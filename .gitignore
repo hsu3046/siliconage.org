@@ -1,0 +1,13 @@
+# .gitignore 내용
+
+# 1. 가장 중요: 라이브러리 폴더 무시
+node_modules/
+
+# 2. 빌드 결과물 무시
+dist/
+build/
+
+# 3. 보안 파일 무시 (API 키 유출 방지!)
+.env
+.env.local
+.DS_Store
