@@ -723,6 +723,59 @@ createCompany('alibaba', 'Alibaba', 1999, 2, CompanyRole.PLATFORM, 'Chinese Clou
 createCompany('baidu', 'Baidu', 2000, 2, CompanyRole.PLATFORM, 'Chinese Search/AI.');
 
 // ==========================================
+// DRONE INDUSTRY & AUTONOMOUS FLIGHT
+// ==========================================
+
+// DJI - Drone Market Leader
+createCompany('dji', 'DJI', 2006, 2, CompanyRole.PLATFORM, 'World\'s largest drone manufacturer with 70%+ market share.');
+createPerson('frank_wang', 'Frank Wang (Wang Tao)', 2006, 2, PersonRole.VISIONARY, 'Founder & CEO', 'Built DJI into drone industry giant, revolutionizing aerial photography and videography.');
+
+createTech('quadcopter', 'Consumer Quadcopter', 2010, 2, TechRole.PRODUCT, 'Four-rotor drone design that enabled stable consumer drones.');
+createTech('gimbal_stabilization', 'Gimbal Stabilization', 2012, 2, TechRole.CORE, '3-axis camera stabilization for smooth aerial footage.');
+createTech('autonomous_flight', 'Autonomous Flight', 2015, 2, TechRole.CORE, 'Computer vision and GPS-based autonomous navigation for drones.');
+createTech('fpv_drone', 'FPV Drone', 2016, 2, TechRole.PRODUCT, 'First-Person View racing drones with immersive piloting experience.');
+
+createEpisode('phantom_launch', 'DJI Phantom Launch', 2013, 2, EpisodeRole.MILESTONE, 'DJI Phantom democratized aerial photography and created consumer drone market.');
+createEpisode('faa_drone_rules', 'FAA Drone Regulations', 2016, 2, EpisodeRole.MILESTONE, 'US FAA established Part 107 commercial drone rules, legitimizing drone industry.');
+
+linkBelonging('frank_wang', 'dji');
+linkMaker('dji', 'quadcopter');
+linkMaker('dji', 'gimbal_stabilization');
+linkMaker('dji', 'autonomous_flight');
+linkMaker('dji', 'fpv_drone');
+linkBelonging('phantom_launch', 'dji');
+linkBelonging('faa_drone_rules', 'dji');
+
+// Drone Delivery Services
+createCompany('zipline', 'Zipline', 2014, 2, CompanyRole.SERVICE, 'Autonomous drone delivery for medical supplies in Africa and US.');
+createPerson('keller_rinaudo', 'Keller Rinaudo', 2014, 2, PersonRole.VISIONARY, 'Co-Founder & CEO', 'Pioneered drone delivery for life-saving medical supplies.');
+
+createTech('drone_delivery', 'Drone Delivery', 2016, 2, TechRole.PRODUCT, 'Autonomous aerial package delivery system.');
+
+createEpisode('zipline_rwanda', 'Zipline Rwanda Launch', 2016, 2, EpisodeRole.MILESTONE, 'First national drone delivery network delivering blood and vaccines.');
+
+linkBelonging('keller_rinaudo', 'zipline');
+linkMaker('zipline', 'drone_delivery');
+linkBelonging('zipline_rwanda', 'zipline');
+linkDependency('drone_delivery', 'autonomous_flight');
+
+// Wing (Alphabet)
+createCompany('wing', 'Wing (Alphabet)', 2012, 2, CompanyRole.SERVICE, 'Alphabet\'s drone delivery service operating in US and Australia.');
+createEpisode('wing_faa_approval', 'Wing FAA Approval', 2019, 2, EpisodeRole.MILESTONE, 'First drone delivery company to receive FAA Air Carrier Certification.');
+
+linkBelonging('wing', 'alphabet');
+linkMaker('wing', 'drone_delivery');
+linkBelonging('wing_faa_approval', 'wing');
+
+// Skydio - Autonomous Drones
+createCompany('skydio', 'Skydio', 2014, 2, CompanyRole.PLATFORM, 'US autonomous drone company using AI for obstacle avoidance.');
+createPerson('adam_bry', 'Adam Bry', 2014, 2, PersonRole.VISIONARY, 'CEO', 'MIT roboticist who built fully autonomous drones with computer vision.');
+
+linkBelonging('adam_bry', 'skydio');
+linkMaker('skydio', 'autonomous_flight');
+linkDependency('autonomous_flight', 'computer_vision');
+
+// ==========================================
 // IBM TECHNOLOGIES & HISTORY
 // ==========================================
 
