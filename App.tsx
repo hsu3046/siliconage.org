@@ -4,14 +4,13 @@ import { INITIAL_DATA, CATEGORY_COLORS } from './constants';
 import { NodeData, Category, GraphData, LinkType, CompanyMode } from './types';
 import { calculateSiliconRank } from './utils/ranking';
 
-// --- LAZY LOADING FOR PERFORMANCE (Code Splitting) ---
-const NetworkGraph = React.lazy(() => import('./components/NetworkGraph'));
-const TimelineView = React.lazy(() => import('./components/TimelineView'));
-const ListView = React.lazy(() => import('./components/ListView'));
-const DetailPanel = React.lazy(() => import('./components/DetailPanel'));
-const AboutModal = React.lazy(() => import('./components/AboutModal'));
-
-// Loading Spinner Component
+// --- Delete LAZY LOADING FOR PERFORMANCE (Code Splitting) ---
+import NetworkGraph from './components/NetworkGraph';
+import DetailPanel from './components/DetailPanel';
+import AboutModal from './components/AboutModal';
+import ChangeLog from './components/ChangeLog';
+import TimelineView from './components/TimelineView';
+import ListView from './components/ListView';
 const LoadingSpinner = () => (
   <div className="w-full h-full flex items-center justify-center bg-background">
     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
@@ -50,6 +49,7 @@ const App: React.FC = () => {
   const [scrollToNodeId, setScrollToNodeId] = useState<string | null>(null);
 
   const [isAboutOpen, setIsAboutOpen] = useState(false);
+  const [isChangeLogOpen, setIsChangeLogOpen] = useState(false);
 
   const [companyMode, setCompanyMode] = useState<CompanyMode>('FULL');
 
@@ -99,11 +99,32 @@ const App: React.FC = () => {
     return () => clearTimeout(timeoutId);
   }, [viewMode, selectedNode]);
 
+  // --- SYNC VIEW MODE WITH URL ---
+  useEffect(() => {
+    updateViewUrl(viewMode);
+  }, [viewMode]);
+
   // --- DEEP LINKING & URL MANAGEMENT ---
   useEffect(() => {
     const handlePopState = () => {
       const params = new URLSearchParams(window.location.search);
       const nodeId = params.get('node');
+      const aboutParam = params.get('about');
+      const viewParam = params.get('view');
+
+      // Handle about modal
+      if (aboutParam === 'true') {
+        setIsAboutOpen(true);
+      }
+
+      // Handle view mode
+      if (viewParam === 'history') {
+        setViewMode('TIMELINE');
+      } else if (viewParam === 'list') {
+        setViewMode('LIST');
+      } else if (viewParam === 'map') {
+        setViewMode('MAP');
+      }
 
       if (nodeId) {
         const node = INITIAL_DATA.nodes.find(n => n.id === nodeId);
@@ -131,6 +152,28 @@ const App: React.FC = () => {
       url.searchParams.set('node', nodeId);
     } else {
       url.searchParams.delete('node');
+    }
+    window.history.pushState({}, '', url);
+  };
+
+  const updateViewUrl = (view: 'MAP' | 'TIMELINE' | 'LIST') => {
+    const url = new URL(window.location.href);
+    if (view === 'TIMELINE') {
+      url.searchParams.set('view', 'history');
+    } else if (view === 'LIST') {
+      url.searchParams.set('view', 'list');
+    } else {
+      url.searchParams.delete('view'); // Map is default
+    }
+    window.history.pushState({}, '', url);
+  };
+
+  const updateAboutUrl = (isOpen: boolean) => {
+    const url = new URL(window.location.href);
+    if (isOpen) {
+      url.searchParams.set('about', 'true');
+    } else {
+      url.searchParams.delete('about');
     }
     window.history.pushState({}, '', url);
   };
@@ -234,11 +277,11 @@ const App: React.FC = () => {
   }, [visibleCategories, visibleLinkTypes, focusNodeId, companyMode]);
 
   return (
-    <div className="flex flex-col h-screen w-screen bg-background text-white overflow-hidden">
+    <div className="flex flex-col h-screen w-screen bg-background text-white overflow-hidden" style={{ width: '100vw', height: '100vh', backgroundColor: '#0f172a', overflow: 'hidden' }}>
 
       <header className="h-16 border-b border-slate-700 bg-surface flex items-center justify-between px-4 sm:px-6 z-10 shrink-0 relative">
         <button
-          onClick={() => setIsAboutOpen(true)}
+          onClick={() => { setIsAboutOpen(true); updateAboutUrl(true); }}
           className="flex items-center gap-2 sm:gap-3 shrink-0 hover:bg-slate-800 p-2 -ml-2 rounded-lg transition-colors group"
           title="About The Silicon Age"
         >
@@ -443,49 +486,53 @@ const App: React.FC = () => {
       </div>
 
       <main className="flex-1 relative overflow-hidden">
-        <Suspense fallback={<LoadingSpinner />}>
-          {viewMode === 'MAP' && (
-            <NetworkGraph
-              data={filteredData}
-              onNodeClick={handleNodeSelect}
-              onNodeDoubleClick={handleNodeDoubleClick}
-              width={width}
-              height={contentHeight}
-              focusNodeId={focusNodeId}
-              scrollToNodeId={scrollToNodeId}
-              companyMode={companyMode}
-            />
-          )}
-
-          {viewMode === 'TIMELINE' && (
-            <TimelineView
-              data={filteredData}
-              onNodeClick={handleNodeSelect}
-              scrollToNodeId={scrollToNodeId}
-            />
-          )}
-
-          {viewMode === 'LIST' && (
-            <ListView
-              data={filteredData}
-              onNodeClick={handleNodeSelect}
-              scrollToNodeId={scrollToNodeId}
-            />
-          )}
-
-          <DetailPanel
-            node={selectedNode}
+        {viewMode === 'MAP' && (
+          <NetworkGraph
             data={filteredData}
-            onClose={() => { setSelectedNode(null); setScrollToNodeId(null); updateUrl(null); }}
-            onFocus={() => { if (selectedNode) handleNodeDoubleClick(selectedNode); }}
-            onNodeSelect={handleNodeSelect}
+            onNodeClick={handleNodeSelect}
+            onNodeDoubleClick={handleNodeDoubleClick}
+            width={width}
+            height={contentHeight}
+            focusNodeId={focusNodeId}
+            scrollToNodeId={scrollToNodeId}
+            companyMode={companyMode}
           />
+        )}
 
-          <AboutModal
-            isOpen={isAboutOpen}
-            onClose={() => setIsAboutOpen(false)}
+        {viewMode === 'TIMELINE' && (
+          <TimelineView
+            data={filteredData}
+            onNodeClick={handleNodeSelect}
+            scrollToNodeId={scrollToNodeId}
           />
-        </Suspense>
+        )}
+
+        {viewMode === 'LIST' && (
+          <ListView
+            data={filteredData}
+            onNodeClick={handleNodeSelect}
+            scrollToNodeId={scrollToNodeId}
+          />
+        )}
+
+        <DetailPanel
+          node={selectedNode}
+          data={filteredData}
+          onClose={() => { setSelectedNode(null); setScrollToNodeId(null); updateUrl(null); }}
+          onFocus={() => { if (selectedNode) handleNodeDoubleClick(selectedNode); }}
+          onNodeSelect={handleNodeSelect}
+        />
+
+        <AboutModal
+          isOpen={isAboutOpen}
+          onClose={() => { setIsAboutOpen(false); updateAboutUrl(false); }}
+          onOpenChangeLog={() => setIsChangeLogOpen(true)}
+        />
+
+        <ChangeLog
+          isOpen={isChangeLogOpen}
+          onClose={() => setIsChangeLogOpen(false)}
+        />
       </main>
 
     </div >

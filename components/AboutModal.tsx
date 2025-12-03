@@ -4,9 +4,10 @@ import { Logo } from './Logo';
 interface AboutModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpenChangeLog: () => void;
 }
 
-const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
+const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose, onOpenChangeLog }) => {
   const [formStatus, setFormStatus] = useState<'IDLE' | 'SUBMITTING' | 'SUCCESS' | 'ERROR'>('IDLE');
 
   if (!isOpen) return null;
@@ -176,8 +177,19 @@ const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-slate-800 bg-slate-900/50 text-center text-[10px] text-slate-500">
-          © 2025 The Silicon Age Project. All rights reserved.
+        <div className="p-4 border-t border-slate-800 bg-slate-900/50 flex justify-between items-center">
+          <button
+            onClick={onOpenChangeLog}
+            className="text-xs text-slate-400 hover:text-white flex items-center gap-1 transition-colors"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            ChangeLog
+          </button>
+          <p className="text-[10px] text-slate-500">
+            © 2025 The Silicon Age Project
+          </p>
         </div>
 
       </div>
