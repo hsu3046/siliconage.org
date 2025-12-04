@@ -30,6 +30,67 @@ const ChangeLog: React.FC<ChangeLogProps> = ({ isOpen, onClose }) => {
                 {/* Content */}
                 <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
 
+                    {/* Version 1.1.1 */}
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-3">
+                            <span className="px-3 py-1 bg-blue-500/10 border border-blue-500/50 text-blue-400 rounded-full text-xs font-bold">
+                                v1.1.1
+                            </span>
+                            <span className="text-slate-500 text-sm">2025-12-04</span>
+                        </div>
+
+                        <div className="space-y-6">
+                            <div>
+                                <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                                    <span className="text-amber-400">✨</span> UX Improvements
+                                </h3>
+                                <ul className="space-y-2 text-slate-300 text-sm">
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-amber-400 mt-1">•</span>
+                                        <span>
+                                            <strong className="text-white">Enhanced History Filtering:</strong> Added category filters (L1/L2) with PC dropdown and mobile bottom sheet support.
+                                        </span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-amber-400 mt-1">•</span>
+                                        <span>
+                                            <strong className="text-white">Focus Mode Upgrade:</strong> Improved physics engine stability and refined UI for better focus experience.
+                                        </span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-amber-400 mt-1">•</span>
+                                        <span>
+                                            <strong className="text-white">Onboarding Guide:</strong> Added Welcome Modal and Interactive Tutorial for first-time visitors.
+                                        </span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-amber-400 mt-1">•</span>
+                                        <span>
+                                            <strong className="text-white">Featured Node:</strong> Added "Node of the Day" recommendation feature.
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                                    <span className="text-red-400">🐛</span> Bug Fixes
+                                </h3>
+                                <ul className="space-y-2 text-slate-300 text-sm">
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-red-400 mt-1">•</span>
+                                        <span>Fixed mobile viewport shift issue when using search in History view.</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-red-400 mt-1">•</span>
+                                        <span>Unified search icon sizes across different views.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="border-t border-slate-800 my-8"></div>
                     {/* Version 1.1.0 */}
                     <div className="space-y-4">
                         <div className="flex items-center gap-3">

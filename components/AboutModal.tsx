@@ -56,7 +56,7 @@ const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose, onOpenChangeLo
             <Logo className="w-10 h-10" />
             <div>
               <h2 className="text-xl font-bold text-white tracking-tight">The Silicon Age</h2>
-              <p className="text-xs text-slate-400 font-mono">v1.1.0 • From Transistors to AI</p>
+              <p className="text-xs text-slate-400 font-mono">v1.1.1 • From Transistors to AI</p>
             </div>
           </div>
           <button onClick={onClose} className="text-slate-400 hover:text-white p-2 hover:bg-slate-800 rounded-full transition-colors">

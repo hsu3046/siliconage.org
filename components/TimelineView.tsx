@@ -103,20 +103,40 @@ const TimelineView: React.FC<TimelineViewProps> = ({ data, onNodeClick, scrollTo
       blurTimeoutRef.current = null;
     }
 
+    // Get reference to container and target element before making changes
+    const scrollContainer = document.querySelector('.w-full.h-full.overflow-y-auto') as HTMLElement;
+    const targetElement = document.getElementById(`timeline-node-${node.id}`);
+
     setSearchTerm("");
     setSuggestions([]);
     setIsSearchFocused(false);
 
-    // Blur input first to dismiss keyboard on mobile (prevents scroll shift)
+    // Blur input to dismiss keyboard on mobile
     searchInputRef.current?.blur();
 
-    // Scroll to the selected node after a short delay for keyboard dismiss
-    setTimeout(() => {
-      const element = document.getElementById(`timeline-node-${node.id}`);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Use requestAnimationFrame chain to wait for keyboard dismiss and then scroll
+    // This is more reliable than setTimeout for iOS Safari
+    const scrollToTarget = () => {
+      if (targetElement && scrollContainer) {
+        const containerRect = scrollContainer.getBoundingClientRect();
+        const targetRect = targetElement.getBoundingClientRect();
+        const scrollTop = scrollContainer.scrollTop + targetRect.top - containerRect.top - containerRect.height / 2 + targetRect.height / 2;
+
+        scrollContainer.scrollTo({
+          top: scrollTop,
+          behavior: 'smooth'
+        });
       }
-    }, 100);
+    };
+
+    // Wait for keyboard to fully dismiss (300ms is typical iOS keyboard animation)
+    setTimeout(() => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          scrollToTarget();
+        });
+      });
+    }, 300);
   };
 
   const handleSearchFocus = () => {
@@ -159,7 +179,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({ data, onNodeClick, scrollTo
           <div className="flex items-center gap-3">
             <div className="relative flex-1 max-w-md">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg className="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <svg className="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
               </div>
               <input
                 ref={searchInputRef}
