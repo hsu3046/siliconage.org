@@ -107,7 +107,7 @@ const ListView: React.FC<ListViewProps> = ({ data, onNodeClick, scrollToNodeId }
             <input
               type="text"
               className="block w-full pl-10 pr-3 py-2 border border-slate-600 rounded-lg leading-5 bg-slate-900 text-slate-100 placeholder-slate-400 focus:outline-none focus:bg-slate-800 focus:border-primary focus:ring-1 focus:ring-primary sm:text-sm transition-colors"
-              placeholder="Search..."
+              placeholder="Filter by name or category"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />

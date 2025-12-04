@@ -116,6 +116,9 @@ export interface NodeData {
   vy?: number;
   fx?: number | null;
   fy?: number | null;
+
+  // Focus Mode Distance (0=focused, 1=1st-degree, 2=2nd-degree)
+  _focusDistance?: number;
 }
 
 export interface LinkData {

@@ -788,8 +788,6 @@ linkMaker('spacex', 'starlink');
 linkMaker('spacex', 'starship');
 linkBelonging('first_reusable_rocket', 'spacex');
 
-createCompany('unity', 'Unity', 2004, 2, CompanyRole.PLATFORM, 'The engine powering most mobile games and VR/AR experiences.', [CompanyCategory.SOFTWARE]);
-createCompany('roblox', 'Roblox', 2006, 2, CompanyRole.PLATFORM, 'User-generated content platform and proto-metaverse.', [CompanyCategory.INTERNET]);
 createCompany('palantir', 'Palantir', 2003, 2, CompanyRole.SERVICE, 'Defense AI.', [CompanyCategory.SOFTWARE]);
 createCompany('paypal', 'PayPal', 1998, 2, CompanyRole.PLATFORM, 'Online payments system that birthed the PayPal Mafia.', [CompanyCategory.INTERNET]);
 createPerson('thiel', 'Peter Thiel', 2003, 2, PersonRole.VISIONARY, 'Co-Founder', 'PayPal Mafia.');
@@ -1044,7 +1042,7 @@ createTech('oculus', 'Oculus', 2012, 2, TechRole.PRODUCT, 'VR headset line kicks
 createPerson('palmer_luckey', 'Palmer Luckey', 2012, 2, PersonRole.VISIONARY, 'Founder', 'Creator of the Oculus Rift.');
 
 linkBelonging('palmer_luckey', 'oculus');
-linkMaker('facebook', 'oculus'); // Acquired by Meta
+linkMaker('meta', 'oculus'); // Acquired by Meta
 linkDependency('oculus', 'vr');
 linkDependency('metaverse', 'vr');
 linkDependency('metaverse', 'ar');
@@ -1086,36 +1084,80 @@ linkBelonging('john_doerr', 'kpcb');
 linkBelonging('andreessen', 'a16z'); // Marc Andreessen
 linkBelonging('paul_graham', 'y_combinator');
 
-// Sequoia Portfolio
-linkInfluence('sequoia', 'apple');
-linkInfluence('sequoia', 'google');
-linkInfluence('sequoia', 'oracle');
-linkInfluence('sequoia', 'nvidia');
-linkInfluence('sequoia', 'paypal');
-linkInfluence('sequoia', 'youtube');
-linkInfluence('sequoia', 'whatsapp');
+// Sequoia Portfolio - via Investment Episodes
+createEpisode('sequoia_apple', 'Sequoia invests in Apple', 1978, 3, EpisodeRole.DEAL, 'Don Valentine made the crucial early investment in Apple.');
+createEpisode('sequoia_google', 'Sequoia invests in Google', 1999, 2, EpisodeRole.DEAL, 'Sequoia backed Google in its Series A round.');
+createEpisode('sequoia_oracle', 'Sequoia invests in Oracle', 1977, 3, EpisodeRole.DEAL, 'Early investment in database giant.');
+createEpisode('sequoia_nvidia', 'Sequoia invests in NVIDIA', 1993, 2, EpisodeRole.DEAL, 'Sequoia backed the GPU pioneer.');
+createEpisode('sequoia_paypal', 'Sequoia invests in PayPal', 1999, 2, EpisodeRole.DEAL, 'Sequoia backed the payments revolution.');
+createEpisode('sequoia_youtube', 'Sequoia invests in YouTube', 2005, 2, EpisodeRole.DEAL, 'Sequoia backed the video platform.');
+createEpisode('sequoia_whatsapp', 'Sequoia invests in WhatsApp', 2011, 2, EpisodeRole.DEAL, 'Sequoia was the sole institutional investor.');
 
-// Kleiner Perkins Portfolio
-linkInfluence('kpcb', 'amazon');
-linkInfluence('kpcb', 'google');
-linkInfluence('kpcb', 'netscape');
-linkInfluence('kpcb', 'sun');
+linkBelonging('sequoia_apple', 'sequoia');
+linkBelonging('sequoia_google', 'sequoia');
+linkBelonging('sequoia_oracle', 'sequoia');
+linkBelonging('sequoia_nvidia', 'sequoia');
+linkBelonging('sequoia_paypal', 'sequoia');
+linkBelonging('sequoia_youtube', 'sequoia');
+linkBelonging('sequoia_whatsapp', 'sequoia');
 
-// a16z Portfolio
-linkInfluence('a16z', 'facebook');
-linkInfluence('a16z', 'twitter');
-linkInfluence('a16z', 'airbnb');
-linkInfluence('a16z', 'github');
-linkInfluence('a16z', 'skype');
+linkInfluence('sequoia_apple', 'apple');
+linkInfluence('sequoia_google', 'google');
+linkInfluence('sequoia_oracle', 'oracle');
+linkInfluence('sequoia_nvidia', 'nvidia');
+linkInfluence('sequoia_paypal', 'paypal');
+linkInfluence('sequoia_youtube', 'youtube');
+linkInfluence('sequoia_whatsapp', 'whatsapp');
 
-// Y Combinator Portfolio
-linkInfluence('y_combinator', 'airbnb');
-// Dropbox/Twitch not added as nodes per request
+// Kleiner Perkins Portfolio - via Investment Episodes
+createEpisode('kpcb_amazon', 'Kleiner Perkins invests in Amazon', 1996, 2, EpisodeRole.DEAL, 'John Doerr backed Amazon early.');
+createEpisode('kpcb_google', 'Kleiner Perkins invests in Google', 1999, 2, EpisodeRole.DEAL, 'Kleiner Perkins co-led Google Series A.');
+createEpisode('kpcb_netscape', 'Kleiner Perkins invests in Netscape', 1994, 2, EpisodeRole.DEAL, 'Kleiner Perkins backed the browser pioneer.');
+createEpisode('kpcb_sun', 'Kleiner Perkins invests in Sun', 1982, 3, EpisodeRole.DEAL, 'Early investment in Sun Microsystems.');
 
-// SoftBank Influence
-linkInfluence('softbank', 'uber');
-linkInfluence('softbank', 'nvidia');
-// ARM link exists as ownership
+linkBelonging('kpcb_amazon', 'kpcb');
+linkBelonging('kpcb_google', 'kpcb');
+linkBelonging('kpcb_netscape', 'kpcb');
+linkBelonging('kpcb_sun', 'kpcb');
+
+linkInfluence('kpcb_amazon', 'amazon');
+linkInfluence('kpcb_google', 'google');
+linkInfluence('kpcb_netscape', 'netscape');
+linkInfluence('kpcb_sun', 'sun');
+
+// a16z Portfolio - via Investment Episodes
+createEpisode('a16z_facebook', 'a16z invests in Facebook', 2010, 2, EpisodeRole.DEAL, 'Andreessen Horowitz backed the social giant.');
+createEpisode('a16z_twitter', 'a16z invests in Twitter', 2011, 2, EpisodeRole.DEAL, 'a16z invested in the microblogging platform.');
+createEpisode('a16z_airbnb', 'a16z invests in Airbnb', 2011, 2, EpisodeRole.DEAL, 'a16z backed the sharing economy pioneer.');
+createEpisode('a16z_github', 'a16z invests in GitHub', 2012, 2, EpisodeRole.DEAL, 'a16z led GitHub Series A.');
+createEpisode('a16z_skype', 'a16z invests in Skype', 2009, 2, EpisodeRole.DEAL, 'a16z backed the VoIP pioneer.');
+
+linkBelonging('a16z_facebook', 'a16z');
+linkBelonging('a16z_twitter', 'a16z');
+linkBelonging('a16z_airbnb', 'a16z');
+linkBelonging('a16z_github', 'a16z');
+linkBelonging('a16z_skype', 'a16z');
+
+linkInfluence('a16z_facebook', 'meta');
+linkInfluence('a16z_twitter', 'twitter');
+linkInfluence('a16z_airbnb', 'airbnb');
+linkInfluence('a16z_github', 'github');
+linkInfluence('a16z_skype', 'skype');
+
+// Y Combinator Portfolio - via Investment Episodes
+createEpisode('yc_airbnb', 'Y Combinator funds Airbnb', 2009, 2, EpisodeRole.DEAL, 'YC backed Airbnb in its earliest days.');
+linkBelonging('yc_airbnb', 'y_combinator');
+linkInfluence('yc_airbnb', 'airbnb');
+
+// SoftBank Investments - via Investment Episodes
+createEpisode('softbank_uber', 'SoftBank invests in Uber', 2018, 2, EpisodeRole.DEAL, 'Vision Fund led massive investment in Uber.');
+createEpisode('softbank_nvidia', 'SoftBank invests in NVIDIA', 2017, 2, EpisodeRole.DEAL, 'SoftBank bought $4B stake in NVIDIA.');
+
+linkBelonging('softbank_uber', 'softbank');
+linkBelonging('softbank_nvidia', 'softbank');
+
+linkInfluence('softbank_uber', 'uber');
+linkInfluence('softbank_nvidia', 'nvidia');
 
 // ==========================================
 // FINTECH & CRYPTOCURRENCY

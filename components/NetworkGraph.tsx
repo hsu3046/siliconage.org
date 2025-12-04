@@ -13,6 +13,7 @@ interface NetworkGraphProps {
   focusNodeId?: string | null;
   scrollToNodeId?: string | null;
   companyMode: CompanyMode;
+  featuredNode?: NodeData;
 }
 
 // Helper to formulate the Sub-Label (Role or Year) based on Category
@@ -300,7 +301,7 @@ const getCircleIntersection = (
   };
 };
 
-const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFocus, onNodeDoubleClick, width, height, focusNodeId, scrollToNodeId, companyMode }) => {
+const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFocus, onNodeDoubleClick, width, height, focusNodeId, scrollToNodeId, companyMode, featuredNode }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const clickTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -702,9 +703,70 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
     if (focusNodeId) {
       const focusedNode = visibleNodes.find(n => n.id === focusNodeId);
       if (focusedNode) {
-        // Fix: Pin to CENTER of screen, not (0,0)
-        focusedNode.fx = width / 2;
-        focusedNode.fy = height / 2;
+        const centerX = width / 2;
+        const centerY = height / 2;
+
+        // Fix focused node at center
+        focusedNode.fx = centerX;
+        focusedNode.fy = centerY;
+
+        // Get 1st and 2nd degree nodes
+        const firstDegreeNodes = visibleNodes.filter(n => n._focusDistance === 1);
+        const secondDegreeNodes = visibleNodes.filter(n => n._focusDistance === 2);
+
+        // Radial distances
+        const innerRadius = Math.min(width, height) * 0.25;  // 1st degree circle
+        const outerRadius = Math.min(width, height) * 0.42; // 2nd degree circle
+
+        // Position 1st degree nodes in a circle
+        const angleStep1 = (2 * Math.PI) / firstDegreeNodes.length;
+        firstDegreeNodes.forEach((node, i) => {
+          const angle = i * angleStep1 - Math.PI / 2; // Start from top
+          node.fx = centerX + Math.cos(angle) * innerRadius;
+          node.fy = centerY + Math.sin(angle) * innerRadius;
+          (node as any)._angle = angle; // Store angle for 2nd degree positioning
+        });
+
+        // Position 2nd degree nodes - extend from their 1st degree parent
+        secondDegreeNodes.forEach(node => {
+          // Find which 1st degree node this is connected to
+          const connectedFirstDegree = firstDegreeNodes.find(first => {
+            return visibleLinks.some(link => {
+              const s = typeof link.source === 'object' ? (link.source as any).id : link.source;
+              const t = typeof link.target === 'object' ? (link.target as any).id : link.target;
+              return (s === first.id && t === node.id) || (t === first.id && s === node.id);
+            });
+          });
+
+          if (connectedFirstDegree) {
+            const parentAngle = (connectedFirstDegree as any)._angle || 0;
+            // Count how many 2nd degree nodes share this parent
+            const siblings = secondDegreeNodes.filter(n => {
+              return visibleLinks.some(link => {
+                const s = typeof link.source === 'object' ? (link.source as any).id : link.source;
+                const t = typeof link.target === 'object' ? (link.target as any).id : link.target;
+                return (s === connectedFirstDegree.id && t === n.id) || (t === connectedFirstDegree.id && s === n.id);
+              });
+            });
+            const siblingIndex = siblings.indexOf(node);
+            const siblingCount = siblings.length;
+
+            // Spread siblings in a small angle range around parent's direction
+            const spreadAngle = Math.PI / 6; // 30 degrees total spread
+            const offsetAngle = siblingCount > 1
+              ? (siblingIndex - (siblingCount - 1) / 2) * (spreadAngle / siblingCount)
+              : 0;
+
+            const finalAngle = parentAngle + offsetAngle;
+            node.fx = centerX + Math.cos(finalAngle) * outerRadius;
+            node.fy = centerY + Math.sin(finalAngle) * outerRadius;
+          } else {
+            // Fallback: place randomly on outer ring if no parent found
+            const randomAngle = Math.random() * 2 * Math.PI;
+            node.fx = centerX + Math.cos(randomAngle) * outerRadius;
+            node.fy = centerY + Math.sin(randomAngle) * outerRadius;
+          }
+        });
       }
     } else {
       visibleNodes.forEach(n => { n.fx = null; n.fy = null; });
@@ -781,13 +843,26 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
         enter => enter.append("circle")
           .attr("r", 0)
           .attr("fill", d => CATEGORY_COLORS[d.category])
-          .attr("fill-opacity", companyMode === 'MINIMAL' ? 0 : 0.15)
-          .attr("stroke", "none")
+          .attr("fill-opacity", d => {
+            if (companyMode === 'MINIMAL') return 0;
+            // 2nd degree: no fill, just border
+            if (d._focusDistance === 2) return 0;
+            return 0.15;
+          })
+          .attr("stroke", d => d._focusDistance === 2 ? CATEGORY_COLORS[d.category] : "none")
+          .attr("stroke-opacity", d => d._focusDistance === 2 ? 0.15 : 0)
+          .attr("stroke-width", 1)
           .attr("pointer-events", "none")
           .call(enter => enter.transition(t).attr("r", (d: any) => d._zoneRadius || 150)),
         update => update.transition(t)
           .attr("r", (d: any) => d._zoneRadius || 150)
-          .attr("fill-opacity", companyMode === 'MINIMAL' ? 0 : 0.15),
+          .attr("fill-opacity", (d: any) => {
+            if (companyMode === 'MINIMAL') return 0;
+            if (d._focusDistance === 2) return 0;
+            return 0.15;
+          })
+          .attr("stroke", (d: any) => d._focusDistance === 2 ? CATEGORY_COLORS[d.category] : "none")
+          .attr("stroke-opacity", (d: any) => d._focusDistance === 2 ? 0.15 : 0),
         exit => exit.transition(t).attr("r", 0).remove()
       );
 
@@ -829,7 +904,15 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
             .style("text-shadow", "0px 1px 2px #000000")
             .style("pointer-events", "none");
 
-          g.transition(t).style("opacity", 1);
+          // Apply opacity based on focus distance (0=focused, 1=1st degree, 2=2nd degree)
+          const getNodeOpacity = (d: NodeData) => {
+            if (d._focusDistance === undefined) return 1;
+            if (d._focusDistance === 0) return 1;      // Focused node
+            if (d._focusDistance === 1) return 1;      // 1st degree
+            return 0.15;                               // 2nd degree (very faint)
+          };
+
+          g.transition(t).style("opacity", (d: NodeData) => getNodeOpacity(d));
 
           g.on("click", (event, d) => { event.stopPropagation(); handleNodeClick(d); })
             .on("dblclick", (event, d) => { event.stopPropagation(); handleNodeDoubleClick(d); })
@@ -869,11 +952,32 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
           return g;
         },
         update => {
-          const g = update.transition(t).style("opacity", 1);
+          // Get opacity function for update case
+          const getNodeOpacity = (d: NodeData) => {
+            if (d._focusDistance === undefined) return 1;
+            if (d._focusDistance === 0) return 1;
+            if (d._focusDistance === 1) return 1;
+            return 0.15;
+          };
+          const g = update.transition(t).style("opacity", (d: NodeData) => getNodeOpacity(d));
           return g;
         },
         exit => exit.transition(t).style("opacity", 0).remove()
       );
+
+    // Helper to get link opacity based on connected nodes' focus distance
+    const getLinkOpacity = (d: any) => {
+      const sourceNode = visibleNodes.find(n => n.id === (typeof d.source === 'object' ? d.source.id : d.source));
+      const targetNode = visibleNodes.find(n => n.id === (typeof d.target === 'object' ? d.target.id : d.target));
+      const sourceDist = sourceNode?._focusDistance;
+      const targetDist = targetNode?._focusDistance;
+
+      // If both nodes are 2nd degree, dim the link significantly
+      if (sourceDist === 2 && targetDist === 2) return getLinkStyle(d.type).opacity * 0.15;
+      // If either node is 2nd degree, dim
+      if (sourceDist === 2 || targetDist === 2) return getLinkStyle(d.type).opacity * 0.25;
+      return getLinkStyle(d.type).opacity;
+    };
 
     // 3. Links
     const linksSel = rootGroup.select(".layer-links")
@@ -881,7 +985,7 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
       .data(visibleLinks, (d: any) => `${d.source.id}-${d.target.id}`)
       .join("line")
       .attr("stroke", d => getLinkStyle(d.type).color)
-      .attr("stroke-opacity", d => getLinkStyle(d.type).opacity)
+      .attr("stroke-opacity", d => getLinkOpacity(d))
       .attr("stroke-width", d => getLinkStyle(d.type).width)
       // FIX: FORCE SOLID LINE
       .attr("stroke-dasharray", d => getLinkStyle(d.type).dasharray === "none" ? null : getLinkStyle(d.type).dasharray)
@@ -1034,13 +1138,13 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
       {!focusNodeId && (
         <div className="absolute top-4 left-4 z-20 w-64">
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
               <svg className="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
             </div>
             <input
               type="text"
               className="block w-full pl-10 pr-3 py-2 border border-slate-600 rounded-lg leading-5 bg-slate-900/90 text-slate-300 placeholder-slate-500 focus:outline-none focus:bg-slate-900 focus:border-primary focus:ring-1 focus:ring-primary sm:text-sm backdrop-blur-md shadow-xl transition-all"
-              placeholder="Search nodes..."
+              placeholder="e.g. Apple, Google"
               value={searchTerm}
               onChange={handleSearchChange}
               onKeyDown={handleKeyDown}
@@ -1067,6 +1171,18 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
               </div>
             )}
           </div>
+
+          {/* Mobile Featured Node - below search */}
+          {featuredNode && (
+            <button
+              onClick={() => onNodeDoubleClick(featuredNode)}
+              className="lg:hidden mt-2 flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/50 rounded-lg text-amber-300 hover:from-amber-500/30 hover:to-orange-500/30 transition-all w-full"
+              title={`Today's Featured: ${featuredNode.label}`}
+            >
+              <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" strokeWidth="2" /><circle cx="8" cy="8" r="1" fill="currentColor" /><circle cx="16" cy="8" r="1" fill="currentColor" /><circle cx="12" cy="12" r="1" fill="currentColor" /><circle cx="8" cy="16" r="1" fill="currentColor" /><circle cx="16" cy="16" r="1" fill="currentColor" /></svg>
+              <span className="text-xs font-medium truncate">{featuredNode.label}</span>
+            </button>
+          )}
         </div>
       )}
 

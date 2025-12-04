@@ -1,7 +1,8 @@
 
 import React, { useEffect } from 'react';
-import { GraphData, NodeData, Category } from '../types';
+import { GraphData, NodeData, Category, TechCategoryL1, TechCategoryL2 } from '../types';
 import { CATEGORY_COLORS } from '../constants';
+import TechCategoryFilter from './TechCategoryFilter';
 
 interface TimelineViewProps {
   data: GraphData;
@@ -19,8 +20,25 @@ const TimelineView: React.FC<TimelineViewProps> = ({ data, onNodeClick, scrollTo
   const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
+  // Category Filter State
+  const [selectedL1, setSelectedL1] = useState<TechCategoryL1 | null>(null);
+  const [selectedL2, setSelectedL2] = useState<TechCategoryL2 | null>(null);
+
+  const handleFilterChange = (l1: TechCategoryL1 | null, l2: TechCategoryL2 | null) => {
+    setSelectedL1(l1);
+    setSelectedL2(l2);
+  };
+
+  // Apply category filter
+  const filteredNodes = data.nodes.filter(node => {
+    if (!selectedL1) return true;
+    if (node.techCategoryL1 !== selectedL1) return false;
+    if (selectedL2 && node.techCategoryL2 !== selectedL2) return false;
+    return true;
+  });
+
   // Sort nodes by year
-  const sortedNodes = [...data.nodes].sort((a, b) => a.year - b.year);
+  const sortedNodes = [...filteredNodes].sort((a, b) => a.year - b.year);
 
   // Group by year to handle multiple events in one year
   const groupedByYear: Record<number, NodeData[]> = {};
@@ -138,40 +156,49 @@ const TimelineView: React.FC<TimelineViewProps> = ({ data, onNodeClick, scrollTo
 
         {/* Sticky Search Header - reduced margin to match ListView */}
         <div className="sticky top-0 z-30 bg-background/95 backdrop-blur-md pb-4 border-b border-slate-800">
-          <div className="relative flex-1 max-w-md">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg className="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            </div>
-            <input
-              ref={searchInputRef}
-              type="text"
-              className="block w-full pl-10 pr-3 py-2 border border-slate-600 rounded-lg leading-5 bg-slate-900 text-slate-300 placeholder-slate-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary sm:text-sm"
-              placeholder="Search nodes..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-              onKeyDown={handleKeyDown}
-              onFocus={handleSearchFocus}
-              onBlur={handleSearchBlur}
-            />
-            {/* Suggestions Dropdown */}
-            {isSearchFocused && suggestions.length > 0 && (
-              <div className="absolute mt-1 w-full bg-slate-900/95 border border-slate-600 rounded-md shadow-2xl backdrop-blur-md overflow-hidden z-50">
-                <ul className="max-h-60 overflow-auto custom-scrollbar">
-                  {suggestions.map((node) => (
-                    <li
-                      key={node.id}
-                      className="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-slate-800 text-slate-300 transition-colors border-b border-slate-800/50 last:border-0"
-                      onClick={() => handleSearchSelect(node)}
-                    >
-                      <div className="flex items-center">
-                        <span className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: CATEGORY_COLORS[node.category] }}></span>
-                        <span className="block truncate font-medium text-sm">{node.label}</span>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
+          <div className="flex items-center gap-3">
+            <div className="relative flex-1 max-w-md">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg className="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
               </div>
-            )}
+              <input
+                ref={searchInputRef}
+                type="text"
+                className="block w-full pl-10 pr-3 py-2 border border-slate-600 rounded-lg leading-5 bg-slate-900 text-slate-300 placeholder-slate-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary sm:text-sm"
+                placeholder="e.g. Apple, Google"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                onKeyDown={handleKeyDown}
+                onFocus={handleSearchFocus}
+                onBlur={handleSearchBlur}
+              />
+              {/* Suggestions Dropdown */}
+              {isSearchFocused && suggestions.length > 0 && (
+                <div className="absolute mt-1 w-full bg-slate-900/95 border border-slate-600 rounded-md shadow-2xl backdrop-blur-md overflow-hidden z-50">
+                  <ul className="max-h-60 overflow-auto custom-scrollbar">
+                    {suggestions.map((node) => (
+                      <li
+                        key={node.id}
+                        className="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-slate-800 text-slate-300 transition-colors border-b border-slate-800/50 last:border-0"
+                        onClick={() => handleSearchSelect(node)}
+                      >
+                        <div className="flex items-center">
+                          <span className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: CATEGORY_COLORS[node.category] }}></span>
+                          <span className="block truncate font-medium text-sm">{node.label}</span>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            {/* Category Filter */}
+            <TechCategoryFilter
+              selectedL1={selectedL1}
+              selectedL2={selectedL2}
+              onFilterChange={handleFilterChange}
+            />
           </div>
         </div>
 
@@ -222,7 +249,8 @@ const TimelineView: React.FC<TimelineViewProps> = ({ data, onNodeClick, scrollTo
                     <div
                       className={`
                                 absolute top-6 h-0.5 bg-slate-700
-                                ${isLeft ? 'left-4 right-full md:left-auto md:-right-0 md:w-12' : 'left-4 w-8 md:w-12 md:-left-0'}
+                                left-4 w-8
+                                ${isLeft ? 'md:left-auto md:right-0 md:w-12' : 'md:left-0 md:w-12'}
                             `}
                     ></div>
 

@@ -11,6 +11,8 @@ import AboutModal from './components/AboutModal';
 import ChangeLog from './components/ChangeLog';
 import TimelineView from './components/TimelineView';
 import ListView from './components/ListView';
+import WelcomeModal from './components/WelcomeModal';
+import Tutorial from './components/Tutorial';
 const LoadingSpinner = () => (
   <div className="w-full h-full flex items-center justify-center bg-background">
     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
@@ -50,6 +52,19 @@ const App: React.FC = () => {
 
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isChangeLogOpen, setIsChangeLogOpen] = useState(false);
+  const [isWelcomeOpen, setIsWelcomeOpen] = useState(() => {
+    return !localStorage.getItem('siliconage-welcome-seen');
+  });
+  const [isTutorialOpen, setIsTutorialOpen] = useState(false);
+
+  // Featured Node of the Day - deterministic based on date
+  const featuredNode = useMemo(() => {
+    const today = new Date();
+    const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+    const importantNodes = INITIAL_DATA.nodes.filter(n => n.importance === 1);
+    const index = seed % importantNodes.length;
+    return importantNodes[index];
+  }, []);
 
   const [companyMode, setCompanyMode] = useState<CompanyMode>('FULL');
 
@@ -243,23 +258,45 @@ const App: React.FC = () => {
     let activeLinks = INITIAL_DATA.links.map(link => ({ ...link }));
 
     if (focusNodeId) {
-      const relatedNodeIds = new Set<string>();
-      relatedNodeIds.add(focusNodeId);
+      const firstDegreeIds = new Set<string>();
+      const secondDegreeIds = new Set<string>();
+      firstDegreeIds.add(focusNodeId);
 
+      // Find 1st-degree connections
       INITIAL_DATA.links.forEach(link => {
         const source = typeof link.source === 'object' ? (link.source as any).id : link.source;
         const target = typeof link.target === 'object' ? (link.target as any).id : link.target;
 
-        if (source === focusNodeId) relatedNodeIds.add(target);
-        if (target === focusNodeId) relatedNodeIds.add(source);
+        if (source === focusNodeId) firstDegreeIds.add(target);
+        if (target === focusNodeId) firstDegreeIds.add(source);
       });
 
-      activeNodes = activeNodes.filter(node => relatedNodeIds.has(node.id));
+      // Find 2nd-degree connections
+      INITIAL_DATA.links.forEach(link => {
+        const source = typeof link.source === 'object' ? (link.source as any).id : link.source;
+        const target = typeof link.target === 'object' ? (link.target as any).id : link.target;
+
+        if (firstDegreeIds.has(source) && !firstDegreeIds.has(target)) {
+          secondDegreeIds.add(target);
+        }
+        if (firstDegreeIds.has(target) && !firstDegreeIds.has(source)) {
+          secondDegreeIds.add(source);
+        }
+      });
+
+      // Combine all related node IDs
+      const allRelatedIds = new Set([...firstDegreeIds, ...secondDegreeIds]);
+
+      // Set _focusDistance for each node (0=focused, 1=1st degree, 2=2nd degree)
+      activeNodes = activeNodes.filter(node => allRelatedIds.has(node.id)).map(node => ({
+        ...node,
+        _focusDistance: node.id === focusNodeId ? 0 : (firstDegreeIds.has(node.id) ? 1 : 2)
+      }));
 
       activeLinks = activeLinks.filter(link => {
         const source = typeof link.source === 'object' ? (link.source as any).id : link.source;
         const target = typeof link.target === 'object' ? (link.target as any).id : link.target;
-        return relatedNodeIds.has(source) && relatedNodeIds.has(target);
+        return allRelatedIds.has(source) && allRelatedIds.has(target);
       });
     }
 
@@ -292,9 +329,12 @@ const App: React.FC = () => {
           title="About The Silicon Age"
         >
           <Logo className="w-8 h-8 drop-shadow-lg group-hover:scale-110 transition-transform" />
-          <h1 className="font-bold tracking-tight text-slate-100 text-base sm:text-lg md:text-xl truncate group-hover:text-primary transition-colors">
-            The Silicon Age
-          </h1>
+          <div className="flex flex-col items-start">
+            <h1 className="font-bold tracking-tight text-slate-100 text-base sm:text-lg md:text-xl truncate group-hover:text-primary transition-colors">
+              The Silicon Age
+            </h1>
+            <span className="hidden sm:block text-xs text-slate-500 -mt-0.5">From Transistors to AI</span>
+          </div>
         </button>
 
         <div className="hidden md:flex flex-1 min-w-0 items-center justify-center gap-4 mx-4 overflow-x-auto no-scrollbar">
@@ -401,6 +441,16 @@ const App: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-3 shrink-0 ml-2">
+          {/* Featured Node of the Day */}
+          <button
+            onClick={() => handleNodeDoubleClick(featuredNode)}
+            className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/50 rounded-lg text-amber-300 hover:from-amber-500/30 hover:to-orange-500/30 transition-all"
+            title={`Today's Featured: ${featuredNode.label}`}
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" strokeWidth="2" /><circle cx="8" cy="8" r="1" fill="currentColor" /><circle cx="16" cy="8" r="1" fill="currentColor" /><circle cx="12" cy="12" r="1" fill="currentColor" /><circle cx="8" cy="16" r="1" fill="currentColor" /><circle cx="16" cy="16" r="1" fill="currentColor" /></svg>
+            <span className="text-xs font-medium truncate max-w-[120px]">{featuredNode.label}</span>
+          </button>
+
           <div className="flex bg-slate-900 p-1 rounded-lg border border-slate-700">
             <button onClick={() => setViewMode('MAP')} className={`px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all ${viewMode === 'MAP' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-white'}`}>Map</button>
             <button onClick={() => setViewMode('TIMELINE')} className={`px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all ${viewMode === 'TIMELINE' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-white'}`}>History</button>
@@ -503,6 +553,7 @@ const App: React.FC = () => {
             focusNodeId={focusNodeId}
             scrollToNodeId={scrollToNodeId}
             companyMode={companyMode}
+            featuredNode={featuredNode}
           />
         )}
 
@@ -539,6 +590,20 @@ const App: React.FC = () => {
         <ChangeLog
           isOpen={isChangeLogOpen}
           onClose={() => setIsChangeLogOpen(false)}
+        />
+
+        <WelcomeModal
+          isOpen={isWelcomeOpen}
+          onClose={() => setIsWelcomeOpen(false)}
+          onStartTutorial={() => {
+            setIsWelcomeOpen(false);
+            setIsTutorialOpen(true);
+          }}
+        />
+
+        <Tutorial
+          isOpen={isTutorialOpen}
+          onClose={() => setIsTutorialOpen(false)}
         />
       </main>
 
