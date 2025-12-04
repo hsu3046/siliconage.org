@@ -24,6 +24,7 @@ export enum CompanyRole {
   LAB = 'LAB',           // Research focused (OpenAI, Bell Labs)
   INFRA = 'INFRA',       // Supply chain/Hardware (TSMC, ASML) - Score dampened
   SERVICE = 'SERVICE',   // Service providers
+  PRODUCT = 'PRODUCT',   // Consumer Hardware (iRobot, DJI, GoPro)
 }
 
 export enum PersonRole {
@@ -55,6 +56,20 @@ export interface ExternalLink {
   label: string;
 }
 
+export type TechCategoryL1 =
+  | 'Hardware & Infrastructure'
+  | 'System Software'
+  | 'Network & Connectivity'
+  | 'Digital Services & Platforms'
+  | 'AI & Physical Systems';
+
+export type TechCategoryL2 =
+  | 'Processors & Compute' | 'Devices & Form Factors' | 'Memory & Storage' | 'Components & Manufacturing'
+  | 'Operating Systems (OS)' | 'Development & Languages'
+  | 'Telecommunications' | 'Network Architecture'
+  | 'Search & Information' | 'Social & Media' | 'Digital Platforms'
+  | 'Artificial Intelligence' | 'Autonomous Mobility' | 'Robotics' | 'Fintech & Crypto' | 'Spatial Computing';
+
 export interface NodeData {
   id: string;
   label: string;
@@ -62,23 +77,25 @@ export interface NodeData {
   year: number;
   description: string;
   image?: string;
-  radius?: number; 
-  importance?: number;
-  
+  radius?: number;
+  importance: number; // Now required
+
   // Specific Role Classification
-  roleType: Role;
-  
+  roleType?: Role; // Optional because not all nodes might have it initially (though we enforce it)
+
   // Search & SEO
-  keywords?: string[]; 
-  
-  role?: string; // Job Title string (for display)
-  externalLinks?: ExternalLink[]; 
-  
+  keywords?: string[];
+  techCategoryL1?: TechCategoryL1;
+  techCategoryL2?: TechCategoryL2;
+
+  role?: string; // For Person (e.g. "Founder", "CEO")
+  externalLinks?: ExternalLink[];
+
   // Computed Properties (Impact Factor)
-  _score?: number;      
-  _radius?: number;     
-  _zoneRadius?: number; 
-  
+  _score?: number;
+  _radius?: number;
+  _zoneRadius?: number;
+
   // D3 Simulation Properties
   index?: number;
   x?: number;
@@ -93,9 +110,9 @@ export interface LinkData {
   source: string | NodeData;
   target: string | NodeData;
   label?: string;
-  type: LinkType; 
+  type: LinkType;
   direction: LinkDirection;
-  strength: number; 
+  strength: number;
 }
 
 export interface GraphData {

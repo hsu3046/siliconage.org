@@ -96,6 +96,22 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
 
             {node.role && <span className="text-slate-500 text-xs px-2 py-0.5 bg-slate-800 rounded">{node.role}</span>}
           </div>
+
+          {/* Technology Categories */}
+          {node.category === Category.TECHNOLOGY && (
+            <div className="flex flex-wrap gap-2 mt-3">
+              {node.techCategoryL1 && (
+                <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-blue-900/30 text-blue-300 border border-blue-800/50">
+                  {node.techCategoryL1}
+                </span>
+              )}
+              {node.techCategoryL2 && (
+                <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-indigo-900/30 text-indigo-300 border border-indigo-800/50">
+                  {node.techCategoryL2}
+                </span>
+              )}
+            </div>
+          )}
         </div>
         <div className="flex gap-2">
           {/* Focus Button - Changed Icon to Target/Crosshair */}

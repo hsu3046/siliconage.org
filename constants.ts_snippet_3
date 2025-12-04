@@ -1,0 +1,41 @@
+
+// ==========================================
+// DEVELOPER PLATFORMS & INFRASTRUCTURE
+// ==========================================
+
+// 1. Code & Collaboration
+
+// GitHub
+createCompany('github', 'GitHub', 2008, 2, CompanyRole.PLATFORM, 'The world\'s largest code host.');
+createPerson('chris_wanstrath', 'Chris Wanstrath', 2008, 2, PersonRole.VISIONARY, 'Co-Founder', 'CEO who led GitHub to become the home of open source.');
+createTech('git', 'Git', 2005, 1, TechRole.STANDARD, 'Distributed version control system.', 'System Software', 'Development & Languages');
+
+linkBelonging('chris_wanstrath', 'github');
+linkMaker('linus', 'git'); // Linus created Git
+linkDependency('github', 'git'); // GitHub is built on Git
+linkMaker('microsoft', 'github'); // Acquired by Microsoft
+
+// Stack Overflow
+createCompany('stackoverflow', 'Stack Overflow', 2008, 2, CompanyRole.PLATFORM, 'Where developers learn, share, & build careers.');
+createPerson('joel_spolsky', 'Joel Spolsky', 2008, 2, PersonRole.VISIONARY, 'Co-Founder', 'Influential software blogger and creator of Trello.');
+
+linkBelonging('joel_spolsky', 'stackoverflow');
+
+// 2. Modern Web & AI Infrastructure
+
+// Vercel
+createCompany('vercel', 'Vercel', 2015, 2, CompanyRole.PLATFORM, 'Frontend cloud platform.');
+createPerson('guillermo_rauch', 'Guillermo Rauch', 2015, 2, PersonRole.VISIONARY, 'Founder', 'Creator of Next.js and Socket.io.');
+createTech('nextjs', 'Next.js', 2016, 2, TechRole.STANDARD, 'The React Framework for the Web.', 'System Software', 'Development & Languages');
+
+linkBelonging('guillermo_rauch', 'vercel');
+linkMaker('vercel', 'nextjs');
+
+// Hugging Face
+createCompany('hugging_face', 'Hugging Face', 2016, 2, CompanyRole.PLATFORM, 'The AI community building the future.');
+createPerson('clement_delangue', 'Clement Delangue', 2016, 2, PersonRole.VISIONARY, 'Co-Founder', 'CEO of Hugging Face.');
+createTech('transformers_lib', 'Transformers', 2018, 2, TechRole.STANDARD, 'State-of-the-art Machine Learning for Pytorch, TensorFlow, and JAX.', 'AI & Physical Systems', 'Artificial Intelligence');
+
+linkBelonging('clement_delangue', 'hugging_face');
+linkMaker('hugging_face', 'transformers_lib');
+linkDependency('transformers_lib', 'pytorch'); // Built on PyTorch (and others)

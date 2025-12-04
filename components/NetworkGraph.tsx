@@ -46,12 +46,12 @@ const getLabelDimensions = (label: string, category: Category) => {
 const getLinkStyle = (type: LinkType) => {
   switch (type) {
     case LinkType.DEPENDENCY: // User -> Supplier (Weighted Lower for Infra)
-      // Red/Orange, Thick, SOLID (Critical Path)
-      return { dasharray: "none", width: 3, color: "#f97316", opacity: 1.0 };
+      // Red/Orange, Thin, SOLID (Critical Path)
+      return { dasharray: "none", width: 1.5, color: "#f97316", opacity: 1.0 };
 
     case LinkType.MAKER:      // Creator -> Creation (Weighted Higher for Product)
-      // Cyan, Medium, Solid (Creative Output)
-      return { dasharray: "0", width: 2, color: "#22d3ee", opacity: 0.8 };
+      // Cyan, Thin, Solid (Creative Output)
+      return { dasharray: "0", width: 1.5, color: "#22d3ee", opacity: 0.8 };
 
     case LinkType.INFLUENCE:  // Cause -> Effect (Medium Weight)
       // Purple, Thin, Dotted (Abstract)
@@ -571,8 +571,9 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeDo
     if (focusNodeId) {
       const focusedNode = visibleNodes.find(n => n.id === focusNodeId);
       if (focusedNode) {
-        focusedNode.fx = 0;
-        focusedNode.fy = 0;
+        // Fix: Pin to CENTER of screen, not (0,0)
+        focusedNode.fx = width / 2;
+        focusedNode.fy = height / 2;
       }
     } else {
       visibleNodes.forEach(n => { n.fx = null; n.fy = null; });
@@ -581,35 +582,60 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeDo
     simulation.nodes(visibleNodes);
 
     // Update Forces
-    simulation.force("link", d3.forceLink<NodeData, LinkData>(visibleLinks)
-      .id(d => d.id)
-      .distance((d) => {
-        const sRad = (d.source as NodeData)._radius || 20;
-        const tRad = (d.target as NodeData)._radius || 20;
+    const isFocusMode = visibleNodes.length < 50;
 
-        if ((d.source as NodeData).category === Category.COMPANY && (d.target as NodeData).category === Category.COMPANY) {
-          return 500;
-        }
+    simulation
+      .force("link", d3.forceLink<NodeData, LinkData>(visibleLinks)
+        .id((d: any) => d.id)
+        .distance((d: any) => {
+          // PLANETARY PHYSICS:
+          // Maker/Belonging = Satellites (Close)
+          // Dependency/Influence = Inter-planetary (Far)
+          let dist = 150;
+          if (d.type === LinkType.MAKER) dist = 60;      // Very close (Gravity)
+          else if (d.type === LinkType.BELONGING) dist = 80;  // Close
+          else if (d.type === LinkType.DEPENDENCY) dist = 250; // Far
+          else if (d.type === LinkType.INFLUENCE) dist = 350;  // Very Far
 
-        const minD = sRad + tRad + 40;
-        return minD + (150 * (1 - d.strength));
-      })
-      .strength((d) => {
-        // Dependency is stronger tether
-        if (d.type === LinkType.DEPENDENCY) return 0.9;
-        if (d.type === LinkType.BELONGING) return 0.8;
-        return 0.2 * d.strength;
-      })
-    );
-
-    simulation.force("collide", d3.forceCollide<NodeData>()
-      .radius(d => (d._radius || 10) + 15)
-      .iterations(2)
-    );
-
-    simulation.force("company-collide", forceCompanySeparation(0.6));
-    simulation.force("weighted-gravity", forceWeightedGravity(visibleLinks, 0.4));
-    simulation.force("company-affinity", forceCompanyAffinity(visibleLinks, 0.2));
+          // In Focus Mode, tighten everything significantly
+          return isFocusMode ? dist * 0.6 : dist;
+        })
+        .strength((d: any) => {
+          if (d.type === LinkType.MAKER) return 2.0;      // Strongest pull
+          if (d.type === LinkType.BELONGING) return 1.5;  // Strong pull
+          if (d.type === LinkType.DEPENDENCY) return 0.2; // Weak pull
+          if (d.type === LinkType.INFLUENCE) return 0.1;  // Very weak pull
+          return 0.5;
+        })
+      )
+      .force("charge", d3.forceManyBody()
+        .strength((d: any) => {
+          // Dynamic Repulsion based on Node Count
+          if (isFocusMode) {
+            // Focus Mode: Moderate repulsion to keep cluster tight but readable
+            if (d.category === Category.COMPANY) return -300;
+            return -100;
+          }
+          // Full Graph: Huge repulsion to clear space
+          if (d.category === Category.COMPANY) return -3000;
+          return -800;
+        })
+        .distanceMax(isFocusMode ? 500 : 1500)
+      )
+      .force("collide", d3.forceCollide<NodeData>()
+        .radius((d: any) => {
+          // Prevent overlap, give Companies extra breathing room
+          const base = (d._radius || 10); // Use _radius for visual size
+          if (d.category === Category.COMPANY) return base + 60; // Huge buffer
+          return base + 20;
+        })
+        .strength(0.9)
+      )
+      .force("center", d3.forceCenter(width / 2, height / 2).strength(isFocusMode ? 0.1 : 0.05))
+      // Custom forces
+      .force("company-separation", forceCompanySeparation(isFocusMode ? 0.1 : 1.0)) // Less separation in focus mode
+      .force("weighted-gravity", forceWeightedGravity(visibleLinks, 0.3)) // Optional: keep or tune
+      .velocityDecay(isFocusMode ? 0.5 : 0.6); // Tune friction
 
     simulation.alpha(0.3).restart();
 
