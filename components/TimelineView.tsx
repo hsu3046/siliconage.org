@@ -10,7 +10,7 @@ interface TimelineViewProps {
   scrollToNodeId?: string | null;
 }
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 
 const TimelineView: React.FC<TimelineViewProps> = ({ data, onNodeClick, scrollToNodeId }) => {
   // Search State (Map-style)
@@ -28,6 +28,23 @@ const TimelineView: React.FC<TimelineViewProps> = ({ data, onNodeClick, scrollTo
     setSelectedL1(l1);
     setSelectedL2(l2);
   };
+
+  // Calculate category counts
+  const categoryCounts = useMemo(() => {
+    const l1Counts: Record<string, number> = {};
+    const l2Counts: Record<string, number> = {};
+
+    data.nodes.forEach(node => {
+      if (node.techCategoryL1) {
+        l1Counts[node.techCategoryL1] = (l1Counts[node.techCategoryL1] || 0) + 1;
+      }
+      if (node.techCategoryL2) {
+        l2Counts[node.techCategoryL2] = (l2Counts[node.techCategoryL2] || 0) + 1;
+      }
+    });
+
+    return { l1: l1Counts, l2: l2Counts };
+  }, [data.nodes]);
 
   // Apply category filter
   const filteredNodes = data.nodes.filter(node => {
@@ -218,6 +235,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({ data, onNodeClick, scrollTo
               selectedL1={selectedL1}
               selectedL2={selectedL2}
               onFilterChange={handleFilterChange}
+              counts={categoryCounts}
             />
           </div>
         </div>

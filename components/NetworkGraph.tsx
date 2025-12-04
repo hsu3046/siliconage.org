@@ -722,8 +722,11 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
         const angleStep1 = (2 * Math.PI) / firstDegreeNodes.length;
         firstDegreeNodes.forEach((node, i) => {
           const angle = i * angleStep1 - Math.PI / 2; // Start from top
-          node.fx = centerX + Math.cos(angle) * innerRadius;
-          node.fy = centerY + Math.sin(angle) * innerRadius;
+          // Set initial position but allow physics to move them (release fx/fy)
+          node.x = centerX + Math.cos(angle) * innerRadius;
+          node.y = centerY + Math.sin(angle) * innerRadius;
+          node.fx = null;
+          node.fy = null;
           (node as any)._angle = angle; // Store angle for 2nd degree positioning
         });
 
@@ -758,13 +761,18 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
               : 0;
 
             const finalAngle = parentAngle + offsetAngle;
-            node.fx = centerX + Math.cos(finalAngle) * outerRadius;
-            node.fy = centerY + Math.sin(finalAngle) * outerRadius;
+            // Set initial position but allow physics to move them
+            node.x = centerX + Math.cos(finalAngle) * outerRadius;
+            node.y = centerY + Math.sin(finalAngle) * outerRadius;
+            node.fx = null;
+            node.fy = null;
           } else {
             // Fallback: place randomly on outer ring if no parent found
             const randomAngle = Math.random() * 2 * Math.PI;
-            node.fx = centerX + Math.cos(randomAngle) * outerRadius;
-            node.fy = centerY + Math.sin(randomAngle) * outerRadius;
+            node.x = centerX + Math.cos(randomAngle) * outerRadius;
+            node.y = centerY + Math.sin(randomAngle) * outerRadius;
+            node.fx = null;
+            node.fy = null;
           }
         });
       }
@@ -790,8 +798,8 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
           else if (d.type === LinkType.DEPENDENCY) dist = 250; // Far
           else if (d.type === LinkType.INFLUENCE) dist = 350;  // Very Far
 
-          // In Focus Mode, tighten everything significantly
-          return isFocusMode ? dist * 0.6 : dist;
+          // In Focus Mode, keep distance normal or slightly larger to prevent overlap
+          return isFocusMode ? dist * 1.2 : dist;
         })
         .strength((d: any) => {
           if (d.type === LinkType.MAKER) return 2.0;      // Strongest pull
@@ -805,20 +813,24 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
         .strength((d: any) => {
           // Dynamic Repulsion based on Node Count
           if (isFocusMode) {
-            // Focus Mode: Moderate repulsion to keep cluster tight but readable
-            if (d.category === Category.COMPANY) return -500;
-            return -150;
+            // Focus Mode: Stronger repulsion to separate nodes clearly
+            if (d.category === Category.COMPANY) return -2000;
+            return -800;
           }
           // Full Graph: Huge repulsion to clear space
           if (d.category === Category.COMPANY) return -4500;
           return -1000;
         })
-        .distanceMax(isFocusMode ? 500 : 2000)
+        .distanceMax(isFocusMode ? 1000 : 2000)
       )
       .force("collide", d3.forceCollide<NodeData>()
         .radius((d: any) => {
           // Prevent overlap, give Companies extra breathing room
           const base = (d._radius || 10); // Use _radius for visual size
+          if (isFocusMode) {
+            if (d.category === Category.COMPANY) return base + 150; // Even bigger buffer in Focus Mode
+            return base + 40;
+          }
           if (d.category === Category.COMPANY) return base + 100; // Huge buffer
           return base + 20;
         })
@@ -828,9 +840,12 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
       // Custom forces
       .force("company-separation", forceCompanySeparation(isFocusMode ? 0.1 : 1.0)) // Less separation in focus mode
       .force("weighted-gravity", forceWeightedGravity(visibleLinks, 0.3)) // Optional: keep or tune
-      .velocityDecay(isFocusMode ? 0.5 : 0.6); // Tune friction
+      .velocityDecay(isFocusMode ? 0.45 : 0.6); // Moderate friction to prevent excessive bouncing
 
-    simulation.alpha(0.3).restart();
+    simulation
+      .alpha(isFocusMode ? 0.8 : 0.3)
+      .alphaDecay(isFocusMode ? 0.05 : 0.0228) // Faster decay in Focus Mode to settle quickly
+      .restart();
 
     const t = svg.transition().duration(300);
 

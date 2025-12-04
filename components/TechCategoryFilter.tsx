@@ -24,9 +24,10 @@ interface TechCategoryFilterProps {
     selectedL1: TechCategoryL1 | null;
     selectedL2: TechCategoryL2 | null;
     onFilterChange: (l1: TechCategoryL1 | null, l2: TechCategoryL2 | null) => void;
+    counts: { l1: Record<string, number>; l2: Record<string, number> };
 }
 
-const TechCategoryFilter: React.FC<TechCategoryFilterProps> = ({ selectedL1, selectedL2, onFilterChange }) => {
+const TechCategoryFilter: React.FC<TechCategoryFilterProps> = ({ selectedL1, selectedL2, onFilterChange, counts }) => {
     const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
     const [expandedL1, setExpandedL1] = useState<TechCategoryL1 | null>(null);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -101,7 +102,7 @@ const TechCategoryFilter: React.FC<TechCategoryFilterProps> = ({ selectedL1, sel
                                             className={`w-full flex items-center justify-between px-4 py-2.5 text-sm hover:bg-slate-800 transition-colors ${selectedL1 === l1 && !selectedL2 ? 'text-primary font-medium' : 'text-slate-300'
                                                 }`}
                                         >
-                                            <span>{L1_SHORT_NAMES[l1]}</span>
+                                            <span>{L1_SHORT_NAMES[l1]} <span className="text-slate-500 ml-0.5 text-xs font-normal">({counts.l1[l1] || 0})</span></span>
                                             <ChevronRight className={`w-4 h-4 transition-transform ${expandedL1 === l1 ? 'rotate-90' : ''}`} />
                                         </button>
                                         {expandedL1 === l1 && (
@@ -111,7 +112,7 @@ const TechCategoryFilter: React.FC<TechCategoryFilterProps> = ({ selectedL1, sel
                                                     className={`w-full text-left pl-8 pr-4 py-2 text-xs font-semibold hover:bg-slate-700 transition-colors ${selectedL1 === l1 && !selectedL2 ? 'text-primary' : 'text-slate-400'
                                                         }`}
                                                 >
-                                                    All {L1_SHORT_NAMES[l1]}
+                                                    All {L1_SHORT_NAMES[l1]} <span className="text-slate-500 ml-0.5 font-normal">({counts.l1[l1] || 0})</span>
                                                 </button>
                                                 {TECH_HIERARCHY[l1].map((l2) => (
                                                     <button
@@ -120,7 +121,7 @@ const TechCategoryFilter: React.FC<TechCategoryFilterProps> = ({ selectedL1, sel
                                                         className={`w-full text-left pl-8 pr-4 py-2 text-xs hover:bg-slate-700 transition-colors ${selectedL2 === l2 ? 'text-primary font-medium' : 'text-slate-400'
                                                             }`}
                                                     >
-                                                        {l2}
+                                                        {l2} <span className="text-slate-500 ml-0.5 font-normal">({counts.l2[l2] || 0})</span>
                                                     </button>
                                                 ))}
                                             </div>
@@ -175,7 +176,7 @@ const TechCategoryFilter: React.FC<TechCategoryFilterProps> = ({ selectedL1, sel
                                         className={`w-full flex items-center justify-between px-4 py-3 text-sm transition-colors ${selectedL1 === l1 ? 'bg-slate-700 text-white' : 'bg-slate-800 text-slate-300'
                                             }`}
                                     >
-                                        <span>{L1_SHORT_NAMES[l1]}</span>
+                                        <span>{L1_SHORT_NAMES[l1]} <span className="text-slate-400 ml-1 text-xs font-normal">({counts.l1[l1] || 0})</span></span>
                                         <ChevronDown className={`w-4 h-4 transition-transform ${expandedL1 === l1 ? 'rotate-180' : ''}`} />
                                     </button>
                                     {expandedL1 === l1 && (
@@ -185,7 +186,7 @@ const TechCategoryFilter: React.FC<TechCategoryFilterProps> = ({ selectedL1, sel
                                                 className={`w-full text-left px-6 py-2.5 text-xs font-semibold transition-colors ${selectedL1 === l1 && !selectedL2 ? 'text-primary' : 'text-slate-400'
                                                     }`}
                                             >
-                                                All {L1_SHORT_NAMES[l1]}
+                                                All {L1_SHORT_NAMES[l1]} <span className="text-slate-500 ml-1 font-normal">({counts.l1[l1] || 0})</span>
                                             </button>
                                             {TECH_HIERARCHY[l1].map((l2) => (
                                                 <button
@@ -194,7 +195,7 @@ const TechCategoryFilter: React.FC<TechCategoryFilterProps> = ({ selectedL1, sel
                                                     className={`w-full text-left px-6 py-2.5 text-xs transition-colors ${selectedL2 === l2 ? 'text-primary font-medium' : 'text-slate-400'
                                                         }`}
                                                 >
-                                                    {l2}
+                                                    {l2} <span className="text-slate-500 ml-1 font-normal">({counts.l2[l2] || 0})</span>
                                                 </button>
                                             ))}
                                         </div>
