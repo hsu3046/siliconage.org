@@ -6,6 +6,7 @@ import { CATEGORY_COLORS } from '../constants';
 interface NetworkGraphProps {
   data: GraphData;
   onNodeClick: (node: NodeData) => void;
+  onNodeFocus?: (node: NodeData) => void;
   onNodeDoubleClick: (node: NodeData) => void;
   width: number;
   height: number;
@@ -299,13 +300,13 @@ const getCircleIntersection = (
   };
 };
 
-const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeDoubleClick, width, height, focusNodeId, scrollToNodeId, companyMode }) => {
+const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFocus, onNodeDoubleClick, width, height, focusNodeId, scrollToNodeId, companyMode }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const clickTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // START AT LEVEL 2 (Default)
-  const [zoomLevel, setZoomLevel] = useState<number>(2);
-  const zoomLevelRef = useRef<number>(2);
+  // START AT LEVEL 1 (Zoom Out)
+  const [zoomLevel, setZoomLevel] = useState<number>(1);
+  const zoomLevelRef = useRef<number>(1);
   const wheelTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [tooltip, setTooltip] = useState<{
@@ -320,6 +321,12 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeDo
     techCategoryL2?: string;
     hashtags?: { id: string, label: string }[];
   } | null>(null);
+
+  // Search State
+  const [searchTerm, setSearchTerm] = useState("");
+  const [suggestions, setSuggestions] = useState<NodeData[]>([]);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Store simulation references to update them dynamically
   const simulationRef = useRef<d3.Simulation<NodeData, LinkData> | null>(null);
@@ -344,6 +351,108 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeDo
       clickTimerRef.current = null;
     }
     onNodeDoubleClick(d);
+  };
+
+  // Search Logic
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const term = e.target.value;
+    setSearchTerm(term);
+    if (term.length > 0) {
+      const matches = data.nodes
+        .filter(n => n.label.toLowerCase().includes(term.toLowerCase()))
+        .slice(0, 5); // Limit to 5 suggestions
+      setSuggestions(matches);
+      // Ensure focus state is true when typing (fixes issue after search selection)
+      setIsSearchFocused(true);
+    } else {
+      setSuggestions([]);
+    }
+  };
+
+  const handleSearchSelect = (node: NodeData) => {
+    // Clear blur timeout if pending
+    if (blurTimeoutRef.current) {
+      clearTimeout(blurTimeoutRef.current);
+      blurTimeoutRef.current = null;
+    }
+
+    setSearchTerm("");
+    setSuggestions([]);
+    setIsSearchFocused(false);
+
+    console.log('[Search] handleSearchSelect called for:', node.id, node.label);
+    console.log('[Search] zoomBehaviorRef:', !!zoomBehaviorRef.current);
+    console.log('[Search] zoomSelectionRef:', !!zoomSelectionRef.current);
+    console.log('[Search] simulationRef:', !!simulationRef.current);
+    console.log('[Search] simNodes count:', simulationRef.current?.nodes()?.length || 0);
+
+    // Directly pan to node using internal zoom logic
+    if (zoomBehaviorRef.current && zoomSelectionRef.current) {
+      // Find node position from simulation (nodes have x/y after simulation runs)
+      const simNodes = simulationRef.current?.nodes() || [];
+      const simNode = simNodes.find(n => n.id === node.id);
+
+      console.log('[Search] simNode found:', !!simNode, simNode?.x, simNode?.y);
+      console.log('[Search] original node:', node.x, node.y);
+
+      // Use simulation node position if available, otherwise use data node
+      const targetNode = simNode || node;
+
+      console.log('[Search] targetNode:', targetNode.id, targetNode.x, targetNode.y);
+
+      if (targetNode.x !== undefined && targetNode.y !== undefined) {
+        const svg = zoomSelectionRef.current;
+        svg.interrupt();
+        const currentTransform = d3.zoomTransform(svg.node()!);
+        const scale = currentTransform.k;
+        const tx = width / 2 - targetNode.x * scale;
+        const ty = height / 2 - targetNode.y * scale;
+        const transform = d3.zoomIdentity.translate(tx, ty).scale(scale);
+        console.log('[Search] Panning to:', tx, ty, 'scale:', scale);
+        svg.transition()
+          .duration(750)
+          .ease(d3.easeCubicOut)
+          .call(zoomBehaviorRef.current.transform, transform);
+      } else {
+        console.log('[Search] No x/y position found, cannot pan');
+      }
+    } else {
+      console.log('[Search] Refs not ready');
+    }
+    // Note: We intentionally don't call onNodeFocus here to avoid double-pan interference
+    // The direct pan above is sufficient for search navigation
+  };
+
+
+  const handleSearchFocus = () => {
+    // Clear any pending blur timeout
+    if (blurTimeoutRef.current) {
+      clearTimeout(blurTimeoutRef.current);
+      blurTimeoutRef.current = null;
+    }
+    setIsSearchFocused(true);
+  };
+
+  const handleSearchBlur = () => {
+    // Delay to allow click on suggestions
+    blurTimeoutRef.current = setTimeout(() => {
+      setIsSearchFocused(false);
+      blurTimeoutRef.current = null;
+    }, 250);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      if (suggestions.length > 0) {
+        handleSearchSelect(suggestions[0]);
+      } else if (searchTerm) {
+        const match = data.nodes.find(n => n.label.toLowerCase() === searchTerm.toLowerCase())
+          || data.nodes.find(n => n.label.toLowerCase().includes(searchTerm.toLowerCase()));
+        if (match) {
+          handleSearchSelect(match);
+        }
+      }
+    }
   };
 
   const zoomToLevel = (targetLevel: number) => {
@@ -457,8 +566,8 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeDo
     zoomBehaviorRef.current = zoom;
     zoomSelectionRef.current = svg;
 
-    // Start at Level 2 (Scale 0.4)
-    svg.call(zoom.transform, d3.zoomIdentity.translate(width / 2, height / 2).scale(0.4));
+    // Start at Level 1 (Scale 0.15)
+    svg.call(zoom.transform, d3.zoomIdentity.translate(width / 2, height / 2).scale(0.15));
 
     // Layers
     rootGroup.append("g").attr("class", "layer-company-zone");
@@ -467,13 +576,22 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeDo
     rootGroup.append("g").attr("class", "layer-nodes");
     rootGroup.append("g").attr("class", "layer-labels");
 
+    // Aspect Ratio Logic
+    const aspectRatio = width / height;
+    const isPortrait = aspectRatio < 1;
+
+    // Portrait: Constrain Width (Strong X), Allow Height (Weak Y)
+    // Landscape: Allow Width (Weak X), Constrain Height (Strong Y)
+    const forceXStrength = isPortrait ? 0.05 : 0.01;
+    const forceYStrength = isPortrait ? 0.01 : 0.05;
+
     // Simulation Setup
     const simulation = d3.forceSimulation<NodeData>()
       .velocityDecay(0.85) // High friction
       .alphaDecay(0.02)
       .force("charge", d3.forceManyBody().strength(-250))
-      .force("x", d3.forceX(0).strength(0.01))
-      .force("y", d3.forceY(0).strength(0.015));
+      .force("x", d3.forceX(0).strength(forceXStrength))
+      .force("y", d3.forceY(0).strength(forceYStrength));
 
     simulationRef.current = simulation;
 
@@ -482,7 +600,7 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeDo
     };
   }, []);
 
-  // Focus Zoom Effect (Same as before)
+  // Focus Zoom Effect - centers on the focused node
   useEffect(() => {
     const wasFocused = !!prevFocusNodeIdRef.current;
     const isFocused = !!focusNodeId;
@@ -490,19 +608,28 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeDo
     const timer = setTimeout(() => {
       if (!zoomBehaviorRef.current || !zoomSelectionRef.current || !width || !height) return;
 
-      if (isFocused) {
-        const transform = d3.zoomIdentity.translate(width / 2, height / 2).scale(0.8); // Level 3
-        setZoomLevel(3);
-        zoomLevelRef.current = 3;
+      if (isFocused && simulationRef.current) {
+        // Find the focused node position
+        const focusedNode = simulationRef.current.nodes().find(n => n.id === focusNodeId);
 
-        zoomSelectionRef.current.transition()
-          .duration(750)
-          .ease(d3.easeCubicOut)
-          .call(zoomBehaviorRef.current.transform, transform);
+        if (focusedNode && focusedNode.x !== undefined && focusedNode.y !== undefined) {
+          const scale = 0.8; // Level 3
+          const tx = width / 2 - focusedNode.x * scale;
+          const ty = height / 2 - focusedNode.y * scale;
+          const transform = d3.zoomIdentity.translate(tx, ty).scale(scale);
+
+          setZoomLevel(3);
+          zoomLevelRef.current = 3;
+
+          zoomSelectionRef.current.transition()
+            .duration(750)
+            .ease(d3.easeCubicOut)
+            .call(zoomBehaviorRef.current.transform, transform);
+        }
       } else if (wasFocused && !isFocused) {
-        const transform = d3.zoomIdentity.translate(width / 2, height / 2).scale(0.4); // Level 2
-        setZoomLevel(2);
-        zoomLevelRef.current = 2;
+        const transform = d3.zoomIdentity.translate(width / 2, height / 2).scale(0.15); // Level 1 (most zoomed out)
+        setZoomLevel(1);
+        zoomLevelRef.current = 1;
 
         zoomSelectionRef.current.transition()
           .duration(750)
@@ -617,20 +744,20 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeDo
           // Dynamic Repulsion based on Node Count
           if (isFocusMode) {
             // Focus Mode: Moderate repulsion to keep cluster tight but readable
-            if (d.category === Category.COMPANY) return -300;
-            return -100;
+            if (d.category === Category.COMPANY) return -500;
+            return -150;
           }
           // Full Graph: Huge repulsion to clear space
-          if (d.category === Category.COMPANY) return -3000;
-          return -800;
+          if (d.category === Category.COMPANY) return -4500;
+          return -1000;
         })
-        .distanceMax(isFocusMode ? 500 : 1500)
+        .distanceMax(isFocusMode ? 500 : 2000)
       )
       .force("collide", d3.forceCollide<NodeData>()
         .radius((d: any) => {
           // Prevent overlap, give Companies extra breathing room
           const base = (d._radius || 10); // Use _radius for visual size
-          if (d.category === Category.COMPANY) return base + 60; // Huge buffer
+          if (d.category === Category.COMPANY) return base + 100; // Huge buffer
           return base + 20;
         })
         .strength(0.9)
@@ -902,6 +1029,46 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeDo
   return (
     <div className="relative w-full h-full bg-background overflow-hidden border border-slate-700 rounded-xl shadow-2xl">
       <svg ref={svgRef} width={width} height={height} className="block" />
+
+      {/* Search Overlay - hidden in Focus mode */}
+      {!focusNodeId && (
+        <div className="absolute top-4 left-4 z-20 w-64">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg className="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            <input
+              type="text"
+              className="block w-full pl-10 pr-3 py-2 border border-slate-600 rounded-lg leading-5 bg-slate-900/90 text-slate-300 placeholder-slate-500 focus:outline-none focus:bg-slate-900 focus:border-primary focus:ring-1 focus:ring-primary sm:text-sm backdrop-blur-md shadow-xl transition-all"
+              placeholder="Search nodes..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+              onKeyDown={handleKeyDown}
+              onFocus={handleSearchFocus}
+              onBlur={handleSearchBlur}
+            />
+            {/* Suggestions Dropdown */}
+            {isSearchFocused && suggestions.length > 0 && (
+              <div className="absolute mt-1 w-full bg-slate-900/95 border border-slate-600 rounded-md shadow-2xl backdrop-blur-md overflow-hidden">
+                <ul className="max-h-60 overflow-auto custom-scrollbar">
+                  {suggestions.map((node) => (
+                    <li
+                      key={node.id}
+                      className="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-slate-800 text-slate-300 transition-colors border-b border-slate-800/50 last:border-0"
+                      onClick={() => handleSearchSelect(node)}
+                    >
+                      <div className="flex items-center">
+                        <span className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: CATEGORY_COLORS[node.category] }}></span>
+                        <span className="block truncate font-medium text-sm">{node.label}</span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {tooltip && (
         <div

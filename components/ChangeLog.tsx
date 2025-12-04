@@ -30,58 +30,63 @@ const ChangeLog: React.FC<ChangeLogProps> = ({ isOpen, onClose }) => {
                 {/* Content */}
                 <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
 
-                    {/* Version 1.0.1 */}
+                    {/* Version 1.1.0 */}
                     <div className="space-y-4">
                         <div className="flex items-center gap-3">
                             <span className="px-3 py-1 bg-green-500/10 border border-green-500/50 text-green-400 rounded-full text-xs font-bold">
-                                v1.0.1
+                                v1.1.0
                             </span>
-                            <span className="text-slate-500 text-sm">2025-12-03</span>
+                            <span className="text-slate-500 text-sm">2025-12-04</span>
                         </div>
 
                         <div className="space-y-6">
-                            {/* Mobile UI Improvements */}
+                            {/* New Content */}
                             <div>
                                 <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
-                                    <span className="text-blue-400">📱</span> Mobile UI Improvements
+                                    <span className="text-blue-400">📦</span> New Content
                                 </h3>
                                 <ul className="space-y-2 text-slate-300 text-sm">
                                     <li className="flex items-start gap-2">
                                         <span className="text-green-400 mt-1">✓</span>
-                                        <span>Center-aligned toggle buttons on mobile for better visual balance</span>
+                                        <span>Added massive new nodes related to Metaverse, Robotics, Quantum Computing, VC and more</span>
                                     </li>
                                     <li className="flex items-start gap-2">
                                         <span className="text-green-400 mt-1">✓</span>
-                                        <span>Increased title font size on mobile for better readability</span>
-                                    </li>
-                                    <li className="flex items-start gap-2">
-                                        <span className="text-green-400 mt-1">✓</span>
-                                        <span>Disabled graph tooltips on touch devices to prevent conflicts</span>
+                                        <span>Added category information to Company and Technology nodes</span>
                                     </li>
                                 </ul>
                             </div>
 
-                            {/* Focus Mode Enhancements */}
+                            {/* New Features */}
                             <div>
                                 <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
-                                    <span className="text-purple-400">🎯</span> Focus Mode Enhancements
+                                    <span className="text-purple-400">🚀</span> New Features
                                 </h3>
                                 <ul className="space-y-2 text-slate-300 text-sm">
                                     <li className="flex items-start gap-2">
                                         <span className="text-green-400 mt-1">✓</span>
-                                        <span>Two-row layout on mobile: Focus info on top, Exit button + toggles on bottom</span>
+                                        <span>Added search bar to Map mode - search and center the node on screen</span>
                                     </li>
                                     <li className="flex items-start gap-2">
                                         <span className="text-green-400 mt-1">✓</span>
-                                        <span>Center-aligned Focus info and Exit button for cleaner appearance</span>
+                                        <span>Added search bar to History mode</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            {/* Improvements */}
+                            <div>
+                                <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                                    <span className="text-yellow-400">✨</span> Improvements
+                                </h3>
+                                <ul className="space-y-2 text-slate-300 text-sm">
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-green-400 mt-1">✓</span>
+                                        <span>Improved physics engine for better node positioning</span>
                                     </li>
                                     <li className="flex items-start gap-2">
                                         <span className="text-green-400 mt-1">✓</span>
-                                        <span>Enabled category and link type toggles while in Focus Mode</span>
-                                    </li>
-                                    <li className="flex items-start gap-2">
-                                        <span className="text-green-400 mt-1">✓</span>
-                                        <span>Auto-close Detail Panel when entering Focus Mode</span>
+                                        <span>Minor UI adjustments</span>
                                     </li>
                                 </ul>
                             </div>
@@ -94,40 +99,7 @@ const ChangeLog: React.FC<ChangeLogProps> = ({ isOpen, onClose }) => {
                                 <ul className="space-y-2 text-slate-300 text-sm">
                                     <li className="flex items-start gap-2">
                                         <span className="text-green-400 mt-1">✓</span>
-                                        <span>Fixed scroll position reset when switching views (Map/History/List)</span>
-                                    </li>
-                                    <li className="flex items-start gap-2">
-                                        <span className="text-green-400 mt-1">✓</span>
-                                        <span>Fixed mobile viewport shifting issues with delayed scroll reset</span>
-                                    </li>
-                                    <li className="flex items-start gap-2">
-                                        <span className="text-green-400 mt-1">✓</span>
-                                        <span>Fixed unwanted auto-scroll after exiting Focus Mode or closing Detail Panel</span>
-                                    </li>
-                                    <li className="flex items-start gap-2">
-                                        <span className="text-green-400 mt-1">✓</span>
-                                        <span>Improved Detail Panel close button reliability on mobile</span>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            {/* UI Polish */}
-                            <div>
-                                <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
-                                    <span className="text-yellow-400">✨</span> UI Polish
-                                </h3>
-                                <ul className="space-y-2 text-slate-300 text-sm">
-                                    <li className="flex items-start gap-2">
-                                        <span className="text-green-400 mt-1">✓</span>
-                                        <span>Updated version number to v1.0.1</span>
-                                    </li>
-                                    <li className="flex items-start gap-2">
-                                        <span className="text-green-400 mt-1">✓</span>
-                                        <span>Added ChangeLog feature to track updates</span>
-                                    </li>
-                                    <li className="flex items-start gap-2">
-                                        <span className="text-green-400 mt-1">✓</span>
-                                        <span>URL routing support for About modal</span>
+                                        <span>Various minor bug fixes</span>
                                     </li>
                                 </ul>
                             </div>

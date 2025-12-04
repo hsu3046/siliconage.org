@@ -9,7 +9,16 @@ interface TimelineViewProps {
   scrollToNodeId?: string | null;
 }
 
+import { useState, useRef } from 'react';
+
 const TimelineView: React.FC<TimelineViewProps> = ({ data, onNodeClick, scrollToNodeId }) => {
+  // Search State (Map-style)
+  const [searchTerm, setSearchTerm] = useState("");
+  const [suggestions, setSuggestions] = useState<NodeData[]>([]);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
   // Sort nodes by year
   const sortedNodes = [...data.nodes].sort((a, b) => a.year - b.year);
 
@@ -54,11 +63,118 @@ const TimelineView: React.FC<TimelineViewProps> = ({ data, onNodeClick, scrollTo
     return `${node.year}`;
   };
 
+  // Search Logic (Map-style: node names only with suggestions)
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const term = e.target.value;
+    setSearchTerm(term);
+    if (term.length > 0) {
+      const matches = data.nodes
+        .filter(n => n.label.toLowerCase().includes(term.toLowerCase()))
+        .slice(0, 5); // Limit to 5 suggestions
+      setSuggestions(matches);
+      setIsSearchFocused(true);
+    } else {
+      setSuggestions([]);
+    }
+  };
+
+  const handleSearchSelect = (node: NodeData) => {
+    // Clear blur timeout if pending
+    if (blurTimeoutRef.current) {
+      clearTimeout(blurTimeoutRef.current);
+      blurTimeoutRef.current = null;
+    }
+
+    setSearchTerm("");
+    setSuggestions([]);
+    setIsSearchFocused(false);
+
+    // Blur input first to dismiss keyboard on mobile (prevents scroll shift)
+    searchInputRef.current?.blur();
+
+    // Scroll to the selected node after a short delay for keyboard dismiss
+    setTimeout(() => {
+      const element = document.getElementById(`timeline-node-${node.id}`);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100);
+  };
+
+  const handleSearchFocus = () => {
+    if (blurTimeoutRef.current) {
+      clearTimeout(blurTimeoutRef.current);
+      blurTimeoutRef.current = null;
+    }
+    setIsSearchFocused(true);
+  };
+
+  const handleSearchBlur = () => {
+    blurTimeoutRef.current = setTimeout(() => {
+      setIsSearchFocused(false);
+      blurTimeoutRef.current = null;
+    }, 250);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      if (suggestions.length > 0) {
+        handleSearchSelect(suggestions[0]);
+      } else if (searchTerm) {
+        const match = data.nodes.find(n => n.label.toLowerCase() === searchTerm.toLowerCase())
+          || data.nodes.find(n => n.label.toLowerCase().includes(searchTerm.toLowerCase()));
+        if (match) {
+          handleSearchSelect(match);
+        }
+      }
+    }
+  };
+
   return (
-    <div className="w-full h-full overflow-y-auto bg-background p-4 md:p-8 custom-scrollbar scroll-smooth">
+    <div className="w-full h-full overflow-y-auto bg-background p-4 custom-scrollbar scroll-smooth">
       <div className="max-w-6xl mx-auto relative">
         {/* Central Line */}
         <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-slate-800 transform md:-translate-x-1/2"></div>
+
+        {/* Sticky Search Header - reduced margin to match ListView */}
+        <div className="sticky top-0 z-30 bg-background/95 backdrop-blur-md pb-4 border-b border-slate-800">
+          <div className="relative flex-1 max-w-md">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg className="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            <input
+              ref={searchInputRef}
+              type="text"
+              className="block w-full pl-10 pr-3 py-2 border border-slate-600 rounded-lg leading-5 bg-slate-900 text-slate-300 placeholder-slate-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary sm:text-sm"
+              placeholder="Search nodes..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+              onKeyDown={handleKeyDown}
+              onFocus={handleSearchFocus}
+              onBlur={handleSearchBlur}
+            />
+            {/* Suggestions Dropdown */}
+            {isSearchFocused && suggestions.length > 0 && (
+              <div className="absolute mt-1 w-full bg-slate-900/95 border border-slate-600 rounded-md shadow-2xl backdrop-blur-md overflow-hidden z-50">
+                <ul className="max-h-60 overflow-auto custom-scrollbar">
+                  {suggestions.map((node) => (
+                    <li
+                      key={node.id}
+                      className="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-slate-800 text-slate-300 transition-colors border-b border-slate-800/50 last:border-0"
+                      onClick={() => handleSearchSelect(node)}
+                    >
+                      <div className="flex items-center">
+                        <span className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: CATEGORY_COLORS[node.category] }}></span>
+                        <span className="block truncate font-medium text-sm">{node.label}</span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+
 
         {years.map((year) => (
           <div key={year} className="mb-8 relative">
@@ -128,13 +244,21 @@ const TimelineView: React.FC<TimelineViewProps> = ({ data, onNodeClick, scrollTo
                       <div className={`flex flex-col ${isLeft ? 'md:items-end' : 'md:items-start'}`}>
                         <div className="flex items-center gap-2 mb-2">
                           <span
-                            className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-900 border border-slate-700"
+                            className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-900/50"
                             style={{ color: CATEGORY_COLORS[node.category] }}
                           >
                             {node.category}
                           </span>
-
                           {/* Exact Score Display */}
+                          <div
+                            className="flex items-center gap-1 bg-slate-800 px-2 py-0.5 rounded border border-slate-600 ml-2"
+                            title="Impact Factor"
+                          >
+                            <svg className="w-3 h-3 text-yellow-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                            <span className="text-xs font-mono font-bold text-slate-300">
+                              {(node._score || 0).toFixed(1)}
+                            </span>
+                          </div>
                         </div>
 
                         {/* Company Categories */}
@@ -207,7 +331,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({ data, onNodeClick, scrollTo
           <div className="w-3 h-3 rounded-full bg-slate-800 border border-slate-600"></div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

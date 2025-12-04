@@ -232,6 +232,12 @@ const App: React.FC = () => {
     }
   };
 
+  // For search: center on node WITHOUT opening Detail Panel
+  const handleNodeFocus = (node: NodeData) => {
+    setScrollToNodeId(node.id);
+    // Do NOT set selectedNode, so DetailPanel won't open
+  };
+
   const filteredData: GraphData = useMemo(() => {
     let activeNodes = INITIAL_DATA.nodes.map(node => ({ ...node }));
     let activeLinks = INITIAL_DATA.links.map(link => ({ ...link }));
@@ -490,6 +496,7 @@ const App: React.FC = () => {
           <NetworkGraph
             data={filteredData}
             onNodeClick={handleNodeSelect}
+            onNodeFocus={handleNodeFocus}
             onNodeDoubleClick={handleNodeDoubleClick}
             width={width}
             height={contentHeight}

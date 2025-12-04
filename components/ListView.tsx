@@ -125,7 +125,7 @@ const ListView: React.FC<ListViewProps> = ({ data, onNodeClick, scrollToNodeId }
             >
               <option value="CATEGORY">Category</option>
               <option value="ALPHABETICAL">Name (A-Z)</option>
-              <option value="IMPORTANCE">Importance Score</option>
+              <option value="IMPORTANCE">Impact</option>
             </select>
             <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-400">
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
