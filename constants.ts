@@ -1,5 +1,4 @@
-
-import { Category, GraphData, LinkType, LinkDirection, NodeData, LinkData, CompanyRole, PersonRole, TechRole, EpisodeRole, Role, TechCategoryL1, TechCategoryL2 } from './types';
+import { Category, GraphData, LinkType, LinkDirection, NodeData, LinkData, CompanyRole, PersonRole, TechRole, EpisodeRole, CompanyCategory, Role, TechCategoryL1, TechCategoryL2 } from './types';
 
 // Visual Colors mapped to categories
 export const CATEGORY_COLORS: Record<Category, string> = {
@@ -14,8 +13,8 @@ export const CATEGORY_COLORS: Record<Category, string> = {
 const nodes: NodeData[] = [];
 const links: LinkData[] = [];
 
-const createCompany = (id: string, label: string, year: number, importance: number, roleType: CompanyRole, description: string) => {
-  nodes.push({ id, label, category: Category.COMPANY, year, importance, roleType, description });
+const createCompany = (id: string, label: string, year: number, importance: number, roleType: CompanyRole, description: string, categories: CompanyCategory[] = []) => {
+  nodes.push({ id, label, category: Category.COMPANY, year, importance, roleType, description, companyCategories: categories });
 };
 
 const createPerson = (id: string, label: string, year: number, importance: number, roleType: PersonRole, role: string, description: string) => {
@@ -65,7 +64,7 @@ linkInfluence('turing', 'mccarthy', 0.8);
 // ==========================================
 
 // AMD - The Challenger
-createCompany('amd', 'AMD', 1969, 2, CompanyRole.INFRA, 'Intel\'s eternal rival, resurgent under Lisa Su with Ryzen and EPYC processors.');
+createCompany('amd', 'AMD', 1969, 2, CompanyRole.INFRA, 'Intel\'s eternal rival, resurgent under Lisa Su with Ryzen and EPYC processors.', [CompanyCategory.SEMICONDUCTOR]);
 createPerson('lisa_su', 'Lisa Su', 2014, 2, PersonRole.VISIONARY, 'CEO', 'Led AMD\'s remarkable turnaround with Ryzen architecture and data center dominance.');
 createTech('ryzen', 'AMD Ryzen', 2017, 2, TechRole.PRODUCT, 'High-performance CPUs that challenged Intel\'s dominance.', 'Hardware & Infrastructure', 'Processors & Compute');
 createTech('epyc', 'AMD EPYC', 2017, 2, TechRole.PRODUCT, 'Server processors that captured data center market share from Intel.', 'Hardware & Infrastructure', 'Processors & Compute');
@@ -90,7 +89,7 @@ linkDependency('snapdragon', 'tsmc');
 // ERA 1: THE GENESIS
 // ==========================================
 
-createCompany('att', 'AT&T', 1885, 2, CompanyRole.PLATFORM, 'American Telephone & Telegraph - parent company of Bell Labs and telecommunications giant.');
+createCompany('att', 'AT&T', 1885, 2, CompanyRole.PLATFORM, 'American Telephone & Telegraph - parent company of Bell Labs and telecommunications giant.', [CompanyCategory.TELECOM]);
 createPerson('alexander_graham_bell', 'Alexander Graham Bell', 1885, 1, PersonRole.VISIONARY, 'Founder', 'Inventor of the telephone.');
 createEpisode('att_breakup', 'The Breakup', 1984, 2, EpisodeRole.MILESTONE, 'Antitrust split of AT&T into Baby Bells, opening telecom innovation.');
 
@@ -153,7 +152,7 @@ linkBelonging('shannon', 'dartmouth');
 // Transistor's fundamental influence
 linkInfluence('transistor', 'integrated_circuit', 0.95);
 
-createCompany('ibm', 'IBM', 1911, 1, CompanyRole.PLATFORM, 'Big Blue. The dominant force in computing for most of the 20th century.');
+createCompany('ibm', 'IBM', 1911, 1, CompanyRole.PLATFORM, 'Big Blue. The dominant force in computing for most of the 20th century.', [CompanyCategory.HARDWARE, CompanyCategory.SOFTWARE]);
 createTech('mainframe', 'Mainframe', 1952, 2, TechRole.PRODUCT, 'Big iron computing for enterprise.', 'Hardware & Infrastructure', 'Processors & Compute');
 createTech('deep_blue', 'Deep Blue', 1997, 2, TechRole.PRODUCT, 'First computer to defeat a world chess champion.', 'AI & Physical Systems', 'Artificial Intelligence');
 createEpisode('kasparov_match', 'Kasparov vs Deep Blue', 1997, 2, EpisodeRole.MILESTONE, 'The first time a computer defeated a reigning world chess champion.');
@@ -164,7 +163,7 @@ linkBelonging('deep_blue', 'kasparov_match');
 linkBelonging('kasparov_match', 'ibm');
 linkInfluence('von_neumann', 'mainframe', 0.6);
 
-createCompany('fairchild', 'Fairchild Semi', 1957, 2, CompanyRole.LAB, 'The incubator of Silicon Valley.');
+createCompany('fairchild', 'Fairchild Semi', 1957, 2, CompanyRole.LAB, 'The incubator of Silicon Valley.', [CompanyCategory.SEMICONDUCTOR]);
 createPerson('noyce', 'Robert Noyce', 1957, 1, PersonRole.VISIONARY, 'Mayor of Silicon Valley', 'Co-inventor of the IC and co-founder of Intel.');
 createPerson('moore', 'Gordon Moore', 1968, 1, PersonRole.VISIONARY, 'Co-founder', 'Author of Moore\'s Law. Co-founded Intel.');
 createEpisode('traitorous_eight', 'The Traitorous Eight', 1957, 2, EpisodeRole.MILESTONE, 'Eight engineers left Shockley to found Fairchild.');
@@ -176,7 +175,7 @@ linkMaker('fairchild', 'ic');
 linkInfluence('shockley', 'traitorous_eight');
 linkInfluence('traitorous_eight', 'fairchild');
 
-createCompany('ti', 'Texas Instruments', 1930, 2, CompanyRole.INFRA, 'Pioneers of the Integrated Circuit and DSPs.');
+createCompany('ti', 'Texas Instruments', 1930, 2, CompanyRole.INFRA, 'Pioneers of the Integrated Circuit and DSPs.', [CompanyCategory.SEMICONDUCTOR]);
 createPerson('kilby', 'Jack Kilby', 1958, 2, PersonRole.THEORIST, 'Nobel Laureate', 'Inventor of the Integrated Circuit (alongside Noyce).');
 
 createTech('ti_calculator', 'Handheld Calculator', 1967, 2, TechRole.PRODUCT, 'First handheld electronic calculator, revolutionizing personal computing.', 'Hardware & Infrastructure', 'Devices & Form Factors');
@@ -205,7 +204,7 @@ linkDependency('dsp', 'microprocessor', 0.7);
 linkInfluence('tms1000', 'microprocessor', 0.5);
 linkDependency('ttl_logic', 'transistor');
 
-createCompany('intel', 'Intel', 1968, 1, CompanyRole.INFRA, 'Put the "Silicon" in Silicon Valley. Created the microprocessor.');
+createCompany('intel', 'Intel', 1968, 1, CompanyRole.INFRA, 'Put the "Silicon" in Silicon Valley. Created the microprocessor.', [CompanyCategory.SEMICONDUCTOR]);
 createPerson('andy_grove', 'Andy Grove', 1979, 2, PersonRole.VISIONARY, 'Former CEO', 'The man who drove Intel\'s execution. "Only the Paranoid Survive."');
 createPerson('faggin', 'Federico Faggin', 1971, 2, PersonRole.BUILDER, 'Lead Designer', 'Led the design of the first commercial microprocessor.');
 createPerson('gelsinger', 'Pat Gelsinger', 2021, 2, PersonRole.VISIONARY, 'CEO', 'Returned to Intel as CEO to restore its manufacturing leadership.');
@@ -257,13 +256,13 @@ linkInfluence('moores_law', 'microprocessor', 0.8);
 // ERA 2: PERSONAL COMPUTING & OS
 // ==========================================
 
-createCompany('xerox', 'Xerox PARC', 1970, 2, CompanyRole.LAB, 'Invented the GUI, Mouse, and Ethernet, but failed to commercialize them.');
+createCompany('xerox', 'Xerox PARC', 1970, 2, CompanyRole.LAB, 'Invented the GUI, Mouse, and Ethernet, but failed to commercialize them.', [CompanyCategory.LAB]);
 createPerson('kay', 'Alan Kay', 1970, 2, PersonRole.THEORIST, 'Visionary', 'Pioneered OOP (Smalltalk) and the GUI.');
 createTech('gui', 'GUI', 1973, 2, TechRole.CORE, 'Graphical User Interface.', 'System Software', 'Operating Systems (OS)');
 linkBelonging('kay', 'xerox');
 linkMaker('xerox', 'gui');
 
-createCompany('apple', 'Apple', 1976, 1, CompanyRole.PLATFORM, 'Revolutionized personal computing, mobile, and design.');
+createCompany('apple', 'Apple', 1976, 1, CompanyRole.PLATFORM, 'Revolutionized personal computing, mobile, and design.', [CompanyCategory.HARDWARE, CompanyCategory.SOFTWARE]);
 createPerson('jobs', 'Steve Jobs', 1976, 1, PersonRole.VISIONARY, 'Co-Founder', 'The visionary who made technology beautiful and accessible.');
 createPerson('wozniak', 'Steve Wozniak', 1976, 2, PersonRole.BUILDER, 'Co-Founder', 'The engineering genius behind the Apple I and II.');
 createPerson('cook', 'Tim Cook', 2011, 2, PersonRole.VISIONARY, 'CEO', 'Master of the supply chain who scaled Apple to a $3T company.');
@@ -283,7 +282,7 @@ linkBelonging('xerox_investment', 'xerox');
 linkInfluence('xerox_investment', 'apple');
 linkInfluence('gui_visit', 'macintosh');
 
-createCompany('microsoft', 'Microsoft', 1975, 1, CompanyRole.PLATFORM, 'PC software monopoly turned Cloud & AI giant.');
+createCompany('microsoft', 'Microsoft', 1975, 1, CompanyRole.PLATFORM, 'PC software monopoly turned Cloud & AI giant.', [CompanyCategory.SOFTWARE, CompanyCategory.INTERNET]);
 createPerson('gates', 'Bill Gates', 1975, 1, PersonRole.VISIONARY, 'Co-Founder', 'Dominated the PC era.');
 createPerson('nadella', 'Satya Nadella', 2014, 1, PersonRole.VISIONARY, 'CEO', 'Led the Cloud & AI transformation.');
 createTech('windows', 'Windows', 1985, 2, TechRole.PRODUCT, 'The OS that runs the world.', 'System Software', 'Operating Systems (OS)');
@@ -298,7 +297,7 @@ linkInfluence('ms_saves_apple', 'apple');
 linkBelonging('wintel_alliance', 'microsoft');
 linkBelonging('wintel_alliance', 'intel');
 
-createCompany('oracle', 'Oracle', 1977, 2, CompanyRole.PLATFORM, 'Database giant.');
+createCompany('oracle', 'Oracle', 1977, 2, CompanyRole.PLATFORM, 'Database giant.', [CompanyCategory.SOFTWARE]);
 createPerson('ellison', 'Larry Ellison', 1977, 2, PersonRole.VISIONARY, 'Founder', 'Pioneer of the relational database.');
 createPerson('safra_catz', 'Safra Catz', 1999, 2, PersonRole.VISIONARY, 'CEO', 'Led Oracle\'s aggressive acquisition strategy and cloud pivot.');
 createTech('oracle_db', 'Oracle Database', 1979, 2, TechRole.STANDARD, 'The gold standard for enterprise relational databases.', 'System Software', 'Development & Languages');
@@ -309,7 +308,7 @@ linkBelonging('safra_catz', 'oracle');
 linkMaker('oracle', 'oracle_db');
 linkBelonging('oracle_buys_sun', 'oracle');
 
-createCompany('sap', 'SAP', 1972, 2, CompanyRole.PLATFORM, 'European software giant.');
+createCompany('sap', 'SAP', 1972, 2, CompanyRole.PLATFORM, 'European software giant.', [CompanyCategory.SOFTWARE]);
 createPerson('hasso_plattner', 'Hasso Plattner', 1972, 2, PersonRole.VISIONARY, 'Co-Founder', 'Pioneered ERP software.');
 createTech('erp', 'ERP', 1972, 2, TechRole.PRODUCT, 'Enterprise Resource Planning - the software that runs global business.', 'Digital Services & Platforms', 'Digital Platforms');
 
@@ -317,7 +316,7 @@ linkBelonging('hasso_plattner', 'sap');
 linkMaker('sap', 'erp');
 linkMaker('sap', 'saas');
 
-createCompany('sun', 'Sun Microsystems', 1982, 2, CompanyRole.PLATFORM, 'The dot in .com.');
+createCompany('sun', 'Sun Microsystems', 1982, 2, CompanyRole.PLATFORM, 'The dot in .com.', [CompanyCategory.HARDWARE]);
 createPerson('scott_mcnealy', 'Scott McNealy', 1982, 2, PersonRole.VISIONARY, 'Co-Founder', 'Aggressive leader who defined the dot-com era.');
 createTech('java', 'Java', 1995, 2, TechRole.STANDARD, 'Write once, run anywhere.', 'System Software', 'Development & Languages');
 createTech('solaris', 'Solaris', 1992, 2, TechRole.PRODUCT, 'Enterprise Unix standard.', 'System Software', 'Operating Systems (OS)');
@@ -330,7 +329,7 @@ linkMaker('sun', 'nfs');
 linkDependency('oracle', 'oracle_buys_sun');
 linkInfluence('oracle_buys_sun', 'sun');
 
-createCompany('adobe', 'Adobe', 1982, 2, CompanyRole.PLATFORM, 'Creative software giant.');
+createCompany('adobe', 'Adobe', 1982, 2, CompanyRole.PLATFORM, 'Creative software giant.', [CompanyCategory.SOFTWARE]);
 createPerson('john_warnock', 'John Warnock', 1982, 2, PersonRole.VISIONARY, 'Co-Founder', 'Inventor of PostScript and PDF.');
 createPerson('charles_geschke', 'Charles Geschke', 1982, 2, PersonRole.VISIONARY, 'Co-Founder', 'Desktop publishing pioneer.');
 
@@ -363,7 +362,7 @@ linkInfluence('unix', 'linus');
 // ERA 3: INTERNET & CLOUD
 // ==========================================
 
-createCompany('darpa', 'DARPA', 1958, 1, CompanyRole.LAB, 'Defense Research. Funded Internet & AI.');
+createCompany('darpa', 'DARPA', 1958, 1, CompanyRole.LAB, 'Defense Research. Funded Internet & AI.', [CompanyCategory.LAB]);
 createTech('gps', 'GPS', 1973, 2, TechRole.CORE, 'Global Positioning System - originally a military project, now essential for global navigation.', 'Network & Connectivity', 'Telecommunications');
 createEpisode('darpa_grand_challenge', 'DARPA Grand Challenge', 2004, 2, EpisodeRole.MILESTONE, 'Competition that kickstarted the autonomous vehicle industry.');
 createTech('arpanet', 'ARPANET', 1969, 1, TechRole.CORE, 'Precursor to the Internet.', 'Network & Connectivity', 'Network Architecture');
@@ -373,14 +372,14 @@ linkMaker('cerf', 'arpanet');
 linkMaker('darpa', 'gps');
 linkBelonging('darpa_grand_challenge', 'darpa');
 
-createCompany('cern', 'CERN', 1954, 2, CompanyRole.LAB, 'Birthplace of the Web.');
+createCompany('cern', 'CERN', 1954, 2, CompanyRole.LAB, 'Birthplace of the Web.', [CompanyCategory.LAB]);
 createTech('www', 'World Wide Web', 1989, 1, TechRole.STANDARD, 'HTML, HTTP, URL.', 'Network & Connectivity', 'Network Architecture');
 createPerson('berners_lee', 'Tim Berners-Lee', 1989, 2, PersonRole.THEORIST, 'Inventor', 'Invented the Web.');
 linkBelonging('berners_lee', 'cern');
 linkMaker('cern', 'www');
 linkInfluence('arpanet', 'www');
 
-createCompany('netscape', 'Netscape', 1994, 2, CompanyRole.PLATFORM, 'First commercial browser.');
+createCompany('netscape', 'Netscape', 1994, 2, CompanyRole.PLATFORM, 'First commercial browser.', [CompanyCategory.INTERNET]);
 createPerson('andreessen', 'Marc Andreessen', 1994, 2, PersonRole.BUILDER, 'Co-Founder', 'Created Mosaic/Netscape.');
 createTech('javascript', 'JavaScript', 1995, 2, TechRole.STANDARD, 'Language of the web.', 'System Software', 'Development & Languages');
 createEpisode('browser_wars', 'Browser Wars', 1995, 2, EpisodeRole.MILESTONE, 'Netscape vs Microsoft (IE).');
@@ -391,7 +390,7 @@ linkInfluence('www', 'netscape');
 linkBelonging('browser_wars', 'netscape');
 linkBelonging('browser_wars', 'microsoft');
 
-createCompany('google', 'Google', 1998, 1, CompanyRole.PLATFORM, 'Organized the world\'s information. AI First company.');
+createCompany('google', 'Google', 1998, 1, CompanyRole.PLATFORM, 'Organized the world\'s information. AI First company.', [CompanyCategory.INTERNET, CompanyCategory.SOFTWARE]);
 createPerson('larry_page', 'Larry Page', 1998, 2, PersonRole.VISIONARY, 'Co-Founder', 'PageRank inventor.');
 createPerson('pichai', 'Sundar Pichai', 2015, 2, PersonRole.VISIONARY, 'CEO', 'Led Chrome, Android, and AI pivot.');
 createTech('search', 'Google Search', 1998, 1, TechRole.PRODUCT, 'Algorithmic search.', 'Digital Services & Platforms', 'Search & Information');
@@ -406,7 +405,7 @@ linkMaker('google', 'android'); // Note: Android is a Product here
 linkMaker('google', 'tpu');
 linkInfluence('iphone', 'android');
 
-createCompany('amazon', 'Amazon', 1994, 2, CompanyRole.PLATFORM, 'E-commerce & Cloud.');
+createCompany('amazon', 'Amazon', 1994, 2, CompanyRole.PLATFORM, 'E-commerce & Cloud.', [CompanyCategory.INTERNET, CompanyCategory.SOFTWARE]);
 createPerson('bezos', 'Jeff Bezos', 1994, 2, PersonRole.VISIONARY, 'Founder', 'Cloud computing pioneer.');
 createTech('aws', 'AWS', 2006, 1, TechRole.PRODUCT, 'Cloud Infrastructure (IaaS).', 'Digital Services & Platforms', 'Digital Platforms');
 linkBelonging('bezos', 'amazon');
@@ -424,7 +423,7 @@ linkMaker('alibaba', 'cloud_computing');
 linkDependency('aws', 'cloud_computing');
 linkDependency('saas', 'cloud_computing'); // SaaS runs on Cloud
 
-createCompany('salesforce', 'Salesforce', 1999, 2, CompanyRole.PLATFORM, 'SaaS Pioneer.');
+createCompany('salesforce', 'Salesforce', 1999, 2, CompanyRole.PLATFORM, 'SaaS Pioneer.', [CompanyCategory.SOFTWARE]);
 createPerson('benioff', 'Marc Benioff', 1999, 2, PersonRole.VISIONARY, 'Founder', 'Former Oracle executive who pioneered SaaS.');
 createTech('crm', 'CRM', 1999, 2, TechRole.PRODUCT, 'Customer Relationship Management - the killer app for SaaS.', 'Digital Services & Platforms', 'Digital Platforms');
 createEpisode('no_software', 'No Software Campaign', 2000, 2, EpisodeRole.MILESTONE, 'Marketing campaign that launched the Cloud computing era.');
@@ -441,7 +440,7 @@ linkDependency('crm', 'saas');
 // createCompany('cisco', 'Cisco', 1984, 2, CompanyRole.INFRA, 'Internet plumbing.'); // Moved to Networking section
 // linkDependency('arpanet', 'cisco'); // Moved to Networking section
 
-createCompany('netflix', 'Netflix', 1997, 2, CompanyRole.PLATFORM, 'Streaming & RecSys.');
+createCompany('netflix', 'Netflix', 1997, 2, CompanyRole.PLATFORM, 'Streaming & RecSys.', [CompanyCategory.INTERNET]);
 createPerson('reed_hastings', 'Reed Hastings', 1997, 2, PersonRole.VISIONARY, 'Founder', 'Pivoted from DVD to Streaming, reinventing TV.');
 createTech('chaos_monkey', 'Chaos Monkey', 2011, 2, TechRole.CORE, 'Revolutionized DevOps by randomly terminating instances to test resilience.', 'AI & Physical Systems', 'Artificial Intelligence');
 createEpisode('netflix_prize', 'Netflix Prize', 2006, 2, EpisodeRole.MILESTONE, 'Crowdsourced recommendation algorithm contest ($1M prize) that advanced ML field.');
@@ -460,7 +459,7 @@ linkDependency('chaos_monkey', 'aws');
 // ERA 4: HARDWARE & GLOBAL SUPPLY CHAIN
 // ==========================================
 
-createCompany('tsmc', 'TSMC', 1987, 1, CompanyRole.INFRA, 'The World\'s Foundry.');
+createCompany('tsmc', 'TSMC', 1987, 1, CompanyRole.INFRA, 'The World\'s Foundry.', [CompanyCategory.SEMICONDUCTOR]);
 createPerson('morris_chang', 'Morris Chang', 1987, 2, PersonRole.VISIONARY, 'Founder', 'Invented foundry model.');
 createTech('apple_silicon', 'Apple Silicon', 2020, 2, TechRole.PRODUCT, 'Custom ARM chips.', 'Hardware & Infrastructure', 'Processors & Compute');
 
@@ -469,7 +468,7 @@ linkMaker('apple', 'apple_silicon');
 // linkDependency('apple', 'tsmc'); // Removed direct link
 linkDependency('apple_silicon', 'tsmc');
 
-createCompany('asml', 'ASML', 1984, 1, CompanyRole.INFRA, 'Monopoly on Lithography.');
+createCompany('asml', 'ASML', 1984, 1, CompanyRole.INFRA, 'Monopoly on Lithography.', [CompanyCategory.SEMICONDUCTOR]);
 createTech('euv', 'EUV Lithography', 2019, 1, TechRole.CORE, 'Extreme UV machines.', 'Hardware & Infrastructure', 'Components & Manufacturing');
 linkMaker('asml', 'euv');
 // Companies use EUV technology, which is made by ASML
@@ -484,7 +483,7 @@ linkDependency('intel', 'euv');
 // ARM HOLDINGS - RISC REVOLUTION
 // ==========================================
 
-createCompany('arm', 'ARM', 1990, 2, CompanyRole.INFRA, 'The architecture that powers mobile computing through licensing model.');
+createCompany('arm', 'ARM', 1990, 2, CompanyRole.INFRA, 'The architecture that powers mobile computing through licensing model.', [CompanyCategory.SEMICONDUCTOR]);
 createPerson('sophie_wilson', 'Sophie Wilson', 1983, 2, PersonRole.THEORIST, 'Architect', 'Designed ARM instruction set at Acorn Computers.');
 createPerson('steve_furber', 'Steve Furber', 1983, 2, PersonRole.THEORIST, 'Co-Designer', 'Co-designed the first ARM processor with Sophie Wilson.');
 
@@ -517,7 +516,7 @@ linkInfluence('arm_cortex', 'apple_silicon', 0.6);
 // QUALCOMM - WIRELESS PIONEER
 // ==========================================
 
-createCompany('qualcomm', 'Qualcomm', 1985, 2, CompanyRole.INFRA, 'Mobile chip giant and wireless patent powerhouse.');
+createCompany('qualcomm', 'Qualcomm', 1985, 2, CompanyRole.INFRA, 'Mobile chip giant and wireless patent powerhouse.', [CompanyCategory.SEMICONDUCTOR]);
 createPerson('irwin_jacobs', 'Irwin Jacobs', 1985, 2, PersonRole.VISIONARY, 'Co-Founder', 'Pioneer of CDMA technology and mobile communications.');
 createPerson('paul_jacobs', 'Paul Jacobs', 2005, 2, PersonRole.VISIONARY, 'Former CEO', 'Son of Irwin, led Qualcomm through smartphone era.');
 
@@ -563,7 +562,7 @@ linkDependency('android', 'snapdragon');
 // ==========================================
 
 // SoftBank Group & Vision Fund
-createCompany('softbank', 'SoftBank', 1981, 2, CompanyRole.PLATFORM, 'Japanese conglomerate and world\'s largest tech investor through Vision Fund.');
+createCompany('softbank', 'SoftBank', 1981, 2, CompanyRole.PLATFORM, 'Japanese conglomerate and world\'s largest tech investor through Vision Fund.', [CompanyCategory.VC, CompanyCategory.TELECOM]);
 createPerson('masayoshi_son', 'Masayoshi Son', 1981, 1, PersonRole.VISIONARY, 'Founder & CEO', 'Visionary investor who bet big on internet companies and AI revolution.');
 createEpisode('vision_fund', 'Vision Fund Launch', 2017, 2, EpisodeRole.DEAL, '$100B fund - largest tech investment fund in history, backed by Saudi Arabia.');
 createEpisode('softbank_arm', 'SoftBank Acquires ARM', 2016, 2, EpisodeRole.DEAL, 'SoftBank bought ARM for $32B, largest European tech acquisition.');
@@ -575,7 +574,7 @@ linkBelonging('softbank_arm', 'arm');
 linkInfluence('vision_fund', 'openai', 0.3); // Vision Fund invested in many AI companies
 
 // NTT - Telecom Pioneer
-createCompany('ntt', 'NTT', 1952, 2, CompanyRole.PLATFORM, 'Nippon Telegraph and Telephone - Japan\'s telecom giant and 5G pioneer.');
+createCompany('ntt', 'NTT', 1952, 2, CompanyRole.PLATFORM, 'Nippon Telegraph and Telephone - Japan\'s telecom giant and 5G pioneer.', [CompanyCategory.TELECOM]);
 createPerson('shigeki_goto', 'Shigeki Goto', 1990, 3, PersonRole.THEORIST, 'Researcher', 'NTT researcher who contributed to internet protocols and networking.');
 createTech('ntt_docomo', 'NTT DoCoMo i-mode', 1999, 2, TechRole.PRODUCT, 'World\'s first major mobile internet platform - predated iPhone by 8 years.', 'Digital Services & Platforms', 'Social & Media');
 createTech('emoji', 'Emoji', 1999, 2, TechRole.STANDARD, 'Picture characters invented by Shigetaka Kurita at NTT DoCoMo.', 'Digital Services & Platforms', 'Social & Media');
@@ -596,7 +595,7 @@ linkInfluence('ntt_docomo', 'iphone', 0.4); // i-mode influenced mobile internet
 
 
 // Fujitsu - Enterprise Computing
-createCompany('fujitsu', 'Fujitsu', 1935, 2, CompanyRole.INFRA, 'Japanese IT giant in enterprise computing and supercomputers.');
+createCompany('fujitsu', 'Fujitsu', 1935, 2, CompanyRole.INFRA, 'Japanese IT giant in enterprise computing and supercomputers.', [CompanyCategory.SEMICONDUCTOR]);
 createTech('fugaku', 'Fugaku Supercomputer', 2020, 2, TechRole.PRODUCT, 'World\'s fastest supercomputer (2020-2021) using ARM architecture.', 'Hardware & Infrastructure', 'Processors & Compute');
 createTech('fm_towns', 'FM Towns', 1989, 2, TechRole.PRODUCT, 'Multimedia PC that pioneered CD-ROM usage in Japan.', 'Hardware & Infrastructure', 'Devices & Form Factors');
 createTech('fujitsu_mainframe', 'Fujitsu Mainframe', 1974, 2, TechRole.PRODUCT, 'IBM-compatible mainframes that powered Japanese industry.', 'Hardware & Infrastructure', 'Processors & Compute');
@@ -615,13 +614,13 @@ linkDependency('fujitsu_mainframe', 'mainframe'); // Compatible with IBM
 
 // Samsung - Memory & Display Dominance
 // Toshiba - Flash Memory Pioneer
-createCompany('toshiba', 'Toshiba', 1939, 2, CompanyRole.INFRA, 'Japanese conglomerate and inventor of Flash memory.');
+createCompany('toshiba', 'Toshiba', 1939, 2, CompanyRole.INFRA, 'Japanese conglomerate and inventor of Flash memory.', [CompanyCategory.SEMICONDUCTOR]);
 createPerson('fujio_masuoka', 'Fujio Masuoka', 1980, 2, PersonRole.THEORIST, 'Inventor', 'Invented Flash Memory at Toshiba.');
 
 linkBelonging('fujio_masuoka', 'toshiba');
 
 // Samsung - Memory & Display Dominance
-createCompany('samsung', 'Samsung', 1938, 1, CompanyRole.INFRA, 'World leader in memory chips, displays, and smartphones.');
+createCompany('samsung', 'Samsung', 1938, 1, CompanyRole.INFRA, 'World leader in memory chips, displays, and smartphones.', [CompanyCategory.HARDWARE]);
 createPerson('lee_byung_chul', 'Lee Byung-chul', 1938, 2, PersonRole.VISIONARY, 'Founder', 'Founded Samsung, built it into Korea\'s largest conglomerate.');
 createPerson('lee_kun_hee', 'Lee Kun-hee', 1987, 2, PersonRole.VISIONARY, 'Former Chairman', 'Transformed Samsung into global tech leader. "Change everything except your wife and children."');
 createPerson('lee_jae_yong', 'Lee Jae-yong', 2014, 2, PersonRole.VISIONARY, 'Vice Chairman', 'Third generation leader, focused on AI and semiconductors.');
@@ -660,7 +659,7 @@ linkDependency('galaxy', 'android');
 linkDependency('galaxy', 'snapdragon');
 
 // SK Hynix - Memory Specialist
-createCompany('sk_hynix', 'SK Hynix', 1983, 2, CompanyRole.INFRA, 'Second-largest memory chip maker, HBM leader for AI chips.');
+createCompany('sk_hynix', 'SK Hynix', 1983, 2, CompanyRole.INFRA, 'Second-largest memory chip maker, HBM leader for AI chips.', [CompanyCategory.SEMICONDUCTOR]);
 createPerson('park_jung_ho', 'Park Jung-ho', 2018, 3, PersonRole.VISIONARY, 'CEO', 'Led SK Hynix\'s dominance in HBM for AI accelerators.');
 
 linkBelonging('park_jung_ho', 'sk_hynix');
@@ -673,7 +672,7 @@ linkDependency('sk_hynix', 'euv'); // Uses EUV
 
 // Naver and Kakao removed as per request
 
-createCompany('broadcom', 'Broadcom', 1961, 2, CompanyRole.INFRA, 'Connectivity.');
+createCompany('broadcom', 'Broadcom', 1961, 2, CompanyRole.INFRA, 'Connectivity.', [CompanyCategory.SEMICONDUCTOR]);
 createPerson('hock_tan', 'Hock Tan', 2006, 2, PersonRole.VISIONARY, 'CEO', 'Architect of semiconductor industry consolidation.');
 createEpisode('broadcom_vmware', 'Broadcom Acquires VMware', 2022, 2, EpisodeRole.DEAL, 'Massive $69B acquisition reshaping enterprise software.');
 
@@ -685,7 +684,7 @@ linkDependency('tpu', 'broadcom');
 // FOXCONN - WORLD'S FACTORY
 // ==========================================
 
-createCompany('foxconn', 'Foxconn', 1974, 2, CompanyRole.INFRA, 'World\'s largest electronics manufacturer - assembles most of world\'s consumer electronics.');
+createCompany('foxconn', 'Foxconn', 1974, 2, CompanyRole.INFRA, 'World\'s largest electronics manufacturer - assembles most of world\'s consumer electronics.', [CompanyCategory.HARDWARE]);
 createPerson('terry_gou', 'Terry Gou', 1974, 2, PersonRole.VISIONARY, 'Founder', 'Built Foxconn into world\'s largest contract manufacturer, employing over 1 million workers.');
 
 createEpisode('foxconn_apple_deal', 'Apple-Foxconn Partnership', 2000, 2, EpisodeRole.DEAL, 'Foxconn became Apple\'s primary manufacturer, assembling iPhones, iPads, and Macs.');
@@ -715,7 +714,7 @@ linkDependency('xbox', 'foxconn');
 // ERA 5: THE AI REVOLUTION
 // ==========================================
 
-createCompany('nvidia', 'NVIDIA', 1993, 1, CompanyRole.PLATFORM, 'The Engine of AI.');
+createCompany('nvidia', 'NVIDIA', 1993, 1, CompanyRole.PLATFORM, 'The Engine of AI.', [CompanyCategory.SEMICONDUCTOR, CompanyCategory.SOFTWARE]);
 createPerson('jensen_huang', 'Jensen Huang', 1993, 1, PersonRole.VISIONARY, 'CEO', 'Bet on CUDA.');
 createTech('gpu', 'GPU', 1999, 1, TechRole.PRODUCT, 'Parallel compute.', 'Hardware & Infrastructure', 'Processors & Compute');
 createTech('cuda', 'CUDA', 2007, 1, TechRole.PLATFORM, 'GPGPU Software.', 'System Software', 'Development & Languages'); // Using PLATFORM concept via Product for now or Standard
@@ -727,7 +726,7 @@ linkMaker('nvidia', 'cuda');
 linkDependency('gpu', 'tsmc'); // Added explicit link
 linkDependency('gpu', 'hbm');
 
-createCompany('openai', 'OpenAI', 2015, 1, CompanyRole.LAB, 'Generative AI Leader.');
+createCompany('openai', 'OpenAI', 2015, 1, CompanyRole.LAB, 'Generative AI Leader.', [CompanyCategory.LAB]);
 createPerson('altman', 'Sam Altman', 2015, 1, PersonRole.VISIONARY, 'CEO', 'Face of AI.');
 createPerson('ilya', 'Ilya Sutskever', 2015, 2, PersonRole.THEORIST, 'Co-Founder', 'Chief Scientist.');
 createTech('gpt', 'GPT-4', 2023, 1, TechRole.PRODUCT, 'LLM with reasoning.', 'AI & Physical Systems', 'Artificial Intelligence');
@@ -761,7 +760,7 @@ linkMaker('google', 'alphafold');
 linkInfluence('transformer', 'gpt');
 linkInfluence('gpu', 'fei_fei_li');
 
-createCompany('tesla', 'Tesla', 2003, 1, CompanyRole.PLATFORM, 'AI & Robotics.');
+createCompany('tesla', 'Tesla', 2003, 1, CompanyRole.PLATFORM, 'AI & Robotics.', [CompanyCategory.ROBOTICS, CompanyCategory.HARDWARE]);
 createPerson('musk', 'Elon Musk', 2004, 1, PersonRole.VISIONARY, 'CEO', 'Technoking.');
 createTech('autopilot', 'Autopilot', 2014, 2, TechRole.PRODUCT, 'Vision AI.', 'AI & Physical Systems', 'Autonomous Mobility');
 createTech('optimus', 'Optimus', 2021, 2, TechRole.PRODUCT, 'Humanoid Robot.', 'AI & Physical Systems', 'Robotics');
@@ -775,7 +774,7 @@ linkDependency('autopilot', 'autonomous_driving');
 linkInfluence('musk', 'openai');
 linkDependency('tesla', 'gpu');
 
-createCompany('spacex', 'SpaceX', 2002, 1, CompanyRole.INFRA, 'Revolutionizing space technology.');
+createCompany('spacex', 'SpaceX', 2002, 1, CompanyRole.INFRA, 'Revolutionizing space technology.', [CompanyCategory.ROBOTICS]);
 createPerson('gwynne_shotwell', 'Gwynne Shotwell', 2002, 2, PersonRole.VISIONARY, 'President', 'The operator who built SpaceX into a profitable business.');
 createTech('falcon9', 'Falcon 9', 2010, 1, TechRole.PRODUCT, 'First orbital class reusable rocket.', 'AI & Physical Systems', 'Robotics');
 createTech('starlink', 'Starlink', 2019, 2, TechRole.PRODUCT, 'Satellite internet constellation.', 'Network & Connectivity', 'Telecommunications');
@@ -789,8 +788,10 @@ linkMaker('spacex', 'starlink');
 linkMaker('spacex', 'starship');
 linkBelonging('first_reusable_rocket', 'spacex');
 
-createCompany('palantir', 'Palantir', 2003, 2, CompanyRole.SERVICE, 'Defense AI.');
-createCompany('paypal', 'PayPal', 1998, 2, CompanyRole.PLATFORM, 'Online payments system that birthed the PayPal Mafia.');
+createCompany('unity', 'Unity', 2004, 2, CompanyRole.PLATFORM, 'The engine powering most mobile games and VR/AR experiences.', [CompanyCategory.SOFTWARE]);
+createCompany('roblox', 'Roblox', 2006, 2, CompanyRole.PLATFORM, 'User-generated content platform and proto-metaverse.', [CompanyCategory.INTERNET]);
+createCompany('palantir', 'Palantir', 2003, 2, CompanyRole.SERVICE, 'Defense AI.', [CompanyCategory.SOFTWARE]);
+createCompany('paypal', 'PayPal', 1998, 2, CompanyRole.PLATFORM, 'Online payments system that birthed the PayPal Mafia.', [CompanyCategory.INTERNET]);
 createPerson('thiel', 'Peter Thiel', 2003, 2, PersonRole.VISIONARY, 'Co-Founder', 'PayPal Mafia.');
 linkBelonging('thiel', 'paypal');
 createPerson('alex_karp', 'Alex Karp', 2004, 2, PersonRole.VISIONARY, 'CEO', 'Philosopher-CEO.');
@@ -816,7 +817,7 @@ linkBelonging('project_maven', 'google'); // Google was also involved initially
 // NETWORKING & INFRASTRUCTURE
 // ==========================================
 
-createCompany('cisco', 'Cisco', 1984, 2, CompanyRole.INFRA, 'Internet plumbing.');
+createCompany('cisco', 'Cisco', 1984, 2, CompanyRole.INFRA, 'Internet plumbing.', [CompanyCategory.HARDWARE]);
 createPerson('bosack', 'Leonard Bosack', 1984, 2, PersonRole.VISIONARY, 'Co-Founder', 'Stanford computer scientist.');
 createPerson('lerner', 'Sandy Lerner', 1984, 2, PersonRole.VISIONARY, 'Co-Founder', 'Pioneered multi-protocol router.');
 
@@ -833,11 +834,11 @@ linkDependency('router', 'ios_cisco');
 linkBelonging('dot_com_bubble', 'cisco');
 linkDependency('arpanet', 'router'); // ARPANET evolved into Internet via routers
 
-createCompany('tencent', 'Tencent', 1998, 2, CompanyRole.PLATFORM, 'Chinese Tech Giant.');
+createCompany('tencent', 'Tencent', 1998, 2, CompanyRole.PLATFORM, 'Chinese Tech Giant.', [CompanyCategory.INTERNET]);
 createPerson('pony_ma', 'Pony Ma', 1998, 2, PersonRole.VISIONARY, 'Founder', 'Quiet architect of China\'s digital ecosystem.');
 createTech('wechat', 'WeChat', 2011, 1, TechRole.PRODUCT, 'The Super App: Messaging, Payments, OS-within-OS.', 'Digital Services & Platforms', 'Social & Media');
 
-createCompany('alibaba', 'Alibaba', 1999, 2, CompanyRole.PLATFORM, 'Chinese Cloud/AI.');
+createCompany('alibaba', 'Alibaba', 1999, 2, CompanyRole.PLATFORM, 'Chinese Cloud/AI.', [CompanyCategory.INTERNET]);
 createPerson('jack_ma', 'Jack Ma', 1999, 1, PersonRole.VISIONARY, 'Founder', 'Face of Chinese tech entrepreneurship.');
 createTech('alipay', 'Alipay', 2004, 2, TechRole.PRODUCT, 'Revolutionized digital payments in China.', 'Digital Services & Platforms', 'Digital Platforms');
 createEpisode('ant_group_halt', 'Ant Group IPO Halt', 2020, 2, EpisodeRole.CRISIS, 'Chinese government crackdown on Jack Ma and Big Tech.');
@@ -853,7 +854,7 @@ linkBelonging('ant_group_halt', 'jack_ma');
 // Baidu removed as per request
 
 // ByteDance - Social Media & AI
-createCompany('bytedance', 'ByteDance', 2012, 1, CompanyRole.PLATFORM, 'World\'s most valuable startup, known for its powerful recommendation algorithms.');
+createCompany('bytedance', 'ByteDance', 2012, 1, CompanyRole.PLATFORM, 'World\'s most valuable startup, known for its powerful recommendation algorithms.', [CompanyCategory.INTERNET]);
 createPerson('zhang_yiming', 'Zhang Yiming', 2012, 2, PersonRole.VISIONARY, 'Founder', 'Engineer-turned-entrepreneur who built a global empire on AI recommendation engines.');
 createPerson('shou_zi_chew', 'Shou Zi Chew', 2021, 2, PersonRole.VISIONARY, 'CEO', 'Led TikTok through intense global regulatory scrutiny.');
 
@@ -873,7 +874,7 @@ linkDependency('douyin', 'rec_algo');
 linkBelonging('tiktok_ban_threat', 'bytedance');
 
 // Huawei - Telecom & Hardware
-createCompany('huawei', 'Huawei', 1987, 1, CompanyRole.INFRA, 'Global telecommunications giant and consumer electronics leader.');
+createCompany('huawei', 'Huawei', 1987, 1, CompanyRole.INFRA, 'Global telecommunications giant and consumer electronics leader.', [CompanyCategory.HARDWARE, CompanyCategory.TELECOM]);
 createPerson('ren_zhengfei', 'Ren Zhengfei', 1987, 2, PersonRole.VISIONARY, 'Founder', 'Former PLA engineer who built Huawei into a global tech powerhouse.');
 
 createTech('5g_infra', '5G Infrastructure', 2019, 1, TechRole.CORE, 'Next-generation cellular network equipment dominating global market.', 'Network & Connectivity', 'Telecommunications');
@@ -900,7 +901,7 @@ linkDependency('5g_infra', '5g_patents'); // Relies on global standards (Qualcom
 // ==========================================
 
 // DJI - Drone Market Leader
-createCompany('dji', 'DJI', 2006, 2, CompanyRole.PLATFORM, 'World\'s largest drone manufacturer with 70%+ market share.');
+createCompany('dji', 'DJI', 2006, 2, CompanyRole.PLATFORM, 'World\'s largest drone manufacturer with 70%+ market share.', [CompanyCategory.HARDWARE]);
 createPerson('frank_wang', 'Frank Wang (Wang Tao)', 2006, 2, PersonRole.VISIONARY, 'Founder & CEO', 'Built DJI into drone industry giant, revolutionizing aerial photography and videography.');
 
 createTech('quadcopter', 'Consumer Quadcopter', 2010, 2, TechRole.PRODUCT, 'Four-rotor drone design that enabled stable consumer drones.');
@@ -945,7 +946,7 @@ linkBelonging('ms_skype_deal', 'skype');
 // 1. Autonomous Driving
 // Waymo removed as per request, linked directly to Google
 createTech('self_driving_car', 'Self-Driving Car', 2009, 1, TechRole.PRODUCT, 'Autonomous vehicles capable of sensing their environment and navigating without human input.', 'AI & Physical Systems', 'Autonomous Mobility');
-createCompany('mobileye', 'Mobileye', 1999, 2, CompanyRole.INFRA, 'Pioneer in ADAS and computer vision for automotive.');
+createCompany('mobileye', 'Mobileye', 1999, 2, CompanyRole.INFRA, 'Pioneer in ADAS and computer vision for automotive.', [CompanyCategory.ROBOTICS]);
 createTech('adas', 'ADAS', 1999, 2, TechRole.STANDARD, 'Advanced Driver Assistance Systems - electronic systems that assist drivers.', 'AI & Physical Systems', 'Autonomous Mobility');
 
 linkMaker('google', 'self_driving_car'); // Waymo (formerly Google Self-Driving Car Project)
@@ -954,13 +955,13 @@ linkMaker('mobileye', 'adas');
 linkBelonging('mobileye', 'intel'); // Acquired by Intel
 
 // 2. Robotics
-createCompany('boston_dynamics', 'Boston Dynamics', 1992, 2, CompanyRole.LAB, 'The world\'s most dynamic humanoid and quadruped robots.');
+createCompany('boston_dynamics', 'Boston Dynamics', 1992, 2, CompanyRole.LAB, 'The world\'s most dynamic humanoid and quadruped robots.', [CompanyCategory.LAB, CompanyCategory.ROBOTICS]);
 createPerson('marc_raibert', 'Marc Raibert', 1992, 2, PersonRole.VISIONARY, 'Founder', 'Father of dynamic robots.');
 createTech('spot', 'Spot', 2016, 2, TechRole.PRODUCT, 'Agile mobile robot that navigates terrain with unprecedented mobility.', 'AI & Physical Systems', 'Robotics');
 createTech('atlas', 'Atlas', 2013, 2, TechRole.PRODUCT, 'Bipedal humanoid robot capable of parkour and complex manipulation.', 'AI & Physical Systems', 'Robotics');
 createEpisode('hyundai_bd_deal', 'Hyundai Acquires Boston Dynamics', 2020, 2, EpisodeRole.DEAL, 'Hyundai Motor Group acquires controlling interest in Boston Dynamics.');
 
-createCompany('irobot', 'iRobot', 1990, 2, CompanyRole.PRODUCT, 'Consumer robot company known for Roomba.');
+createCompany('irobot', 'iRobot', 1990, 2, CompanyRole.PRODUCT, 'Consumer robot company known for Roomba.', [CompanyCategory.ROBOTICS]);
 createTech('roomba', 'Roomba', 2002, 2, TechRole.PRODUCT, 'Autonomous robotic vacuum cleaner.', 'AI & Physical Systems', 'Robotics');
 
 linkBelonging('marc_raibert', 'boston_dynamics');
@@ -1066,17 +1067,17 @@ linkDependency('ibm_q', 'quantum_computing');
 // ==========================================
 
 // 1. The Sand Hill Road Giants
-createCompany('sequoia', 'Sequoia Capital', 1972, 2, CompanyRole.INFRA, 'The gold standard of Venture Capital.');
+createCompany('sequoia', 'Sequoia Capital', 1972, 2, CompanyRole.INFRA, 'The gold standard of Venture Capital.', [CompanyCategory.VC]);
 createPerson('don_valentine', 'Don Valentine', 1972, 2, PersonRole.VISIONARY, 'Founder', 'The grandfather of Silicon Valley VC.');
 
-createCompany('kpcb', 'Kleiner Perkins', 1972, 2, CompanyRole.INFRA, 'The other titan of Sand Hill Road.');
+createCompany('kpcb', 'Kleiner Perkins', 1972, 2, CompanyRole.INFRA, 'The other titan of Sand Hill Road.', [CompanyCategory.VC]);
 createPerson('john_doerr', 'John Doerr', 1980, 2, PersonRole.VISIONARY, 'Partner', 'Legendary investor who backed Google and Amazon.');
 
-createCompany('a16z', 'Andreessen Horowitz', 2009, 2, CompanyRole.INFRA, 'Software is eating the world.');
+createCompany('a16z', 'Andreessen Horowitz', 2009, 2, CompanyRole.INFRA, 'Software is eating the world.', [CompanyCategory.VC]);
 // Marc Andreessen already exists
 
 // 2. The Accelerators
-createCompany('y_combinator', 'Y Combinator', 2005, 2, CompanyRole.INFRA, 'The startup factory that launched Airbnb, Dropbox, and Stripe.');
+createCompany('y_combinator', 'Y Combinator', 2005, 2, CompanyRole.INFRA, 'The startup factory that launched Airbnb, Dropbox, and Stripe.', [CompanyCategory.VC]);
 createPerson('paul_graham', 'Paul Graham', 2005, 2, PersonRole.VISIONARY, 'Founder', 'Hacker, painter, and startup mentor.');
 
 // Connections
@@ -1315,7 +1316,7 @@ linkBelonging('linkedin', 'microsoft'); // Acquired by Microsoft
 // 2. Service & Content Platforms
 
 // Uber
-createCompany('uber', 'Uber', 2009, 2, CompanyRole.PLATFORM, 'Revolutionized mobility with the gig economy.');
+createCompany('uber', 'Uber', 2009, 2, CompanyRole.PLATFORM, 'Revolutionized mobility with the gig economy.', [CompanyCategory.INTERNET]);
 createPerson('travis_kalanick', 'Travis Kalanick', 2009, 2, PersonRole.VISIONARY, 'Co-Founder', 'Aggressive expansionist who built Uber.');
 createTech('gig_economy', 'Gig Economy', 2009, 2, TechRole.STANDARD, 'Labor market characterized by short-term contracts or freelance work.', 'Digital Services & Platforms', 'Digital Platforms');
 
@@ -1324,7 +1325,7 @@ linkMaker('uber', 'gig_economy');
 linkMaker('uber', 'sharing_economy');
 
 // Airbnb
-createCompany('airbnb', 'Airbnb', 2008, 2, CompanyRole.PLATFORM, 'Community-based marketplace for accommodations.');
+createCompany('airbnb', 'Airbnb', 2008, 2, CompanyRole.PLATFORM, 'Community-based marketplace for accommodations.', [CompanyCategory.INTERNET]);
 createPerson('brian_chesky', 'Brian Chesky', 2008, 2, PersonRole.VISIONARY, 'Co-Founder', 'Designer-founder who reimagined travel.');
 createTech('sharing_economy', 'Sharing Economy', 2008, 2, TechRole.STANDARD, 'Peer-to-peer based activity of acquiring, providing or sharing access to goods and services.', 'Digital Services & Platforms', 'Digital Platforms');
 

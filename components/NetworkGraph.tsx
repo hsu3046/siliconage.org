@@ -315,6 +315,10 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeDo
     category: Category;
     description: string;
     score: number;
+    companyCategories?: string[];
+    techCategoryL1?: string;
+    techCategoryL2?: string;
+    hashtags?: { id: string, label: string }[];
   } | null>(null);
 
   // Store simulation references to update them dynamically
@@ -704,7 +708,33 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeDo
             .on("dblclick", (event, d) => { event.stopPropagation(); handleNodeDoubleClick(d); })
             .on("mouseenter", (event, d) => {
               if (window.matchMedia('(pointer: coarse)').matches) return; // Disable tooltip on touch devices
-              setTooltip({ x: event.clientX, y: event.clientY, label: d.label, category: d.category, description: d.description, score: d._score || 0 });
+
+              // Calculate Hashtags
+              const relatedLinks = data.links.filter(l => {
+                const s = typeof l.source === 'object' ? (l.source as any).id : l.source;
+                const t = typeof l.target === 'object' ? (l.target as any).id : l.target;
+                return s === d.id || t === d.id;
+              });
+              const hashtags = relatedLinks.map(l => {
+                const sId = typeof l.source === 'object' ? (l.source as any).id : l.source;
+                const tId = typeof l.target === 'object' ? (l.target as any).id : l.target;
+                const targetId = sId === d.id ? tId : sId;
+                const targetNode = data.nodes.find(n => n.id === targetId);
+                return targetNode ? { id: targetId, label: targetNode.label } : null;
+              }).filter(Boolean) as { id: string, label: string }[];
+
+              setTooltip({
+                x: event.clientX,
+                y: event.clientY,
+                label: d.label,
+                category: d.category,
+                description: d.description,
+                score: d._score || 0,
+                companyCategories: d.companyCategories,
+                techCategoryL1: d.techCategoryL1,
+                techCategoryL2: d.techCategoryL2,
+                hashtags: hashtags
+              });
             })
             .on("mousemove", (event) => setTooltip(prev => prev ? { ...prev, x: event.clientX, y: event.clientY } : null))
             .on("mouseleave", () => setTooltip(null));
@@ -758,7 +788,34 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeDo
           .call(enter => enter.transition(t).attr("r", (d: any) => d._radius || 10))
           .on("click", (event, d) => { event.stopPropagation(); handleNodeClick(d); })
           .on("dblclick", (event, d) => { event.stopPropagation(); handleNodeDoubleClick(d); })
-          .on("mouseenter", (event, d) => setTooltip({ x: event.clientX, y: event.clientY, label: d.label, category: d.category, description: d.description, score: d._score || 0 }))
+          .on("mouseenter", (event, d) => {
+            // Calculate Hashtags
+            const relatedLinks = data.links.filter(l => {
+              const s = typeof l.source === 'object' ? (l.source as any).id : l.source;
+              const t = typeof l.target === 'object' ? (l.target as any).id : l.target;
+              return s === d.id || t === d.id;
+            });
+            const hashtags = relatedLinks.map(l => {
+              const sId = typeof l.source === 'object' ? (l.source as any).id : l.source;
+              const tId = typeof l.target === 'object' ? (l.target as any).id : l.target;
+              const targetId = sId === d.id ? tId : sId;
+              const targetNode = data.nodes.find(n => n.id === targetId);
+              return targetNode ? { id: targetId, label: targetNode.label } : null;
+            }).filter(Boolean) as { id: string, label: string }[];
+
+            setTooltip({
+              x: event.clientX,
+              y: event.clientY,
+              label: d.label,
+              category: d.category,
+              description: d.description,
+              score: d._score || 0,
+              companyCategories: d.companyCategories,
+              techCategoryL1: d.techCategoryL1,
+              techCategoryL2: d.techCategoryL2,
+              hashtags: hashtags
+            });
+          })
           .on("mousemove", (event) => setTooltip(prev => prev ? { ...prev, x: event.clientX, y: event.clientY } : null))
           .on("mouseleave", () => setTooltip(null)),
         update => update.transition(t).attr("r", (d: any) => d._radius || 10),
@@ -856,6 +913,27 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeDo
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{tooltip.category}</span>
           </div>
           <span className="text-sm font-bold text-white leading-tight">{tooltip.label}</span>
+
+          {/* Categories */}
+          {(tooltip.companyCategories || tooltip.techCategoryL1) && (
+            <div className="flex flex-wrap gap-1 mt-1 mb-1">
+              {tooltip.companyCategories?.map(cat => (
+                <span key={cat} className="text-[9px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                  {cat}
+                </span>
+              ))}
+              {tooltip.techCategoryL1 && (
+                <span className="text-[9px] px-1.5 py-0.5 rounded bg-blue-900/40 text-blue-300 border border-blue-800/50">
+                  {tooltip.techCategoryL1}
+                </span>
+              )}
+              {tooltip.techCategoryL2 && (
+                <span className="text-[9px] px-1.5 py-0.5 rounded bg-indigo-900/40 text-indigo-300 border border-indigo-800/50">
+                  {tooltip.techCategoryL2}
+                </span>
+              )}
+            </div>
+          )}
           <p className="text-xs text-slate-300 mt-1 leading-snug border-t border-slate-700 pt-2 opacity-90">
             {tooltip.description}
           </p>
@@ -866,6 +944,22 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeDo
               {(data.nodes.find(n => n.id === tooltip.label || n.label === tooltip.label) || {} as any)._score?.toFixed(1) || '0.0'}
             </span>
           </div>
+
+
+
+          {/* Hashtags */}
+          {tooltip.hashtags && tooltip.hashtags.length > 0 && (
+            <div className="flex flex-wrap gap-1 mt-2 pt-2 border-t border-slate-700/50">
+              {tooltip.hashtags.slice(0, 4).map((tag, idx) => (
+                <span key={`${tag.id}-${idx}`} className="text-[9px] font-mono text-blue-400">
+                  #{tag.label.replace(/\s+/g, '')}
+                </span>
+              ))}
+              {tooltip.hashtags.length > 4 && (
+                <span className="text-[9px] text-slate-500">+{tooltip.hashtags.length - 4}</span>
+              )}
+            </div>
+          )}
         </div>
       )}
 

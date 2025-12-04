@@ -97,6 +97,17 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
             {node.role && <span className="text-slate-500 text-xs px-2 py-0.5 bg-slate-800 rounded">{node.role}</span>}
           </div>
 
+          {/* Company Categories */}
+          {node.category === Category.COMPANY && node.companyCategories && (
+            <div className="flex flex-wrap gap-2 mt-3">
+              {node.companyCategories.map((cat) => (
+                <span key={cat} className="text-[10px] font-medium px-2 py-0.5 rounded bg-emerald-900/30 text-emerald-300 border border-emerald-800/50">
+                  {cat}
+                </span>
+              ))}
+            </div>
+          )}
+
           {/* Technology Categories */}
           {node.category === Category.TECHNOLOGY && (
             <div className="flex flex-wrap gap-2 mt-3">

@@ -70,9 +70,21 @@ export type TechCategoryL2 =
   | 'Search & Information' | 'Social & Media' | 'Digital Platforms'
   | 'Artificial Intelligence' | 'Autonomous Mobility' | 'Robotics' | 'Fintech & Crypto' | 'Spatial Computing';
 
+export enum CompanyCategory {
+  SEMICONDUCTOR = 'SEMICONDUCTOR',
+  HARDWARE = 'HARDWARE',
+  SOFTWARE = 'SOFTWARE',
+  INTERNET = 'INTERNET',
+  TELECOM = 'TELECOM',
+  LAB = 'LAB',
+  VC = 'VC',
+  ROBOTICS = 'ROBOTICS',
+}
+
 export interface NodeData {
   id: string;
   label: string;
+  companyCategories?: CompanyCategory[];
   category: Category;
   year: number;
   description: string;
