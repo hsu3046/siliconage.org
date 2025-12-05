@@ -30,44 +30,52 @@ const ChangeLog: React.FC<ChangeLogProps> = ({ isOpen, onClose }) => {
                 {/* Content */}
                 <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
 
-                    {/* Version 1.1.1 */}
+                    {/* Version 1.2.0 */}
                     <div className="space-y-4">
                         <div className="flex items-center gap-3">
-                            <span className="px-3 py-1 bg-blue-500/10 border border-blue-500/50 text-blue-400 rounded-full text-xs font-bold">
-                                v1.1.1
+                            <span className="px-3 py-1 bg-purple-500/10 border border-purple-500/50 text-purple-400 rounded-full text-xs font-bold">
+                                v1.2.0
                             </span>
-                            <span className="text-slate-500 text-sm">2025-12-04</span>
+                            <span className="text-slate-500 text-sm">2025-12-05</span>
                         </div>
 
                         <div className="space-y-6">
                             <div>
                                 <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
-                                    <span className="text-amber-400">✨</span> UX Improvements
+                                    <span className="text-blue-400">📦</span> New Content
+                                </h3>
+                                <ul className="space-y-2 text-slate-300 text-sm">
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-green-400 mt-1">✓</span>
+                                        <span><strong className="text-white">Programming Languages:</strong> Added Python, C++, SQL, Swift as core technology nodes</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-green-400 mt-1">✓</span>
+                                        <span><strong className="text-white">AI Concepts:</strong> Backpropagation, ImageNet, AlexNet, GAN, BERT, Diffusion, RLHF and more</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-green-400 mt-1">✓</span>
+                                        <span><strong className="text-white">AI Companies:</strong> Anthropic (Claude), Stability AI, Midjourney</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-green-400 mt-1">✓</span>
+                                        <span><strong className="text-white">AI Pioneers:</strong> Yoshua Bengio, Andrej Karpathy</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                                    <span className="text-amber-400">✨</span> Improvements
                                 </h3>
                                 <ul className="space-y-2 text-slate-300 text-sm">
                                     <li className="flex items-start gap-2">
                                         <span className="text-amber-400 mt-1">•</span>
-                                        <span>
-                                            <strong className="text-white">Enhanced History Filtering:</strong> Added category filters (L1/L2) with PC dropdown and mobile bottom sheet support.
-                                        </span>
+                                        <span><strong className="text-white">Impact Score:</strong> Rebalanced algorithm - boosted foundational tech, nerfed founder scores</span>
                                     </li>
                                     <li className="flex items-start gap-2">
                                         <span className="text-amber-400 mt-1">•</span>
-                                        <span>
-                                            <strong className="text-white">Focus Mode Upgrade:</strong> Improved physics engine stability and refined UI for better focus experience.
-                                        </span>
-                                    </li>
-                                    <li className="flex items-start gap-2">
-                                        <span className="text-amber-400 mt-1">•</span>
-                                        <span>
-                                            <strong className="text-white">Onboarding Guide:</strong> Added Welcome Modal and Interactive Tutorial for first-time visitors.
-                                        </span>
-                                    </li>
-                                    <li className="flex items-start gap-2">
-                                        <span className="text-amber-400 mt-1">•</span>
-                                        <span>
-                                            <strong className="text-white">Featured Node:</strong> Added "Node of the Day" recommendation feature.
-                                        </span>
+                                        <span><strong className="text-white">Detail Panel:</strong> Improved UI Design and added research paper link</span>
                                     </li>
                                 </ul>
                             </div>
@@ -79,11 +87,7 @@ const ChangeLog: React.FC<ChangeLogProps> = ({ isOpen, onClose }) => {
                                 <ul className="space-y-2 text-slate-300 text-sm">
                                     <li className="flex items-start gap-2">
                                         <span className="text-red-400 mt-1">•</span>
-                                        <span>Fixed mobile viewport shift issue when using search in History view.</span>
-                                    </li>
-                                    <li className="flex items-start gap-2">
-                                        <span className="text-red-400 mt-1">•</span>
-                                        <span>Unified search icon sizes across different views.</span>
+                                        <span>Various minor bug fixes</span>
                                     </li>
                                 </ul>
                             </div>

@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2025-12-05
+
+### Added
+- **Programming Languages**: Added Python, C++, SQL, Swift as core technology nodes
+- **AI Concepts**: Added Backpropagation, ImageNet, AlexNet, Word2Vec, GAN, ResNet, Attention, BERT, Diffusion Models, RLHF
+- **AI Companies**: Added Anthropic (Claude), Stability AI (Stable Diffusion), Midjourney
+- **AI Pioneers**: Added Yoshua Bengio, Andrej Karpathy
+
+### Changed
+- **AI Deep Dive**: Upgraded Gemini API to 2.0-flash with Google Search Grounding for real-time information
+- **AI Deep Dive**: Enhanced prompts with rich node context (year, description, industry, market cap)
+- **Impact Score**: Rebalanced algorithm - VISIONARY role reduced, STANDARD tech boosted, THEORIST boosted
+- **Impact Score**: Added foundational BASED_ON links for better score propagation
+
+### Fixed
+- **DetailPanel**: Fixed duplicate connections display bug
+
 ## [1.1.0] - 2025-12-04
 
 ### Added

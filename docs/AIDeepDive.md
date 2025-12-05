@@ -2,7 +2,7 @@
 
 ## 개요
 
-DetailPanel에서 노드 선택 시 "AI Deep Dive" 버튼을 클릭하면 해당 노드에 대한 AI 생성 분석 텍스트를 표시합니다.
+DetailPanel에서 노드 선택 시 AI 생성 분석 텍스트를 자동으로 표시합니다.
 
 ---
 
@@ -14,9 +14,32 @@ DetailPanel에서 노드 선택 시 "AI Deep Dive" 버튼을 클릭하면 해당
 
 | 순서 | 캐시 위치 | 설명 |
 |------|----------|------|
-| **1** | `STATIC_CACHE[node.id]` | 서버사이드 하드코딩 캐시 (가장 빠름, 무료) |
+| **1** | `STATIC_CACHE[node.id]` | 서버사이드 하드코딩 캐시 (가장 빠름) |
 | **2** | `localStorage.getItem(cacheKey)` | 브라우저 로컬스토리지 캐시 |
 | **3** | **Gemini API 호출** | 실시간 생성 (fallback) |
+
+---
+
+## Gemini API 설정 (v1.2.0 업데이트)
+
+| 항목 | 설정 |
+|------|------|
+| **모델** | `gemini-2.0-flash-001` |
+| **Google Search Grounding** | ✅ 활성화 (최신 정보 반영) |
+| **Response Format** | JSON Schema (summary, significance, keyFacts) |
+
+### 프롬프트에 포함되는 컨텍스트
+
+```
+Entity: "{node.label}"
+Category: {node.category}
+Year: {node.year}
+Description: {node.description}
+Role: {node.role}
+Industry: {node.companyCategories}
+Tech Category: {node.techCategoryL1}
+Market Cap: {node.marketCap?.current}
+```
 
 ---
 
@@ -24,18 +47,9 @@ DetailPanel에서 노드 선택 시 "AI Deep Dive" 버튼을 클릭하면 해당
 
 | 저장소 | 파일/위치 | 설명 |
 |--------|----------|------|
-| **Static Cache** | `services/staticCache.ts` | 16개 노드 사전 정의 |
+| **Static Cache** | `services/staticCache.ts` | 현재 비어있음 (API 호출로 대체) |
 | **Local Storage** | 브라우저 `localStorage` | API 호출 결과 캐싱 (키: `silicon_age_ai_cache_{nodeId}`) |
 | **Component State** | `DetailPanel.tsx` `aiData` state | UI 렌더링용 |
-
----
-
-## Static Cache에 저장된 노드 (16개)
-
-```
-turing, shannon, nvidia, google, openai, microsoft, tsmc, apple, 
-ibm, tesla, samsung, jensen_huang, altman, transformer, gpu, chatgpt_launch
-```
 
 ---
 
@@ -54,7 +68,7 @@ interface AIResponse {
 ## 흐름 다이어그램
 
 ```
-사용자 클릭 "AI Deep Dive"
+사용자 노드 선택
         ↓
 DetailPanel.loadAiData()
         ↓
@@ -67,7 +81,8 @@ fetchNodeDetails(node)
 │ 2. localStorage 확인                │
 │    → 있으면 반환                    │
 ├─────────────────────────────────────┤
-│ 3. Gemini API 호출                  │
+│ 3. Gemini 2.0-flash API 호출        │
+│    (Google Search Grounding 활성화) │
 │    → 결과를 localStorage에 저장     │
 └─────────────────────────────────────┘
         ↓
@@ -84,3 +99,4 @@ UI 렌더링
 - `services/geminiService.ts` - API 호출 및 캐시 로직
 - `services/staticCache.ts` - 하드코딩된 캐시 데이터
 - `types.ts` - `AIResponse` 인터페이스 정의
+

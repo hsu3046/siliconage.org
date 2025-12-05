@@ -158,7 +158,7 @@ linkCreated('shockley', 'transistor');
 
 // Technology influences
 linkBasedOn('unix', 'c_language'); // Unix rewritten in C
-linkTriggered('c_language', 'cpp', 0.9); // C influenced C++
+// Note: C++ linkBasedOn is in the AI section (line ~815)
 linkTriggered('transistor', 'mosfet', 0.9); // MOSFET is evolution of transistor
 
 // Shannon's influence
@@ -800,6 +800,86 @@ linkTriggered('gpu', 'fei_fei_li');
 
 // Turing's legacy: his work influenced McCarthy and modern AI
 linkTriggered('turing', 'transformer');  // Conceptual lineage
+
+// ==========================================
+// PROGRAMMING LANGUAGES
+// ==========================================
+
+createTech('python', 'Python', 1991, 1, TechRole.STANDARD, 'The lingua franca of AI and data science.', 'System Software', 'Development & Languages');
+createTech('cpp', 'C++', 1983, 1, TechRole.STANDARD, 'High-performance systems programming language.', 'System Software', 'Development & Languages');
+createTech('sql', 'SQL', 1974, 1, TechRole.STANDARD, 'Standard language for relational databases.', 'System Software', 'Development & Languages');
+createTech('swift', 'Swift', 2014, 2, TechRole.STANDARD, 'Apple\'s modern programming language for iOS/macOS.', 'System Software', 'Development & Languages');
+
+linkBasedOn('pytorch', 'python');
+linkBasedOn('python', 'c_language');
+linkBasedOn('cpp', 'c_language');
+linkCreated('apple', 'swift');
+linkBasedOn('oracle_db', 'sql');
+
+// ==========================================
+// AI FOUNDATIONS & CONCEPTS
+// ==========================================
+
+// Key AI Concepts
+createTech('backprop', 'Backpropagation', 1986, 1, TechRole.CORE, 'The algorithm that enabled deep learning by efficiently computing gradients.', 'AI & Physical Systems', 'Artificial Intelligence');
+createTech('imagenet', 'ImageNet', 2009, 1, TechRole.CORE, 'Large-scale visual database that enabled the deep learning revolution.', 'AI & Physical Systems', 'Artificial Intelligence');
+createTech('alexnet', 'AlexNet', 2012, 1, TechRole.CORE, 'CNN that won ImageNet 2012, sparking the deep learning revolution.', 'AI & Physical Systems', 'Artificial Intelligence');
+createTech('word2vec', 'Word2Vec', 2013, 2, TechRole.CORE, 'Word embedding model that revolutionized NLP.', 'AI & Physical Systems', 'Artificial Intelligence');
+createTech('gan', 'GAN', 2014, 1, TechRole.CORE, 'Generative Adversarial Networks - two neural networks competing to generate realistic data.', 'AI & Physical Systems', 'Artificial Intelligence');
+createTech('resnet', 'ResNet', 2015, 2, TechRole.CORE, 'Deep residual learning with skip connections, enabling very deep networks.', 'AI & Physical Systems', 'Artificial Intelligence');
+createTech('attention', 'Attention Mechanism', 2014, 1, TechRole.CORE, 'The "Attention Is All You Need" concept that powers Transformers.', 'AI & Physical Systems', 'Artificial Intelligence');
+createTech('bert', 'BERT', 2018, 1, TechRole.CORE, 'Bidirectional Encoder Representations from Transformers - revolutionized NLP.', 'AI & Physical Systems', 'Artificial Intelligence');
+createTech('diffusion', 'Diffusion Models', 2020, 1, TechRole.CORE, 'Generative models that power DALL-E, Stable Diffusion, Midjourney.', 'AI & Physical Systems', 'Artificial Intelligence');
+createTech('rlhf', 'RLHF', 2017, 1, TechRole.CORE, 'Reinforcement Learning from Human Feedback - key to making ChatGPT helpful.', 'AI & Physical Systems', 'Artificial Intelligence');
+
+// AI Concept Links
+linkCreated('hinton', 'backprop');
+linkCreated('fei_fei_li', 'imagenet');
+linkCreated('hinton', 'alexnet');
+linkCreated('google', 'word2vec');
+linkCreated('microsoft', 'resnet');
+linkCreated('google', 'bert');
+linkCreated('openai', 'rlhf');
+linkCreated('google', 'gan');  // GAN originated from Google Brain (Ian Goodfellow)
+
+linkBasedOn('alexnet', 'imagenet');
+linkBasedOn('alexnet', 'gpu');
+linkBasedOn('alexnet', 'backprop');
+linkBasedOn('transformer', 'attention');
+linkBasedOn('bert', 'transformer');
+linkBasedOn('gpt', 'bert');  // GPT learned from BERT's approach
+linkBasedOn('dalle', 'diffusion');
+linkBasedOn('sora', 'diffusion');
+linkBasedOn('chatgpt', 'rlhf');
+linkBasedOn('gan', 'backprop');  // GAN uses backprop for training
+linkBasedOn('diffusion', 'gan'); // Diffusion models evolved from GAN concepts
+
+// ==========================================
+// GENERATIVE AI COMPANIES
+// ==========================================
+
+createCompany('anthropic', 'Anthropic', 2021, 2, CompanyRole.LAB, 'AI safety company founded by ex-OpenAI researchers, creator of Claude.', [CompanyCategory.LAB], { marketCap: { current: 'Private (~$18B)', peak: 'Private (~$18B)' } });
+createTech('claude', 'Claude', 2023, 2, TechRole.PRODUCT, 'Anthropic\'s AI assistant focused on safety and helpfulness.', 'AI & Physical Systems', 'Artificial Intelligence');
+linkCreated('anthropic', 'claude');
+linkBasedOn('claude', 'transformer');
+linkBasedOn('claude', 'rlhf');
+
+createCompany('stability_ai', 'Stability AI', 2020, 2, CompanyRole.LAB, 'Open-source AI company behind Stable Diffusion.', [CompanyCategory.LAB], { marketCap: { current: 'Private (~$1B)', peak: 'Private (~$4B)' } });
+createTech('stable_diffusion', 'Stable Diffusion', 2022, 2, TechRole.PRODUCT, 'Open-source text-to-image model that democratized AI art.', 'AI & Physical Systems', 'Artificial Intelligence');
+linkCreated('stability_ai', 'stable_diffusion');
+linkBasedOn('stable_diffusion', 'diffusion');
+
+createCompany('midjourney', 'Midjourney', 2022, 2, CompanyRole.LAB, 'AI art generator known for aesthetic quality.', [CompanyCategory.LAB], { marketCap: { current: 'Private', peak: 'Private' } });
+linkBasedOn('midjourney', 'diffusion');
+
+// Additional AI Pioneers
+createPerson('yoshua_bengio', 'Yoshua Bengio', 2018, 1, PersonRole.THEORIST, 'Deep Learning Pioneer', 'Turing Award winner, one of the "Godfathers of AI" with Hinton and LeCun.', { primaryRole: 'Professor at Mila', birthYear: 1964 });
+createPerson('andrej_karpathy', 'Andrej Karpathy', 2017, 2, PersonRole.THEORIST, 'AI Educator', 'Former Tesla AI Director, built Tesla Autopilot vision system.', { primaryRole: 'Founder of Eureka Labs', secondaryRole: 'Former Tesla AI Director', birthYear: 1986 });
+
+linkCreated('yoshua_bengio', 'backprop');
+linkPartOf('andrej_karpathy', 'tesla');
+linkPartOf('andrej_karpathy', 'openai');
+
 
 createCompany('tesla', 'Tesla', 2003, 1, CompanyRole.PLATFORM, 'AI & Robotics.', [CompanyCategory.MOBILITY, CompanyCategory.ROBOTICS], { marketCap: { current: '$1.1T', peak: '$1.2T' } });
 createPerson('musk', 'Elon Musk', 2004, 1, PersonRole.VISIONARY, 'CEO', 'Technoking.', { primaryRole: 'CEO of Tesla & SpaceX', secondaryRole: 'Owner of X', birthYear: 1971 });

@@ -1,19 +1,22 @@
 {
   "name": "the-silicon-age",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate-cache": "npx tsx scripts/generateCache.ts"
   },
   "dependencies": {
     "@formspree/react": "^2.5.1",
     "@google/genai": "^1.30.0",
+    "@google/generative-ai": "^0.21.0",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
     "d3": "^7.9.0",
+    "dotenv": "^16.4.5",
     "lucide-react": "^0.475.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -25,6 +28,7 @@
     "autoprefixer": "^10.4.20",
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17",
+    "tsx": "^4.19.0",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   }
