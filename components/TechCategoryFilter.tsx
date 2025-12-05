@@ -61,7 +61,7 @@ const TechCategoryFilter: React.FC<TechCategoryFilterProps> = ({ selectedL1, sel
     const getFilterLabel = () => {
         if (selectedL2) return selectedL2;
         if (selectedL1) return L1_SHORT_NAMES[selectedL1];
-        return 'All Categories';
+        return 'All Technologies';
     };
 
     const isFiltered = selectedL1 !== null;

@@ -420,6 +420,17 @@ const App: React.FC = () => {
                     }
                   };
 
+                  // Human-readable link type labels
+                  const getLinkTypeLabel = () => {
+                    switch (type) {
+                      case LinkType.BASED_ON: return "Based on";
+                      case LinkType.CREATED: return "Created";
+                      case LinkType.TRIGGERED: return "Triggered";
+                      case LinkType.PART_OF: return "Part of";
+                      default: return type;
+                    }
+                  };
+
                   const getBorderColor = () => {
                     if (!isActive) return undefined; // Grey border when OFF (from className)
                     switch (type) {
@@ -444,7 +455,7 @@ const App: React.FC = () => {
                     >
                       <div className={`${getLineStyle()} ${isActive ? 'opacity-100' : 'opacity-50'} shrink-0`}></div>
                       <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-1000 ease-in-out whitespace-nowrap opacity-0 group-hover:opacity-100">
-                        {type.charAt(0) + type.slice(1).toLowerCase()}
+                        {getLinkTypeLabel()}
                       </span>
                     </button>
                   );

@@ -304,6 +304,7 @@ const getCircleIntersection = (
 const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFocus, onNodeDoubleClick, width, height, focusNodeId, scrollToNodeId, companyMode, featuredNode }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const clickTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pulseIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // START AT LEVEL 1 (Zoom Out)
   const [zoomLevel, setZoomLevel] = useState<number>(1);
@@ -520,6 +521,34 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
         .attr("fill", m.color);
     });
 
+    // --- FOCUS MODE: Pulsing Glow Effect ---
+    const glowFilter = defs.append("filter")
+      .attr("id", "focus-glow")
+      .attr("x", "-50%")
+      .attr("y", "-50%")
+      .attr("width", "200%")
+      .attr("height", "200%");
+
+    glowFilter.append("feGaussianBlur")
+      .attr("in", "SourceGraphic")
+      .attr("stdDeviation", "4")
+      .attr("result", "blur");
+
+    glowFilter.append("feColorMatrix")
+      .attr("in", "blur")
+      .attr("type", "matrix")
+      .attr("values", "0 0 0 0 0.2  0 0 0 0 0.8  0 0 0 0 1  0 0 0 1 0")
+      .attr("result", "glow");
+
+    glowFilter.append("feMerge")
+      .selectAll("feMergeNode")
+      .data(["glow", "SourceGraphic"])
+      .enter()
+      .append("feMergeNode")
+      .attr("in", d => d);
+
+    // Pulse animation will be handled by D3 interval in tick function
+
     const rootGroup = svg.append("g");
 
     const zoom = d3.zoom<SVGSVGElement, unknown>()
@@ -640,7 +669,63 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
     }, 100);
 
     prevFocusNodeIdRef.current = focusNodeId || null;
-    return () => clearTimeout(timer);
+
+    // === D3 PULSE ANIMATION (Safari/iOS Compatible) ===
+    // Clear previous pulse interval
+    if (pulseIntervalRef.current) {
+      clearInterval(pulseIntervalRef.current);
+      pulseIntervalRef.current = null;
+    }
+
+    if (focusNodeId && svgRef.current) {
+      let pulsePhase = 0;
+
+      pulseIntervalRef.current = setInterval(() => {
+        if (!svgRef.current) return;
+
+        const svg = d3.select(svgRef.current);
+        const focusedCompany = svg.selectAll(".layer-company-labels g")
+          .filter((d: any) => d._focusDistance === 0);
+        const focusedOther = svg.selectAll(".layer-nodes circle")
+          .filter((d: any) => d._focusDistance === 0);
+
+        // Toggle pulse phase (0 -> 1 -> 0)
+        pulsePhase = pulsePhase === 0 ? 1 : 0;
+
+        const expandedStroke = 4;
+        const normalStroke = 0;
+        const expandedOpacity = 0.9;
+        const normalOpacity = 1;
+        const glowColor = "#fbbf24";  // Warm golden yellow for glow effect
+
+        // Animate Company Labels (rect inside group)
+        focusedCompany.select("rect")
+          .transition()
+          .duration(1000)
+          .ease(d3.easeSinInOut)
+          .attr("stroke", glowColor)
+          .attr("stroke-width", pulsePhase === 1 ? expandedStroke : normalStroke)
+          .attr("stroke-opacity", pulsePhase === 1 ? expandedOpacity : 0);
+
+        // Animate Other Nodes (circles)
+        focusedOther
+          .transition()
+          .duration(1000)
+          .ease(d3.easeSinInOut)
+          .attr("stroke", glowColor)
+          .attr("stroke-width", pulsePhase === 1 ? expandedStroke + 2 : 2)
+          .attr("stroke-opacity", pulsePhase === 1 ? expandedOpacity : 1);
+
+      }, 1000);
+    }
+
+    return () => {
+      clearTimeout(timer);
+      if (pulseIntervalRef.current) {
+        clearInterval(pulseIntervalRef.current);
+        pulseIntervalRef.current = null;
+      }
+    };
   }, [focusNodeId, width, height]);
 
 

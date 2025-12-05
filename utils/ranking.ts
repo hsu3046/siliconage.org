@@ -9,18 +9,18 @@ const ROLE_MULTIPLIERS: Record<string, number> = {
   // Company Roles
   [CompanyRole.PLATFORM]: 1.2, // Consumer impact
   [CompanyRole.LAB]: 1.1,      // Innovation source
-  [CompanyRole.INFRA]: 0.7,    // Dampen supply chain (ASML/TSMC fix)
+  [CompanyRole.INFRA]: 0.85,   // Dampen supply chain
   [CompanyRole.SERVICE]: 0.8,
 
   // Person Roles
-  [PersonRole.THEORIST]: 1.5,  // Buff inventors (Turing, Hinton)
+  [PersonRole.THEORIST]: 1.8,  // Buff inventors (Turing, Hinton, LeCun)
   [PersonRole.BUILDER]: 1.2,   // Buff engineers
-  [PersonRole.VISIONARY]: 1.0, // Standard
+  [PersonRole.VISIONARY]: 0.85, // Nerf founders (to prevent Larry Page #1)
 
-  // Tech Roles
-  [TechRole.PRODUCT]: 1.3,     // Final products get more credit (iPhone)
-  [TechRole.CORE]: 1.0,        // Intermediate tech
-  [TechRole.STANDARD]: 0.9,
+  // Tech Roles - Prioritize foundational over products
+  [TechRole.PRODUCT]: 0.9,     // Services/products get less credit
+  [TechRole.CORE]: 1.15,       // Core tech boosted
+  [TechRole.STANDARD]: 1.4,    // Foundational standards highest
 
   // Episode Roles
   [EpisodeRole.MILESTONE]: 1.5, // High impact events
@@ -71,7 +71,7 @@ export const calculateSiliconRank = (nodes: NodeData[], links: LinkData[]) => {
       // A. BASED_ON: User(S) -> Supplier(T)
       // High impact path, but dampened for INFRA roles to prevent ASML/TSMC blowing up
       if (link.type === LinkType.BASED_ON) {
-        const multiplier = ROLE_MULTIPLIERS[tNode.roleType] || 1.0;
+        const multiplier = ROLE_MULTIPLIERS[tNode.impactRole] || 1.0;
         // Reduced base weight from 0.4 to 0.3
         nextScores.set(tId, (nextScores.get(tId) || 0) + (sScore * 0.3 * multiplier));
       }
@@ -79,21 +79,21 @@ export const calculateSiliconRank = (nodes: NodeData[], links: LinkData[]) => {
       // B. PART_OF: Member(S) -> Group(T)
       // Standard flow
       else if (link.type === LinkType.PART_OF) {
-        const multiplier = ROLE_MULTIPLIERS[tNode.roleType] || 1.0;
+        const multiplier = ROLE_MULTIPLIERS[tNode.impactRole] || 1.0;
         nextScores.set(tId, (nextScores.get(tId) || 0) + (sScore * 0.2 * multiplier));
       }
 
       // C. CREATED: Maker(S) -> Product(T) (Reverse Flow)
       // Creation validates the creator. High boost for THEORISTS.
       else if (link.type === LinkType.CREATED) {
-        const multiplier = ROLE_MULTIPLIERS[sNode.roleType] || 1.0;
+        const multiplier = ROLE_MULTIPLIERS[sNode.impactRole] || 1.0;
         // Increased base weight from 0.5 to 0.7 to boost inventors
         nextScores.set(sId, (nextScores.get(sId) || 0) + (tScore * 0.7 * multiplier));
       }
 
       // D. TRIGGERED: Cause(S) -> Effect(T) (Reverse Flow)
       else if (link.type === LinkType.TRIGGERED) {
-        const multiplier = ROLE_MULTIPLIERS[sNode.roleType] || 1.0;
+        const multiplier = ROLE_MULTIPLIERS[sNode.impactRole] || 1.0;
         nextScores.set(sId, (nextScores.get(sId) || 0) + (tScore * 0.3 * multiplier));
       }
     });

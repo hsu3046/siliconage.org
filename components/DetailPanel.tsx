@@ -378,8 +378,17 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
       };
     }).filter(Boolean);
 
+    // Deduplicate: keep only one connection per otherNode (first occurrence by link order)
+    const seen = new Set<string>();
+    const dedupedConnections = rawConnections.filter(conn => {
+      if (!conn) return false;
+      if (seen.has(conn.otherNode.id)) return false;
+      seen.add(conn.otherNode.id);
+      return true;
+    });
+
     // Sort: 1st by category order, 2nd by impact score (descending)
-    return rawConnections.sort((a, b) => {
+    return dedupedConnections.sort((a, b) => {
       const catA = categoryOrder[a!.otherNode.category] ?? 99;
       const catB = categoryOrder[b!.otherNode.category] ?? 99;
 
@@ -643,22 +652,17 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
             ) : aiData ? (
               <div className="space-y-6 animate-in fade-in duration-500">
                 <div>
-                  <h4 className="text-[10px] text-slate-500 uppercase font-bold mb-1.5 tracking-wider">{sectionHeaders.summary}</h4>
+                  <h4 className="text-xs text-purple-400 font-semibold mb-2 tracking-wide">{sectionHeaders.summary}</h4>
                   <p className="text-sm text-slate-200 leading-relaxed">{aiData.summary}</p>
                 </div>
 
                 <div>
-                  <h4 className="text-[10px] text-slate-500 uppercase font-bold mb-1.5 tracking-wider flex items-center gap-1">
-                    {sectionHeaders.significance}
-                    <span className="text-yellow-500">💡</span>
-                  </h4>
-                  <p className="text-sm text-slate-300 italic border-l-2 border-purple-500/50 pl-3 py-1">
-                    "{aiData.significance}"
-                  </p>
+                  <h4 className="text-xs text-purple-400 font-semibold mb-2 tracking-wide">{sectionHeaders.significance}</h4>
+                  <p className="text-sm text-slate-300 leading-relaxed">{aiData.significance}</p>
                 </div>
 
                 <div>
-                  <h4 className="text-[10px] text-slate-500 uppercase font-bold mb-1.5 tracking-wider">{sectionHeaders.keyFacts}</h4>
+                  <h4 className="text-xs text-purple-400 font-semibold mb-2 tracking-wide">{sectionHeaders.keyFacts}</h4>
                   <ul className="space-y-2">
                     {aiData.keyFacts.map((fact, idx) => (
                       <li key={idx} className="text-sm text-slate-300 flex items-start gap-2 group">

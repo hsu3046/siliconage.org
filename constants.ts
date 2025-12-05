@@ -15,33 +15,33 @@ const links: LinkData[] = [];
 
 // Extended helper with metadata support
 const createCompany = (
-  id: string, label: string, year: number, importance: number, roleType: CompanyRole, description: string,
+  id: string, label: string, year: number, importance: number, impactRole: CompanyRole, description: string,
   categories: CompanyCategory[] = [],
   meta?: { marketCap?: { current?: string; peak?: string } }
 ) => {
-  nodes.push({ id, label, category: Category.COMPANY, year, importance, roleType, description, companyCategories: categories, ...meta });
+  nodes.push({ id, label, category: Category.COMPANY, year, importance, impactRole, description, companyCategories: categories, ...meta });
 };
 
 const createPerson = (
-  id: string, label: string, year: number, importance: number, roleType: PersonRole, role: string, description: string,
+  id: string, label: string, year: number, importance: number, impactRole: PersonRole, role: string, description: string,
   meta?: { primaryRole?: string; secondaryRole?: string; birthYear?: number; deathYear?: number }
 ) => {
-  nodes.push({ id, label, category: Category.PERSON, year, importance, roleType, role, description, ...meta });
+  nodes.push({ id, label, category: Category.PERSON, year, importance, impactRole, role, description, ...meta });
 };
 
 const createTech = (
-  id: string, label: string, year: number, importance: number, roleType: TechRole, description: string,
+  id: string, label: string, year: number, importance: number, impactRole: TechRole, description: string,
   l1?: TechCategoryL1, l2?: TechCategoryL2,
   meta?: { endYear?: number }
 ) => {
-  nodes.push({ id, label, category: Category.TECHNOLOGY, year, importance, roleType, description, techCategoryL1: l1, techCategoryL2: l2, ...meta });
+  nodes.push({ id, label, category: Category.TECHNOLOGY, year, importance, impactRole, description, techCategoryL1: l1, techCategoryL2: l2, ...meta });
 };
 
 const createEpisode = (
-  id: string, label: string, year: number, importance: number, roleType: EpisodeRole, description: string,
+  id: string, label: string, year: number, importance: number, impactRole: EpisodeRole, description: string,
   meta?: { eventType?: string; impactScale?: string }
 ) => {
-  nodes.push({ id, label, category: Category.EPISODE, year, importance, roleType, description, ...meta });
+  nodes.push({ id, label, category: Category.EPISODE, year, importance, impactRole, description, ...meta });
 };
 
 const linkCreated = (source: string, target: string, strength: number = 0.9) => {
@@ -79,7 +79,7 @@ linkTriggered('turing', 'mccarthy', 0.8);
 // ==========================================
 
 // AMD - The Challenger
-createCompany('amd', 'AMD', 1969, 2, CompanyRole.INFRA, 'Intel\'s eternal rival, resurgent under Lisa Su with Ryzen and EPYC processors.', [CompanyCategory.SEMICONDUCTOR], { marketCap: { current: '$220B', peak: '$260B' } });
+createCompany('amd', 'AMD', 1969, 1, CompanyRole.INFRA, 'Intel\'s eternal rival, resurgent under Lisa Su with Ryzen and EPYC processors.', [CompanyCategory.SEMICONDUCTOR], { marketCap: { current: '$220B', peak: '$260B' } });
 createPerson('lisa_su', 'Lisa Su', 2014, 2, PersonRole.VISIONARY, 'CEO', 'Led AMD\'s remarkable turnaround with Ryzen architecture and data center dominance.', { primaryRole: 'CEO of AMD', birthYear: 1969 });
 createTech('ryzen', 'AMD Ryzen', 2017, 2, TechRole.PRODUCT, 'High-performance CPUs that challenged Intel\'s dominance.', 'Hardware & Infrastructure', 'Processors & Compute');
 createTech('epyc', 'AMD EPYC', 2017, 2, TechRole.PRODUCT, 'Server processors that captured data center market share from Intel.', 'Hardware & Infrastructure', 'Processors & Compute');
@@ -222,7 +222,7 @@ linkBasedOn('ttl_logic', 'transistor');
 createCompany('intel', 'Intel', 1968, 1, CompanyRole.INFRA, 'Put the "Silicon" in Silicon Valley. Created the microprocessor.', [CompanyCategory.SEMICONDUCTOR], { marketCap: { current: '$110B', peak: '$290B' } });
 createPerson('andy_grove', 'Andy Grove', 1979, 2, PersonRole.VISIONARY, 'Former CEO', 'The man who drove Intel\'s execution. "Only the Paranoid Survive."', { primaryRole: 'Former CEO of Intel', birthYear: 1936, deathYear: 2016 });
 createPerson('faggin', 'Federico Faggin', 1971, 2, PersonRole.BUILDER, 'Lead Designer', 'Led the design of the first commercial microprocessor.', { primaryRole: 'Designer of Intel 4004', birthYear: 1941 });
-createPerson('gelsinger', 'Pat Gelsinger', 2021, 2, PersonRole.VISIONARY, 'CEO', 'Returned to Intel as CEO to restore its manufacturing leadership.', { primaryRole: 'CEO of Intel', birthYear: 1961 });
+createPerson('gelsinger', 'Pat Gelsinger', 2021, 1, PersonRole.VISIONARY, 'CEO', 'Returned to Intel as CEO to restore its manufacturing leadership.', { primaryRole: 'CEO of Intel', birthYear: 1961 });
 
 createTech('microprocessor', 'Microprocessor (4004)', 1971, 1, TechRole.CORE, 'The first general-purpose CPU on a single chip.', 'Hardware & Infrastructure', 'Processors & Compute');
 createTech('x86', 'x86 Architecture', 1978, 1, TechRole.CORE, 'The instruction set architecture that dominated personal computing for decades.', 'Hardware & Infrastructure', 'Processors & Compute');
@@ -300,7 +300,7 @@ linkTriggered('gui_visit', 'macintosh');
 createCompany('microsoft', 'Microsoft', 1975, 1, CompanyRole.PLATFORM, 'PC software monopoly turned Cloud & AI giant.', [CompanyCategory.SOFTWARE, CompanyCategory.INTERNET], { marketCap: { current: '$3.1T', peak: '$3.1T' } });
 createPerson('gates', 'Bill Gates', 1975, 1, PersonRole.VISIONARY, 'Co-Founder', 'Dominated the PC era.', { primaryRole: 'Co-founder of Microsoft', secondaryRole: 'Philanthropist', birthYear: 1955 });
 createPerson('nadella', 'Satya Nadella', 2014, 1, PersonRole.VISIONARY, 'CEO', 'Led the Cloud & AI transformation.', { primaryRole: 'CEO of Microsoft', birthYear: 1967 });
-createTech('windows', 'Windows', 1985, 2, TechRole.PRODUCT, 'The OS that runs the world.', 'System Software', 'Operating Systems (OS)');
+createTech('windows', 'Windows', 1985, 1, TechRole.PRODUCT, 'The OS that runs the world.', 'System Software', 'Operating Systems (OS)');
 createEpisode('wintel_alliance', 'Wintel Alliance', 1980, 2, EpisodeRole.DEAL, 'The dominance of Windows running on Intel chips.', { eventType: 'Partnership', impactScale: 'PC Duopoly' });
 createEpisode('ms_saves_apple', 'Microsoft Saves Apple', 1997, 3, EpisodeRole.DEAL, 'Gates invests $150M in Apple.', { eventType: 'Investment', impactScale: '$150M Bailout' });
 
@@ -312,7 +312,7 @@ linkTriggered('ms_saves_apple', 'apple');
 linkPartOf('wintel_alliance', 'microsoft');
 linkPartOf('wintel_alliance', 'intel');
 
-createCompany('oracle', 'Oracle', 1977, 2, CompanyRole.PLATFORM, 'Database giant.', [CompanyCategory.SOFTWARE], { marketCap: { current: '$450B', peak: '$450B' } });
+createCompany('oracle', 'Oracle', 1977, 1, CompanyRole.PLATFORM, 'Database giant.', [CompanyCategory.SOFTWARE], { marketCap: { current: '$450B', peak: '$450B' } });
 createPerson('ellison', 'Larry Ellison', 1977, 2, PersonRole.VISIONARY, 'Founder', 'Pioneer of the relational database.', { primaryRole: 'Co-founder of Oracle', birthYear: 1944 });
 createPerson('safra_catz', 'Safra Catz', 1999, 2, PersonRole.VISIONARY, 'CEO', 'Led Oracle\'s aggressive acquisition strategy and cloud pivot.', { primaryRole: 'CEO of Oracle', birthYear: 1961 });
 createTech('oracle_db', 'Oracle Database', 1979, 2, TechRole.STANDARD, 'The gold standard for enterprise relational databases.', 'System Software', 'Development & Languages');
@@ -333,7 +333,7 @@ linkCreated('sap', 'saas');
 
 createCompany('sun', 'Sun Microsystems', 1982, 2, CompanyRole.PLATFORM, 'The dot in .com.', [CompanyCategory.HARDWARE], { marketCap: { current: 'Acquired', peak: '$200B' } });
 createPerson('scott_mcnealy', 'Scott McNealy', 1982, 2, PersonRole.VISIONARY, 'Co-Founder', 'Aggressive leader who defined the dot-com era.', { primaryRole: 'Co-founder of Sun', birthYear: 1954 });
-createTech('java', 'Java', 1995, 2, TechRole.STANDARD, 'Write once, run anywhere.', 'System Software', 'Development & Languages');
+createTech('java', 'Java', 1995, 1, TechRole.STANDARD, 'Write once, run anywhere.', 'System Software', 'Development & Languages');
 createTech('solaris', 'Solaris', 1992, 2, TechRole.PRODUCT, 'Enterprise Unix standard.', 'System Software', 'Operating Systems (OS)');
 createTech('nfs', 'NFS', 1984, 2, TechRole.STANDARD, 'Network File System.', 'Network & Connectivity', 'Network Architecture');
 
@@ -420,11 +420,18 @@ linkCreated('google', 'android');
 linkCreated('google', 'tpu');
 linkTriggered('iphone', 'android');
 
-createCompany('amazon', 'Amazon', 1994, 2, CompanyRole.PLATFORM, 'E-commerce & Cloud.', [CompanyCategory.INTERNET, CompanyCategory.SOFTWARE], { marketCap: { current: '$2.1T', peak: '$2.1T' } });
-createPerson('bezos', 'Jeff Bezos', 1994, 2, PersonRole.VISIONARY, 'Founder', 'Cloud computing pioneer.', { primaryRole: 'Founder of Amazon', secondaryRole: 'Founder of Blue Origin', birthYear: 1964 });
-createTech('aws', 'AWS', 2006, 1, TechRole.PRODUCT, 'Cloud Infrastructure (IaaS).', 'Digital Services & Platforms', 'Digital Platforms');
+createCompany('amazon', 'Amazon', 1994, 1, CompanyRole.PLATFORM, 'E-commerce & Cloud pioneer.', [CompanyCategory.INTERNET, CompanyCategory.SOFTWARE], { marketCap: { current: '$2.1T', peak: '$2.1T' } });
+createPerson('bezos', 'Jeff Bezos', 1994, 1, PersonRole.VISIONARY, 'Founder', 'E-commerce and cloud computing pioneer.', { primaryRole: 'Founder of Amazon', secondaryRole: 'Founder of Blue Origin', birthYear: 1964 });
+
+// Amazon Products
+createTech('aws', 'AWS', 2006, 1, TechRole.PRODUCT, 'Cloud Infrastructure (IaaS) that powers a third of the internet.', 'Digital Services & Platforms', 'Digital Platforms');
+createTech('alexa', 'Amazon Alexa', 2014, 2, TechRole.PRODUCT, 'AI voice assistant that pioneered smart home speakers.', 'AI & Physical Systems', 'Artificial Intelligence');
+createTech('kindle', 'Kindle', 2007, 2, TechRole.PRODUCT, 'E-reader that revolutionized book publishing and distribution.', 'Hardware & Infrastructure', 'Devices & Form Factors');
+
 linkCreated('bezos', 'amazon');
 linkCreated('amazon', 'aws');
+linkCreated('amazon', 'alexa');
+linkCreated('amazon', 'kindle');
 
 createTech('cloud_computing', 'Cloud Computing', 2006, 1, TechRole.CORE, 'On-demand availability of computer system resources, especially data storage and computing power.', 'Network & Connectivity', 'Network Architecture');
 linkCreated('amazon', 'cloud_computing');
@@ -455,7 +462,7 @@ linkBasedOn('crm', 'saas');
 // createCompany('cisco', 'Cisco', 1984, 2, CompanyRole.INFRA, 'Internet plumbing.'); // Moved to Networking section
 // linkBasedOn('arpanet', 'cisco'); // Moved to Networking section
 
-createCompany('netflix', 'Netflix', 1997, 2, CompanyRole.PLATFORM, 'Streaming & RecSys.', [CompanyCategory.INTERNET], { marketCap: { current: '$280B', peak: '$310B' } });
+createCompany('netflix', 'Netflix', 1997, 1, CompanyRole.PLATFORM, 'Streaming & RecSys.', [CompanyCategory.MEDIA, CompanyCategory.INTERNET], { marketCap: { current: '$280B', peak: '$310B' } });
 createPerson('reed_hastings', 'Reed Hastings', 1997, 2, PersonRole.VISIONARY, 'Founder', 'Pivoted from DVD to Streaming, reinventing TV.', { primaryRole: 'Co-founder of Netflix', birthYear: 1960 });
 createTech('chaos_monkey', 'Chaos Monkey', 2011, 2, TechRole.CORE, 'Revolutionized DevOps by randomly terminating instances to test resilience.', 'AI & Physical Systems', 'Artificial Intelligence');
 createEpisode('netflix_prize', 'Netflix Prize', 2006, 2, EpisodeRole.MILESTONE, 'Crowdsourced recommendation algorithm contest ($1M prize) that advanced ML field.', { eventType: 'Competition', impactScale: '$1M Prize' });
@@ -741,17 +748,27 @@ linkCreated('nvidia', 'cuda');
 linkBasedOn('gpu', 'tsmc'); // Added explicit link
 linkBasedOn('gpu', 'hbm');
 
-createCompany('openai', 'OpenAI', 2015, 1, CompanyRole.LAB, 'Generative AI Leader.', [CompanyCategory.LAB], { marketCap: { current: '$157B', peak: '$157B' } });
+createCompany('openai', 'OpenAI', 2015, 1, CompanyRole.PLATFORM, 'Generative AI Leader.', [CompanyCategory.LAB], { marketCap: { current: '$157B', peak: '$157B' } });
 createPerson('altman', 'Sam Altman', 2015, 1, PersonRole.VISIONARY, 'CEO', 'Face of AI.', { primaryRole: 'CEO of OpenAI', birthYear: 1985 });
 createPerson('ilya', 'Ilya Sutskever', 2015, 2, PersonRole.THEORIST, 'Co-Founder', 'Chief Scientist.', { primaryRole: 'Co-founder of OpenAI', secondaryRole: 'Founder of SSI', birthYear: 1986 });
+
+// Added Product Nodes to boost Impact Score
+createTech('chatgpt', 'ChatGPT', 2022, 1, TechRole.PRODUCT, 'The AI chatbot that started the revolution.', 'AI & Physical Systems', 'Artificial Intelligence');
 createTech('gpt', 'GPT-4', 2023, 1, TechRole.PRODUCT, 'LLM with reasoning.', 'AI & Physical Systems', 'Artificial Intelligence');
+createTech('dalle', 'DALL-E', 2021, 2, TechRole.PRODUCT, 'Text-to-Image generation.', 'AI & Physical Systems', 'Artificial Intelligence');
+createTech('sora', 'Sora', 2024, 2, TechRole.PRODUCT, 'Text-to-Video generation.', 'AI & Physical Systems', 'Artificial Intelligence');
+
 createEpisode('chatgpt_launch', 'ChatGPT Launch', 2022, 1, EpisodeRole.MILESTONE, 'AI "iPhone Moment".', { eventType: 'Product Launch', impactScale: 'AI Revolution' });
 createEpisode('openai_coup', 'The Board Coup', 2023, 2, EpisodeRole.CRISIS, 'Altman fired and rehired.', { eventType: 'Crisis', impactScale: 'Leadership Drama' });
 createEpisode('ms_openai_deal', 'The $10B Partnership', 2023, 1, EpisodeRole.DEAL, 'Microsoft bets on OpenAI.', { eventType: 'Investment', impactScale: '$10B+ Partnership' });
 
 linkPartOf('altman', 'openai');
 linkPartOf('ilya', 'openai');
+linkCreated('openai', 'chatgpt');
 linkCreated('openai', 'gpt');
+linkCreated('openai', 'dalle');
+linkCreated('openai', 'sora');
+
 linkTriggered('openai', 'chatgpt_launch'); // OpenAI's product launch
 linkPartOf('openai_coup', 'openai'); // Crisis that happened to OpenAI
 linkTriggered('microsoft', 'ms_openai_deal'); // Microsoft initiated the investment
@@ -772,10 +789,19 @@ linkPartOf('vaswani', 'google');
 linkCreated('google', 'transformer');
 linkCreated('vaswani', 'transformer');
 linkCreated('google', 'alphafold');
+
+// Foundational links: Modern AI depends on Transformer architecture
+linkBasedOn('gpt', 'transformer');
+linkBasedOn('chatgpt', 'transformer');
+linkBasedOn('dalle', 'transformer');
+linkBasedOn('alphafold', 'transformer');
 linkTriggered('transformer', 'gpt');
 linkTriggered('gpu', 'fei_fei_li');
 
-createCompany('tesla', 'Tesla', 2003, 1, CompanyRole.PLATFORM, 'AI & Robotics.', [CompanyCategory.ROBOTICS, CompanyCategory.HARDWARE], { marketCap: { current: '$1.1T', peak: '$1.2T' } });
+// Turing's legacy: his work influenced McCarthy and modern AI
+linkTriggered('turing', 'transformer');  // Conceptual lineage
+
+createCompany('tesla', 'Tesla', 2003, 1, CompanyRole.PLATFORM, 'AI & Robotics.', [CompanyCategory.MOBILITY, CompanyCategory.ROBOTICS], { marketCap: { current: '$1.1T', peak: '$1.2T' } });
 createPerson('musk', 'Elon Musk', 2004, 1, PersonRole.VISIONARY, 'CEO', 'Technoking.', { primaryRole: 'CEO of Tesla & SpaceX', secondaryRole: 'Owner of X', birthYear: 1971 });
 createTech('autopilot', 'Autopilot', 2014, 2, TechRole.PRODUCT, 'Vision AI.', 'AI & Physical Systems', 'Autonomous Mobility');
 createTech('optimus', 'Optimus', 2021, 2, TechRole.PRODUCT, 'Humanoid Robot.', 'AI & Physical Systems', 'Robotics');
@@ -789,7 +815,7 @@ linkBasedOn('autopilot', 'autonomous_driving');
 linkTriggered('musk', 'openai');
 linkBasedOn('tesla', 'gpu');
 
-createCompany('spacex', 'SpaceX', 2002, 1, CompanyRole.INFRA, 'Revolutionizing space technology.', [CompanyCategory.ROBOTICS], { marketCap: { current: '$210B', peak: '$210B' } });
+createCompany('spacex', 'SpaceX', 2002, 1, CompanyRole.INFRA, 'Revolutionizing space technology.', [CompanyCategory.AEROSPACE, CompanyCategory.HARDWARE], { marketCap: { current: '$210B', peak: '$210B' } });
 createPerson('gwynne_shotwell', 'Gwynne Shotwell', 2002, 2, PersonRole.VISIONARY, 'President', 'The operator who built SpaceX into a profitable business.', { primaryRole: 'President of SpaceX', birthYear: 1963 });
 createTech('falcon9', 'Falcon 9', 2010, 1, TechRole.PRODUCT, 'First orbital class reusable rocket.', 'AI & Physical Systems', 'Robotics');
 createTech('starlink', 'Starlink', 2019, 2, TechRole.PRODUCT, 'Satellite internet constellation.', 'Network & Connectivity', 'Telecommunications');
@@ -803,8 +829,8 @@ linkCreated('spacex', 'starlink');
 linkCreated('spacex', 'starship');
 linkPartOf('first_reusable_rocket', 'spacex');
 
-createCompany('palantir', 'Palantir', 2003, 2, CompanyRole.SERVICE, 'Defense AI.', [CompanyCategory.SOFTWARE], { marketCap: { current: '$150B', peak: '$150B' } });
-createCompany('paypal', 'PayPal', 1998, 2, CompanyRole.PLATFORM, 'Online payments system that birthed the PayPal Mafia.', [CompanyCategory.INTERNET], { marketCap: { current: '$70B', peak: '$350B' } });
+createCompany('palantir', 'Palantir', 2003, 1, CompanyRole.SERVICE, 'Defense AI.', [CompanyCategory.SOFTWARE], { marketCap: { current: '$150B', peak: '$150B' } });
+createCompany('paypal', 'PayPal', 1998, 2, CompanyRole.PLATFORM, 'Online payments system that birthed the PayPal Mafia.', [CompanyCategory.FINTECH, CompanyCategory.INTERNET], { marketCap: { current: '$70B', peak: '$350B' } });
 createPerson('thiel', 'Peter Thiel', 2003, 2, PersonRole.VISIONARY, 'Co-Founder', 'PayPal Mafia.', { primaryRole: 'Co-founder of PayPal', secondaryRole: 'Co-founder of Palantir', birthYear: 1967 });
 linkCreated('thiel', 'paypal');
 createPerson('alex_karp', 'Alex Karp', 2004, 2, PersonRole.VISIONARY, 'CEO', 'Philosopher-CEO.', { primaryRole: 'CEO of Palantir', birthYear: 1967 });
@@ -830,7 +856,7 @@ linkPartOf('project_maven', 'google'); // Google was also involved initially
 // NETWORKING & INFRASTRUCTURE
 // ==========================================
 
-createCompany('cisco', 'Cisco', 1984, 2, CompanyRole.INFRA, 'Internet plumbing.', [CompanyCategory.HARDWARE], { marketCap: { current: '$230B', peak: '$555B' } });
+createCompany('cisco', 'Cisco', 1984, 1, CompanyRole.INFRA, 'Internet plumbing.', [CompanyCategory.HARDWARE], { marketCap: { current: '$230B', peak: '$555B' } });
 createPerson('bosack', 'Leonard Bosack', 1984, 2, PersonRole.VISIONARY, 'Co-Founder', 'Stanford computer scientist.', { primaryRole: 'Co-founder of Cisco', birthYear: 1952 });
 createPerson('lerner', 'Sandy Lerner', 1984, 2, PersonRole.VISIONARY, 'Co-Founder', 'Pioneered multi-protocol router.', { primaryRole: 'Co-founder of Cisco', birthYear: 1955 });
 
@@ -846,6 +872,13 @@ linkCreated('cisco', 'ios_cisco');
 linkBasedOn('router', 'ios_cisco');
 linkPartOf('dot_com_bubble', 'cisco');
 linkBasedOn('arpanet', 'router'); // ARPANET evolved into Internet via routers
+
+// Foundational Links: Core infrastructure dependencies
+linkBasedOn('www', 'router');       // Web depends on routers
+linkBasedOn('cloud_computing', 'router');  // Cloud depends on networking
+linkBasedOn('android', 'java');     // Android built on Java
+linkBasedOn('photoshop', 'windows'); // Photoshop runs on Windows
+linkBasedOn('office', 'windows');    // Office runs on Windows
 
 createCompany('tencent', 'Tencent', 1998, 2, CompanyRole.PLATFORM, 'Chinese Tech Giant.', [CompanyCategory.INTERNET], { marketCap: { current: '$450B', peak: '$900B' } });
 createPerson('pony_ma', 'Pony Ma', 1998, 2, PersonRole.VISIONARY, 'Founder', 'Quiet architect of China\'s digital ecosystem.', { primaryRole: 'Founder of Tencent', birthYear: 1971 });
@@ -867,12 +900,12 @@ linkPartOf('ant_group_halt', 'jack_ma');
 // Baidu removed as per request
 
 // ByteDance - Social Media & AI
-createCompany('bytedance', 'ByteDance', 2012, 1, CompanyRole.PLATFORM, 'World\'s most valuable startup, known for its powerful recommendation algorithms.', [CompanyCategory.INTERNET], { marketCap: { current: '$300B', peak: '$400B' } });
+createCompany('bytedance', 'ByteDance', 2012, 1, CompanyRole.PLATFORM, 'World\'s most valuable startup, known for its powerful recommendation algorithms.', [CompanyCategory.MEDIA, CompanyCategory.INTERNET], { marketCap: { current: '$300B', peak: '$400B' } });
 createPerson('zhang_yiming', 'Zhang Yiming', 2012, 2, PersonRole.VISIONARY, 'Founder', 'Engineer-turned-entrepreneur who built a global empire on AI recommendation engines.', { primaryRole: 'Founder of ByteDance', birthYear: 1983 });
 createPerson('shou_zi_chew', 'Shou Zi Chew', 2021, 2, PersonRole.VISIONARY, 'CEO', 'Led TikTok through intense global regulatory scrutiny.', { primaryRole: 'CEO of TikTok', birthYear: 1983 });
 
-createTech('tiktok', 'TikTok', 2016, 1, TechRole.PRODUCT, 'Short-form video platform that revolutionized social media consumption.', 'Digital Services & Platforms', 'Social & Media');
-createTech('douyin', 'Douyin', 2016, 2, TechRole.PRODUCT, 'Chinese version of TikTok, integrating e-commerce and local services.', 'Digital Services & Platforms', 'Social & Media');
+// TikTok/Douyin merged into single node (same service, different markets)
+createTech('tiktok', 'TikTok', 2016, 1, TechRole.PRODUCT, 'Short-form video platform (TikTok/Douyin) that revolutionized social media consumption globally.', 'Digital Services & Platforms', 'Social & Media');
 createTech('rec_algo', 'Recommendation Algorithm', 2012, 2, TechRole.CORE, 'AI engine that personalizes content feed with uncanny accuracy.', 'AI & Physical Systems', 'Artificial Intelligence');
 
 createEpisode('tiktok_ban_threat', 'TikTok US Ban Threat', 2020, 2, EpisodeRole.CRISIS, 'US government threatens to ban TikTok over national security concerns.', { eventType: 'Regulatory', impactScale: 'National Security Concern' });
@@ -880,10 +913,8 @@ createEpisode('tiktok_ban_threat', 'TikTok US Ban Threat', 2020, 2, EpisodeRole.
 linkCreated('zhang_yiming', 'bytedance');
 linkPartOf('shou_zi_chew', 'bytedance');
 linkCreated('bytedance', 'tiktok');
-linkCreated('bytedance', 'douyin');
 linkCreated('bytedance', 'rec_algo');
 linkBasedOn('tiktok', 'rec_algo');
-linkBasedOn('douyin', 'rec_algo');
 linkPartOf('tiktok_ban_threat', 'bytedance');
 
 // Huawei - Telecom & Hardware
@@ -914,13 +945,12 @@ linkBasedOn('5g_infra', '5g_patents'); // Relies on global standards (Qualcomm e
 // ==========================================
 
 // DJI - Drone Market Leader
-createCompany('dji', 'DJI', 2006, 2, CompanyRole.PLATFORM, 'World\'s largest drone manufacturer with 70%+ market share.', [CompanyCategory.HARDWARE], { marketCap: { current: 'Private (~$15B)', peak: 'Private (~$16B)' } });
+createCompany('dji', 'DJI', 2006, 2, CompanyRole.PLATFORM, 'World\'s largest drone manufacturer with 70%+ market share.', [CompanyCategory.AEROSPACE, CompanyCategory.ROBOTICS], { marketCap: { current: 'Private (~$15B)', peak: 'Private (~$16B)' } });
 createPerson('frank_wang', 'Frank Wang (Wang Tao)', 2006, 2, PersonRole.VISIONARY, 'Founder & CEO', 'Built DJI into drone industry giant, revolutionizing aerial photography and videography.', { primaryRole: 'Founder of DJI', birthYear: 1980 });
 
-createTech('quadcopter', 'Consumer Quadcopter', 2010, 2, TechRole.PRODUCT, 'Four-rotor drone design that enabled stable consumer drones.');
-createTech('gimbal_stabilization', 'Gimbal Stabilization', 2012, 2, TechRole.CORE, '3-axis camera stabilization for smooth aerial footage.');
-createTech('autonomous_flight', 'Autonomous Flight', 2015, 2, TechRole.CORE, 'Computer vision and GPS-based autonomous navigation for drones.');
-createTech('fpv_drone', 'FPV Drone', 2016, 2, TechRole.PRODUCT, 'First-Person View racing drones with immersive piloting experience.');
+// Core DJI Technologies (reduced to 3)
+createTech('quadcopter', 'Consumer Quadcopter', 2010, 2, TechRole.PRODUCT, 'Four-rotor drone design that enabled stable consumer drones.', 'AI & Physical Systems', 'Robotics');
+createTech('gimbal_stabilization', 'Gimbal Stabilization', 2012, 2, TechRole.CORE, '3-axis camera stabilization for smooth aerial footage.', 'AI & Physical Systems', 'Robotics');
 
 createEpisode('phantom_launch', 'DJI Phantom Launch', 2013, 2, EpisodeRole.MILESTONE, 'DJI Phantom democratized aerial photography and created consumer drone market.', { eventType: 'Product Launch', impactScale: 'Drone Market Creator' });
 createEpisode('faa_drone_rules', 'FAA Drone Regulations', 2016, 2, EpisodeRole.MILESTONE, 'US FAA established Part 107 commercial drone rules, legitimizing drone industry.', { eventType: 'Regulatory', impactScale: 'Industry Legitimization' });
@@ -928,10 +958,7 @@ createEpisode('faa_drone_rules', 'FAA Drone Regulations', 2016, 2, EpisodeRole.M
 linkCreated('frank_wang', 'dji');
 linkCreated('dji', 'quadcopter');
 linkCreated('dji', 'gimbal_stabilization');
-linkCreated('dji', 'autonomous_flight');
-linkBasedOn('autonomous_flight', 'drone');
-linkCreated('dji', 'fpv_drone');
-linkBasedOn('fpv_drone', 'drone');
+linkCreated('dji', 'drone');
 linkBasedOn('quadcopter', 'drone');
 linkPartOf('phantom_launch', 'dji');
 linkPartOf('faa_drone_rules', 'dji');
@@ -1234,7 +1261,7 @@ linkCreated('softbank', 'paypay'); // Joint venture, but SoftBank is the parent 
 // linkCreated('yahoo_japan', 'paypay'); // Yahoo Japan not in graph
 
 // Zoom
-createCompany('zoom', 'Zoom', 2011, 2, CompanyRole.PLATFORM, 'Video conferencing standard.', [CompanyCategory.INTERNET], { marketCap: { current: '$20B', peak: '$160B' } });
+createCompany('zoom', 'Zoom', 2011, 1, CompanyRole.PLATFORM, 'Video conferencing standard.', [CompanyCategory.INTERNET], { marketCap: { current: '$20B', peak: '$160B' } });
 createPerson('eric_yuan', 'Eric Yuan', 2011, 2, PersonRole.VISIONARY, 'Founder', 'Former WebEx engineer who built Zoom.', { primaryRole: 'CEO of Zoom', birthYear: 1970 });
 createEpisode('zoom_boom', 'The Zoom Boom', 2020, 1, EpisodeRole.MILESTONE, 'Pandemic drives massive global adoption of video conferencing.', { eventType: 'Adoption', impactScale: '30x User Growth' });
 
@@ -1376,7 +1403,7 @@ linkPartOf('linkedin', 'microsoft'); // Acquired by Microsoft
 // 2. Service & Content Platforms
 
 // Uber
-createCompany('uber', 'Uber', 2009, 2, CompanyRole.PLATFORM, 'Revolutionized mobility with the gig economy.', [CompanyCategory.INTERNET], { marketCap: { current: '$140B', peak: '$150B' } });
+createCompany('uber', 'Uber', 2009, 2, CompanyRole.PLATFORM, 'Revolutionized mobility with the gig economy.', [CompanyCategory.MOBILITY, CompanyCategory.INTERNET], { marketCap: { current: '$140B', peak: '$150B' } });
 createPerson('travis_kalanick', 'Travis Kalanick', 2009, 2, PersonRole.VISIONARY, 'Co-Founder', 'Aggressive expansionist who built Uber.', { primaryRole: 'Co-founder of Uber', birthYear: 1976 });
 createTech('gig_economy', 'Gig Economy', 2009, 2, TechRole.STANDARD, 'Labor market characterized by short-term contracts or freelance work.', 'Digital Services & Platforms', 'Digital Platforms');
 
@@ -1395,7 +1422,7 @@ linkCreated('airbnb', 'sharing_economy');
 
 
 // Wikipedia
-createCompany('wikimedia', 'Wikimedia Foundation', 2003, 2, CompanyRole.PLATFORM, 'Non-profit charitable organization that hosts Wikipedia.', [CompanyCategory.INTERNET], { marketCap: { current: 'Non-profit', peak: 'Non-profit' } });
+createCompany('wikimedia', 'Wikimedia Foundation', 2003, 1, CompanyRole.PLATFORM, 'Non-profit charitable organization that hosts Wikipedia.', [CompanyCategory.INTERNET], { marketCap: { current: 'Non-profit', peak: 'Non-profit' } });
 createTech('wikipedia', 'Wikipedia', 2001, 1, TechRole.PRODUCT, 'The free encyclopedia that anyone can edit.', 'Digital Services & Platforms', 'Search & Information');
 createPerson('jimmy_wales', 'Jimmy Wales', 2001, 2, PersonRole.VISIONARY, 'Founder', 'Created the world\'s largest knowledge base.', { primaryRole: 'Founder of Wikipedia', birthYear: 1966 });
 
@@ -1427,7 +1454,7 @@ linkPartOf('github', 'microsoft'); // Acquired by Microsoft
 // 2. Modern Web & AI Infrastructure
 
 // Stripe - Payments Infrastructure
-createCompany('stripe', 'Stripe', 2010, 2, CompanyRole.PLATFORM, 'Payment infrastructure for the internet, powering millions of businesses.', [CompanyCategory.INTERNET], { marketCap: { current: '$70B', peak: '$95B' } });
+createCompany('stripe', 'Stripe', 2010, 2, CompanyRole.PLATFORM, 'Payment infrastructure for the internet, powering millions of businesses.', [CompanyCategory.FINTECH, CompanyCategory.INTERNET], { marketCap: { current: '$70B', peak: '$95B' } });
 createPerson('patrick_collison', 'Patrick Collison', 2010, 2, PersonRole.VISIONARY, 'Co-Founder & CEO', 'Built the most developer-friendly payments platform.', { primaryRole: 'Co-founder of Stripe', birthYear: 1988 });
 createPerson('john_collison', 'John Collison', 2010, 2, PersonRole.VISIONARY, 'Co-Founder', 'Youngest self-made billionaire (at 26).', { primaryRole: 'Co-founder of Stripe', birthYear: 1990 });
 createTech('api_economy', 'API Economy', 2010, 2, TechRole.STANDARD, 'Business model based on providing APIs as products.', 'Digital Services & Platforms', 'Digital Platforms');
@@ -1438,7 +1465,7 @@ linkCreated('stripe', 'api_economy');
 linkBasedOn('stripe', 'saas');
 
 // Spotify - Music Streaming
-createCompany('spotify', 'Spotify', 2006, 2, CompanyRole.PLATFORM, 'World\'s largest music streaming service with 600M+ users.', [CompanyCategory.INTERNET], { marketCap: { current: '$80B', peak: '$90B' } });
+createCompany('spotify', 'Spotify', 2006, 1, CompanyRole.PLATFORM, 'World\'s largest music streaming service with 600M+ users.', [CompanyCategory.MEDIA, CompanyCategory.INTERNET], { marketCap: { current: '$80B', peak: '$90B' } });
 createPerson('daniel_ek', 'Daniel Ek', 2006, 2, PersonRole.VISIONARY, 'Co-Founder & CEO', 'Transformed music industry from piracy to streaming.', { primaryRole: 'CEO of Spotify', birthYear: 1983 });
 createTech('music_streaming', 'Music Streaming', 2006, 2, TechRole.PRODUCT, 'On-demand music delivery service model.', 'Digital Services & Platforms', 'Social & Media');
 

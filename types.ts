@@ -79,6 +79,11 @@ export enum CompanyCategory {
   LAB = 'LAB',
   VC = 'VC',
   ROBOTICS = 'ROBOTICS',
+  // New Categories
+  FINTECH = 'FINTECH',
+  MOBILITY = 'MOBILITY',
+  AEROSPACE = 'AEROSPACE',
+  MEDIA = 'MEDIA',
 }
 
 export interface NodeData {
@@ -92,8 +97,8 @@ export interface NodeData {
   radius?: number;
   importance: number; // Now required
 
-  // Specific Role Classification
-  roleType?: Role; // Optional because not all nodes might have it initially (though we enforce it)
+  // Impact Score Role Classification (used for score multipliers)
+  impactRole?: Role;
 
   // Search & SEO
   keywords?: string[];

@@ -8,7 +8,7 @@ if (!apiKey) {
   console.error("❌ API Key is missing! Please check Vercel Environment Variables (VITE_GOOGLE_API_KEY).");
 }
 
-const ai = new GoogleGenAI({ apiKey: apiKey }); // 키가 없으면 에러가 나겠지만, 일단 변수로 전달
+const ai = new GoogleGenAI({ apiKey: apiKey });
 
 const CACHE_PREFIX = 'silicon_age_ai_cache_';
 
@@ -32,19 +32,41 @@ export const fetchNodeDetails = async (node: NodeData): Promise<AIResponse> => {
     console.warn("Failed to read from localStorage", e);
   }
 
-  // 3. Fetch from API (Fallback)
+  // 3. Fetch from API with enhanced context
   try {
     console.log(`[API Call] Fetching Gemini data for ${node.id}`);
-    const prompt = `
-      Provide a detailed analysis of "${node.label}" (Category: ${node.category}) in the context of Artificial Intelligence history.
-      Focus on its specific contribution, relationships to other key entities, and historical significance.
-    `;
 
-    // Use the lightest, fastest model available
+    // Build rich context from node data
+    const contextParts = [
+      `Entity: "${node.label}"`,
+      `Category: ${node.category}`,
+      `Year: ${node.year}`,
+      node.description ? `Description: ${node.description}` : null,
+      node.role ? `Role: ${node.role}` : null,
+      node.primaryRole ? `Primary Role: ${node.primaryRole}` : null,
+      node.companyCategories?.length ? `Industry: ${node.companyCategories.join(', ')}` : null,
+      node.techCategoryL1 ? `Tech Category: ${node.techCategoryL1}` : null,
+      node.marketCap?.current ? `Market Cap: ${node.marketCap.current}` : null,
+    ].filter(Boolean).join('\n');
+
+    const prompt = `
+You are an expert technology historian. Analyze the following entity in the context of computing and AI history.
+
+${contextParts}
+
+Provide:
+1. A concise 2-sentence summary
+2. Why this entity is significant in the "Silicon Age" (the era from transistors to AI)
+3. 3-5 interesting facts or achievements
+
+Use the latest available information. Be specific with dates, numbers, and achievements.
+    `.trim();
+
     const response = await ai.models.generateContent({
-      model: "gemini-flash-lite-latest", 
+      model: "gemini-2.0-flash-001",  // Upgraded model
       contents: prompt,
       config: {
+        tools: [{ googleSearch: {} }],  // Enable Google Search Grounding
         responseMimeType: "application/json",
         responseSchema: {
           type: Type.OBJECT,
@@ -70,7 +92,7 @@ export const fetchNodeDetails = async (node: NodeData): Promise<AIResponse> => {
 
     if (response.text) {
       const result = JSON.parse(response.text) as AIResponse;
-      
+
       // Save to Local Cache for future visits
       try {
         localStorage.setItem(cacheKey, JSON.stringify(result));
@@ -90,3 +112,4 @@ export const fetchNodeDetails = async (node: NodeData): Promise<AIResponse> => {
     };
   }
 };
+
