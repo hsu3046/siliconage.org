@@ -7,10 +7,10 @@ export enum Category {
 }
 
 export enum LinkType {
-  DEPENDENCY = 'DEPENDENCY', // User -> Supplier (Weighted Lower for Infra)
-  MAKER = 'MAKER',           // Creator -> Creation (Weighted Higher for Product)
-  INFLUENCE = 'INFLUENCE',   // Cause -> Effect
-  BELONGING = 'BELONGING',   // Member -> Group
+  CREATED = 'CREATED',       // (Was MAKER) - Creation, Launch, Founding
+  BASED_ON = 'BASED_ON',     // (Was DEPENDENCY) - Usage, Infrastructure, Foundation
+  PART_OF = 'PART_OF',       // (Was BELONGING) - Membership, Ownership, Category
+  TRIGGERED = 'TRIGGERED',   // (Was INFLUENCE) - Investment, Cause/Effect, Inspiration
 }
 
 export enum LinkDirection {

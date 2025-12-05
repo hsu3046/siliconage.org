@@ -47,19 +47,19 @@ const getLabelDimensions = (label: string, category: Category) => {
 // Define styles for different link types
 const getLinkStyle = (type: LinkType) => {
   switch (type) {
-    case LinkType.DEPENDENCY: // User -> Supplier (Weighted Lower for Infra)
-      // Red/Orange, Thin, SOLID (Critical Path)
-      return { dasharray: "none", width: 1.5, color: "#f97316", opacity: 1.0 };
-
-    case LinkType.MAKER:      // Creator -> Creation (Weighted Higher for Product)
+    case LinkType.CREATED:    // Creation, Launch, Founding
       // Cyan, Thin, Solid (Creative Output)
       return { dasharray: "0", width: 1.5, color: "#22d3ee", opacity: 0.8 };
 
-    case LinkType.INFLUENCE:  // Cause -> Effect (Medium Weight)
+    case LinkType.BASED_ON:   // Usage, Infrastructure, Foundation
+      // Orange, Thin, SOLID (Critical Path)
+      return { dasharray: "none", width: 1.5, color: "#f97316", opacity: 1.0 };
+
+    case LinkType.TRIGGERED:  // Investment, Cause/Effect, Inspiration
       // Purple, Thin, Dotted (Abstract)
       return { dasharray: "2,4", width: 1.5, color: "#a78bfa", opacity: 0.6 };
 
-    case LinkType.BELONGING:  // Member -> Group (Low Weight)
+    case LinkType.PART_OF:    // Membership, Ownership, Category
       // Slate, Thin, Solid (Structural)
       return { dasharray: "0", width: 1, color: "#64748b", opacity: 0.5 };
 
@@ -484,10 +484,10 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
     const defs = svg.append("defs");
 
     const markerTypes = [
-      { id: "arrow-dependency", color: "#f97316" }, // Orange
-      { id: "arrow-maker", color: "#22d3ee" },      // Cyan
-      { id: "arrow-influence", color: "#a78bfa" },  // Purple
-      { id: "arrow-belonging", color: "#64748b" },  // Slate
+      { id: "arrow-created", color: "#22d3ee" },    // Cyan
+      { id: "arrow-based_on", color: "#f97316" },   // Orange (underscore to match LinkType)
+      { id: "arrow-triggered", color: "#a78bfa" },  // Purple
+      { id: "arrow-part_of", color: "#64748b" },    // Slate (underscore to match LinkType)
     ];
 
     markerTypes.forEach(m => {
@@ -790,22 +790,22 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
         .id((d: any) => d.id)
         .distance((d: any) => {
           // PLANETARY PHYSICS:
-          // Maker/Belonging = Satellites (Close)
-          // Dependency/Influence = Inter-planetary (Far)
+          // Created/Part_Of = Satellites (Close)
+          // Based_On/Triggered = Inter-planetary (Far)
           let dist = 150;
-          if (d.type === LinkType.MAKER) dist = 60;      // Very close (Gravity)
-          else if (d.type === LinkType.BELONGING) dist = 80;  // Close
-          else if (d.type === LinkType.DEPENDENCY) dist = 250; // Far
-          else if (d.type === LinkType.INFLUENCE) dist = 350;  // Very Far
+          if (d.type === LinkType.CREATED) dist = 60;      // Very close (Gravity)
+          else if (d.type === LinkType.PART_OF) dist = 80;  // Close
+          else if (d.type === LinkType.BASED_ON) dist = 250; // Far
+          else if (d.type === LinkType.TRIGGERED) dist = 350;  // Very Far
 
           // In Focus Mode, keep distance normal or slightly larger to prevent overlap
           return isFocusMode ? dist * 1.2 : dist;
         })
         .strength((d: any) => {
-          if (d.type === LinkType.MAKER) return 2.0;      // Strongest pull
-          if (d.type === LinkType.BELONGING) return 1.5;  // Strong pull
-          if (d.type === LinkType.DEPENDENCY) return 0.2; // Weak pull
-          if (d.type === LinkType.INFLUENCE) return 0.1;  // Very weak pull
+          if (d.type === LinkType.CREATED) return 2.0;      // Strongest pull
+          if (d.type === LinkType.PART_OF) return 1.5;  // Strong pull
+          if (d.type === LinkType.BASED_ON) return 0.2; // Weak pull
+          if (d.type === LinkType.TRIGGERED) return 0.1;  // Very weak pull
           return 0.5;
         })
       )
@@ -1006,8 +1006,8 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
       .attr("stroke-dasharray", d => getLinkStyle(d.type).dasharray === "none" ? null : getLinkStyle(d.type).dasharray)
       .attr("stroke-linecap", "butt")
       .attr("marker-end", d => {
-        if (d.direction === LinkDirection.FORWARD) {
-          const suffix = d.type.toLowerCase().split('_')[0];
+        // Show arrow by default (FORWARD or undefined), hide only for REVERSE
+        if (d.direction !== LinkDirection.REVERSE) {
           return `url(#arrow-${d.type.toLowerCase()})`;
         }
         return null;

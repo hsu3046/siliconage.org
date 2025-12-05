@@ -76,10 +76,10 @@ const App: React.FC = () => {
   });
 
   const [visibleLinkTypes, setVisibleLinkTypes] = useState<Record<LinkType, boolean>>({
-    [LinkType.DEPENDENCY]: true,
-    [LinkType.MAKER]: true,
-    [LinkType.INFLUENCE]: true,
-    [LinkType.BELONGING]: true,
+    [LinkType.CREATED]: true,
+    [LinkType.BASED_ON]: true,
+    [LinkType.TRIGGERED]: true,
+    [LinkType.PART_OF]: true,
   });
 
   const { width, height } = useWindowSize();
@@ -412,10 +412,10 @@ const App: React.FC = () => {
                   const isActive = visibleLinkTypes[type];
                   const getLineStyle = () => {
                     switch (type) {
-                      case LinkType.DEPENDENCY: return "border-b-2 w-4 border-orange-500 border-solid";
-                      case LinkType.MAKER: return "border-b-2 w-4 border-cyan-400";
-                      case LinkType.INFLUENCE: return "border-b w-4 border-purple-400 border-dotted";
-                      case LinkType.BELONGING: return "border-b w-4 border-slate-400";
+                      case LinkType.BASED_ON: return "border-b-2 w-4 border-orange-500 border-solid";
+                      case LinkType.CREATED: return "border-b-2 w-4 border-cyan-400";
+                      case LinkType.TRIGGERED: return "border-b w-4 border-purple-400 border-dotted";
+                      case LinkType.PART_OF: return "border-b w-4 border-slate-400";
                       default: return "w-4 border-b";
                     }
                   };
@@ -423,10 +423,10 @@ const App: React.FC = () => {
                   const getBorderColor = () => {
                     if (!isActive) return undefined; // Grey border when OFF (from className)
                     switch (type) {
-                      case LinkType.DEPENDENCY: return "rgba(249, 115, 22, 1)";
-                      case LinkType.MAKER: return "rgba(34, 211, 238, 1)";
-                      case LinkType.INFLUENCE: return "rgba(192, 132, 252, 1)";
-                      case LinkType.BELONGING: return "rgba(148, 163, 184, 1)";
+                      case LinkType.BASED_ON: return "rgba(249, 115, 22, 1)";
+                      case LinkType.CREATED: return "rgba(34, 211, 238, 1)";
+                      case LinkType.TRIGGERED: return "rgba(192, 132, 252, 1)";
+                      case LinkType.PART_OF: return "rgba(148, 163, 184, 1)";
                       default: return undefined;
                     }
                   };
@@ -529,10 +529,10 @@ const App: React.FC = () => {
                   const isActive = visibleLinkTypes[type];
                   const getLineStyle = () => {
                     switch (type) {
-                      case LinkType.DEPENDENCY: return "border-b-2 w-4 border-orange-500 border-solid";
-                      case LinkType.MAKER: return "border-b-2 w-4 border-cyan-400";
-                      case LinkType.INFLUENCE: return "border-b w-4 border-purple-400 border-dotted";
-                      case LinkType.BELONGING: return "border-b w-4 border-slate-400";
+                      case LinkType.BASED_ON: return "border-b-2 w-4 border-orange-500 border-solid";
+                      case LinkType.CREATED: return "border-b-2 w-4 border-cyan-400";
+                      case LinkType.TRIGGERED: return "border-b w-4 border-purple-400 border-dotted";
+                      case LinkType.PART_OF: return "border-b w-4 border-slate-400";
                       default: return "w-4 border-b";
                     }
                   };
@@ -540,10 +540,10 @@ const App: React.FC = () => {
                   const getBorderColor = () => {
                     if (!isActive) return undefined;
                     switch (type) {
-                      case LinkType.DEPENDENCY: return "rgba(249, 115, 22, 1)";
-                      case LinkType.MAKER: return "rgba(34, 211, 238, 1)";
-                      case LinkType.INFLUENCE: return "rgba(192, 132, 252, 1)";
-                      case LinkType.BELONGING: return "rgba(148, 163, 184, 1)";
+                      case LinkType.BASED_ON: return "rgba(249, 115, 22, 1)";
+                      case LinkType.CREATED: return "rgba(34, 211, 238, 1)";
+                      case LinkType.TRIGGERED: return "rgba(192, 132, 252, 1)";
+                      case LinkType.PART_OF: return "rgba(148, 163, 184, 1)";
                       default: return undefined;
                     }
                   };

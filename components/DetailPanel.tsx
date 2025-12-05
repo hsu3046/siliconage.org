@@ -154,6 +154,174 @@ const getExternalLinks = (node: NodeData) => {
   return links.filter(link => link.show);
 };
 
+// === HELPER: Generate Natural Language Connection Labels ===
+const getConnectionLabel = (
+  subjectNode: NodeData,
+  objectNode: NodeData,
+  linkType: string,
+  direction: 'Inbound' | 'Outbound'
+): string => {
+  const subject = subjectNode.label;
+  const object = objectNode.label;
+  const subjectCat = subjectNode.category;
+  const objectCat = objectNode.category;
+
+  // === EPISODE CONTEXT HELPERS ===
+  const getEpisodeContext = (episodeNode: NodeData): string => {
+    return episodeNode.eventType?.toLowerCase() || 'event';
+  };
+
+  // === CASE A: COMPANY ===
+  if (subjectCat === Category.COMPANY) {
+    // Person -> Company (INBOUND)
+    if (objectCat === Category.PERSON && direction === 'Inbound') {
+      if (linkType === 'CREATED') return `Founder`;
+      if (linkType === 'PART_OF') return `Former/Current member`;
+    }
+    // Company -> Person (OUTBOUND to Person)
+    if (objectCat === Category.PERSON && direction === 'Outbound') {
+      if (linkType === 'TRIGGERED') return `Mentored by ${subject}`;
+    }
+    // Company -> Tech/Product (OUTBOUND)
+    if (objectCat === Category.TECHNOLOGY && direction === 'Outbound') {
+      if (linkType === 'CREATED') return `Product/Service`;
+      if (linkType === 'PART_OF') return `Industry category`;
+      if (linkType === 'BASED_ON') return `Core infrastructure`;
+    }
+    // Tech -> Company (INBOUND from Tech)
+    if (objectCat === Category.TECHNOLOGY && direction === 'Inbound') {
+      if (linkType === 'BASED_ON') return `Enabled by this tech`;
+      if (linkType === 'CREATED') return `Created this`;
+    }
+    // Company -> Episode (OUTBOUND) - CONTEXT-AWARE
+    if (objectCat === Category.EPISODE && direction === 'Outbound') {
+      const eventType = getEpisodeContext(objectNode);
+      if (linkType === 'TRIGGERED') return `${subject} initiated this ${eventType}`;
+      if (linkType === 'PART_OF') return `${subject} was involved`;
+    }
+    // Episode -> Company (INBOUND)
+    if (objectCat === Category.EPISODE && direction === 'Inbound') {
+      const eventType = getEpisodeContext(objectNode);
+      if (linkType === 'TRIGGERED') return `This ${eventType} affected ${subject}`;
+    }
+    // Company -> Company (VC/Investor INBOUND)
+    if (objectCat === Category.COMPANY && direction === 'Inbound') {
+      if (linkType === 'TRIGGERED') return `Investor`;
+      if (linkType === 'PART_OF') return `Subsidiary of ${subject}`;
+    }
+    // Company -> Company (Subsidiary OUTBOUND)
+    if (objectCat === Category.COMPANY && direction === 'Outbound') {
+      if (linkType === 'PART_OF') return `Acquired/Parent company`;
+      if (linkType === 'TRIGGERED') return `Investment/Influence`;
+      if (linkType === 'BASED_ON') return `Strategic partner`;
+    }
+  }
+
+  // === CASE B: PERSON ===
+  if (subjectCat === Category.PERSON) {
+    // Person -> Company
+    if (objectCat === Category.COMPANY && direction === 'Outbound') {
+      if (linkType === 'CREATED') return `Founded`;
+      if (linkType === 'PART_OF') return `Worked at`;
+    }
+    // Company -> Person (INBOUND)
+    if (objectCat === Category.COMPANY && direction === 'Inbound') {
+      if (linkType === 'TRIGGERED') return `Mentor organization`;
+    }
+    // Person -> Tech
+    if (objectCat === Category.TECHNOLOGY && direction === 'Outbound') {
+      if (linkType === 'CREATED') return `Inventor`;
+    }
+    // Tech -> Person (INBOUND)
+    if (objectCat === Category.TECHNOLOGY && direction === 'Inbound') {
+      if (linkType === 'CREATED') return `Invented by ${subject}`;
+    }
+    // Person -> Episode (OUTBOUND) - CONTEXT-AWARE
+    if (objectCat === Category.EPISODE && direction === 'Outbound') {
+      const eventType = getEpisodeContext(objectNode);
+      if (linkType === 'TRIGGERED') return `${subject} initiated this ${eventType}`;
+      if (linkType === 'PART_OF') return `${subject} participated`;
+    }
+    // Episode -> Person (INBOUND)
+    if (objectCat === Category.EPISODE && direction === 'Inbound') {
+      const eventType = getEpisodeContext(objectNode);
+      if (linkType === 'TRIGGERED') return `This ${eventType} affected ${subject}`;
+    }
+    // Person -> Person
+    if (objectCat === Category.PERSON) {
+      if (direction === 'Outbound' && linkType === 'TRIGGERED') return `Mentor`;
+      if (direction === 'Inbound' && linkType === 'TRIGGERED') return `Influenced by`;
+    }
+  }
+
+  // === CASE C: TECHNOLOGY ===
+  if (subjectCat === Category.TECHNOLOGY) {
+    // Company/Person -> Tech (INBOUND - Creator)
+    if ((objectCat === Category.COMPANY || objectCat === Category.PERSON) && direction === 'Inbound') {
+      if (linkType === 'CREATED') return `Creator`;
+    }
+    // Tech -> Company/Person (OUTBOUND - Used by)
+    if ((objectCat === Category.COMPANY || objectCat === Category.PERSON) && direction === 'Outbound') {
+      if (linkType === 'BASED_ON') return `Dependency`;
+    }
+    // Tech -> Tech (Base)
+    if (objectCat === Category.TECHNOLOGY && direction === 'Outbound') {
+      if (linkType === 'BASED_ON') return `Built on`;
+      if (linkType === 'TRIGGERED') return `Inspired by`;
+      if (linkType === 'CREATED') return `Created this`;
+    }
+    // Tech -> Tech (Derivative INBOUND)
+    if (objectCat === Category.TECHNOLOGY && direction === 'Inbound') {
+      if (linkType === 'BASED_ON') return `Foundation for`;
+      if (linkType === 'TRIGGERED') return `Led to`;
+      if (linkType === 'CREATED') return `Created`;
+    }
+    // Tech -> Episode
+    if (objectCat === Category.EPISODE && direction === 'Outbound') {
+      const eventType = getEpisodeContext(objectNode);
+      if (linkType === 'TRIGGERED') return `Caused this ${eventType}`;
+      if (linkType === 'PART_OF') return `Related ${eventType}`;
+    }
+  }
+
+  // === CASE D: EPISODE ===
+  if (subjectCat === Category.EPISODE) {
+    const subjectEventType = getEpisodeContext(subjectNode);
+    const isActor = objectCat === Category.COMPANY || objectCat === Category.PERSON;
+
+    // 1. INBOUND (Who caused/joined it?) -> Actor -> Episode
+    if (direction === 'Inbound') {
+      if (linkType === 'TRIGGERED') return `Main cause of this ${subjectEventType}`;
+      if (linkType === 'PART_OF') return `Key participant`;
+    }
+
+    // 2. OUTBOUND (What did it affect/include?) -> Episode -> Target
+    if (direction === 'Outbound') {
+      // If linked to a Company/Person via PART_OF, they are MEMBERS, not outcomes.
+      if (linkType === 'PART_OF') {
+        return isActor
+          ? `Key player in this ${subjectEventType}`
+          : `Part of this ${subjectEventType}`;
+      }
+
+      // If linked via TRIGGERED, it is likely a consequence/impact.
+      if (linkType === 'TRIGGERED') {
+        return `Consequence of this ${subjectEventType}`;
+      }
+    }
+  }
+
+  // Fallback: Return simple description
+  const verb = linkType === 'CREATED' ? 'Creator'
+    : linkType === 'PART_OF' ? 'Related'
+      : linkType === 'BASED_ON' ? 'Dependency'
+        : linkType === 'TRIGGERED' ? 'Influence'
+          : 'Connection';
+
+  return verb;
+};
+
+
 const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus, onNodeSelect }) => {
   const [aiData, setAiData] = useState<AIResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -168,11 +336,29 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
     return node ? getExternalLinks(node) : [];
   }, [node]);
 
-  // Calculate connections
+  // Calculate connections with smart sorting
   const connections = useMemo(() => {
     if (!node) return [];
 
-    return data.links.map(link => {
+    // Define category priority order based on current node type
+    const getCategoryOrder = (nodeCategory: Category): Record<Category, number> => {
+      switch (nodeCategory) {
+        case Category.COMPANY:
+          return { [Category.PERSON]: 0, [Category.TECHNOLOGY]: 1, [Category.COMPANY]: 2, [Category.EPISODE]: 3 };
+        case Category.PERSON:
+          return { [Category.COMPANY]: 0, [Category.TECHNOLOGY]: 1, [Category.PERSON]: 2, [Category.EPISODE]: 3 };
+        case Category.TECHNOLOGY:
+          return { [Category.TECHNOLOGY]: 0, [Category.PERSON]: 1, [Category.COMPANY]: 2, [Category.EPISODE]: 3 };
+        case Category.EPISODE:
+          return { [Category.COMPANY]: 0, [Category.TECHNOLOGY]: 1, [Category.PERSON]: 2, [Category.EPISODE]: 3 };
+        default:
+          return { [Category.PERSON]: 0, [Category.TECHNOLOGY]: 1, [Category.COMPANY]: 2, [Category.EPISODE]: 3 };
+      }
+    };
+
+    const categoryOrder = getCategoryOrder(node.category);
+
+    const rawConnections = data.links.map(link => {
       const sId = typeof link.source === 'object' ? (link.source as any).id : link.source;
       const tId = typeof link.target === 'object' ? (link.target as any).id : link.target;
 
@@ -191,6 +377,19 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
         type: link.type
       };
     }).filter(Boolean);
+
+    // Sort: 1st by category order, 2nd by impact score (descending)
+    return rawConnections.sort((a, b) => {
+      const catA = categoryOrder[a!.otherNode.category] ?? 99;
+      const catB = categoryOrder[b!.otherNode.category] ?? 99;
+
+      if (catA !== catB) return catA - catB;
+
+      // Same category: sort by score descending
+      const scoreA = a!.otherNode._score || 0;
+      const scoreB = b!.otherNode._score || 0;
+      return scoreB - scoreA;
+    });
   }, [node, data]);
 
   const loadAiData = () => {
@@ -531,7 +730,9 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
                       </div>
                       <div>
                         <div className="text-sm font-bold text-slate-200 group-hover:text-white">{conn?.otherNode.label}</div>
-                        <div className="text-[10px] text-slate-500 uppercase">{conn?.type} • {conn?.relation}</div>
+                        <div className="text-[10px] text-slate-400 italic">
+                          {conn && node && getConnectionLabel(node, conn.otherNode, conn.type, conn.relation as 'Inbound' | 'Outbound')}
+                        </div>
                       </div>
                     </div>
 
