@@ -333,11 +333,11 @@ const App: React.FC = () => {
             <h1 className="font-bold tracking-tight text-slate-100 text-base sm:text-lg md:text-xl truncate group-hover:text-primary transition-colors">
               The Silicon Age
             </h1>
-            <span className="hidden sm:block text-xs text-slate-500 -mt-0.5">From Transistors to AI</span>
+            <span className="block text-xs text-slate-500 -mt-0.5">From Transistors to AI</span>
           </div>
         </button>
 
-        <div className="hidden md:flex flex-1 min-w-0 items-center justify-center gap-4 mx-4 overflow-x-auto no-scrollbar">
+        <div className="hidden xl:flex flex-1 min-w-0 items-center justify-center gap-4 mx-4 overflow-x-auto no-scrollbar">
           {focusNodeId && (
             <div className="flex items-center gap-2 shrink-0 mr-2 border-r border-slate-700 pr-4">
               <span className="text-sm text-slate-300 truncate max-w-[150px] sm:max-w-xs">
@@ -380,7 +380,7 @@ const App: React.FC = () => {
                 <button
                   key={cat}
                   onClick={() => toggleCategory(cat)}
-                  className={`px-3 py-1 text-xs font-bold rounded-full border transition-all duration-200 flex items-center gap-2 group`}
+                  className={`px-3 py-1 text-xs font-bold rounded-full border transition-all duration-200 flex items-center justify-center gap-2 group min-w-[50px]`}
                   style={bgStyle}
                   title={cat === Category.COMPANY
                     ? (viewMode === 'MAP' ? "Click to cycle: Full View → Minimal View → Hidden" : "Click to toggle visibility")
@@ -390,8 +390,9 @@ const App: React.FC = () => {
                   <div
                     className={`w-2 h-2 rounded-full shadow-[0_0_8px_rgba(0,0,0,0.5)] shrink-0`}
                     style={{
-                      backgroundColor: (cat === Category.COMPANY && companyMode === 'MINIMAL' && viewMode === 'MAP') ? 'transparent' : (isActive ? color : '#64748b'),
-                      border: (cat === Category.COMPANY && companyMode === 'MINIMAL' && viewMode === 'MAP') ? `1px solid ${color}` : 'none'
+                      backgroundColor: (cat === Category.COMPANY && companyMode === 'MINIMAL' && viewMode === 'MAP') ? 'transparent' : color,
+                      border: (cat === Category.COMPANY && companyMode === 'MINIMAL' && viewMode === 'MAP') ? `1px solid ${color}` : 'none',
+                      opacity: isActive ? 1 : 0.5
                     }}
                   />
                   <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-1000 ease-in-out whitespace-nowrap opacity-0 group-hover:opacity-100">
@@ -418,14 +419,27 @@ const App: React.FC = () => {
                       default: return "w-4 border-b";
                     }
                   };
+
+                  const getBorderColor = () => {
+                    if (!isActive) return undefined; // Grey border when OFF (from className)
+                    switch (type) {
+                      case LinkType.DEPENDENCY: return "rgba(249, 115, 22, 1)";
+                      case LinkType.MAKER: return "rgba(34, 211, 238, 1)";
+                      case LinkType.INFLUENCE: return "rgba(192, 132, 252, 1)";
+                      case LinkType.BELONGING: return "rgba(148, 163, 184, 1)";
+                      default: return undefined;
+                    }
+                  };
+
                   return (
                     <button
                       key={type}
                       onClick={() => toggleLinkType(type)}
                       className={`
-                            px-3 py-1 text-xs font-bold rounded-full border border-slate-600 transition-all duration-200 flex items-center gap-2 group
+                            px-3 py-1 text-xs font-bold rounded-full border border-slate-600 transition-all duration-200 flex items-center justify-center gap-2 group min-w-[50px]
                             ${isActive ? 'bg-slate-800 text-slate-200' : 'bg-transparent text-slate-500 opacity-50'}
                         `}
+                      style={{ borderColor: getBorderColor() }}
                       title={`Click to toggle ${type.toLowerCase()} links`}
                     >
                       <div className={`${getLineStyle()} ${isActive ? 'opacity-100' : 'opacity-50'} shrink-0`}></div>
@@ -444,7 +458,7 @@ const App: React.FC = () => {
           {/* Featured Node of the Day */}
           <button
             onClick={() => handleNodeDoubleClick(featuredNode)}
-            className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/50 rounded-lg text-amber-300 hover:from-amber-500/30 hover:to-orange-500/30 transition-all"
+            className="hidden xl:flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/50 rounded-lg text-amber-300 hover:from-amber-500/30 hover:to-orange-500/30 transition-all"
             title={`Today's Featured: ${featuredNode.label}`}
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" strokeWidth="2" /><circle cx="8" cy="8" r="1" fill="currentColor" /><circle cx="16" cy="8" r="1" fill="currentColor" /><circle cx="12" cy="12" r="1" fill="currentColor" /><circle cx="8" cy="16" r="1" fill="currentColor" /><circle cx="16" cy="16" r="1" fill="currentColor" /></svg>
@@ -459,7 +473,7 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      <div className="md:hidden border-b border-slate-700 bg-surface/50 flex flex-col">
+      <div className="xl:hidden border-b border-slate-700 bg-surface/50 flex flex-col">
         {focusNodeId && (
           <div className="h-10 flex items-center justify-center px-4 bg-slate-900/30 border-b border-slate-700/50 gap-2">
             <span className="text-xs text-slate-300 truncate">
@@ -484,13 +498,13 @@ const App: React.FC = () => {
               else isActive = visibleCategories[cat];
 
               let bgStyle = { backgroundColor: 'transparent', borderColor: CATEGORY_COLORS[cat] };
-              let dotStyle = { backgroundColor: CATEGORY_COLORS[cat], border: 'none' };
-              let containerClass = `w-6 h-6 rounded-full border border-slate-600 flex items-center justify-center transition-all ${!isActive && 'opacity-30 grayscale'}`;
+              let dotStyle = { backgroundColor: CATEGORY_COLORS[cat], border: 'none', opacity: isActive ? 1 : 0.5 };
+              let containerClass = `w-8 h-8 rounded-full border border-slate-600 flex items-center justify-center transition-all ${!isActive && 'opacity-50'}`;
 
               if (cat === Category.COMPANY) {
                 if (viewMode === 'MAP') {
                   if (companyMode === 'FULL' && isActive) bgStyle.backgroundColor = 'rgba(30, 41, 59, 0.5)';
-                  else if (companyMode === 'MINIMAL') dotStyle = { backgroundColor: 'transparent', border: `1px solid ${CATEGORY_COLORS[cat]}` };
+                  else if (companyMode === 'MINIMAL') dotStyle = { backgroundColor: 'transparent', border: `1px solid ${CATEGORY_COLORS[cat]}`, opacity: isActive ? 1 : 0.5 };
                 } else {
                   if (isActive) bgStyle.backgroundColor = 'rgba(30, 41, 59, 0.5)';
                 }
@@ -522,14 +536,27 @@ const App: React.FC = () => {
                       default: return "w-4 border-b";
                     }
                   };
+
+                  const getBorderColor = () => {
+                    if (!isActive) return undefined;
+                    switch (type) {
+                      case LinkType.DEPENDENCY: return "rgba(249, 115, 22, 1)";
+                      case LinkType.MAKER: return "rgba(34, 211, 238, 1)";
+                      case LinkType.INFLUENCE: return "rgba(192, 132, 252, 1)";
+                      case LinkType.BELONGING: return "rgba(148, 163, 184, 1)";
+                      default: return undefined;
+                    }
+                  };
+
                   return (
                     <button
                       key={type}
                       onClick={() => toggleLinkType(type)}
                       className={`
                             w-8 h-8 rounded-full border border-slate-600 flex items-center justify-center transition-all 
-                            ${isActive ? 'bg-slate-800 border-slate-500 shadow-sm' : 'bg-transparent opacity-40'}
+                            ${isActive ? 'bg-slate-800 shadow-sm' : 'bg-transparent opacity-40'}
                         `}
+                      style={{ borderColor: getBorderColor() }}
                     >
                       <div className={`${getLineStyle()}`}></div>
                     </button>

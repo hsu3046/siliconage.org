@@ -302,6 +302,11 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
           </div>
         </div>
 
+        {/* Disclaimer */}
+        <p className="text-[10px] text-slate-500 leading-relaxed mt-6 pt-4 border-t border-slate-700/50">
+          The content and links provided on this site are aggregated through AI algorithms based on objective technical keywords, rather than personal curation or subjective selection.
+        </p>
+
       </div>
     </div>
   );

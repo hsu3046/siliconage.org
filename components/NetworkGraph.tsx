@@ -1274,7 +1274,7 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
         </button>
       </div>
 
-      <div className="absolute bottom-4 right-4 z-10 flex md:hidden flex-col items-center gap-2 bg-surface/90 backdrop-blur rounded-lg border border-slate-600 shadow-lg p-2">
+      <div className="absolute bottom-20 right-4 z-10 flex md:hidden flex-col items-center gap-2 bg-surface/90 backdrop-blur rounded-lg border border-slate-600 shadow-lg p-2">
         <button onClick={() => zoomToLevel(Math.min(zoomLevel + 1, 5))} className="w-8 h-8 flex items-center justify-center text-slate-300 hover:text-white bg-slate-800 rounded hover:bg-slate-700 transition-colors">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
         </button>
