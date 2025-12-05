@@ -103,6 +103,25 @@ export interface NodeData {
   role?: string; // For Person (e.g. "Founder", "CEO")
   externalLinks?: ExternalLink[];
 
+  // === NEW: Person Specific ===
+  primaryRole?: string;   // e.g. "CEO of Tesla"
+  secondaryRole?: string; // e.g. "CEO of SpaceX" (Optional)
+  birthYear?: number;
+  deathYear?: number;     // undefined = "Present"
+
+  // === NEW: Episode Specific ===
+  eventType?: string;     // e.g. "Investment", "Security Breach"
+  impactScale?: string;   // e.g. "$13B Deal", "Global Impact"
+
+  // === NEW: Company Specific ===
+  marketCap?: {
+    current?: string;     // e.g. "$1.5T"
+    peak?: string;        // e.g. "$3.0T"
+  };
+
+  // === NEW: Technology Specific ===
+  endYear?: number;       // For lifecycle display (undefined = "Present")
+
   // Computed Properties (Impact Factor)
   _score?: number;
   _radius?: number;

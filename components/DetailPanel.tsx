@@ -11,9 +11,162 @@ interface DetailPanelProps {
   onNodeSelect: (node: NodeData) => void; // Navigation handler
 }
 
+// === HELPER: Get Section Headers by Category ===
+const getSectionHeaders = (category: Category) => {
+  switch (category) {
+    case Category.COMPANY:
+      return {
+        summary: 'Corporate Profile',
+        significance: 'Market Dominance',
+        keyFacts: 'Key Products & Services'
+      };
+    case Category.PERSON:
+      return {
+        summary: 'Biography',
+        significance: 'Career & Legacy',
+        keyFacts: 'Major Achievements'
+      };
+    case Category.EPISODE:
+      return {
+        summary: 'Event Overview',
+        significance: 'Impact & Aftermath',
+        keyFacts: 'Causes & Timeline'
+      };
+    case Category.TECHNOLOGY:
+      return {
+        summary: 'Core Concept',
+        significance: 'Why it Matters',
+        keyFacts: 'Technical Specs'
+      };
+    default:
+      return {
+        summary: 'Summary',
+        significance: 'Significance',
+        keyFacts: 'Key Facts'
+      };
+  }
+};
+
+// === HELPER: Generate Smart External Links ===
+const getExternalLinks = (node: NodeData) => {
+  const name = node.label;
+  const category = node.category;
+
+  // For EPISODE nodes: Show ONLY Web Search
+  if (category === Category.EPISODE) {
+    return [
+      {
+        label: 'Web Search',
+        url: `https://www.google.com/search?q=${encodeURIComponent(`"${name}" explained history`)}`,
+        icon: (
+          <svg className="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
+          </svg>
+        ),
+        show: true
+      }
+    ];
+  }
+
+  // For all other nodes (Company, Person, Technology)
+  const links: Array<{
+    label: string;
+    url: string;
+    icon: React.ReactNode;
+    show: boolean;
+  }> = [
+      // 1. Wikipedia (First for non-EPISODE)
+      {
+        label: 'Wikipedia',
+        url: `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(name)}`,
+        icon: (
+          <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12.09 13.119c-.936 1.932-2.217 4.548-2.853 5.728-.616 1.074-1.127.931-1.532.029-1.406-3.321-4.293-9.144-5.651-12.409-.251-.601-.441-.987-.619-1.139-.181-.15-.554-.24-1.122-.271C.12 5.045 0 4.992 0 4.894v-.528c0-.119.068-.189.207-.19h3.852c.118.001.178.062.179.18v.485c0 .11-.061.179-.18.18-.968.042-1.196.344-.701 1.024l4.455 9.195 2.115-4.263-1.836-3.807c-.577-1.132-.975-1.611-1.594-1.754-.229-.049-.593-.092-.684-.243-.06-.112-.074-.178-.074-.332V4.88c0-.107.062-.175.169-.175h4.086c.099 0 .169.068.169.175v.533c0 .105-.079.185-.193.185-.478.008-.847.104-.847.417 0 .158.058.33.174.518l2.155 4.373 2.119-4.243c.117-.235.189-.462.189-.688 0-.375-.384-.447-.847-.447-.11 0-.186-.08-.186-.185v-.537c0-.107.07-.175.17-.175h3.29c.099 0 .168.068.168.175v.519c0 .111-.057.19-.17.19-.544.009-.97.143-1.274.404-.304.259-.658.821-1.065 1.684l-2.47 4.967 2.578 5.339c.634 1.354 1.04 1.607 1.647 1.607.207 0 .394-.027.558-.082.163-.055.336-.134.519-.239.183-.105.352-.171.508-.199.156-.028.306.015.452.128.145.113.218.266.218.459 0 .256-.114.464-.342.622-.229.159-.564.238-1.006.238-1.348 0-2.292-.595-2.834-1.785l-2.91-6.022-2.677 5.39c-.35.712-.632 1.21-.846 1.49-.214.281-.508.422-.883.422-.356 0-.707-.133-1.052-.4-.345-.266-.517-.59-.517-.97 0-.193.052-.357.155-.49.104-.134.285-.271.543-.41.157-.088.275-.159.353-.213.079-.054.195-.15.349-.288.154-.138.289-.31.404-.516.115-.207.25-.472.404-.797l3.142-6.51-2.29-4.686c-.422-.87-.752-1.384-1.088-1.54-.181-.088-.431-.116-.749-.085-.11 0-.186-.08-.186-.185v-.537c0-.107.07-.175.17-.175h4.17c.1 0 .17.068.17.175v.537c0 .105-.08.185-.186.185" />
+          </svg>
+        ),
+        show: true
+      },
+      // 2. YouTube
+      {
+        label: 'YouTube',
+        url: (() => {
+          switch (category) {
+            case Category.PERSON:
+              return `https://www.youtube.com/results?search_query=${encodeURIComponent(`"${name}" documentary biography interview`)}`;
+            case Category.TECHNOLOGY:
+              return `https://www.youtube.com/results?search_query=${encodeURIComponent(`How "${name}" works explained`)}`;
+            default:
+              return `https://www.youtube.com/results?search_query=${encodeURIComponent(`"${name}" overview`)}`;
+          }
+        })(),
+        icon: (
+          <svg className="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+          </svg>
+        ),
+        show: true
+      },
+      // 3. Web Search (Google)
+      {
+        label: 'Web Search',
+        url: `https://www.google.com/search?q=${encodeURIComponent(`"${name}" overview`)}`,
+        icon: (
+          <svg className="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
+          </svg>
+        ),
+        show: true
+      },
+      // 4. Research Paper (arXiv) - Tech & Person only
+      {
+        label: 'Paper',
+        url: (() => {
+          if (category === Category.PERSON) {
+            return `https://arxiv.org/search/?query=${encodeURIComponent(name)}&searchtype=all`;
+          }
+          return `https://arxiv.org/search/?query=${encodeURIComponent(name)}&searchtype=all`;
+        })(),
+        icon: (
+          <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+          </svg>
+        ),
+        show: category === Category.TECHNOLOGY || category === Category.PERSON
+      },
+      // 5. Books (Amazon)
+      {
+        label: 'Books',
+        url: (() => {
+          if (category === Category.PERSON) {
+            return `https://www.amazon.com/s?k=${encodeURIComponent(`Books by "${name}"`)}`;
+          }
+          return `https://www.amazon.com/s?k=${encodeURIComponent(`"${name}" book`)}`;
+        })(),
+        icon: (
+          <svg className="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z" />
+          </svg>
+        ),
+        show: true
+      }
+    ];
+
+  return links.filter(link => link.show);
+};
+
 const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus, onNodeSelect }) => {
   const [aiData, setAiData] = useState<AIResponse | null>(null);
   const [loading, setLoading] = useState(false);
+
+  // Get dynamic section headers
+  const sectionHeaders = useMemo(() => {
+    return node ? getSectionHeaders(node.category) : getSectionHeaders(Category.TECHNOLOGY);
+  }, [node?.category]);
+
+  // Get smart external links
+  const externalLinks = useMemo(() => {
+    return node ? getExternalLinks(node) : [];
+  }, [node]);
 
   // Calculate connections
   const connections = useMemo(() => {
@@ -56,6 +209,100 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
 
   if (!node) return null;
 
+  // === Dynamic Metadata Rendering ===
+  const renderDynamicMetadata = () => {
+    switch (node.category) {
+      case Category.COMPANY:
+        // Market Cap display (if available)
+        if (node.marketCap?.current || node.marketCap?.peak) {
+          const currentValue = node.marketCap.current || 'N/A';
+          const isNonProfit = currentValue.toLowerCase().includes('non-profit') ||
+            currentValue.toLowerCase().includes('nonprofit') ||
+            currentValue === 'N/A (Gov)' ||
+            currentValue === 'N/A (Intl Org)';
+
+          return (
+            <div className="flex items-center gap-2 mt-2 text-sm">
+              {isNonProfit ? (
+                // Case A: Non-profit - show only this label
+                <span className="text-slate-400 font-medium">Non-profit</span>
+              ) : (
+                // Case B: Standard market cap - clickable with peak
+                <a
+                  href={`https://www.google.com/search?q=${encodeURIComponent(`${node.label} stock price`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 hover:underline cursor-pointer"
+                >
+                  <span className="text-emerald-400 font-medium">
+                    {currentValue}
+                  </span>
+                  {node.marketCap.peak && (
+                    <span className="text-slate-500">
+                      / Peak {node.marketCap.peak}
+                    </span>
+                  )}
+                </a>
+              )}
+            </div>
+          );
+        }
+        return null;
+
+      case Category.PERSON:
+        // Roles + Birth/Death years - VERTICAL LAYOUT
+        const roles = [node.primaryRole, node.secondaryRole].filter(Boolean);
+        const lifespan = node.birthYear
+          ? `${node.birthYear}–${node.deathYear || 'Present'}`
+          : null;
+
+        if (roles.length > 0 || lifespan) {
+          return (
+            <div className="flex flex-col gap-1 mt-2 text-sm">
+              {/* Line 1: Role (Bright) */}
+              {roles.length > 0 && (
+                <span className="text-slate-200">{roles.join(' • ')}</span>
+              )}
+              {/* Line 2: Lifespan (Dim) */}
+              {lifespan && <span className="text-slate-500 font-mono text-xs">{lifespan}</span>}
+            </div>
+          );
+        }
+        return null;
+
+      case Category.EPISODE:
+        // Event Type + Impact Scale
+        if (node.eventType || node.impactScale) {
+          return (
+            <div className="flex items-center gap-2 mt-2 text-sm">
+              {node.eventType && (
+                <span className="text-violet-400">{node.eventType}</span>
+              )}
+              {node.eventType && node.impactScale && <span className="text-slate-500">•</span>}
+              {node.impactScale && (
+                <span className="text-slate-300">{node.impactScale}</span>
+              )}
+            </div>
+          );
+        }
+        return null;
+
+      case Category.TECHNOLOGY:
+        // Lifecycle display
+        const lifecycle = node.endYear
+          ? `${node.year} – ${node.endYear}`
+          : `${node.year} – Present`;
+        return (
+          <div className="flex items-center gap-2 mt-2 text-sm text-slate-400 font-mono">
+            {lifecycle}
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="fixed inset-y-0 right-0 w-full md:w-[450px] bg-surface/95 backdrop-blur-xl border-l border-slate-700 shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col">
       {/* Header */}
@@ -81,21 +328,35 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
           </div>
 
           <h2 className="text-3xl font-bold text-white mt-3 leading-tight">{node.label}</h2>
-          <div className="flex items-center gap-2 mt-2">
-            {/* Logic for Year Display: Show Range for Companies, Single Year for Tech/Episodes, Hidden for Persons */}
-            {node.category === Category.COMPANY && (
-              <span className="text-slate-400 font-mono text-sm">
-                {node.year} - Current
-              </span>
-            )}
-            {(node.category === Category.TECHNOLOGY || node.category === Category.EPISODE) && (
-              <span className="text-slate-400 font-mono text-sm">
-                {node.year}
-              </span>
-            )}
 
-            {node.role && <span className="text-slate-500 text-xs px-2 py-0.5 bg-slate-800 rounded">{node.role}</span>}
-          </div>
+          {/* Dynamic Metadata based on node type */}
+          {renderDynamicMetadata()}
+
+          {/* Fallback: Original year display (only if no dynamic metadata) */}
+          {!renderDynamicMetadata() && (
+            <div className="flex items-center gap-2 mt-2">
+              {/* Logic for Year Display: Show Range for Companies, Single Year for Tech/Episodes, Hidden for Persons */}
+              {node.category === Category.COMPANY && (
+                <span className="text-slate-400 font-mono text-sm">
+                  {node.year} - Current
+                </span>
+              )}
+              {(node.category === Category.TECHNOLOGY || node.category === Category.EPISODE) && (
+                <span className="text-slate-400 font-mono text-sm">
+                  {node.year}
+                </span>
+              )}
+
+              {node.role && <span className="text-slate-500 text-xs px-2 py-0.5 bg-slate-800 rounded">{node.role}</span>}
+            </div>
+          )}
+
+          {/* Role badge (for Person, if no primaryRole) */}
+          {node.category === Category.PERSON && !node.primaryRole && node.role && (
+            <div className="flex items-center gap-2 mt-2">
+              <span className="text-slate-500 text-xs px-2 py-0.5 bg-slate-800 rounded">{node.role}</span>
+            </div>
+          )}
 
           {/* Company Categories */}
           {node.category === Category.COMPANY && node.companyCategories && (
@@ -125,14 +386,15 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
           )}
         </div>
         <div className="flex gap-2">
-          {/* Focus Button - Changed Icon to Target/Crosshair */}
+          {/* Focus Button - Map Icon */}
           <button
             onClick={onFocus}
             className="text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 rounded p-1.5 transition-all"
-            title="Focus View"
+            title="Enter Focus View"
           >
+            {/* Map Icon */}
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
             </svg>
           </button>
 
@@ -182,19 +444,22 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
             ) : aiData ? (
               <div className="space-y-6 animate-in fade-in duration-500">
                 <div>
-                  <h4 className="text-[10px] text-slate-500 uppercase font-bold mb-1.5 tracking-wider">Summary</h4>
+                  <h4 className="text-[10px] text-slate-500 uppercase font-bold mb-1.5 tracking-wider">{sectionHeaders.summary}</h4>
                   <p className="text-sm text-slate-200 leading-relaxed">{aiData.summary}</p>
                 </div>
 
                 <div>
-                  <h4 className="text-[10px] text-slate-500 uppercase font-bold mb-1.5 tracking-wider">Significance</h4>
+                  <h4 className="text-[10px] text-slate-500 uppercase font-bold mb-1.5 tracking-wider flex items-center gap-1">
+                    {sectionHeaders.significance}
+                    <span className="text-yellow-500">💡</span>
+                  </h4>
                   <p className="text-sm text-slate-300 italic border-l-2 border-purple-500/50 pl-3 py-1">
                     "{aiData.significance}"
                   </p>
                 </div>
 
                 <div>
-                  <h4 className="text-[10px] text-slate-500 uppercase font-bold mb-1.5 tracking-wider">Key Facts</h4>
+                  <h4 className="text-[10px] text-slate-500 uppercase font-bold mb-1.5 tracking-wider">{sectionHeaders.keyFacts}</h4>
                   <ul className="space-y-2">
                     {aiData.keyFacts.map((fact, idx) => (
                       <li key={idx} className="text-sm text-slate-300 flex items-start gap-2 group">
@@ -211,94 +476,101 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
           </div>
         </div>
 
-        {/* 2. Connections Section */}
+        {/* 2. Connections Section (renamed from Relationships) */}
         {connections && connections.length > 0 && (
           <div>
-            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Relationships</h3>
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Connections</h3>
             <div className="grid grid-cols-1 gap-2">
-              {connections.map((conn, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => conn && onNodeSelect(conn.otherNode)}
-                  className="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-slate-500 hover:bg-slate-800 transition-all group text-left"
-                >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="w-2 h-2 rounded-full"
-                      style={{ backgroundColor: CATEGORY_COLORS[conn?.otherNode.category || 'COMPANY'] }}
-                    ></div>
-                    <div>
-                      <div className="text-sm font-bold text-slate-200 group-hover:text-white">{conn?.otherNode.label}</div>
-                      <div className="text-[10px] text-slate-500 uppercase">{conn?.type} • {conn?.relation}</div>
-                    </div>
-                  </div>
+              {connections.map((conn, idx) => {
+                // Get appropriate icon for connection type
+                const getConnectionIcon = () => {
+                  switch (conn?.otherNode.category) {
+                    case Category.COMPANY:
+                      return (
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                      );
+                    case Category.PERSON:
+                      return (
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                      );
+                    case Category.TECHNOLOGY:
+                      return (
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                        </svg>
+                      );
+                    case Category.EPISODE:
+                      return (
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                        </svg>
+                      );
+                    default:
+                      return (
+                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: CATEGORY_COLORS[conn?.otherNode.category || 'COMPANY'] }}></div>
+                      );
+                  }
+                };
 
-                  {/* 2. Relationship Score Display */}
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="flex items-center gap-1 bg-slate-900/50 px-1.5 py-0.5 rounded border border-slate-700/50"
-                      title={`Impact Factor: ${(conn?.otherNode._score || 0).toFixed(1)}`}
-                    >
-                      <svg className="w-2.5 h-2.5 text-yellow-500/70" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                      <span className="text-[10px] font-mono text-slate-400 group-hover:text-slate-300">
-                        {(conn?.otherNode._score || 0).toFixed(0)}
-                      </span>
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => conn && onNodeSelect(conn.otherNode)}
+                    className="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-slate-500 hover:bg-slate-800 transition-all group text-left"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="flex items-center justify-center"
+                        style={{ color: CATEGORY_COLORS[conn?.otherNode.category || 'COMPANY'] }}
+                      >
+                        {getConnectionIcon()}
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-slate-200 group-hover:text-white">{conn?.otherNode.label}</div>
+                        <div className="text-[10px] text-slate-500 uppercase">{conn?.type} • {conn?.relation}</div>
+                      </div>
                     </div>
-                    <svg className="w-4 h-4 text-slate-600 group-hover:text-primary transform group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
-                  </div>
-                </button>
-              ))}
+
+                    {/* 2. Relationship Score Display */}
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="flex items-center gap-1 bg-slate-900/50 px-1.5 py-0.5 rounded border border-slate-700/50"
+                        title={`Impact Factor: ${(conn?.otherNode._score || 0).toFixed(1)}`}
+                      >
+                        <svg className="w-2.5 h-2.5 text-yellow-500/70" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                        <span className="text-[10px] font-mono text-slate-400 group-hover:text-slate-300">
+                          {(conn?.otherNode._score || 0).toFixed(0)}
+                        </span>
+                      </div>
+                      <svg className="w-4 h-4 text-slate-600 group-hover:text-primary transform group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
 
-        {/* 3. External Links Section (Placeholder UI) */}
+        {/* 3. Learn More Section (renamed from External Resources) */}
         <div>
-          <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">External Resources</h3>
+          <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Learn More</h3>
           <div className="flex flex-wrap gap-3">
-            {/* Pre-canned Google Search Link for Demo */}
-            <a
-              href={`https://www.google.com/search?q=${encodeURIComponent(node.label + " history AI")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700 hover:border-slate-500 transition-colors text-xs font-medium text-slate-300"
-            >
-              <svg className="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" /></svg>
-              Google Search
-            </a>
-
-            {/* Placeholder: Wikipedia */}
-            <a
-              href={`https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(node.label)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700 hover:border-slate-500 transition-colors text-xs font-medium text-slate-300"
-            >
-              <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 2.2c1.76 0 3.407.467 4.86 1.287l-1.32 3.18H13.8l-1.12-2.68-1.76 4.18H9.38l2.62-5.973A9.76 9.76 0 0 1 12 2.2zm-6.2 3.2l1.98 4.52-2.38 5.62H3.72a9.75 9.75 0 0 1 2.08-10.14zm12.38.34l-2.98 7.02 1.34 3.18h1.66l-2.3-5.34 2.58-6.04c-.08.38-.2.74-.3 1.18zm-2.1 10.74l-1.34-3.18H13.2l1.78 4.22a9.72 9.72 0 0 1-6.96 0L9.8 13.3h1.56l-2.1 4.98h1.52l1.24-2.94 1.24 2.94h1.52l-2.1-4.98h1.56l1.78 4.22z" /></svg>
-              Wikipedia
-            </a>
-
-            {/* Placeholder: YouTube */}
-            <a
-              href={`https://www.youtube.com/results?search_query=${encodeURIComponent(node.label + " documentary")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700 hover:border-slate-500 transition-colors text-xs font-medium text-slate-300"
-            >
-              <svg className="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" /></svg>
-              YouTube
-            </a>
-
-            {/* Placeholder: Amazon Books */}
-            <a
-              href={`https://www.amazon.com/s?k=${encodeURIComponent(node.label + " book")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700 hover:border-slate-500 transition-colors text-xs font-medium text-slate-300"
-            >
-              <svg className="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95a15.65 15.65 0 0 0-1.38-3.56c1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.9-4.33-3.56zm2.95-8H5.08c.96-1.66 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z" /></svg>
-              Books
-            </a>
+            {externalLinks.map((link, idx) => (
+              <a
+                key={idx}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700 hover:border-slate-500 transition-colors text-xs font-medium text-slate-300"
+              >
+                {link.icon}
+                {link.label}
+              </a>
+            ))}
           </div>
         </div>
 
