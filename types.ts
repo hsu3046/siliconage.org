@@ -76,19 +76,14 @@ export type TechCategoryL2 =
   | 'Standards & Protocols';         // PDF, VoIP, WebRTC, UPC
 
 export enum CompanyCategory {
-  SEMICONDUCTOR = 'SEMICONDUCTOR',
-  HARDWARE = 'HARDWARE',
-  SOFTWARE = 'SOFTWARE',
-  INTERNET = 'INTERNET',
-  TELECOM = 'TELECOM',
-  LAB = 'LAB',
-  VC = 'VC',
-  ROBOTICS = 'ROBOTICS',
-  // New Categories
-  FINTECH = 'FINTECH',
-  MOBILITY = 'MOBILITY',
-  AEROSPACE = 'AEROSPACE',
-  MEDIA = 'MEDIA',
+  PLATFORM_INTERNET = 'PLATFORM_INTERNET', // Network Effects (Google, Meta, PayPal)
+  ENTERPRISE_SAAS = 'ENTERPRISE_SAAS',     // Productivity Tools (Microsoft, Adobe)
+  AI_INNOVATION = 'AI_INNOVATION',         // Models & Intelligence (OpenAI)
+  HARDWARE_ROBOTICS = 'HARDWARE_ROBOTICS', // Physical Devices (Apple, Tesla)
+  SEMICONDUCTOR = 'SEMICONDUCTOR',         // Chips (Nvidia, TSMC)
+  MEDIA_CONTENT = 'MEDIA_CONTENT',         // Entertainment (Netflix)
+  INFRA_TELECOM = 'INFRA_TELECOM',         // Backbone (Cisco, AT&T)
+  VENTURE_CAPITAL = 'VENTURE_CAPITAL',     // Funding (Sequoia)
 }
 
 export interface NodeData {

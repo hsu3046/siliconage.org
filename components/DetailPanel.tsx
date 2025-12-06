@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { NodeData, AIResponse, GraphData, LinkDirection, Category } from '../types';
-import { CATEGORY_COLORS } from '../constants';
+import { CATEGORY_COLORS, CATEGORY_LABELS } from '../constants';
 import { fetchNodeDetails } from '../services/geminiService';
 
 interface DetailPanelProps {
@@ -566,11 +566,11 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
             </div>
           )}
 
-          {/* Company Role Badge */}
-          {node.category === Category.COMPANY && node.impactRole && (
+          {/* Company Category Badge */}
+          {node.category === Category.COMPANY && node.companyCategories?.[0] && (
             <div className="flex flex-wrap gap-2 mt-3">
               <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-emerald-900/30 text-emerald-300 border border-emerald-800/50">
-                {node.impactRole}
+                {CATEGORY_LABELS[node.companyCategories[0]]}
               </span>
             </div>
           )}
