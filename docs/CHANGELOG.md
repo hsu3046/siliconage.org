@@ -4,13 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ## [1.3.0] - 2025-12-06
 
+### Added
+- **New Links View**: Added a new view to easily grasp the relationships between topics.
+
 ### Changed
-- **Map Search**: Search now enters Focus Mode directly (double-click behavior)
-- **Focus Exit**: Now zooms to Level 1 first, then after stabilization zooms to Level 3 centered on the focused node
-- **Focus Exit**: Smooth physics with reduced jitter (low alpha, high decay)
+- **History View UI**: Redesigned the interface to make it easier to understand the historical flow of topics.
+- **Search Functionality**: Enhanced search capabilities for better navigation.
+- **Topic Information**: Significantly revised and added detailed information for each topic.
 
 ### Fixed
-- **Focus Highlight**: Yellow stroke now properly removed from all node types on exit
+- **Bug Fixes**: Fixed various miscellaneous bugs.
+
 
 ## [1.2.0] - 2025-12-05
 
@@ -28,6 +32,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - **DetailPanel**: Fixed duplicate connections display bug
+
 
 ## [1.1.0] - 2025-12-04
 
@@ -48,6 +53,7 @@ All notable changes to this project will be documented in this file.
 - **Map Search**: Fixed first search not panning to node (double-pan interference)
 - **Map Search**: Fixed suggestions not showing after first search
 - **History Search**: Fixed mobile scroll shift when selecting search result (keyboard dismiss)
+
 
 ## [1.0.1] - Previous Version
 

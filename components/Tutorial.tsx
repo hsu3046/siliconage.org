@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, ChevronLeft, MapPin, Clock, List, MousePointerClick, Search, CheckCircle } from 'lucide-react';
+import { ChevronRight, ChevronLeft, MapPin, Clock, LayoutGrid, Link, MousePointerClick, Search, CheckCircle } from 'lucide-react';
 
 interface TutorialStep {
     title: string;
@@ -30,9 +30,14 @@ const Tutorial: React.FC<TutorialProps> = ({ isOpen, onClose }) => {
             icon: <Clock className="w-6 h-6" />,
         },
         {
-            title: "List View",
+            title: "Card View",
             description: "Filter and sort all nodes by name, category, or impact score. Great for quick lookups.",
-            icon: <List className="w-6 h-6" />,
+            icon: <LayoutGrid className="w-6 h-6" />,
+        },
+        {
+            title: "Links View",
+            description: "Trace the origins and impact of any node. See exactly what it was based on, what it created, and what it influenced.",
+            icon: <Link className="w-6 h-6" />,
         },
         {
             title: isTouchDevice ? "Tap to Explore" : "Click to Explore",
@@ -128,8 +133,8 @@ const Tutorial: React.FC<TutorialProps> = ({ isOpen, onClose }) => {
                         onClick={handlePrev}
                         disabled={isFirstStep}
                         className={`flex items-center gap-1 px-4 py-2 rounded-lg font-medium transition-colors ${isFirstStep
-                                ? 'text-slate-600 cursor-not-allowed'
-                                : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+                            ? 'text-slate-600 cursor-not-allowed'
+                            : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
                             }`}
                     >
                         <ChevronLeft className="w-4 h-4" />

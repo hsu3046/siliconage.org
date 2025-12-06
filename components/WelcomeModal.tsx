@@ -58,7 +58,7 @@ const WelcomeModal: React.FC<WelcomeModalProps> = ({ isOpen, onClose, onStartTut
                                 {isTouchDevice ? 'Tap & Explore' : 'Click & Explore'}
                             </h3>
                             <p className="text-sm text-slate-400">
-                                Explore through <strong className="text-emerald-400">Map</strong>, <strong className="text-amber-400">History</strong>, and <strong className="text-cyan-400">List</strong> views. {isTouchDevice ? 'Tap' : 'Click'} any node for details, {isTouchDevice ? 'double-tap' : 'double-click'} to focus.
+                                Explore through <strong className="text-emerald-400">Map</strong>, <strong className="text-amber-400">History</strong>, <strong className="text-cyan-400">Card</strong>, and <strong className="text-purple-400">Links</strong> views. {isTouchDevice ? 'Tap' : 'Click'} any node for details, {isTouchDevice ? 'double-tap' : 'double-click'} to focus.
                             </p>
                         </div>
                     </div>

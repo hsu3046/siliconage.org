@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { GraphData, NodeData, Category } from '../types';
 import { CATEGORY_COLORS, CATEGORY_LABELS } from '../constants';
 
-interface ListViewProps {
+interface CardViewProps {
   data: GraphData;
   fullData: GraphData;
   onNodeClick: (node: NodeData) => void;
@@ -23,7 +23,7 @@ const toTitleCase = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
 
-const ListView: React.FC<ListViewProps> = ({ data, fullData, onNodeClick, onTagClick, scrollToNodeId, focusNodeId }) => {
+const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagClick, scrollToNodeId, focusNodeId }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('IMPORTANCE');
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -263,34 +263,41 @@ const ListView: React.FC<ListViewProps> = ({ data, fullData, onNodeClick, onTagC
                 <div className="p-5 flex flex-col flex-1">
                   {/* Category / Role Badges */}
                   <div className="min-h-[22px] flex flex-wrap gap-1 mb-2">
-                    {/* Company Category Badge */}
+                    {/* Company Category Badge - RED (Muted) */}
                     {node.category === Category.COMPANY && node.companyCategories?.[0] && (
-                      <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-emerald-900/30 text-emerald-300 border border-emerald-800/50">
+                      <span className="text-[9px] font-medium px-1.5 py-1 rounded bg-red-900/20 text-red-400/80 border border-red-800/30">
                         {CATEGORY_LABELS[node.companyCategories[0]]}
                       </span>
                     )}
 
-                    {/* Person Role Badge - NEW */}
+                    {/* Person Role Badge (Muted) */}
                     {node.category === Category.PERSON && node.impactRole && (
-                      <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-blue-900/30 text-blue-300 border border-blue-800/50">
+                      <span className="text-[9px] font-medium px-1.5 py-1 rounded bg-blue-900/20 text-blue-400/80 border border-blue-800/30">
                         {toTitleCase(node.impactRole)}
                       </span>
                     )}
 
-                    {/* Technology Categories */}
+                    {/* Technology Categories - GREEN (Muted) */}
                     {node.category === Category.TECHNOLOGY && (
                       <>
                         {node.techCategoryL1 && (
-                          <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-blue-900/30 text-blue-300 border border-blue-800/50">
+                          <span className="text-[9px] font-medium px-1.5 py-1 rounded bg-emerald-900/20 text-emerald-400/80 border border-emerald-800/30">
                             {node.techCategoryL1}
                           </span>
                         )}
                         {node.techCategoryL2 && (
-                          <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-indigo-900/30 text-indigo-300 border border-indigo-800/50">
+                          <span className="text-[9px] font-medium px-1.5 py-1 rounded bg-emerald-900/20 text-emerald-400/80 border border-emerald-800/30">
                             {node.techCategoryL2}
                           </span>
                         )}
                       </>
+                    )}
+
+                    {/* Episode Badge - Purple (Muted) */}
+                    {node.category === Category.EPISODE && (
+                      <span className="text-[9px] font-medium px-1.5 py-1 rounded bg-purple-900/20 text-purple-400/80 border border-purple-800/30">
+                        Episode
+                      </span>
                     )}
                   </div>
 
@@ -309,18 +316,36 @@ const ListView: React.FC<ListViewProps> = ({ data, fullData, onNodeClick, onTagC
                   </p>
 
                   {hashtags.length > 0 && (
-                    <div className="mt-auto pt-3 border-t border-slate-700/50 flex flex-wrap gap-2">
-                      {hashtags.slice(0, 5).map((tag, idx) => (
-                        <span
-                          key={`${node.id}-tag-${idx}`}
-                          onClick={(e) => tag && handleTagClick(e, tag.id)}
-                          className="text-xs font-mono text-blue-400 hover:text-blue-300 hover:underline bg-blue-500/10 px-2 py-1 rounded cursor-pointer transition-colors"
-                        >
-                          #{tag?.label.replace(/\s+/g, '')}
-                        </span>
-                      ))}
+                    <div className="mt-auto pt-3 border-t border-slate-700/50 flex flex-wrap gap-1.5">
+                      {hashtags.slice(0, 5).map((tag, idx) => {
+                        // Get category color for hashtag
+                        const tagNode = fullData.nodes.find(n => n.id === tag?.id);
+                        const getTagColor = () => {
+                          switch (tagNode?.category) {
+                            case Category.COMPANY:
+                              return 'text-red-400 hover:text-red-300';
+                            case Category.PERSON:
+                              return 'text-blue-400 hover:text-blue-300';
+                            case Category.TECHNOLOGY:
+                              return 'text-emerald-400 hover:text-emerald-300';
+                            case Category.EPISODE:
+                              return 'text-purple-400 hover:text-purple-300';
+                            default:
+                              return 'text-slate-400 hover:text-slate-300';
+                          }
+                        };
+                        return (
+                          <span
+                            key={`${node.id}-tag-${idx}`}
+                            onClick={(e) => tag && handleTagClick(e, tag.id)}
+                            className={`text-[10px] font-mono ${getTagColor()} cursor-pointer transition-colors`}
+                          >
+                            #{tag?.label.replace(/\s+/g, '')}
+                          </span>
+                        );
+                      })}
                       {hashtags.length > 5 && (
-                        <span className="text-xs text-slate-500 py-1">+{hashtags.length - 5} more</span>
+                        <span className="text-[10px] text-slate-500">+{hashtags.length - 5} more</span>
                       )}
                     </div>
                   )}
@@ -354,4 +379,4 @@ const ListView: React.FC<ListViewProps> = ({ data, fullData, onNodeClick, onTagC
   );
 };
 
-export default ListView;
+export default CardView;

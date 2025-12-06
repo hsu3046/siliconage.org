@@ -239,7 +239,7 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                                 ref={searchInputRef}
                                 type="text"
                                 className="block w-full pl-10 pr-3 py-2 border border-slate-600 rounded-lg leading-5 bg-slate-800 text-slate-300 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 sm:text-sm"
-                                placeholder="Find & Focus on a Topic..."
+                                placeholder="Search topics (e.g. Apple, AI)..."
                                 value={searchTerm}
                                 onChange={handleSearchChange}
                                 onKeyDown={handleKeyDown}
@@ -256,7 +256,38 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                                                 className="cursor-pointer select-none relative py-3 px-4 hover:bg-slate-800 text-slate-300 transition-colors border-b border-slate-800/50 last:border-0 flex items-center gap-3"
                                                 onClick={() => handleSearchSelect(node)}
                                             >
-                                                <span className="text-xl">{getCategoryIcon(node.category)}</span>
+                                                <span className="text-xl flex items-center justify-center w-8 h-8 rounded-full bg-slate-800 border border-slate-700 text-slate-400">
+                                                    {(() => {
+                                                        switch (node.category) {
+                                                            case Category.COMPANY:
+                                                                return (
+                                                                    <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                                                    </svg>
+                                                                );
+                                                            case Category.PERSON:
+                                                                return (
+                                                                    <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                                    </svg>
+                                                                );
+                                                            case Category.TECHNOLOGY:
+                                                                return (
+                                                                    <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                                                                    </svg>
+                                                                );
+                                                            case Category.EPISODE:
+                                                                return (
+                                                                    <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                                                                    </svg>
+                                                                );
+                                                            default:
+                                                                return <div className="w-2 h-2 rounded-full bg-slate-500"></div>;
+                                                        }
+                                                    })()}
+                                                </span>
                                                 <div className="flex-1 min-w-0">
                                                     <span className="block truncate font-medium">{node.label}</span>
                                                     <span className="block truncate text-xs text-slate-500">{node.description}</span>
@@ -278,8 +309,8 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                 <div className="flex-1 flex items-center justify-center overflow-y-auto">
                     <div className="text-center p-8">
                         <div className="text-6xl mb-4">🔗</div>
-                        <h2 className="text-xl font-bold text-white mb-2">Relationship Explorer</h2>
-                        <p className="text-slate-400">Search for a node above to discover its origins and impact</p>
+                        <h2 className="text-xl font-bold text-white mb-2">Explore Connections</h2>
+                        <p className="text-slate-400">Search for a topic above to see how it connects to the ecosystem.</p>
                     </div>
                 </div>
             </div>

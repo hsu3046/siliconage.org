@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import { GraphData, NodeData, LinkData, Category, LinkType, LinkDirection, CompanyMode } from '../types';
 import { CATEGORY_COLORS } from '../constants';
 
-interface NetworkGraphProps {
+interface MapViewProps {
   data: GraphData;
   onNodeClick: (node: NodeData) => void;
   onNodeFocus?: (node: NodeData) => void;
@@ -301,7 +301,7 @@ const getCircleIntersection = (
   };
 };
 
-const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFocus, onNodeDoubleClick, width, height, focusNodeId, scrollToNodeId, companyMode, featuredNode }) => {
+const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNodeDoubleClick, width, height, focusNodeId, scrollToNodeId, companyMode, featuredNode }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const clickTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pulseIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -1300,17 +1300,7 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
             )}
           </div>
 
-          {/* Mobile Featured Node - below search */}
-          {featuredNode && (
-            <button
-              onClick={() => onNodeDoubleClick(featuredNode)}
-              className="lg:hidden mt-2 flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/50 rounded-lg text-amber-300 hover:from-amber-500/30 hover:to-orange-500/30 transition-all w-full"
-              title={`Today's Featured: ${featuredNode.label}`}
-            >
-              <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" strokeWidth="2" /><circle cx="8" cy="8" r="1" fill="currentColor" /><circle cx="16" cy="8" r="1" fill="currentColor" /><circle cx="12" cy="12" r="1" fill="currentColor" /><circle cx="8" cy="16" r="1" fill="currentColor" /><circle cx="16" cy="16" r="1" fill="currentColor" /></svg>
-              <span className="text-xs font-medium truncate">{featuredNode.label}</span>
-            </button>
-          )}
+          {/* Mobile Featured Node - REMOVED */}
         </div>
       )}
 
@@ -1406,4 +1396,4 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
   );
 };
 
-export default NetworkGraph;
+export default MapView;

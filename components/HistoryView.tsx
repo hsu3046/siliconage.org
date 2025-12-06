@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { GraphData, NodeData, Category, LinkType } from '../types';
 import { CATEGORY_COLORS, ERAS, INITIAL_DATA } from '../constants';
 
-interface TimelineViewProps {
+interface HistoryViewProps {
   data: GraphData;
   onNodeClick: (node: NodeData) => void;
   scrollToNodeId?: string | null;
@@ -21,7 +21,7 @@ const getNodeSizeClass = (score: number) => {
   return 'small';
 };
 
-const TimelineView: React.FC<TimelineViewProps> = ({ data, onNodeClick, scrollToNodeId, focusNodeId }) => {
+const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, scrollToNodeId, focusNodeId }) => {
   // Search State
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState<NodeData[]>([]);
@@ -335,7 +335,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({ data, onNodeClick, scrollTo
                 ref={searchInputRef}
                 type="text"
                 className="block w-full pl-10 pr-3 py-2 border border-slate-600 rounded-lg leading-5 bg-slate-900 text-slate-300 placeholder-slate-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary sm:text-sm"
-                placeholder="Find & Focus on a Topic..."
+                placeholder="Find & Jump to a Topic..."
                 value={searchTerm}
                 onChange={handleSearchChange}
                 onKeyDown={handleKeyDown}
@@ -431,4 +431,4 @@ const TimelineView: React.FC<TimelineViewProps> = ({ data, onNodeClick, scrollTo
   );
 };
 
-export default TimelineView;
+export default HistoryView;

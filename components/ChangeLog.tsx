@@ -30,6 +30,64 @@ const ChangeLog: React.FC<ChangeLogProps> = ({ isOpen, onClose }) => {
                 {/* Content */}
                 <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
 
+                    {/* Version 1.3.0 */}
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-3">
+                            <span className="px-3 py-1 bg-blue-500/10 border border-blue-500/50 text-blue-400 rounded-full text-xs font-bold">
+                                v1.3.0
+                            </span>
+                            <span className="text-slate-500 text-sm">2025-12-06</span>
+                        </div>
+
+                        <div className="space-y-6">
+                            <div>
+                                <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                                    <span className="text-blue-400">📦</span> Added
+                                </h3>
+                                <ul className="space-y-2 text-slate-300 text-sm">
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-blue-400 mt-1">+</span>
+                                        <span><strong className="text-white">New Links View:</strong> Added a new view to easily grasp the relationships between topics.</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                                    <span className="text-amber-400">⚡</span> Changed
+                                </h3>
+                                <ul className="space-y-2 text-slate-300 text-sm">
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-amber-400 mt-1">•</span>
+                                        <span><strong className="text-white">History View UI:</strong> Redesigned the interface to make it easier to understand the historical flow of topics.</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-amber-400 mt-1">•</span>
+                                        <span><strong className="text-white">Search Functionality:</strong> Enhanced search capabilities for better navigation.</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-amber-400 mt-1">•</span>
+                                        <span><strong className="text-white">Topic Information:</strong> Significantly revised and added detailed information for each topic.</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                                    <span className="text-green-400">🛠️</span> Fixed
+                                </h3>
+                                <ul className="space-y-2 text-slate-300 text-sm">
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-green-400 mt-1">✓</span>
+                                        <span><strong className="text-white">Bug Fixes:</strong> Fixed various miscellaneous bugs.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="border-t border-slate-800 my-8"></div>
+
                     {/* Version 1.2.0 */}
                     <div className="space-y-4">
                         <div className="flex items-center gap-3">

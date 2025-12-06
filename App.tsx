@@ -5,12 +5,12 @@ import { NodeData, Category, GraphData, LinkType, CompanyMode } from './types';
 import { calculateSiliconRank } from './utils/ranking';
 
 // --- Delete LAZY LOADING FOR PERFORMANCE (Code Splitting) ---
-import NetworkGraph from './components/NetworkGraph';
+import MapView from './components/MapView';
 import DetailPanel from './components/DetailPanel';
 import AboutModal from './components/AboutModal';
 import ChangeLog from './components/ChangeLog';
-import TimelineView from './components/TimelineView';
-import ListView from './components/ListView';
+import HistoryView from './components/HistoryView';
+import CardView from './components/CardView';
 import LinksView from './components/LinksView';
 import WelcomeModal from './components/WelcomeModal';
 import Tutorial from './components/Tutorial';
@@ -68,6 +68,8 @@ const App: React.FC = () => {
   }, []);
 
   const [companyMode, setCompanyMode] = useState<CompanyMode>('FULL');
+  // PC Header Toggle Hover State: Which group is being hovered - Default to CATEGORY
+  const [hoverGroupActive, setHoverGroupActive] = useState<'CATEGORY' | 'LINK' | null>('CATEGORY');
 
   const [visibleCategories, setVisibleCategories] = useState<Record<Category, boolean>>({
     [Category.COMPANY]: true,
@@ -257,13 +259,13 @@ const App: React.FC = () => {
     updateUrl(nodeId);
   };
 
-  // For NetworkGraph: center on node WITHOUT opening Detail Panel
+  // For MapView: center on node WITHOUT opening Detail Panel
   const handleNodeFocus = (node: NodeData) => {
     setScrollToNodeId(node.id);
     // Do NOT set focusNodeId or selectedNode
   };
 
-  // For ListView hashtags: Open Detail Panel WITHOUT scrolling/jumping
+  // For CardView hashtags: Open Detail Panel WITHOUT scrolling/jumping
   const handleTagClick = (node: NodeData) => {
     setSelectedNode(node);
     // explicitly DO NOT set scrollToNodeId or focusNodeId
@@ -382,9 +384,12 @@ const App: React.FC = () => {
             );
           })()}
 
-          {/* Category toggles - hidden in Focus mode */}
-          {!focusNodeId && (
-            <div className="flex items-center gap-2 shrink-0">
+          {/* Category toggles - hidden in Focus mode AND Links View */}
+          {!focusNodeId && viewMode !== 'LINKS' && (
+            <div
+              className="flex items-center gap-2 shrink-0"
+              onMouseEnter={() => viewMode === 'MAP' && setHoverGroupActive('CATEGORY')}
+            >
               {Object.keys(CATEGORY_COLORS).map((key) => {
                 const cat = key as Category;
                 const color = CATEGORY_COLORS[cat];
@@ -431,7 +436,10 @@ const App: React.FC = () => {
                         opacity: isActive ? 1 : 0.5
                       }}
                     />
-                    <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-1000 ease-in-out whitespace-nowrap opacity-0 group-hover:opacity-100">
+                    <span className={`transition-all duration-500 ease-out whitespace-nowrap ${viewMode === 'MAP'
+                      ? (hoverGroupActive === 'CATEGORY' ? "max-w-xs opacity-100" : "max-w-0 overflow-hidden opacity-0")
+                      : "max-w-xs opacity-100"
+                      }`}>
                       {cat}
                     </span>
                   </button>
@@ -443,7 +451,10 @@ const App: React.FC = () => {
           {viewMode === 'MAP' && !focusNodeId && (
             <>
               <div className="h-6 w-px bg-slate-700 shrink-0"></div>
-              <div className="flex items-center gap-2 shrink-0">
+              <div
+                className="flex items-center gap-2 shrink-0"
+                onMouseEnter={() => setHoverGroupActive('LINK')}
+              >
                 {Object.keys(visibleLinkTypes).map((key) => {
                   const type = key as LinkType;
                   const isActive = visibleLinkTypes[type];
@@ -491,7 +502,8 @@ const App: React.FC = () => {
                       title={`Click to toggle ${type.toLowerCase()} links`}
                     >
                       <div className={`${getLineStyle()} ${isActive ? 'opacity-100' : 'opacity-50'} shrink-0`}></div>
-                      <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-1000 ease-in-out whitespace-nowrap opacity-0 group-hover:opacity-100">
+                      <span className={`transition-all duration-500 ease-out whitespace-nowrap ${hoverGroupActive === 'LINK' ? "max-w-xs opacity-100" : "max-w-0 overflow-hidden opacity-0"
+                        }`}>
                         {getLinkTypeLabel()}
                       </span>
                     </button>
@@ -503,17 +515,7 @@ const App: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-3 shrink-0 ml-2">
-          {/* Featured Node of the Day - hidden in Focus mode */}
-          {!focusNodeId && (
-            <button
-              onClick={() => handleNodeDoubleClick(featuredNode)}
-              className="hidden xl:flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/50 rounded-lg text-amber-300 hover:from-amber-500/30 hover:to-orange-500/30 transition-all"
-              title={`Today's Featured: ${featuredNode.label}`}
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" strokeWidth="2" /><circle cx="8" cy="8" r="1" fill="currentColor" /><circle cx="16" cy="8" r="1" fill="currentColor" /><circle cx="12" cy="12" r="1" fill="currentColor" /><circle cx="8" cy="16" r="1" fill="currentColor" /><circle cx="16" cy="16" r="1" fill="currentColor" /></svg>
-              <span className="text-xs font-medium truncate max-w-[120px]">{featuredNode.label}</span>
-            </button>
-          )}
+          {/* Featured Node of the Day - REMOVED for PC */}
 
           <div className="flex bg-slate-900 p-1 rounded-lg border border-slate-700">
             <button onClick={() => setViewMode('MAP')} className={`px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all ${viewMode === 'MAP' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-white'}`}>Map</button>
@@ -552,8 +554,8 @@ const App: React.FC = () => {
           );
         })()}
 
-        {/* Mobile category toggles - hidden in Focus mode */}
-        {!focusNodeId && (
+        {/* Mobile category toggles - hidden in Focus mode AND Links View */}
+        {!focusNodeId && viewMode !== 'LINKS' && (
           <div className="h-14 flex items-center justify-center px-4 overflow-x-auto gap-4 custom-scrollbar">
             <div className="flex items-center gap-3 shrink-0">
               {Object.keys(CATEGORY_COLORS).map((key) => {
@@ -636,7 +638,7 @@ const App: React.FC = () => {
 
       <main className="flex-1 relative overflow-hidden">
         {viewMode === 'MAP' && (
-          <NetworkGraph
+          <MapView
             data={filteredData}
             onNodeClick={handleNodeSelect}
             onNodeFocus={handleNodeFocus}
@@ -651,7 +653,7 @@ const App: React.FC = () => {
         )}
 
         {viewMode === 'TIMELINE' && (
-          <TimelineView
+          <HistoryView
             data={filteredData}
             onNodeClick={handleNodeSelect}
             scrollToNodeId={scrollToNodeId}
@@ -660,7 +662,7 @@ const App: React.FC = () => {
         )}
 
         {viewMode === 'CARD' && (
-          <ListView
+          <CardView
             data={filteredData}
             fullData={INITIAL_DATA}
             onNodeClick={handleNodeSelect}

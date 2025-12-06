@@ -440,13 +440,14 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
                   href={`https://www.google.com/search?q=${encodeURIComponent(`${node.label} stock price`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 hover:underline cursor-pointer"
+                  className="group flex items-center gap-2 cursor-pointer transition-all duration-200"
+                  title="Open Google Finance (External Link)"
                 >
-                  <span className="text-emerald-400 font-medium">
+                  <span className="text-emerald-400 font-medium group-hover:text-emerald-200 transition-colors duration-200">
                     {currentValue}
                   </span>
                   {node.marketCap.peak && (
-                    <span className="text-slate-500">
+                    <span className="text-slate-500 group-hover:text-slate-400 transition-colors duration-200">
                       / Peak {node.marketCap.peak}
                     </span>
                   )}
@@ -496,13 +497,10 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
         return null;
 
       case Category.TECHNOLOGY:
-        // Lifecycle display
-        const lifecycle = node.endYear
-          ? `${node.year} – ${node.endYear}`
-          : `${node.year} – Present`;
+        // Lifecycle display - JUST YEAR (User Request)
         return (
           <div className="flex items-center gap-2 mt-2 text-sm text-slate-400 font-mono">
-            {lifecycle}
+            {node.year}
           </div>
         );
 
@@ -517,11 +515,35 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
       <div className="p-6 border-b border-slate-700 flex justify-between items-start bg-slate-900/50">
         <div>
           <div className="flex items-center gap-2">
+            {/* Sub-Category Badge (The "Icon" text) */}
             <span
               className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-sm bg-slate-800 border border-slate-700"
               style={{ color: CATEGORY_COLORS[node.category] }}
             >
-              {node.category}
+              {(() => {
+                const toFirstCap = (str: string) => str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : '';
+                const toTitleCase = (str: string) => str ? str.split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()).join(' ') : '';
+
+                switch (node.category) {
+                  case Category.COMPANY:
+                    // Sub-category: First letter capital only (e.g. "Semiconductor")
+                    return node.companyCategories && node.companyCategories[0]
+                      ? toFirstCap(CATEGORY_LABELS[node.companyCategories[0]] || node.companyCategories[0])
+                      : toFirstCap(node.category);
+                  case Category.TECHNOLOGY:
+                    // Category: Title case for multi-word categories (e.g. "Hardware & Robotics")
+                    const techCategory = node.techCategoryL1 || node.category;
+                    if (techCategory === "HARDWARE & ROBOTICS") {
+                      return "Hardware & Robotics";
+                    }
+                    return toTitleCase(techCategory);
+                  case Category.PERSON:
+                    // Impact Role: First letter capital only (e.g. "Founder")
+                    return toFirstCap(node.impactRole || node.category);
+                  default:
+                    return node.category; // "EPISODE"
+                }
+              })()}
             </span>
             {/* 1. Impact Factor Score in Header */}
             <div
@@ -566,41 +588,21 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
             </div>
           )}
 
-          {/* Company Category Badge */}
-          {node.category === Category.COMPANY && node.companyCategories?.[0] && (
-            <div className="flex flex-wrap gap-2 mt-3">
-              <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-emerald-900/30 text-emerald-300 border border-emerald-800/50">
-                {CATEGORY_LABELS[node.companyCategories[0]]}
-              </span>
-            </div>
-          )}
-
-          {/* Technology Categories */}
-          {node.category === Category.TECHNOLOGY && (
-            <div className="flex flex-wrap gap-2 mt-3">
-              {node.techCategoryL1 && (
-                <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-blue-900/30 text-blue-300 border border-blue-800/50">
-                  {node.techCategoryL1}
-                </span>
-              )}
-              {node.techCategoryL2 && (
-                <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-indigo-900/30 text-indigo-300 border border-indigo-800/50">
-                  {node.techCategoryL2}
-                </span>
-              )}
-            </div>
-          )}
+          {/* DUPLICATE BADGES REMOVED */}
         </div>
         <div className="flex gap-2">
-          {/* Focus Button - Map Icon */}
+          {/* Focus Button - TARGET Icon */}
           <button
             onClick={onFocus}
             className="text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 rounded p-1.5 transition-all"
-            title="Enter Focus View"
+            title="Enter Focus Mode"
           >
-            {/* Map Icon */}
+            {/* Target/Crosshair Icon - Outer thick, inner thin */}
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+              <circle cx="12" cy="12" r="10" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <circle cx="12" cy="12" r="4" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+              <line x1="6" y1="12" x2="18" y2="12" strokeWidth="1" strokeLinecap="round" />
+              <line x1="12" y1="6" x2="12" y2="18" strokeWidth="1" strokeLinecap="round" />
             </svg>
           </button>
 
@@ -758,9 +760,11 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
           </div>
         )}
 
-        {/* 3. Learn More Section (renamed from External Resources) */}
+        {/* 3. Learn More Section (External Links) */}
         <div>
-          <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Learn More</h3>
+          <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">
+            Learn More <span className="font-normal text-[10px]">(External Links)</span>
+          </h3>
           <div className="flex flex-wrap gap-3">
             {externalLinks.map((link, idx) => (
               <a
