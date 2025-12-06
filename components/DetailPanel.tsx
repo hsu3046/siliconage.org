@@ -180,7 +180,7 @@ const getConnectionLabel = (
     }
     // Company -> Person (OUTBOUND to Person)
     if (objectCat === Category.PERSON && direction === 'Outbound') {
-      if (linkType === 'TRIGGERED') return `Mentored by ${subject}`;
+      if (linkType === 'INFLUENCED') return `Mentored by ${subject}`;
     }
     // Company -> Tech/Product (OUTBOUND)
     if (objectCat === Category.TECHNOLOGY && direction === 'Outbound') {
@@ -196,23 +196,23 @@ const getConnectionLabel = (
     // Company -> Episode (OUTBOUND) - CONTEXT-AWARE
     if (objectCat === Category.EPISODE && direction === 'Outbound') {
       const eventType = getEpisodeContext(objectNode);
-      if (linkType === 'TRIGGERED') return `${subject} initiated this ${eventType}`;
+      if (linkType === 'INFLUENCED') return `${subject} initiated this ${eventType}`;
       if (linkType === 'PART_OF') return `${subject} was involved`;
     }
     // Episode -> Company (INBOUND)
     if (objectCat === Category.EPISODE && direction === 'Inbound') {
       const eventType = getEpisodeContext(objectNode);
-      if (linkType === 'TRIGGERED') return `This ${eventType} affected ${subject}`;
+      if (linkType === 'INFLUENCED') return `This ${eventType} affected ${subject}`;
     }
     // Company -> Company (VC/Investor INBOUND)
     if (objectCat === Category.COMPANY && direction === 'Inbound') {
-      if (linkType === 'TRIGGERED') return `Investor`;
+      if (linkType === 'INFLUENCED') return `Investor`;
       if (linkType === 'PART_OF') return `Subsidiary of ${subject}`;
     }
     // Company -> Company (Subsidiary OUTBOUND)
     if (objectCat === Category.COMPANY && direction === 'Outbound') {
       if (linkType === 'PART_OF') return `Acquired/Parent company`;
-      if (linkType === 'TRIGGERED') return `Investment/Influence`;
+      if (linkType === 'INFLUENCED') return `Investment/Influence`;
       if (linkType === 'BASED_ON') return `Strategic partner`;
     }
   }
@@ -226,7 +226,7 @@ const getConnectionLabel = (
     }
     // Company -> Person (INBOUND)
     if (objectCat === Category.COMPANY && direction === 'Inbound') {
-      if (linkType === 'TRIGGERED') return `Mentor organization`;
+      if (linkType === 'INFLUENCED') return `Mentor organization`;
     }
     // Person -> Tech
     if (objectCat === Category.TECHNOLOGY && direction === 'Outbound') {
@@ -239,18 +239,18 @@ const getConnectionLabel = (
     // Person -> Episode (OUTBOUND) - CONTEXT-AWARE
     if (objectCat === Category.EPISODE && direction === 'Outbound') {
       const eventType = getEpisodeContext(objectNode);
-      if (linkType === 'TRIGGERED') return `${subject} initiated this ${eventType}`;
+      if (linkType === 'INFLUENCED') return `${subject} initiated this ${eventType}`;
       if (linkType === 'PART_OF') return `${subject} participated`;
     }
     // Episode -> Person (INBOUND)
     if (objectCat === Category.EPISODE && direction === 'Inbound') {
       const eventType = getEpisodeContext(objectNode);
-      if (linkType === 'TRIGGERED') return `This ${eventType} affected ${subject}`;
+      if (linkType === 'INFLUENCED') return `This ${eventType} affected ${subject}`;
     }
     // Person -> Person
     if (objectCat === Category.PERSON) {
-      if (direction === 'Outbound' && linkType === 'TRIGGERED') return `Mentor`;
-      if (direction === 'Inbound' && linkType === 'TRIGGERED') return `Influenced by`;
+      if (direction === 'Outbound' && linkType === 'INFLUENCED') return `Mentor`;
+      if (direction === 'Inbound' && linkType === 'INFLUENCED') return `Influenced by`;
     }
   }
 
@@ -267,19 +267,19 @@ const getConnectionLabel = (
     // Tech -> Tech (Base)
     if (objectCat === Category.TECHNOLOGY && direction === 'Outbound') {
       if (linkType === 'BASED_ON') return `Built on`;
-      if (linkType === 'TRIGGERED') return `Inspired by`;
+      if (linkType === 'INFLUENCED') return `Inspired by`;
       if (linkType === 'CREATED') return `Created this`;
     }
     // Tech -> Tech (Derivative INBOUND)
     if (objectCat === Category.TECHNOLOGY && direction === 'Inbound') {
       if (linkType === 'BASED_ON') return `Foundation for`;
-      if (linkType === 'TRIGGERED') return `Led to`;
+      if (linkType === 'INFLUENCED') return `Led to`;
       if (linkType === 'CREATED') return `Created`;
     }
     // Tech -> Episode
     if (objectCat === Category.EPISODE && direction === 'Outbound') {
       const eventType = getEpisodeContext(objectNode);
-      if (linkType === 'TRIGGERED') return `Caused this ${eventType}`;
+      if (linkType === 'INFLUENCED') return `Caused this ${eventType}`;
       if (linkType === 'PART_OF') return `Related ${eventType}`;
     }
   }
@@ -291,7 +291,7 @@ const getConnectionLabel = (
 
     // 1. INBOUND (Who caused/joined it?) -> Actor -> Episode
     if (direction === 'Inbound') {
-      if (linkType === 'TRIGGERED') return `Main cause of this ${subjectEventType}`;
+      if (linkType === 'INFLUENCED') return `Main cause of this ${subjectEventType}`;
       if (linkType === 'PART_OF') return `Key participant`;
     }
 
@@ -305,7 +305,7 @@ const getConnectionLabel = (
       }
 
       // If linked via TRIGGERED, it is likely a consequence/impact.
-      if (linkType === 'TRIGGERED') {
+      if (linkType === 'INFLUENCED') {
         return `Consequence of this ${subjectEventType}`;
       }
     }
@@ -315,7 +315,7 @@ const getConnectionLabel = (
   const verb = linkType === 'CREATED' ? 'Creator'
     : linkType === 'PART_OF' ? 'Related'
       : linkType === 'BASED_ON' ? 'Dependency'
-        : linkType === 'TRIGGERED' ? 'Influence'
+        : linkType === 'INFLUENCED' ? 'Influence'
           : 'Connection';
 
   return verb;

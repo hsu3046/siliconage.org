@@ -8,6 +8,17 @@ export const CATEGORY_COLORS: Record<Category, string> = {
   [Category.EPISODE]: '#8b5cf6', // Violet
 };
 
+// Era definitions for History View timeline
+export const ERAS = [
+  { id: 'genesis', label: 'THE GENESIS', startYear: 1885, endYear: 1939 },
+  { id: 'dawn', label: 'THE SILICON DAWN', startYear: 1940, endYear: 1969 },
+  { id: 'pc', label: 'THE PC REVOLUTION', startYear: 1970, endYear: 1990 },
+  { id: 'internet', label: 'THE INTERNET AGE', startYear: 1991, endYear: 2006 },
+  { id: 'mobile', label: 'THE MOBILE REVOLUTION', startYear: 2007, endYear: 2011 },
+  { id: 'ai_early', label: 'THE RISE OF AI', startYear: 2012, endYear: 2022 },
+  { id: 'ai_renaissance', label: 'THE AI RENAISSANCE', startYear: 2023, endYear: 2099 },
+];
+
 // --- DATA BUILDER HELPERS ---
 
 const nodes: NodeData[] = [];
@@ -56,8 +67,8 @@ const linkPartOf = (source: string, target: string, strength: number = 0.8) => {
   links.push({ source, target, type: LinkType.PART_OF, direction: LinkDirection.FORWARD, strength });
 };
 
-const linkTriggered = (source: string, target: string, strength: number = 0.5) => {
-  links.push({ source, target, type: LinkType.TRIGGERED, direction: LinkDirection.FORWARD, strength });
+const linkInfluenced = (source: string, target: string, strength: number = 0.5) => {
+  links.push({ source, target, type: LinkType.INFLUENCED, direction: LinkDirection.FORWARD, strength });
 };
 
 
@@ -72,7 +83,7 @@ createPerson('von_neumann', 'John von Neumann', 1945, 1, PersonRole.THEORIST, 'M
 createEpisode('dartmouth', 'Dartmouth Workshop', 1956, 2, EpisodeRole.MILESTONE, 'The birth of AI as a field. McCarthy, Minsky, Shannon, and Rochester attended.', { eventType: 'Conference', impactScale: 'Birth of AI Field' });
 
 linkPartOf('mccarthy', 'dartmouth');
-linkTriggered('turing', 'mccarthy', 0.8);
+linkInfluenced('turing', 'mccarthy', 0.8);
 
 // ==========================================
 // ERA 5: THE AI RACE
@@ -159,13 +170,13 @@ linkCreated('shockley', 'transistor');
 // Technology influences
 linkBasedOn('unix', 'c_language'); // Unix rewritten in C
 // Note: C++ linkBasedOn is in the AI section (line ~815)
-linkTriggered('transistor', 'mosfet', 0.9); // MOSFET is evolution of transistor
+linkInfluenced('transistor', 'mosfet', 0.9); // MOSFET is evolution of transistor
 
 // Shannon's influence
 linkPartOf('shannon', 'dartmouth');
 
 // Transistor's fundamental influence
-linkTriggered('transistor', 'integrated_circuit', 0.95);
+linkInfluenced('transistor', 'integrated_circuit', 0.95);
 
 createCompany('ibm', 'IBM', 1911, 1, CompanyRole.PLATFORM, 'Big Blue. The dominant force in computing for most of the 20th century.', [CompanyCategory.HARDWARE, CompanyCategory.SOFTWARE], { marketCap: { current: '$200B', peak: '$260B' } });
 createTech('mainframe', 'Mainframe', 1952, 2, TechRole.PRODUCT, 'Big iron computing for enterprise.', 'Hardware & Infrastructure', 'Processors & Compute');
@@ -176,7 +187,7 @@ linkCreated('ibm', 'mainframe');
 linkCreated('ibm', 'deep_blue');
 linkPartOf('deep_blue', 'kasparov_match');
 linkPartOf('kasparov_match', 'ibm');
-linkTriggered('von_neumann', 'mainframe', 0.6);
+linkInfluenced('von_neumann', 'mainframe', 0.6);
 
 createCompany('fairchild', 'Fairchild Semi', 1957, 2, CompanyRole.LAB, 'The incubator of Silicon Valley.', [CompanyCategory.SEMICONDUCTOR], { marketCap: { current: 'Acquired', peak: '$2.4B' } });
 createPerson('noyce', 'Robert Noyce', 1957, 1, PersonRole.VISIONARY, 'Mayor of Silicon Valley', 'Co-inventor of the IC and co-founder of Intel.', { primaryRole: 'Co-inventor of IC', secondaryRole: 'Co-founder of Intel', birthYear: 1927, deathYear: 1990 });
@@ -187,8 +198,8 @@ createTech('ic', 'Integrated Circuit', 1959, 1, TechRole.CORE, 'Combining multip
 linkCreated('noyce', 'fairchild');
 linkCreated('moore', 'fairchild');
 linkCreated('fairchild', 'ic');
-linkTriggered('shockley', 'traitorous_eight');
-linkTriggered('traitorous_eight', 'fairchild');
+linkInfluenced('shockley', 'traitorous_eight');
+linkInfluenced('traitorous_eight', 'fairchild');
 
 createCompany('ti', 'Texas Instruments', 1930, 2, CompanyRole.INFRA, 'Pioneers of the Integrated Circuit and DSPs.', [CompanyCategory.SEMICONDUCTOR], { marketCap: { current: '$180B', peak: '$200B' } });
 createPerson('kilby', 'Jack Kilby', 1958, 2, PersonRole.THEORIST, 'Nobel Laureate', 'Inventor of the Integrated Circuit (alongside Noyce).', { primaryRole: 'Nobel Laureate (Physics)', secondaryRole: 'Inventor of IC', birthYear: 1923, deathYear: 2005 });
@@ -211,12 +222,12 @@ linkCreated('ti', 'tms1000');
 // IC Patent Battle
 linkPartOf('ic_patent_battle', 'ti');
 linkPartOf('ic_patent_battle', 'fairchild');
-linkTriggered('ic_patent_battle', 'ic', 0.3);
+linkInfluenced('ic_patent_battle', 'ic', 0.3);
 
 // Technology influences
 linkBasedOn('ti_calculator', 'ic');
 linkBasedOn('dsp', 'microprocessor', 0.7);
-linkTriggered('tms1000', 'microprocessor', 0.5);
+linkInfluenced('tms1000', 'microprocessor', 0.5);
 linkBasedOn('ttl_logic', 'transistor');
 
 createCompany('intel', 'Intel', 1968, 1, CompanyRole.INFRA, 'Put the "Silicon" in Silicon Valley. Created the microprocessor.', [CompanyCategory.SEMICONDUCTOR], { marketCap: { current: '$110B', peak: '$290B' } });
@@ -250,22 +261,22 @@ linkCreated('intel', 'core_processor');
 linkCreated('moore', 'moores_law');
 
 // Technology evolution
-linkTriggered('ic', 'microprocessor');
-linkTriggered('microprocessor', 'x86', 0.9);
+linkInfluenced('ic', 'microprocessor');
+linkInfluenced('microprocessor', 'x86', 0.9);
 linkBasedOn('pentium', 'x86');
 linkBasedOn('core_processor', 'x86');
-linkTriggered('pentium', 'core_processor', 0.7);
+linkInfluenced('pentium', 'core_processor', 0.7);
 
 // Episodes - Intel initiated these
-linkTriggered('intel', 'intel_inside'); // Intel's marketing campaign
-linkTriggered('intel', 'pentium_bug'); // Intel caused the bug
-linkTriggered('intel', 'memory_to_cpu'); // Intel's strategic pivot
-linkTriggered('intel', 'tick_tock'); // Intel's manufacturing strategy
-linkTriggered('memory_to_cpu', 'microprocessor', 0.5);
+linkInfluenced('intel', 'intel_inside'); // Intel's marketing campaign
+linkInfluenced('intel', 'pentium_bug'); // Intel caused the bug
+linkInfluenced('intel', 'memory_to_cpu'); // Intel's strategic pivot
+linkInfluenced('intel', 'tick_tock'); // Intel's manufacturing strategy
+linkInfluenced('memory_to_cpu', 'microprocessor', 0.5);
 
 // Moore's Law influence on industry
-linkTriggered('moores_law', 'ic', 0.8);
-linkTriggered('moores_law', 'microprocessor', 0.8);
+linkInfluenced('moores_law', 'ic', 0.8);
+linkInfluenced('moores_law', 'microprocessor', 0.8);
 
 // ==========================================
 // ERA 2: PERSONAL COMPUTING & OS
@@ -291,11 +302,11 @@ linkCreated('wozniak', 'apple');
 linkPartOf('cook', 'apple');
 linkCreated('apple', 'macintosh');
 linkCreated('apple', 'iphone');
-linkTriggered('jobs', 'gui_visit'); // Jobs initiated the PARC visit
+linkInfluenced('jobs', 'gui_visit'); // Jobs initiated the PARC visit
 linkPartOf('xerox_investment', 'apple');
 linkPartOf('xerox_investment', 'xerox');
-linkTriggered('xerox_investment', 'apple');
-linkTriggered('gui_visit', 'macintosh');
+linkInfluenced('xerox_investment', 'apple');
+linkInfluenced('gui_visit', 'macintosh');
 
 createCompany('microsoft', 'Microsoft', 1975, 1, CompanyRole.PLATFORM, 'PC software monopoly turned Cloud & AI giant.', [CompanyCategory.SOFTWARE, CompanyCategory.INTERNET], { marketCap: { current: '$3.1T', peak: '$3.1T' } });
 createPerson('gates', 'Bill Gates', 1975, 1, PersonRole.VISIONARY, 'Co-Founder', 'Dominated the PC era.', { primaryRole: 'Co-founder of Microsoft', secondaryRole: 'Philanthropist', birthYear: 1955 });
@@ -308,7 +319,7 @@ linkCreated('gates', 'microsoft');
 linkPartOf('nadella', 'microsoft');
 linkCreated('microsoft', 'windows');
 linkPartOf('ms_saves_apple', 'microsoft');
-linkTriggered('ms_saves_apple', 'apple');
+linkInfluenced('ms_saves_apple', 'apple');
 linkPartOf('wintel_alliance', 'microsoft');
 linkPartOf('wintel_alliance', 'intel');
 
@@ -342,7 +353,9 @@ linkCreated('sun', 'java');
 linkCreated('sun', 'solaris');
 linkCreated('sun', 'nfs');
 linkBasedOn('oracle', 'oracle_buys_sun');
-linkTriggered('oracle_buys_sun', 'sun');
+linkBasedOn('oracle', 'oracle_buys_sun');
+linkInfluenced('oracle_buys_sun', 'sun');
+linkPartOf('sun', 'oracle'); // Sun acquired by Oracle
 
 createCompany('adobe', 'Adobe', 1982, 2, CompanyRole.PLATFORM, 'Creative software giant.', [CompanyCategory.SOFTWARE], { marketCap: { current: '$230B', peak: '$320B' } });
 createPerson('john_warnock', 'John Warnock', 1982, 2, PersonRole.VISIONARY, 'Co-Founder', 'Inventor of PostScript and PDF.', { primaryRole: 'Co-founder of Adobe', birthYear: 1940, deathYear: 2023 });
@@ -371,7 +384,7 @@ linkBasedOn('dtp_revolution', 'postscript');
 linkBasedOn('dtp_revolution', 'macintosh');
 
 createPerson('linus', 'Linus Torvalds', 1991, 1, PersonRole.BUILDER, 'Creator of Linux', 'Created the Linux kernel and Git.', { primaryRole: 'Creator of Linux', secondaryRole: 'Creator of Git', birthYear: 1969 });
-linkTriggered('unix', 'linus');
+linkInfluenced('unix', 'linus');
 
 // ==========================================
 // ERA 3: INTERNET & CLOUD
@@ -392,7 +405,7 @@ createTech('www', 'World Wide Web', 1989, 1, TechRole.STANDARD, 'HTML, HTTP, URL
 createPerson('berners_lee', 'Tim Berners-Lee', 1989, 2, PersonRole.THEORIST, 'Inventor', 'Invented the Web.', { primaryRole: 'Inventor of the Web', birthYear: 1955 });
 linkPartOf('berners_lee', 'cern');
 linkCreated('cern', 'www');
-linkTriggered('arpanet', 'www');
+linkInfluenced('arpanet', 'www');
 
 createCompany('netscape', 'Netscape', 1994, 2, CompanyRole.PLATFORM, 'First commercial browser.', [CompanyCategory.INTERNET], { marketCap: { current: 'Acquired', peak: '$10B' } });
 createPerson('andreessen', 'Marc Andreessen', 1994, 2, PersonRole.BUILDER, 'Co-Founder', 'Created Mosaic/Netscape.', { primaryRole: 'Co-founder of Netscape', secondaryRole: 'Co-founder of a16z', birthYear: 1971 });
@@ -401,7 +414,7 @@ createEpisode('browser_wars', 'Browser Wars', 1995, 2, EpisodeRole.MILESTONE, 'N
 
 linkPartOf('andreessen', 'netscape');
 linkCreated('netscape', 'javascript');
-linkTriggered('www', 'netscape');
+linkInfluenced('www', 'netscape');
 linkPartOf('browser_wars', 'netscape');
 linkPartOf('browser_wars', 'microsoft');
 
@@ -418,7 +431,7 @@ linkPartOf('cerf', 'google');
 linkCreated('google', 'search');
 linkCreated('google', 'android');
 linkCreated('google', 'tpu');
-linkTriggered('iphone', 'android');
+linkInfluenced('iphone', 'android');
 
 createCompany('amazon', 'Amazon', 1994, 1, CompanyRole.PLATFORM, 'E-commerce & Cloud pioneer.', [CompanyCategory.INTERNET, CompanyCategory.SOFTWARE], { marketCap: { current: '$2.1T', peak: '$2.1T' } });
 createPerson('bezos', 'Jeff Bezos', 1994, 1, PersonRole.VISIONARY, 'Founder', 'E-commerce and cloud computing pioneer.', { primaryRole: 'Founder of Amazon', secondaryRole: 'Founder of Blue Origin', birthYear: 1964 });
@@ -452,8 +465,8 @@ createEpisode('no_software', 'No Software Campaign', 2000, 2, EpisodeRole.MILEST
 
 linkCreated('benioff', 'salesforce');
 linkCreated('salesforce', 'crm');
-linkTriggered('salesforce', 'no_software'); // Salesforce's marketing campaign
-linkTriggered('oracle', 'benioff');
+linkInfluenced('salesforce', 'no_software'); // Salesforce's marketing campaign
+linkInfluenced('oracle', 'benioff');
 
 createTech('saas', 'SaaS', 1999, 1, TechRole.STANDARD, 'Software as a Service - software licensing and delivery model.', 'Digital Services & Platforms', 'Digital Platforms');
 linkCreated('salesforce', 'saas');
@@ -529,10 +542,11 @@ linkPartOf('arm_license_model', 'arm');
 linkPartOf('nvidia_arm_fail', 'nvidia');
 linkPartOf('nvidia_arm_fail', 'arm');
 // linkPartOf('softbank_arm', 'arm'); // Removed duplicate
+linkPartOf('arm', 'softbank'); // ARM acquired by SoftBank
 
 // ARM influences
 linkBasedOn('apple_silicon', 'arm_arch');
-linkTriggered('arm_cortex', 'apple_silicon', 0.6);
+linkInfluenced('arm_cortex', 'apple_silicon', 0.6);
 
 // ==========================================
 // QUALCOMM - WIRELESS PIONEER
@@ -562,10 +576,10 @@ linkCreated('qualcomm', '4g_lte');
 linkCreated('qualcomm', '5g_patents');
 
 // Patent and technology evolution
-linkTriggered('cdma', 'cdma_tech', 0.9); // Bell Labs CDMA influenced Qualcomm's implementation
-linkTriggered('cdma_tech', '3g_patents', 0.9);
-linkTriggered('3g_patents', '4g_lte', 0.8);
-linkTriggered('4g_lte', '5g_patents', 0.8);
+linkInfluenced('cdma', 'cdma_tech', 0.9); // Bell Labs CDMA influenced Qualcomm's implementation
+linkInfluenced('cdma_tech', '3g_patents', 0.9);
+linkInfluenced('3g_patents', '4g_lte', 0.8);
+linkInfluenced('4g_lte', '5g_patents', 0.8);
 
 // Snapdragon dependencies
 linkBasedOn('snapdragon', 'arm_arch');
@@ -590,10 +604,10 @@ createEpisode('vision_fund', 'Vision Fund Launch', 2017, 2, EpisodeRole.DEAL, '$
 createEpisode('softbank_arm', 'SoftBank Acquires ARM', 2016, 2, EpisodeRole.DEAL, 'SoftBank bought ARM for $32B, largest European tech acquisition.', { eventType: 'Acquisition', impactScale: '$32B Deal' });
 
 linkCreated('masayoshi_son', 'softbank');
-linkTriggered('softbank', 'vision_fund'); // SoftBank launched the fund
-linkTriggered('softbank', 'softbank_arm'); // SoftBank initiated the acquisition
+linkInfluenced('softbank', 'vision_fund'); // SoftBank launched the fund
+linkInfluenced('softbank', 'softbank_arm'); // SoftBank initiated the acquisition
 linkPartOf('softbank_arm', 'arm'); // ARM was the target
-linkTriggered('vision_fund', 'openai', 0.3); // Vision Fund invested in many AI companies
+linkInfluenced('vision_fund', 'openai', 0.3); // Vision Fund invested in many AI companies
 
 // NTT - Telecom Pioneer
 createCompany('ntt', 'NTT', 1952, 2, CompanyRole.PLATFORM, 'Nippon Telegraph and Telephone - Japan\'s telecom giant and 5G pioneer.', [CompanyCategory.TELECOM], { marketCap: { current: '$80B', peak: '$330B' } });
@@ -610,7 +624,7 @@ linkCreated('kurita', 'emoji');
 linkPartOf('kurita', 'ntt');
 linkBasedOn('emoji', 'ntt_docomo');
 linkCreated('ntt', 'optical_fiber');
-linkTriggered('ntt_docomo', 'iphone', 0.4); // i-mode influenced mobile internet thinking
+linkInfluenced('ntt_docomo', 'iphone', 0.4); // i-mode influenced mobile internet thinking
 
 
 
@@ -666,8 +680,8 @@ linkCreated('toshiba', 'nand_flash');
 linkCreated('toshiba', 't1100');
 linkCreated('fujio_masuoka', 'nand_flash');
 linkCreated('samsung', 'hbm');
-linkTriggered('samsung', 'samsung_memory_bet'); // Samsung's strategic decision
-linkTriggered('samsung', 'galaxy_launch'); // Samsung's product launch
+linkInfluenced('samsung', 'samsung_memory_bet'); // Samsung's strategic decision
+linkInfluenced('samsung', 'galaxy_launch'); // Samsung's product launch
 
 // Samsung uses EUV for advanced manufacturing
 linkBasedOn('samsung', 'euv');
@@ -769,9 +783,9 @@ linkCreated('openai', 'gpt');
 linkCreated('openai', 'dalle');
 linkCreated('openai', 'sora');
 
-linkTriggered('openai', 'chatgpt_launch'); // OpenAI's product launch
+linkInfluenced('openai', 'chatgpt_launch'); // OpenAI's product launch
 linkPartOf('openai_coup', 'openai'); // Crisis that happened to OpenAI
-linkTriggered('microsoft', 'ms_openai_deal'); // Microsoft initiated the investment
+linkInfluenced('microsoft', 'ms_openai_deal'); // Microsoft initiated the investment
 linkPartOf('ms_openai_deal', 'openai'); // OpenAI received the investment
 linkBasedOn('openai', 'gpu');
 
@@ -795,11 +809,11 @@ linkBasedOn('gpt', 'transformer');
 linkBasedOn('chatgpt', 'transformer');
 linkBasedOn('dalle', 'transformer');
 linkBasedOn('alphafold', 'transformer');
-linkTriggered('transformer', 'gpt');
-linkTriggered('gpu', 'fei_fei_li');
+linkInfluenced('transformer', 'gpt');
+linkInfluenced('gpu', 'fei_fei_li');
 
 // Turing's legacy: his work influenced McCarthy and modern AI
-linkTriggered('turing', 'transformer');  // Conceptual lineage
+linkInfluenced('turing', 'transformer');  // Conceptual lineage
 
 // ==========================================
 // PROGRAMMING LANGUAGES
@@ -892,7 +906,7 @@ linkCreated('tesla', 'optimus');
 linkBasedOn('optimus', 'robotics');
 linkCreated('tesla', 'autonomous_driving');
 linkBasedOn('autopilot', 'autonomous_driving');
-linkTriggered('musk', 'openai');
+linkInfluenced('musk', 'openai');
 linkBasedOn('tesla', 'gpu');
 
 createCompany('spacex', 'SpaceX', 2002, 1, CompanyRole.INFRA, 'Revolutionizing space technology.', [CompanyCategory.AEROSPACE, CompanyCategory.HARDWARE], { marketCap: { current: '$210B', peak: '$210B' } });
@@ -926,7 +940,7 @@ linkPartOf('alex_karp', 'palantir');
 linkCreated('palantir', 'gotham');
 linkCreated('palantir', 'foundry');
 linkPartOf('in_q_tel', 'darpa');
-linkTriggered('in_q_tel', 'palantir');
+linkInfluenced('in_q_tel', 'palantir');
 linkPartOf('project_maven', 'palantir');
 linkPartOf('project_maven', 'google'); // Google was also involved initially
 
@@ -1070,7 +1084,7 @@ createCompany('mobileye', 'Mobileye', 1999, 2, CompanyRole.INFRA, 'Pioneer in AD
 createTech('adas', 'ADAS', 1999, 2, TechRole.STANDARD, 'Advanced Driver Assistance Systems - electronic systems that assist drivers.', 'AI & Physical Systems', 'Autonomous Mobility');
 
 linkCreated('google', 'self_driving_car'); // Waymo (formerly Google Self-Driving Car Project)
-linkTriggered('darpa_grand_challenge', 'self_driving_car'); // Origins
+linkInfluenced('darpa_grand_challenge', 'self_driving_car'); // Origins
 linkCreated('mobileye', 'adas');
 linkPartOf('mobileye', 'intel'); // Acquired by Intel
 
@@ -1079,7 +1093,7 @@ createCompany('boston_dynamics', 'Boston Dynamics', 1992, 2, CompanyRole.LAB, 'T
 createPerson('marc_raibert', 'Marc Raibert', 1992, 2, PersonRole.VISIONARY, 'Founder', 'Father of dynamic robots.', { primaryRole: 'Founder of Boston Dynamics', birthYear: 1949 });
 createTech('spot', 'Spot', 2016, 2, TechRole.PRODUCT, 'Agile mobile robot that navigates terrain with unprecedented mobility.', 'AI & Physical Systems', 'Robotics');
 createTech('atlas', 'Atlas', 2013, 2, TechRole.PRODUCT, 'Bipedal humanoid robot capable of parkour and complex manipulation.', 'AI & Physical Systems', 'Robotics');
-createEpisode('hyundai_bd_deal', 'Hyundai Acquires Boston Dynamics', 2020, 2, EpisodeRole.DEAL, 'Hyundai Motor Group acquires controlling interest in Boston Dynamics.', { eventType: 'Acquisition', impactScale: '$1.1B Deal' });
+createEpisode('hyundai_robot_deal', 'Hyundai Robot Deal', 2020, 2, EpisodeRole.DEAL, 'Hyundai Motor Group acquires controlling interest in Boston Dynamics from SoftBank.', { eventType: 'Acquisition', impactScale: '$1.1B Deal' });
 
 createCompany('irobot', 'iRobot', 1990, 2, CompanyRole.PRODUCT, 'Consumer robot company known for Roomba.', [CompanyCategory.ROBOTICS], { marketCap: { current: '$1.4B', peak: '$10B' } });
 createTech('roomba', 'Roomba', 2002, 2, TechRole.PRODUCT, 'Autonomous robotic vacuum cleaner.', 'AI & Physical Systems', 'Robotics');
@@ -1087,7 +1101,8 @@ createTech('roomba', 'Roomba', 2002, 2, TechRole.PRODUCT, 'Autonomous robotic va
 linkCreated('marc_raibert', 'boston_dynamics');
 linkCreated('boston_dynamics', 'spot');
 linkCreated('boston_dynamics', 'atlas');
-linkPartOf('hyundai_bd_deal', 'boston_dynamics');
+linkInfluenced('hyundai_robot_deal', 'boston_dynamics');
+linkInfluenced('hyundai_robot_deal', 'softbank');
 linkCreated('irobot', 'roomba');
 
 // 3. Core Technologies
@@ -1102,7 +1117,7 @@ createTech('computer_vision', 'Computer Vision', 2012, 1, TechRole.CORE, 'Field 
 // Interconnections (The Trinity)
 linkBasedOn('autonomous_driving', 'robotics');
 linkBasedOn('drone', 'robotics');
-linkTriggered('autonomous_driving', 'drone'); // Shared autonomy tech
+linkInfluenced('autonomous_driving', 'drone'); // Shared autonomy tech
 
 // Robotics Ecosystem
 linkBasedOn('spot', 'robotics');
@@ -1216,21 +1231,21 @@ createEpisode('sequoia_youtube', 'Sequoia invests in YouTube', 2005, 2, EpisodeR
 createEpisode('sequoia_whatsapp', 'Sequoia invests in WhatsApp', 2011, 2, EpisodeRole.DEAL, 'Sequoia was the sole institutional investor.', { eventType: 'Investment', impactScale: '60x Return' });
 
 // Sequoia triggered these investments
-linkTriggered('sequoia', 'sequoia_apple');
-linkTriggered('sequoia', 'sequoia_google');
-linkTriggered('sequoia', 'sequoia_oracle');
-linkTriggered('sequoia', 'sequoia_nvidia');
-linkTriggered('sequoia', 'sequoia_paypal');
-linkTriggered('sequoia', 'sequoia_youtube');
-linkTriggered('sequoia', 'sequoia_whatsapp');
+linkInfluenced('sequoia', 'sequoia_apple');
+linkInfluenced('sequoia', 'sequoia_google');
+linkInfluenced('sequoia', 'sequoia_oracle');
+linkInfluenced('sequoia', 'sequoia_nvidia');
+linkInfluenced('sequoia', 'sequoia_paypal');
+linkInfluenced('sequoia', 'sequoia_youtube');
+linkInfluenced('sequoia', 'sequoia_whatsapp');
 
-linkTriggered('sequoia_apple', 'apple');
-linkTriggered('sequoia_google', 'google');
-linkTriggered('sequoia_oracle', 'oracle');
-linkTriggered('sequoia_nvidia', 'nvidia');
-linkTriggered('sequoia_paypal', 'paypal');
-linkTriggered('sequoia_youtube', 'youtube');
-linkTriggered('sequoia_whatsapp', 'whatsapp');
+linkInfluenced('sequoia_apple', 'apple');
+linkInfluenced('sequoia_google', 'google');
+linkInfluenced('sequoia_oracle', 'oracle');
+linkInfluenced('sequoia_nvidia', 'nvidia');
+linkInfluenced('sequoia_paypal', 'paypal');
+linkInfluenced('sequoia_youtube', 'youtube');
+linkInfluenced('sequoia_whatsapp', 'whatsapp');
 
 // Kleiner Perkins Portfolio - via Investment Episodes
 createEpisode('kpcb_amazon', 'Kleiner Perkins invests in Amazon', 1996, 2, EpisodeRole.DEAL, 'John Doerr backed Amazon early.', { eventType: 'Investment', impactScale: 'Early Stage' });
@@ -1239,15 +1254,15 @@ createEpisode('kpcb_netscape', 'Kleiner Perkins invests in Netscape', 1994, 2, E
 createEpisode('kpcb_sun', 'Kleiner Perkins invests in Sun', 1982, 3, EpisodeRole.DEAL, 'Early investment in Sun Microsystems.', { eventType: 'Investment', impactScale: 'Early Stage' });
 
 // KPCB triggered these investments
-linkTriggered('kpcb', 'kpcb_amazon');
-linkTriggered('kpcb', 'kpcb_google');
-linkTriggered('kpcb', 'kpcb_netscape');
-linkTriggered('kpcb', 'kpcb_sun');
+linkInfluenced('kpcb', 'kpcb_amazon');
+linkInfluenced('kpcb', 'kpcb_google');
+linkInfluenced('kpcb', 'kpcb_netscape');
+linkInfluenced('kpcb', 'kpcb_sun');
 
-linkTriggered('kpcb_amazon', 'amazon');
-linkTriggered('kpcb_google', 'google');
-linkTriggered('kpcb_netscape', 'netscape');
-linkTriggered('kpcb_sun', 'sun');
+linkInfluenced('kpcb_amazon', 'amazon');
+linkInfluenced('kpcb_google', 'google');
+linkInfluenced('kpcb_netscape', 'netscape');
+linkInfluenced('kpcb_sun', 'sun');
 
 // a16z Portfolio - via Investment Episodes
 createEpisode('a16z_facebook', 'a16z invests in Facebook', 2010, 2, EpisodeRole.DEAL, 'Andreessen Horowitz backed the social giant.', { eventType: 'Investment', impactScale: 'Late Stage' });
@@ -1257,22 +1272,22 @@ createEpisode('a16z_github', 'a16z invests in GitHub', 2012, 2, EpisodeRole.DEAL
 createEpisode('a16z_skype', 'a16z invests in Skype', 2009, 2, EpisodeRole.DEAL, 'a16z backed the VoIP pioneer.', { eventType: 'Investment', impactScale: 'Growth Stage' });
 
 // a16z triggered these investments
-linkTriggered('a16z', 'a16z_facebook');
-linkTriggered('a16z', 'a16z_twitter');
-linkTriggered('a16z', 'a16z_airbnb');
-linkTriggered('a16z', 'a16z_github');
-linkTriggered('a16z', 'a16z_skype');
+linkInfluenced('a16z', 'a16z_facebook');
+linkInfluenced('a16z', 'a16z_twitter');
+linkInfluenced('a16z', 'a16z_airbnb');
+linkInfluenced('a16z', 'a16z_github');
+linkInfluenced('a16z', 'a16z_skype');
 
-linkTriggered('a16z_facebook', 'meta');
-linkTriggered('a16z_twitter', 'twitter');
-linkTriggered('a16z_airbnb', 'airbnb');
-linkTriggered('a16z_github', 'github');
-linkTriggered('a16z_skype', 'skype');
+linkInfluenced('a16z_facebook', 'meta');
+linkInfluenced('a16z_twitter', 'twitter');
+linkInfluenced('a16z_airbnb', 'airbnb');
+linkInfluenced('a16z_github', 'github');
+linkInfluenced('a16z_skype', 'skype');
 
 // Y Combinator Portfolio - via Investment Episodes
 createEpisode('yc_airbnb', 'Y Combinator funds Airbnb', 2009, 2, EpisodeRole.DEAL, 'YC backed Airbnb in its earliest days.', { eventType: 'Investment', impactScale: 'Seed Stage' });
-linkTriggered('y_combinator', 'yc_airbnb'); // YC triggered the investment
-linkTriggered('yc_airbnb', 'airbnb');
+linkInfluenced('y_combinator', 'yc_airbnb'); // YC triggered the investment
+linkInfluenced('yc_airbnb', 'airbnb');
 
 // SoftBank Investments - via Investment Episodes
 createEpisode('softbank_uber', 'SoftBank invests in Uber', 2018, 2, EpisodeRole.DEAL, 'Vision Fund led massive investment in Uber.', { eventType: 'Investment', impactScale: '$7.7B Investment' });
@@ -1281,8 +1296,8 @@ createEpisode('softbank_nvidia', 'SoftBank invests in NVIDIA', 2017, 2, EpisodeR
 linkPartOf('softbank_uber', 'softbank');
 linkPartOf('softbank_nvidia', 'softbank');
 
-linkTriggered('softbank_uber', 'uber');
-linkTriggered('softbank_nvidia', 'nvidia');
+linkInfluenced('softbank_uber', 'uber');
+linkInfluenced('softbank_nvidia', 'nvidia');
 
 // ==========================================
 // FINTECH & CRYPTOCURRENCY
@@ -1324,15 +1339,15 @@ linkCreated('vitalik', 'ethereum');
 linkPartOf('the_merge', 'ethereum');
 linkBasedOn('ethereum', 'blockchain');
 linkCreated('ethereum', 'smart_contracts');
-linkTriggered('bitcoin', 'ethereum'); // Bitcoin inspired Ethereum
+linkInfluenced('bitcoin', 'ethereum'); // Bitcoin inspired Ethereum
 
 linkPartOf('cz', 'binance');
 linkCreated('binance', 'bitcoin');
 linkCreated('binance', 'ethereum');
 
-linkTriggered('ftx_collapse', 'binance'); // Binance triggered the run
-linkTriggered('ftx_collapse', 'bitcoin');
-linkTriggered('bitcoin', 'stablecoin');
+linkInfluenced('ftx_collapse', 'binance'); // Binance triggered the run
+linkInfluenced('ftx_collapse', 'bitcoin');
+linkInfluenced('bitcoin', 'stablecoin');
 linkBasedOn('defi', 'stablecoin');
 
 // 3. Asian FinTech
@@ -1387,20 +1402,20 @@ linkCreated('ibm', 'watson_super');
 linkCreated('ibm', 'ibm_quantum');
 
 // IBM System/360 to Mainframe connection
-linkTriggered('ibm_system_360', 'mainframe', 0.9);
+linkInfluenced('ibm_system_360', 'mainframe', 0.9);
 linkBasedOn('mainframe', 'ibm_system_360');
 
 // PowerPC connections to Apple
 linkBasedOn('apple', 'powerpc'); // Apple used PowerPC in Macs from 1994-2006
-linkTriggered('powerpc', 'apple_silicon', 0.4); // PowerPC influenced Apple's later silicon strategy
+linkInfluenced('powerpc', 'apple_silicon', 0.4); // PowerPC influenced Apple's later silicon strategy
 
 // IBM PC influence on Wintel Alliance
-linkTriggered('ibm_pc', 'wintel_alliance', 0.9);
+linkInfluenced('ibm_pc', 'wintel_alliance', 0.9);
 linkPartOf('wintel_alliance', 'ibm');
 
 // RISC influence on modern architectures
-linkTriggered('risc', 'powerpc', 0.9);
-linkTriggered('risc', 'arm_arch', 0.7);
+linkInfluenced('risc', 'powerpc', 0.9);
+linkInfluenced('risc', 'arm_arch', 0.7);
 
 // IBM Episodes
 linkPartOf('ibm_loss_1993', 'ibm');

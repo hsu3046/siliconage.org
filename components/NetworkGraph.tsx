@@ -48,23 +48,23 @@ const getLabelDimensions = (label: string, category: Category) => {
 const getLinkStyle = (type: LinkType) => {
   switch (type) {
     case LinkType.CREATED:    // Creation, Launch, Founding
-      // Cyan, Thin, Solid (Creative Output)
-      return { dasharray: "0", width: 1.5, color: "#22d3ee", opacity: 0.8 };
+      // Darker Teal, Solid (Main Focus)
+      return { dasharray: "0", width: 1.5, color: "#0891b2", opacity: 1.0 };
 
     case LinkType.BASED_ON:   // Usage, Infrastructure, Foundation
-      // Orange, Thin, SOLID (Critical Path)
-      return { dasharray: "none", width: 1.5, color: "#f97316", opacity: 1.0 };
+      // Dark Orange, Solid, Subtle (Background)
+      return { dasharray: "0", width: 1.5, color: "#c2410c", opacity: 0.5 };
 
-    case LinkType.TRIGGERED:  // Investment, Cause/Effect, Inspiration
-      // Purple, Thin, Dotted (Abstract)
-      return { dasharray: "2,4", width: 1.5, color: "#a78bfa", opacity: 0.6 };
+    case LinkType.INFLUENCED: // Investment, Cause/Effect, Inspiration (Was TRIGGERED)
+      // Soft Purple, Dotted (Narrative)
+      return { dasharray: "3,3", width: 1.5, color: "#d8b4fe", opacity: 0.7 };
 
     case LinkType.PART_OF:    // Membership, Ownership, Category
-      // Slate, Thin, Solid (Structural)
-      return { dasharray: "0", width: 1, color: "#64748b", opacity: 0.5 };
+      // Slate, Solid, Neutral (Structure)
+      return { dasharray: "0", width: 1, color: "#94a3b8", opacity: 0.5 };
 
     default:
-      return { dasharray: "0", width: 1, color: "#64748b", opacity: 0.5 };
+      return { dasharray: "0", width: 1, color: "#94a3b8", opacity: 0.5 };
   }
 };
 
@@ -382,47 +382,8 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
     setSuggestions([]);
     setIsSearchFocused(false);
 
-    console.log('[Search] handleSearchSelect called for:', node.id, node.label);
-    console.log('[Search] zoomBehaviorRef:', !!zoomBehaviorRef.current);
-    console.log('[Search] zoomSelectionRef:', !!zoomSelectionRef.current);
-    console.log('[Search] simulationRef:', !!simulationRef.current);
-    console.log('[Search] simNodes count:', simulationRef.current?.nodes()?.length || 0);
-
-    // Directly pan to node using internal zoom logic
-    if (zoomBehaviorRef.current && zoomSelectionRef.current) {
-      // Find node position from simulation (nodes have x/y after simulation runs)
-      const simNodes = simulationRef.current?.nodes() || [];
-      const simNode = simNodes.find(n => n.id === node.id);
-
-      console.log('[Search] simNode found:', !!simNode, simNode?.x, simNode?.y);
-      console.log('[Search] original node:', node.x, node.y);
-
-      // Use simulation node position if available, otherwise use data node
-      const targetNode = simNode || node;
-
-      console.log('[Search] targetNode:', targetNode.id, targetNode.x, targetNode.y);
-
-      if (targetNode.x !== undefined && targetNode.y !== undefined) {
-        const svg = zoomSelectionRef.current;
-        svg.interrupt();
-        const currentTransform = d3.zoomTransform(svg.node()!);
-        const scale = currentTransform.k;
-        const tx = width / 2 - targetNode.x * scale;
-        const ty = height / 2 - targetNode.y * scale;
-        const transform = d3.zoomIdentity.translate(tx, ty).scale(scale);
-        console.log('[Search] Panning to:', tx, ty, 'scale:', scale);
-        svg.transition()
-          .duration(750)
-          .ease(d3.easeCubicOut)
-          .call(zoomBehaviorRef.current.transform, transform);
-      } else {
-        console.log('[Search] No x/y position found, cannot pan');
-      }
-    } else {
-      console.log('[Search] Refs not ready');
-    }
-    // Note: We intentionally don't call onNodeFocus here to avoid double-pan interference
-    // The direct pan above is sufficient for search navigation
+    // v1.2.1: Search now enters Focus Mode directly
+    onNodeDoubleClick(node);
   };
 
 
@@ -485,10 +446,10 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
     const defs = svg.append("defs");
 
     const markerTypes = [
-      { id: "arrow-created", color: "#22d3ee" },    // Cyan
-      { id: "arrow-based_on", color: "#f97316" },   // Orange (underscore to match LinkType)
-      { id: "arrow-triggered", color: "#a78bfa" },  // Purple
-      { id: "arrow-part_of", color: "#64748b" },    // Slate (underscore to match LinkType)
+      { id: "arrow-created", color: "#0891b2" },     // Darker Teal (Main Focus)
+      { id: "arrow-based_on", color: "#c2410c" },    // Dark Orange (Background)
+      { id: "arrow-influenced", color: "#d8b4fe" },  // Soft Purple (Narrative)
+      { id: "arrow-part_of", color: "#94a3b8" },     // Slate 400 (Structure)
     ];
 
     markerTypes.forEach(m => {
@@ -635,6 +596,9 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
     const wasFocused = !!prevFocusNodeIdRef.current;
     const isFocused = !!focusNodeId;
 
+    // Save the previous focus node ID at the START before any updates
+    const savedPrevFocusNodeId = prevFocusNodeIdRef.current;
+
     const timer = setTimeout(() => {
       if (!zoomBehaviorRef.current || !zoomSelectionRef.current || !width || !height) return;
 
@@ -657,14 +621,37 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
             .call(zoomBehaviorRef.current.transform, transform);
         }
       } else if (wasFocused && !isFocused) {
-        const transform = d3.zoomIdentity.translate(width / 2, height / 2).scale(0.15); // Level 1 (most zoomed out)
+        // v1.2.1: Exit Focus Mode
+        // Step 1: Zoom out to Level 1 first (let physics stabilize)
+        const transform1 = d3.zoomIdentity.translate(width / 2, height / 2).scale(0.15);
         setZoomLevel(1);
         zoomLevelRef.current = 1;
-
         zoomSelectionRef.current.transition()
-          .duration(750)
+          .duration(500)
           .ease(d3.easeCubicOut)
-          .call(zoomBehaviorRef.current.transform, transform);
+          .call(zoomBehaviorRef.current.transform, transform1);
+
+        // Step 2: After physics stabilizes (1000ms), zoom to Level 3 with focused node centered
+        setTimeout(() => {
+          if (!zoomBehaviorRef.current || !zoomSelectionRef.current || !simulationRef.current) return;
+
+          const lastFocusedNode = simulationRef.current.nodes().find(n => n.id === savedPrevFocusNodeId);
+
+          if (lastFocusedNode && lastFocusedNode.x !== undefined && lastFocusedNode.y !== undefined) {
+            const scale = 0.8; // Zoom Level 3
+            const tx = width / 2 - lastFocusedNode.x * scale;
+            const ty = height / 2 - lastFocusedNode.y * scale;
+            const transform2 = d3.zoomIdentity.translate(tx, ty).scale(scale);
+
+            setZoomLevel(3);
+            zoomLevelRef.current = 3;
+
+            zoomSelectionRef.current.transition()
+              .duration(750)
+              .ease(d3.easeCubicOut)
+              .call(zoomBehaviorRef.current.transform, transform2);
+          }
+        }, 1000);
       }
     }, 100);
 
@@ -675,6 +662,26 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
     if (pulseIntervalRef.current) {
       clearInterval(pulseIntervalRef.current);
       pulseIntervalRef.current = null;
+    }
+
+    // Reset highlight strokes when focus ends
+    if (wasFocused && !isFocused && svgRef.current) {
+      const svg = d3.select(svgRef.current);
+      // Reset company label strokes
+      svg.selectAll(".layer-company-labels g rect")
+        .transition()
+        .duration(300)
+        .attr("stroke", "none")
+        .attr("stroke-width", 0)
+        .attr("stroke-opacity", 0);
+      // Reset circle strokes (Person, Tech, Episode nodes)
+      svg.selectAll(".layer-nodes circle")
+        .interrupt() // Stop any ongoing transitions
+        .transition()
+        .duration(300)
+        .attr("stroke", "#0f172a") // Original dark slate color
+        .attr("stroke-width", 2)
+        .attr("stroke-opacity", 1);
     }
 
     if (focusNodeId && svgRef.current) {
@@ -724,6 +731,22 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
       if (pulseIntervalRef.current) {
         clearInterval(pulseIntervalRef.current);
         pulseIntervalRef.current = null;
+
+        // Reset all strokes when cleanup runs
+        if (svgRef.current) {
+          const svg = d3.select(svgRef.current);
+          // Reset company rects
+          svg.selectAll(".layer-company-labels g rect")
+            .attr("stroke", "none")
+            .attr("stroke-width", 0)
+            .attr("stroke-opacity", 0);
+          // Reset circles to original dark slate color
+          svg.selectAll(".layer-nodes circle")
+            .interrupt() // Stop any ongoing transitions
+            .attr("stroke", "#0f172a")
+            .attr("stroke-width", 2)
+            .attr("stroke-opacity", 1);
+        }
       }
     };
   }, [focusNodeId, width, height]);
@@ -870,31 +893,28 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
     // Update Forces
     const isFocusMode = visibleNodes.length < 50;
 
+    // Detect transition from focus mode to normal mode
+    const wasJustInFocusMode = prevFocusNodeIdRef.current && !focusNodeId;
+
     simulation
       .force("link", d3.forceLink<NodeData, LinkData>(visibleLinks)
-        .id((d: any) => d.id)
-        .distance((d: any) => {
-          // PLANETARY PHYSICS:
-          // Created/Part_Of = Satellites (Close)
-          // Based_On/Triggered = Inter-planetary (Far)
-          let dist = 150;
-          if (d.type === LinkType.CREATED) dist = 60;      // Very close (Gravity)
-          else if (d.type === LinkType.PART_OF) dist = 80;  // Close
-          else if (d.type === LinkType.BASED_ON) dist = 250; // Far
-          else if (d.type === LinkType.TRIGGERED) dist = 350;  // Very Far
-
-          // In Focus Mode, keep distance normal or slightly larger to prevent overlap
-          return isFocusMode ? dist * 1.2 : dist;
+        .id(d => d.id)
+        .distance(d => {
+          if (isFocusMode) {
+            // Shorter distances in Focus Mode for tighter grouping
+            if (d.type === LinkType.PART_OF) return 30;
+            return 80;
+          }
+          // Full graph: more spread
+          if (d.type === LinkType.PART_OF) return 60;
+          return 180;
         })
-        .strength((d: any) => {
-          if (d.type === LinkType.CREATED) return 2.0;      // Strongest pull
-          if (d.type === LinkType.PART_OF) return 1.5;  // Strong pull
-          if (d.type === LinkType.BASED_ON) return 0.2; // Weak pull
-          if (d.type === LinkType.TRIGGERED) return 0.1;  // Very weak pull
-          return 0.5;
+        .strength(d => {
+          if (isFocusMode) return d.strength * 0.6;
+          return d.strength * 1.5;
         })
       )
-      .force("charge", d3.forceManyBody()
+      .force("charge", d3.forceManyBody<NodeData>()
         .strength((d: any) => {
           // Dynamic Repulsion based on Node Count
           if (isFocusMode) {
@@ -925,12 +945,20 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
       // Custom forces
       .force("company-separation", forceCompanySeparation(isFocusMode ? 0.1 : 1.0)) // Less separation in focus mode
       .force("weighted-gravity", forceWeightedGravity(visibleLinks, 0.3)) // Optional: keep or tune
-      .velocityDecay(isFocusMode ? 0.45 : 0.6); // Moderate friction to prevent excessive bouncing
+      .velocityDecay(wasJustInFocusMode ? 0.7 : (isFocusMode ? 0.45 : 0.6)); // High friction on focus exit
 
-    simulation
-      .alpha(isFocusMode ? 0.8 : 0.3)
-      .alphaDecay(isFocusMode ? 0.05 : 0.0228) // Faster decay in Focus Mode to settle quickly
-      .restart();
+    // Smooth Focus Exit: Use very low energy to minimize jitter
+    if (wasJustInFocusMode) {
+      simulation
+        .alpha(0.05) // Very low energy - minimal movement
+        .alphaDecay(0.1) // Fast decay - quick settle
+        .restart();
+    } else {
+      simulation
+        .alpha(isFocusMode ? 0.8 : 0.3)
+        .alphaDecay(isFocusMode ? 0.05 : 0.0228) // Faster decay in Focus Mode to settle quickly
+        .restart();
+    }
 
     const t = svg.transition().duration(300);
 
@@ -1244,7 +1272,7 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
             <input
               type="text"
               className="block w-full pl-10 pr-3 py-2 border border-slate-600 rounded-lg leading-5 bg-slate-900/90 text-slate-300 placeholder-slate-500 focus:outline-none focus:bg-slate-900 focus:border-primary focus:ring-1 focus:ring-primary sm:text-sm backdrop-blur-md shadow-xl transition-all"
-              placeholder="e.g. Apple, Google"
+              placeholder="Find & Focus on a Topic..."
               value={searchTerm}
               onChange={handleSearchChange}
               onKeyDown={handleKeyDown}
@@ -1359,7 +1387,7 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
         </button>
       </div>
 
-      <div className="absolute bottom-20 right-4 z-10 flex md:hidden flex-col items-center gap-2 bg-surface/90 backdrop-blur rounded-lg border border-slate-600 shadow-lg p-2">
+      <div className="absolute bottom-16 right-4 z-10 flex md:hidden flex-col items-center gap-2 bg-surface/90 backdrop-blur rounded-lg border border-slate-600 shadow-lg p-2">
         <button onClick={() => zoomToLevel(Math.min(zoomLevel + 1, 5))} className="w-8 h-8 flex items-center justify-center text-slate-300 hover:text-white bg-slate-800 rounded hover:bg-slate-700 transition-colors">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
         </button>

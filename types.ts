@@ -10,7 +10,7 @@ export enum LinkType {
   CREATED = 'CREATED',       // (Was MAKER) - Creation, Launch, Founding
   BASED_ON = 'BASED_ON',     // (Was DEPENDENCY) - Usage, Infrastructure, Foundation
   PART_OF = 'PART_OF',       // (Was BELONGING) - Membership, Ownership, Category
-  TRIGGERED = 'TRIGGERED',   // (Was INFLUENCE) - Investment, Cause/Effect, Inspiration
+  INFLUENCED = 'INFLUENCED', // (Was TRIGGERED) - Investment, Cause/Effect, Inspiration
 }
 
 export enum LinkDirection {

@@ -6,11 +6,12 @@ interface ListViewProps {
   data: GraphData;
   onNodeClick: (node: NodeData) => void;
   scrollToNodeId?: string | null;
+  focusNodeId?: string | null;
 }
 
 type SortOption = 'CATEGORY' | 'ALPHABETICAL' | 'IMPORTANCE';
 
-const ListView: React.FC<ListViewProps> = ({ data, onNodeClick, scrollToNodeId }) => {
+const ListView: React.FC<ListViewProps> = ({ data, onNodeClick, scrollToNodeId, focusNodeId }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('CATEGORY');
 
@@ -93,46 +94,48 @@ const ListView: React.FC<ListViewProps> = ({ data, onNodeClick, scrollToNodeId }
 
   return (
     <div className="w-full h-full flex flex-col bg-background">
-      {/* Search & Sort Bar */}
-      <div className="p-4 border-b border-slate-700 bg-surface/50 backdrop-blur sticky top-0 z-20">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-4">
+      {/* Search & Sort Bar - hidden in Focus mode */}
+      {!focusNodeId && (
+        <div className="p-4 border-b border-slate-700 bg-surface/50 backdrop-blur sticky top-0 z-20">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-4">
 
-          {/* Search Input */}
-          <div className="relative flex-1">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg className="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
+            {/* Search Input */}
+            <div className="relative flex-1">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg className="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              <input
+                type="text"
+                className="block w-full pl-10 pr-3 py-2 border border-slate-600 rounded-lg leading-5 bg-slate-900 text-slate-100 placeholder-slate-400 focus:outline-none focus:bg-slate-800 focus:border-primary focus:ring-1 focus:ring-primary sm:text-sm transition-colors"
+                placeholder="Filter cards by name, category, or keyword..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
-            <input
-              type="text"
-              className="block w-full pl-10 pr-3 py-2 border border-slate-600 rounded-lg leading-5 bg-slate-900 text-slate-100 placeholder-slate-400 focus:outline-none focus:bg-slate-800 focus:border-primary focus:ring-1 focus:ring-primary sm:text-sm transition-colors"
-              placeholder="Search keywords..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
 
-          {/* Sort Selector */}
-          <div className="relative w-full md:w-48">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg className="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path></svg>
-            </div>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as SortOption)}
-              className="block w-full pl-10 pr-8 py-2 border border-slate-600 rounded-lg bg-slate-900 text-slate-200 focus:outline-none focus:border-primary text-sm appearance-none cursor-pointer"
-            >
-              <option value="CATEGORY">Category</option>
-              <option value="ALPHABETICAL">Name (A-Z)</option>
-              <option value="IMPORTANCE">Impact</option>
-            </select>
-            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-400">
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+            {/* Sort Selector */}
+            <div className="relative w-full md:w-48">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg className="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path></svg>
+              </div>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as SortOption)}
+                className="block w-full pl-10 pr-8 py-2 border border-slate-600 rounded-lg bg-slate-900 text-slate-200 focus:outline-none focus:border-primary text-sm appearance-none cursor-pointer"
+              >
+                <option value="CATEGORY">Category</option>
+                <option value="ALPHABETICAL">Name (A-Z)</option>
+                <option value="IMPORTANCE">Impact</option>
+              </select>
+              <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-400">
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Grid Content */}
       <div className="flex-1 overflow-y-auto p-4 sm:p-6 custom-scrollbar">

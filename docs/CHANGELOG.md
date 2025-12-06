@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0] - 2025-12-06
+
+### Changed
+- **Map Search**: Search now enters Focus Mode directly (double-click behavior)
+- **Focus Exit**: Now zooms to Level 1 first, then after stabilization zooms to Level 3 centered on the focused node
+- **Focus Exit**: Smooth physics with reduced jitter (low alpha, high decay)
+
+### Fixed
+- **Focus Highlight**: Yellow stroke now properly removed from all node types on exit
+
 ## [1.2.0] - 2025-12-05
 
 ### Added

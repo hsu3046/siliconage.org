@@ -91,8 +91,8 @@ export const calculateSiliconRank = (nodes: NodeData[], links: LinkData[]) => {
         nextScores.set(sId, (nextScores.get(sId) || 0) + (tScore * 0.7 * multiplier));
       }
 
-      // D. TRIGGERED: Cause(S) -> Effect(T) (Reverse Flow)
-      else if (link.type === LinkType.TRIGGERED) {
+      // D. INFLUENCED: Cause(S) -> Effect(T) (Reverse Flow)
+      else if (link.type === LinkType.INFLUENCED) {
         const multiplier = ROLE_MULTIPLIERS[sNode.impactRole] || 1.0;
         nextScores.set(sId, (nextScores.get(sId) || 0) + (tScore * 0.3 * multiplier));
       }

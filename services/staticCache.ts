@@ -4615,5 +4615,39 @@ export const STATIC_CACHE: Record<string, AIResponse> = {
       "The library's 'Model Hub' features a vast collection of pre-trained models, allowing users to easily fine-tune models for specific tasks with minimal coding.",
       "The Transformers library has expanded beyond NLP to encompass computer vision and audio processing, demonstrating the versatility of transformer architectures and the library's adaptable design."
     ]
+  },
+  "toshiba": {
+    "summary": "Toshiba is a Japanese multinational conglomerate founded in 1939, renowned for its contributions to electronics and semiconductor technology. The company is credited with inventing NAND flash memory in 1987, a technology that revolutionized data storage.",
+    "significance": "Toshiba's invention of NAND flash memory in 1987 by Fujio Masuoka was a watershed moment in the Silicon Age. This technology became the foundation for modern solid-state drives (SSDs), USB flash drives, and smartphone storage, replacing mechanical hard drives and enabling the mobile computing revolution. Without NAND flash, the smartphone era and cloud computing infrastructure as we know it would not exist.",
+    "keyFacts": [
+      "Toshiba engineer Fujio Masuoka invented NAND flash memory in 1987, fundamentally changing data storage technology.",
+      "In 1985, Toshiba released the T1100, widely regarded as the first commercially successful laptop computer.",
+      "Toshiba was a founding member of the DVD Forum and helped establish the DVD standard in 1995.",
+      "The company has been a major player in nuclear power technology and medical imaging equipment.",
+      "Toshiba faced a major accounting scandal in 2015, leading to significant corporate restructuring and the sale of its memory chip business to a consortium led by Bain Capital in 2018."
+    ]
+  },
+  "openai_coup": {
+    "summary": "The OpenAI Board Coup refers to the dramatic events of November 2023 when CEO Sam Altman was unexpectedly fired by the board, only to be reinstated within days after massive employee backlash and intervention from Microsoft.",
+    "significance": "This crisis exposed fundamental tensions in AI governance between commercial interests and safety concerns. It demonstrated the immense power concentration in AI leadership and Microsoft's de facto control over OpenAI despite its nonprofit structure. The incident accelerated discussions about AI safety, corporate governance in AI labs, and the challenges of balancing rapid commercial deployment with responsible development.",
+    "keyFacts": [
+      "On November 17, 2023, OpenAI's board fired Sam Altman, citing a loss of confidence in his leadership.",
+      "Over 700 of OpenAI's 770 employees signed a letter threatening to resign if Altman was not reinstated.",
+      "Microsoft CEO Satya Nadella offered to hire Altman and any OpenAI employees who wanted to join.",
+      "Altman was reinstated as CEO on November 22, 2023, just five days after his firing.",
+      "The board was restructured, with new members including Bret Taylor as chair, and most original board members departing."
+    ]
+  },
+  "a16z": {
+    "summary": "Andreessen Horowitz (a16z) is a venture capital firm founded in 2009 by Marc Andreessen and Ben Horowitz. The firm is known for its thesis that software is eating the world and has invested in transformative tech companies.",
+    "significance": "A16z redefined venture capital by combining traditional investing with extensive operational support and media presence. Their investments in companies like Facebook, Twitter, Airbnb, and GitHub shaped the modern tech landscape. The firm's aggressive approach to crypto and Web3 investments, along with their influential blog and podcast, made them a central force in tech discourse and startup strategy during the 2010s and beyond.",
+    "keyFacts": [
+      "Founded in 2009 with an initial fund of $300 million, a16z has grown to manage approximately $35 billion in assets.",
+      "The firm made early investments in Facebook, Twitter, Airbnb, GitHub, Slack, and Coinbase, all of which became industry-defining companies.",
+      "Marc Andreessen coined the phrase 'Software is eating the world' in a 2011 Wall Street Journal essay that became a tech industry manifesto.",
+      "A16z pioneered the 'platform' model of VC, offering portfolio companies extensive operational support including recruiting, marketing, and executive coaching.",
+      "The firm became one of the largest crypto investors, with dedicated crypto funds totaling over $7 billion and investments in Coinbase, Solana, and OpenSea."
+    ]
   }
 };
+
