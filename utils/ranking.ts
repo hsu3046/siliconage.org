@@ -16,6 +16,8 @@ const ROLE_MULTIPLIERS: Record<string, number> = {
   [PersonRole.THEORIST]: 1.8,  // Buff inventors (Turing, Hinton, LeCun)
   [PersonRole.BUILDER]: 1.2,   // Buff engineers
   [PersonRole.VISIONARY]: 0.85, // Nerf founders (to prevent Larry Page #1)
+  [PersonRole.LEADER]: 1.0,    // Corporate Leaders/Executives
+  [PersonRole.INVESTOR]: 0.6,  // VCs/Investors
 
   // Tech Roles - Prioritize foundational over products
   [TechRole.PRODUCT]: 0.9,     // Services/products get less credit

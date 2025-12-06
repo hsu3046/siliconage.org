@@ -191,13 +191,15 @@ const TimelineView: React.FC<TimelineViewProps> = ({ data, onNodeClick, scrollTo
 
   // Get person context based on role
   const getPersonContext = (node: NodeData) => {
-    const role = node.role?.toLowerCase() || '';
-    if (role.includes('ceo')) return 'became CEO';
-    if (role.includes('founder') || role.includes('co-founder')) return 'founded';
-    if (role.includes('creator') || role.includes('inventor')) return 'invented';
-    if (role.includes('theorist') || role.includes('researcher')) return 'contributed';
-    if (role.includes('architect') || role.includes('designer')) return 'designed';
-    return 'joined';
+    const role = node.primaryRole?.toLowerCase() || '';
+    if (role.includes('ceo') || role.includes('leader')) return 'served as Executive at';
+    if (role.includes('founder') || role.includes('co-founder')) return 'Founded';
+    if (role.includes('creator') || role.includes('engineer')) return 'Created';
+    if (role.includes('theorist') || role.includes('researcher') || role.includes('scientist')) return 'Contributed';
+    if (role.includes('architect') || role.includes('designer')) return 'Designed';
+    if (role.includes('investor')) return 'Invested';
+    if (role.includes('inventor')) return 'Invented';
+    return '';
   };
 
   // Render Person Node - dot centered vertically relative to text block

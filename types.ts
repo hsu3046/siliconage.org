@@ -31,6 +31,8 @@ export enum PersonRole {
   VISIONARY = 'VISIONARY', // Founders/CEOs (Jobs, Gates)
   THEORIST = 'THEORIST',   // Inventors/Academics (Turing, Hinton) - Score boosted
   BUILDER = 'BUILDER',     // Engineers/Architects (Wozniak, Ritchie)
+  LEADER = 'LEADER',       // Corporate Leaders/Executives
+  INVESTOR = 'INVESTOR',   // VCs/Investors
 }
 
 export enum TechRole {
@@ -105,7 +107,6 @@ export interface NodeData {
   techCategoryL1?: TechCategoryL1;
   techCategoryL2?: TechCategoryL2;
 
-  role?: string; // For Person (e.g. "Founder", "CEO")
   externalLinks?: ExternalLink[];
 
   // === NEW: Person Specific ===

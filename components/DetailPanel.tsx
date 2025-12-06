@@ -461,7 +461,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
         // Roles + Birth/Death years - VERTICAL LAYOUT
         const roles = [node.primaryRole, node.secondaryRole].filter(Boolean);
         const lifespan = node.birthYear
-          ? `${node.birthYear}–${node.deathYear || 'Present'}`
+          ? `${node.birthYear} – ${node.deathYear || 'Present'}`
           : null;
 
         if (roles.length > 0 || lifespan) {
@@ -555,14 +555,14 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
                 </span>
               )}
 
-              {node.role && <span className="text-slate-500 text-xs px-2 py-0.5 bg-slate-800 rounded">{node.role}</span>}
+              {node.primaryRole && <span className="text-slate-500 text-xs px-2 py-0.5 bg-slate-800 rounded">{node.primaryRole}</span>}
             </div>
           )}
 
           {/* Role badge (for Person, if no primaryRole) */}
-          {node.category === Category.PERSON && !node.primaryRole && node.role && (
+          {node.category === Category.PERSON && !node.primaryRole && node.primaryRole && (
             <div className="flex items-center gap-2 mt-2">
-              <span className="text-slate-500 text-xs px-2 py-0.5 bg-slate-800 rounded">{node.role}</span>
+              <span className="text-slate-500 text-xs px-2 py-0.5 bg-slate-800 rounded">{node.primaryRole}</span>
             </div>
           )}
 

@@ -22,7 +22,7 @@ const getSubLabel = (node: NodeData) => {
     return `${node.year} - Current`;
   }
   if (node.category === Category.PERSON) {
-    return node.role || null;
+    return node.primaryRole || null;
   }
   if (node.category === Category.TECHNOLOGY || node.category === Category.EPISODE) {
     return `${node.year}`;

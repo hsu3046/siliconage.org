@@ -9,42 +9,37 @@ interface ListViewProps {
   focusNodeId?: string | null;
 }
 
-type SortOption = 'CATEGORY' | 'ALPHABETICAL' | 'IMPORTANCE';
+type SortOption = 'IMPORTANCE' | 'ALPHABETICAL' | 'YEAR_OLDEST' | 'YEAR_NEWEST';
 
 const ListView: React.FC<ListViewProps> = ({ data, onNodeClick, scrollToNodeId, focusNodeId }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState<SortOption>('CATEGORY');
+  const [sortBy, setSortBy] = useState<SortOption>('IMPORTANCE');
 
   // Sort nodes based on selection
   const sortedNodes = useMemo(() => {
     return [...data.nodes].sort((a, b) => {
-      // CATEGORY: Category Group > Importance Score > Year
-      if (sortBy === 'CATEGORY') {
-        const catPriority = {
-          [Category.COMPANY]: 0,
-          [Category.PERSON]: 1,
-          [Category.TECHNOLOGY]: 2,
-          [Category.EPISODE]: 3,
-        };
-        if (catPriority[a.category] !== catPriority[b.category]) {
-          return catPriority[a.category] - catPriority[b.category];
-        }
-        if ((a._score || 0) !== (b._score || 0)) {
-          return (b._score || 0) - (a._score || 0);
-        }
-        return b.year - a.year;
-      }
-
-      // ALPHABETICAL (A-Z)
-      if (sortBy === 'ALPHABETICAL') {
-        return a.label.localeCompare(b.label);
-      }
-
       // IMPORTANCE (Highest Score First)
       if (sortBy === 'IMPORTANCE') {
         const scoreA = a._score || 0;
         const scoreB = b._score || 0;
         if (scoreA !== scoreB) return scoreB - scoreA;
+        return a.label.localeCompare(b.label);
+      }
+
+      // NAME (A-Z)
+      if (sortBy === 'ALPHABETICAL') {
+        return a.label.localeCompare(b.label);
+      }
+
+      // YEAR (Oldest First)
+      if (sortBy === 'YEAR_OLDEST') {
+        if (a.year !== b.year) return a.year - b.year;
+        return a.label.localeCompare(b.label);
+      }
+
+      // YEAR (Newest First)
+      if (sortBy === 'YEAR_NEWEST') {
+        if (a.year !== b.year) return b.year - a.year;
         return a.label.localeCompare(b.label);
       }
 
@@ -59,7 +54,7 @@ const ListView: React.FC<ListViewProps> = ({ data, onNodeClick, scrollToNodeId, 
     return sortedNodes.filter(node =>
       node.label.toLowerCase().includes(lowerQuery) ||
       node.description.toLowerCase().includes(lowerQuery) ||
-      (node.role && node.role.toLowerCase().includes(lowerQuery)) ||
+      (node.primaryRole && node.primaryRole.toLowerCase().includes(lowerQuery)) ||
       (node.impactRole && node.impactRole.toLowerCase().includes(lowerQuery)) ||
       (node.techCategoryL1 && node.techCategoryL1.toLowerCase().includes(lowerQuery)) ||
       (node.techCategoryL2 && node.techCategoryL2.toLowerCase().includes(lowerQuery))
@@ -78,7 +73,7 @@ const ListView: React.FC<ListViewProps> = ({ data, onNodeClick, scrollToNodeId, 
 
   const getSubLabel = (node: NodeData) => {
     if (node.category === Category.COMPANY) return `${node.year} - Present`;
-    if (node.category === Category.PERSON) return node.role;
+    if (node.category === Category.PERSON) return node.primaryRole;
     return `${node.year}`;
   };
 
@@ -125,9 +120,11 @@ const ListView: React.FC<ListViewProps> = ({ data, onNodeClick, scrollToNodeId, 
                 onChange={(e) => setSortBy(e.target.value as SortOption)}
                 className="block w-full pl-10 pr-8 py-2 border border-slate-600 rounded-lg bg-slate-900 text-slate-200 focus:outline-none focus:border-primary text-sm appearance-none cursor-pointer"
               >
-                <option value="CATEGORY">Category</option>
+
+                <option value="IMPORTANCE">Highest Impact</option>
                 <option value="ALPHABETICAL">Name (A-Z)</option>
-                <option value="IMPORTANCE">Impact</option>
+                <option value="YEAR_OLDEST">Year: Oldest First</option>
+                <option value="YEAR_NEWEST">Year: Newest First</option>
               </select>
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-400">
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -165,26 +162,6 @@ const ListView: React.FC<ListViewProps> = ({ data, onNodeClick, scrollToNodeId, 
                 <div className="h-1.5 w-full" style={{ backgroundColor: CATEGORY_COLORS[node.category] }}></div>
 
                 <div className="p-5 flex flex-col flex-1">
-                  <div className="flex justify-between items-start mb-2">
-                    <span
-                      className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-900 border border-slate-700"
-                      style={{ color: CATEGORY_COLORS[node.category] }}
-                    >
-                      {node.category}
-                    </span>
-
-                    {/* Exact Score Display */}
-                    <div
-                      className="flex items-center gap-1 bg-slate-800 px-2 py-0.5 rounded border border-slate-600"
-                      title="Impact Factor"
-                    >
-                      <svg className="w-3 h-3 text-yellow-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                      <span className="text-xs font-mono font-bold text-slate-300">
-                        {(node._score || 0).toFixed(1)}
-                      </span>
-                    </div>
-                  </div>
-
                   {/* Company Category Badge */}
                   {node.category === Category.COMPANY && node.companyCategories?.[0] && (
                     <div className="flex flex-wrap gap-1 mb-2">
@@ -240,6 +217,19 @@ const ListView: React.FC<ListViewProps> = ({ data, onNodeClick, scrollToNodeId, 
                       )}
                     </div>
                   )}
+
+                  {/* Impact Score - Bottom Right */}
+                  <div className="flex justify-end mt-3">
+                    <div
+                      className="flex items-center gap-1 bg-slate-800 px-2 py-0.5 rounded border border-slate-600"
+                      title="Impact Factor"
+                    >
+                      <svg className="w-3 h-3 text-yellow-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                      <span className="text-xs font-mono font-bold text-slate-300">
+                        {Math.round(node._score || 0)}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             );
