@@ -263,6 +263,15 @@ const App: React.FC = () => {
     // Do NOT set focusNodeId or selectedNode
   };
 
+  // For ListView hashtags: Open Detail Panel WITHOUT scrolling/jumping
+  const handleTagClick = (node: NodeData) => {
+    setSelectedNode(node);
+    // explicitly DO NOT set scrollToNodeId or focusNodeId
+    if (viewMode === 'MAP') {
+      // Optional: specific behavior for MAP mode if needed, but per request "no jump"
+    }
+  };
+
   const filteredData: GraphData = useMemo(() => {
     let activeNodes = INITIAL_DATA.nodes.map(node => ({ ...node }));
     let activeLinks = INITIAL_DATA.links.map(link => ({ ...link }));
@@ -653,7 +662,9 @@ const App: React.FC = () => {
         {viewMode === 'CARD' && (
           <ListView
             data={filteredData}
+            fullData={INITIAL_DATA}
             onNodeClick={handleNodeSelect}
+            onTagClick={handleTagClick}
             scrollToNodeId={scrollToNodeId}
             focusNodeId={focusNodeId}
           />
