@@ -10,6 +10,7 @@ const TECH_HIERARCHY: Record<TechCategoryL1, TechCategoryL2[]> = {
     'Network & Connectivity': ['Telecommunications', 'Network Architecture'],
     'Digital Services & Platforms': ['Search & Information', 'Social & Media', 'Digital Platforms'],
     'AI & Physical Systems': ['Artificial Intelligence', 'Autonomous Mobility', 'Robotics', 'Fintech & Crypto', 'Spatial Computing'],
+    'Fundamental Concepts': ['Theories & Architectures', 'Laws & Principles', 'Standards & Protocols'],
 };
 
 const L1_SHORT_NAMES: Record<TechCategoryL1, string> = {
@@ -18,6 +19,7 @@ const L1_SHORT_NAMES: Record<TechCategoryL1, string> = {
     'Network & Connectivity': 'Network',
     'Digital Services & Platforms': 'Platforms',
     'AI & Physical Systems': 'AI & Robotics',
+    'Fundamental Concepts': 'Concepts',
 };
 
 interface TechCategoryFilterProps {

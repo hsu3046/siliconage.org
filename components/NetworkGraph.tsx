@@ -318,7 +318,7 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
     category: Category;
     description: string;
     score: number;
-    companyCategories?: string[];
+    companyRole?: string;
     techCategoryL1?: string;
     techCategoryL2?: string;
     hashtags?: { id: string, label: string }[];
@@ -1068,7 +1068,7 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
                 category: d.category,
                 description: d.description,
                 score: d._score || 0,
-                companyCategories: d.companyCategories,
+                companyRole: d.impactRole as string | undefined,
                 techCategoryL1: d.techCategoryL1,
                 techCategoryL2: d.techCategoryL2,
                 hashtags: hashtags
@@ -1169,7 +1169,7 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
               category: d.category,
               description: d.description,
               score: d._score || 0,
-              companyCategories: d.companyCategories,
+              companyRole: d.impactRole as string | undefined,
               techCategoryL1: d.techCategoryL1,
               techCategoryL2: d.techCategoryL2,
               hashtags: hashtags
@@ -1326,13 +1326,13 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ data, onNodeClick, onNodeFo
           <span className="text-sm font-bold text-white leading-tight">{tooltip.label}</span>
 
           {/* Categories */}
-          {(tooltip.companyCategories || tooltip.techCategoryL1) && (
+          {(tooltip.companyRole || tooltip.techCategoryL1) && (
             <div className="flex flex-wrap gap-1 mt-1 mb-1">
-              {tooltip.companyCategories?.map(cat => (
-                <span key={cat} className="text-[9px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-                  {cat}
+              {tooltip.companyRole && (
+                <span className="text-[9px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                  {tooltip.companyRole}
                 </span>
-              ))}
+              )}
               {tooltip.techCategoryL1 && (
                 <span className="text-[9px] px-1.5 py-0.5 rounded bg-blue-900/40 text-blue-300 border border-blue-800/50">
                   {tooltip.techCategoryL1}

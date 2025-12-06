@@ -236,11 +236,11 @@ createPerson('faggin', 'Federico Faggin', 1971, 2, PersonRole.BUILDER, 'Lead Des
 createPerson('gelsinger', 'Pat Gelsinger', 2021, 1, PersonRole.VISIONARY, 'CEO', 'Returned to Intel as CEO to restore its manufacturing leadership.', { primaryRole: 'CEO of Intel', birthYear: 1961 });
 
 createTech('microprocessor', 'Microprocessor (4004)', 1971, 1, TechRole.CORE, 'The first general-purpose CPU on a single chip.', 'Hardware & Infrastructure', 'Processors & Compute');
-createTech('x86', 'x86 Architecture', 1978, 1, TechRole.CORE, 'The instruction set architecture that dominated personal computing for decades.', 'Hardware & Infrastructure', 'Processors & Compute');
+createTech('x86', 'x86 Architecture', 1978, 1, TechRole.CORE, 'The instruction set architecture that dominated personal computing for decades.', 'Fundamental Concepts', 'Theories & Architectures');
 createTech('pentium', 'Pentium', 1993, 2, TechRole.PRODUCT, 'Intel\'s iconic processor brand that became synonymous with PC performance.', 'Hardware & Infrastructure', 'Processors & Compute');
 createTech('core_processor', 'Intel Core', 2006, 2, TechRole.PRODUCT, 'Multi-core processor architecture that redefined PC performance.', 'Hardware & Infrastructure', 'Processors & Compute');
 
-createTech('moores_law', 'Moore\'s Law', 1965, 1, TechRole.STANDARD, 'Observation that transistor count doubles every two years - guided semiconductor industry for 50+ years.', 'Hardware & Infrastructure', 'Processors & Compute');
+createTech('moores_law', 'Moore\'s Law', 1965, 1, TechRole.STANDARD, 'Observation that transistor count doubles every two years - guided semiconductor industry for 50+ years.', 'Fundamental Concepts', 'Laws & Principles');
 
 createEpisode('intel_inside', 'Intel Inside Campaign', 1991, 2, EpisodeRole.MILESTONE, 'Revolutionary marketing campaign that made a chip maker a consumer brand.', { eventType: 'Marketing', impactScale: 'Brand Revolution' });
 createEpisode('pentium_bug', 'Pentium FDIV Bug', 1994, 3, EpisodeRole.CRISIS, 'Floating-point division bug in Pentium processor. Intel initially denied, then recalled $475M worth of chips.', { eventType: 'Crisis', impactScale: '$475M Recall' });
@@ -361,10 +361,10 @@ createCompany('adobe', 'Adobe', 1982, 2, CompanyRole.PLATFORM, 'Creative softwar
 createPerson('john_warnock', 'John Warnock', 1982, 2, PersonRole.VISIONARY, 'Co-Founder', 'Inventor of PostScript and PDF.', { primaryRole: 'Co-founder of Adobe', birthYear: 1940, deathYear: 2023 });
 createPerson('charles_geschke', 'Charles Geschke', 1982, 2, PersonRole.VISIONARY, 'Co-Founder', 'Desktop publishing pioneer.', { primaryRole: 'Co-founder of Adobe', birthYear: 1939, deathYear: 2021 });
 
-createTech('postscript', 'PostScript', 1982, 2, TechRole.STANDARD, 'Page description language that enabled desktop publishing.', 'System Software', 'Development & Languages');
+createTech('postscript', 'PostScript', 1982, 2, TechRole.STANDARD, 'Page description language that enabled desktop publishing.', 'Fundamental Concepts', 'Standards & Protocols');
 createTech('illustrator', 'Illustrator', 1987, 2, TechRole.PRODUCT, 'Vector graphics standard.', 'Digital Services & Platforms', 'Digital Platforms');
 createTech('photoshop', 'Photoshop', 1990, 2, TechRole.PRODUCT, 'Digital imaging standard.', 'Digital Services & Platforms', 'Digital Platforms');
-createTech('pdf', 'PDF', 1993, 2, TechRole.STANDARD, 'Portable Document Format.', 'Digital Services & Platforms', 'Digital Platforms');
+createTech('pdf', 'PDF', 1993, 2, TechRole.STANDARD, 'Portable Document Format.', 'Fundamental Concepts', 'Standards & Protocols');
 
 createEpisode('dtp_revolution', 'Desktop Publishing Revolution', 1985, 2, EpisodeRole.MILESTONE, 'Convergence of Mac, LaserWriter, and PostScript revolutionized publishing.', { eventType: 'Revolution', impactScale: 'Industry Disruption' });
 
@@ -522,7 +522,7 @@ createCompany('arm', 'ARM', 1990, 2, CompanyRole.INFRA, 'The architecture that p
 createPerson('sophie_wilson', 'Sophie Wilson', 1983, 2, PersonRole.THEORIST, 'Architect', 'Designed ARM instruction set at Acorn Computers.', { primaryRole: 'Designer of ARM ISA', birthYear: 1957 });
 createPerson('steve_furber', 'Steve Furber', 1983, 2, PersonRole.THEORIST, 'Co-Designer', 'Co-designed the first ARM processor with Sophie Wilson.', { primaryRole: 'Co-designer of ARM', birthYear: 1953 });
 
-createTech('arm_arch', 'ARM Architecture', 1990, 2, TechRole.STANDARD, 'Power-efficient RISC instruction set that dominates mobile.', 'Hardware & Infrastructure', 'Processors & Compute');
+createTech('arm_arch', 'ARM Architecture', 1990, 2, TechRole.STANDARD, 'Power-efficient RISC instruction set that dominates mobile.', 'Fundamental Concepts', 'Theories & Architectures');
 createTech('arm_cortex', 'ARM Cortex', 2004, 2, TechRole.PRODUCT, 'Family of ARM processor cores for different performance/power targets.', 'Hardware & Infrastructure', 'Processors & Compute');
 createTech('arm_neoverse', 'ARM Neoverse', 2018, 2, TechRole.PRODUCT, 'ARM server processors challenging x86 in data centers.', 'Hardware & Infrastructure', 'Processors & Compute');
 
@@ -613,7 +613,7 @@ linkInfluenced('vision_fund', 'openai', 0.3); // Vision Fund invested in many AI
 createCompany('ntt', 'NTT', 1952, 2, CompanyRole.PLATFORM, 'Nippon Telegraph and Telephone - Japan\'s telecom giant and 5G pioneer.', [CompanyCategory.TELECOM], { marketCap: { current: '$80B', peak: '$330B' } });
 createPerson('shigeki_goto', 'Shigeki Goto', 1990, 3, PersonRole.THEORIST, 'Researcher', 'NTT researcher who contributed to internet protocols and networking.', { primaryRole: 'NTT Researcher' });
 createTech('ntt_docomo', 'NTT DoCoMo i-mode', 1999, 2, TechRole.PRODUCT, 'World\'s first major mobile internet platform - predated iPhone by 8 years.', 'Digital Services & Platforms', 'Social & Media');
-createTech('emoji', 'Emoji', 1999, 2, TechRole.STANDARD, 'Picture characters invented by Shigetaka Kurita at NTT DoCoMo.', 'Digital Services & Platforms', 'Social & Media');
+createTech('emoji', 'Emoji', 1999, 2, TechRole.STANDARD, 'Picture characters invented by Shigetaka Kurita at NTT DoCoMo.', 'Fundamental Concepts', 'Standards & Protocols');
 createPerson('kurita', 'Shigetaka Kurita', 1999, 2, PersonRole.VISIONARY, 'Designer', 'Inventor of the Emoji.', { primaryRole: 'Creator of Emoji', birthYear: 1972 });
 createTech('optical_fiber', 'Optical Fiber Network', 1980, 2, TechRole.CORE, 'High-speed data transmission through light - foundation of modern internet.', 'Network & Connectivity', 'Telecommunications');
 
@@ -1017,7 +1017,7 @@ createPerson('ren_zhengfei', 'Ren Zhengfei', 1987, 2, PersonRole.VISIONARY, 'Fou
 
 createTech('5g_infra', '5G Infrastructure', 2019, 1, TechRole.CORE, 'Next-generation cellular network equipment dominating global market.', 'Network & Connectivity', 'Telecommunications');
 createTech('harmony_os', 'HarmonyOS', 2019, 2, TechRole.PLATFORM, 'Operating system developed to replace Android after US sanctions.', 'System Software', 'Operating Systems (OS)');
-createTech('kirin_chip', 'Kirin Chip', 2014, 2, TechRole.PRODUCT, 'High-performance mobile processors designed by HiSilicon (Huawei).');
+createTech('kirin_chip', 'Kirin Chip', 2014, 2, TechRole.PRODUCT, 'High-performance mobile processors designed by HiSilicon (Huawei).', 'Hardware & Infrastructure', 'Processors & Compute');
 
 createEpisode('us_sanctions', 'US Entity List', 2019, 2, EpisodeRole.CRISIS, 'US bans American companies from selling tech to Huawei, crippling its smartphone business.', { eventType: 'Sanctions', impactScale: 'Trade War' });
 createEpisode('meng_wanzhou', 'Meng Wanzhou Arrest', 2018, 2, EpisodeRole.CRISIS, 'Huawei CFO arrested in Canada on US fraud charges, sparking diplomatic crisis.', { eventType: 'Arrest', impactScale: 'Diplomatic Crisis' });
@@ -1061,8 +1061,8 @@ linkPartOf('faa_drone_rules', 'dji');
 // VIDEO COMMUNICATION & REMOTE WORK
 // ==========================================
 
-createTech('voip', 'VoIP', 1995, 2, TechRole.STANDARD, 'Voice over IP protocol.', 'Network & Connectivity', 'Telecommunications');
-createTech('webrtc', 'WebRTC', 2011, 2, TechRole.STANDARD, 'Real-time communication standard.', 'Network & Connectivity', 'Network Architecture');
+createTech('voip', 'VoIP', 1995, 2, TechRole.STANDARD, 'Voice over IP protocol.', 'Fundamental Concepts', 'Standards & Protocols');
+createTech('webrtc', 'WebRTC', 2011, 2, TechRole.STANDARD, 'Real-time communication standard.', 'Fundamental Concepts', 'Standards & Protocols');
 
 // Skype (Microsoft Product)
 createTech('skype', 'Skype', 2003, 2, TechRole.PRODUCT, 'Pioneering video call software.', 'Digital Services & Platforms', 'Digital Platforms');
@@ -1370,20 +1370,20 @@ linkBasedOn('zoom', 'voip');
 // ==========================================
 
 // Early IBM Technologies
-createTech('punch_card', 'Punch Card', 1928, 3, TechRole.STANDARD, 'Paper cards with punched holes used for data processing.');
-createTech('ibm_system_360', 'IBM System/360', 1964, 2, TechRole.PRODUCT, 'Revolutionary mainframe family that standardized computing.');
-createTech('pos_system', 'Point of Sale System', 1973, 3, TechRole.PRODUCT, 'Automated retail checkout systems.');
-createTech('upc_barcode', 'UPC Barcode', 1974, 3, TechRole.STANDARD, 'Universal Product Code revolutionized retail.');
-createTech('dram', 'DRAM', 1968, 2, TechRole.CORE, 'Dynamic Random Access Memory - the foundation of modern computer memory.');
-createTech('risc', 'RISC Architecture', 1980, 2, TechRole.CORE, 'Reduced Instruction Set Computing - simplified CPU architecture for higher performance.');
+createTech('punch_card', 'Punch Card', 1928, 3, TechRole.STANDARD, 'Paper cards with punched holes used for data processing.', 'Fundamental Concepts', 'Standards & Protocols');
+createTech('ibm_system_360', 'IBM System/360', 1964, 2, TechRole.PRODUCT, 'Revolutionary mainframe family that standardized computing.', 'Hardware & Infrastructure', 'Processors & Compute');
+createTech('pos_system', 'Point of Sale System', 1973, 3, TechRole.PRODUCT, 'Automated retail checkout systems.', 'Hardware & Infrastructure', 'Devices & Form Factors');
+createTech('upc_barcode', 'UPC Barcode', 1974, 3, TechRole.STANDARD, 'Universal Product Code revolutionized retail.', 'Fundamental Concepts', 'Standards & Protocols');
+createTech('dram', 'DRAM', 1968, 2, TechRole.CORE, 'Dynamic Random Access Memory - the foundation of modern computer memory.', 'Hardware & Infrastructure', 'Memory & Storage');
+createTech('risc', 'RISC Architecture', 1980, 2, TechRole.CORE, 'Reduced Instruction Set Computing - simplified CPU architecture for higher performance.', 'Fundamental Concepts', 'Theories & Architectures');
 
 // IBM PC Era
-createTech('ibm_pc', 'IBM PC', 1981, 1, TechRole.PRODUCT, 'Standardized personal computing and created the PC industry.');
-createTech('powerpc', 'PowerPC', 1991, 2, TechRole.PRODUCT, 'RISC-based processor architecture developed by IBM, Apple, and Motorola.');
+createTech('ibm_pc', 'IBM PC', 1981, 1, TechRole.PRODUCT, 'Standardized personal computing and created the PC industry.', 'Hardware & Infrastructure', 'Devices & Form Factors');
+createTech('powerpc', 'PowerPC', 1991, 2, TechRole.PRODUCT, 'RISC-based processor architecture developed by IBM, Apple, and Motorola.', 'Hardware & Infrastructure', 'Processors & Compute');
 
 // Modern IBM Era
-createTech('watson_super', 'Watson', 2011, 2, TechRole.PRODUCT, 'AI supercomputer that won Jeopardy! and pioneered natural language processing.');
-createTech('ibm_quantum', 'IBM Quantum (Eagle)', 2021, 2, TechRole.PRODUCT, '127-qubit quantum processor advancing quantum computing.');
+createTech('watson_super', 'Watson', 2011, 2, TechRole.PRODUCT, 'AI supercomputer that won Jeopardy! and pioneered natural language processing.', 'AI & Physical Systems', 'Artificial Intelligence');
+createTech('ibm_quantum', 'IBM Quantum (Eagle)', 2021, 2, TechRole.PRODUCT, '127-qubit quantum processor advancing quantum computing.', 'Hardware & Infrastructure', 'Processors & Compute');
 
 // IBM Episodes
 createEpisode('ibm_loss_1993', 'IBM\'s $8B Loss', 1993, 2, EpisodeRole.CRISIS, 'IBM reported an $8 billion loss, the largest in American corporate history at the time.', { eventType: 'Crisis', impactScale: '-$8B Loss' });

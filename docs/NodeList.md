@@ -1,4 +1,4 @@
-# The Silicon Age - 노드 목록
+# The Silicon Age - 노드 & 관계 분류 체계
 
 > 총 **395개** 노드 (2025년 12월 기준)
 
@@ -6,33 +6,64 @@
 
 ## 📊 개요
 
-| 노드 타입 | 개수 | 설명 |
-|----------|------|------|
-| **Company** 🏢 | 64개 | 기업, 연구소, VC |
-| **Person** 👤 | 102개 | 창업자, 발명가, CEO |
-| **Technology** ⚙️ | 156개 | 제품, 기술, 표준 |
-| **Episode** 📅 | 73개 | 사건, 투자, 인수합병 |
+| 노드 타입 | 개수 | 아이콘 | 설명 |
+|----------|------|--------|------|
+| **Company** | 64개 | 🏢 | 기업, 연구소, VC |
+| **Person** | 102개 | 👤 | 창업자, 발명가, CEO |
+| **Technology** | 156개 | ⚙️ | 제품, 기술, 표준 |
+| **Episode** | 73개 | 📅 | 사건, 투자, 인수합병 |
+
+---
+
+## 🔗 관계(Link) 종류
+
+모든 노드는 4가지 관계 타입으로 연결됩니다.
+
+| Link Type | 한국어 | 설명 | 예시 |
+|-----------|--------|------|------|
+| **CREATED** | 창조 | 설립, 발명, 개발, 출시 | `Steve Jobs → iPhone`, `Intel → x86` |
+| **BASED_ON** | 기반 | 기술 의존, 인프라 활용 | `iPhone → ARM Architecture`, `AWS → Linux` |
+| **PART_OF** | 소속 | 멤버십, 소유권, 카테고리 | `Jensen Huang → NVIDIA`, `TSMC → SEMICONDUCTOR` |
+| **INFLUENCED** | 영향 | 투자, 인수, 영감 | `Sequoia → Google 투자`, `PARC Visit → Macintosh` |
+
+### 방향(Direction)
+- **FORWARD**: Source → Target (기본)
+- **REVERSE**: Target → Source
 
 ---
 
 ## 🏢 Company 노드 (64개)
 
-### 속성
-```typescript
-{
-  id: string;
-  label: string;
-  year: number;                    // 설립 연도
-  importance: 1 | 2;               // 중요도 (1: 핵심, 2: 일반)
-  impactRole: CompanyRole;         // PLATFORM | LAB | INFRA | SERVICE | PRODUCT
-  companyCategories: CompanyCategory[];  // 산업 분류
-  marketCap?: { current, peak };   // 시가총액
-}
-```
+### Role (역할 분류)
+
+| CompanyRole | 한국어 | 설명 | 예시 |
+|-------------|--------|------|------|
+| **PLATFORM** | 플랫폼 | 생태계 중심 기업 | Google, Apple, Microsoft |
+| **LAB** | 연구소 | R&D 중심 조직 | OpenAI, DARPA, Xerox PARC |
+| **INFRA** | 인프라 | 공급망/하드웨어 | TSMC, ASML, Samsung |
+| **SERVICE** | 서비스 | 서비스 제공 기업 | Palantir, Salesforce |
+| **PRODUCT** | 제품 | 소비자 하드웨어 | iRobot, DJI, GoPro |
+
+### Category (산업 분류)
+
+| CompanyCategory | 한국어 | 예시 |
+|-----------------|--------|------|
+| **SEMICONDUCTOR** | 반도체 | Intel, TSMC, AMD, NVIDIA |
+| **HARDWARE** | 하드웨어 | Apple, Samsung, Foxconn |
+| **SOFTWARE** | 소프트웨어 | Microsoft, Adobe, Oracle |
+| **INTERNET** | 인터넷 | Google, Amazon, Meta |
+| **TELECOM** | 통신 | AT&T, Cisco, Huawei |
+| **LAB** | 연구소 | DARPA, CERN, Xerox PARC |
+| **VC** | 벤처캐피탈 | Sequoia, a16z, Y Combinator |
+| **ROBOTICS** | 로보틱스 | Boston Dynamics, iRobot |
+| **FINTECH** | 핀테크 | PayPal, Stripe, Binance |
+| **MOBILITY** | 모빌리티 | Tesla, Uber |
+| **AEROSPACE** | 항공우주 | SpaceX, DJI |
+| **MEDIA** | 미디어 | Netflix, ByteDance, Spotify |
 
 ### 목록 (알파벳순)
 | ID | Label | 설립 | Role | 주요 카테고리 |
-|----|-------|------|------|--------------|
+|----|-------|------|------|--------------:|
 | a16z | Andreessen Horowitz | - | - | VC |
 | adobe | Adobe | 1982 | PLATFORM | SOFTWARE |
 | airbnb | Airbnb | - | - | INTERNET |
@@ -101,21 +132,13 @@
 
 ## 👤 Person 노드 (102개)
 
-### 속성
-```typescript
-{
-  id: string;
-  label: string;
-  year: number;
-  importance: 1 | 2;
-  impactRole: PersonRole;      // VISIONARY | THEORIST | BUILDER
-  role: string;                // "Founder", "CEO" 등
-  primaryRole?: string;        // "CEO of Tesla"
-  secondaryRole?: string;      // "CEO of SpaceX"
-  birthYear?: number;
-  deathYear?: number;
-}
-```
+### Role (역할 분류)
+
+| PersonRole | 한국어 | 설명 | 예시 |
+|------------|--------|------|------|
+| **VISIONARY** | 비전가 | 창업자, CEO | Steve Jobs, Bill Gates, Elon Musk |
+| **THEORIST** | 이론가 | 발명가, 학자 | Alan Turing, Geoffrey Hinton |
+| **BUILDER** | 빌더 | 엔지니어, 설계자 | Steve Wozniak, Dennis Ritchie |
 
 ### 목록 (알파벳순)
 ```
@@ -141,26 +164,45 @@ turing, vaswani, vitalik, von_neumann, wozniak, zhang_yiming, zuckerberg
 
 ## ⚙️ Technology 노드 (156개)
 
-### 속성
-```typescript
-{
-  id: string;
-  label: string;
-  year: number;
-  importance: 1 | 2;
-  impactRole: TechRole;        // PRODUCT | CORE | STANDARD | PLATFORM
-  techCategoryL1?: string;     // 대분류
-  techCategoryL2?: string;     // 소분류
-  endYear?: number;            // 기술 종료 연도 (선택)
-}
-```
+### Role (역할 분류)
 
-### techCategoryL1 (5개)
-- Hardware & Infrastructure
-- System Software
-- Network & Connectivity
-- Digital Services & Platforms
-- AI & Physical Systems
+| TechRole | 한국어 | 설명 | 예시 |
+|----------|--------|------|------|
+| **PRODUCT** | 제품 | 소비자 대상 제품 | iPhone, ChatGPT, Windows |
+| **CORE** | 핵심기술 | 기반 기술 | Transformer, PageRank, CUDA |
+| **STANDARD** | 표준 | 프로토콜, 규격 | HTTP, x86, TCP/IP |
+| **PLATFORM** | 플랫폼 | 개발/서비스 플랫폼 | Android, AWS, iOS |
+
+### Category L1 (대분류, 5개)
+
+| TechCategoryL1 | 한국어 | 설명 |
+|----------------|--------|------|
+| **Hardware, Robotics & Infra** | 하드웨어, 로보틱스 & 인프라 | 물리적 장치, 칩, 제조, 로봇 |
+| **System Software** | 시스템 소프트웨어 | OS, 개발도구, 언어 |
+| **Network & Connectivity** | 네트워크 & 연결 | 통신, 프로토콜 |
+| **Digital Services & Platforms** | 디지털 서비스 & 플랫폼 | 인터넷 서비스, 핀테크 |
+| **Artificial Intelligence (AI)** | 인공지능 (AI) | AI 모델, AI 애플리케이션 |
+
+### Category L2 (소분류, 17개)
+
+| TechCategoryL2 | 한국어 | L1 분류 |
+|----------------|--------|---------|
+| **Processors & Compute** | 프로세서 & 컴퓨팅 | Hardware, Robotics & Infra |
+| **Devices & Form Factors** | 디바이스 & 폼팩터 | Hardware, Robotics & Infra |
+| **Memory & Storage** | 메모리 & 저장장치 | Hardware, Robotics & Infra |
+| **Components & Manufacturing** | 부품 & 제조 | Hardware, Robotics & Infra |
+| **Robotics & Mobility** | 로보틱스 & 모빌리티 | Hardware, Robotics & Infra |
+| **Operating Systems (OS)** | 운영체제 | System Software |
+| **Development & Languages** | 개발 & 언어 | System Software |
+| **Telecommunications** | 통신 | Network & Connectivity |
+| **Network Architecture** | 네트워크 아키텍처 | Network & Connectivity |
+| **Search & Information** | 검색 & 정보 | Digital Services & Platforms |
+| **Social & Media** | 소셜 & 미디어 | Digital Services & Platforms |
+| **Digital Platforms** | 디지털 플랫폼 | Digital Services & Platforms |
+| **Fintech & Crypto** | 핀테크 & 크립토 | Digital Services & Platforms |
+| **Spatial Computing** | 공간 컴퓨팅 | Digital Services & Platforms |
+| **AI Core & Models** | AI 핵심 & 모델 | Artificial Intelligence (AI) |
+| **AI Applications & Agents** | AI 애플리케이션 & 에이전트 | Artificial Intelligence (AI) |
 
 ### 목록 (알파벳순)
 ```
@@ -190,18 +232,13 @@ webrtc, wechat, whatsapp, wikipedia, windows, www, x86, xbox, youtube
 
 ## 📅 Episode 노드 (73개)
 
-### 속성
-```typescript
-{
-  id: string;
-  label: string;
-  year: number;
-  importance: 1 | 2;
-  impactRole: EpisodeRole;     // MILESTONE | DEAL | CRISIS
-  eventType?: string;          // "Investment", "Acquisition" 등
-  impactScale?: string;        // "$13B Deal" 등
-}
-```
+### Role (역할 분류)
+
+| EpisodeRole | 한국어 | 설명 | 예시 |
+|-------------|--------|------|------|
+| **MILESTONE** | 이정표 | 출시, 돌파구, 혁신 | Dartmouth Conference, ChatGPT Launch |
+| **DEAL** | 거래 | 인수합병, 투자 | Sequoia → Google, Microsoft → OpenAI |
+| **CRISIS** | 위기 | 스캔들, 실패 | Pentium Bug, FTX Collapse |
 
 ### 목록 (알파벳순)
 ```
@@ -225,7 +262,30 @@ xerox_investment, yc_airbnb, zoom_boom
 
 ---
 
-## 관련 파일
+## 📁 관련 파일
 
-- `constants.ts` - 모든 노드 및 링크 정의
-- `types.ts` - NodeData, LinkData 인터페이스 정의
+| 파일명 | 설명 |
+|--------|------|
+| `types.ts` | 모든 타입, enum 정의 |
+| `constants.ts` | 노드 및 링크 데이터 정의 |
+| `utils/ranking.ts` | Impact Score 계산 로직 |
+
+---
+
+## 🎨 시각적 표현
+
+### 노드 색상 (UI)
+| Category | 색상 | Hex |
+|----------|------|-----|
+| Company | 🔴 Red | `#ef4444` |
+| Person | 🔵 Blue | `#3b82f6` |
+| Technology | 🟢 Emerald | `#10b981` |
+| Episode | 🟣 Violet | `#8b5cf6` |
+
+### 링크 색상 (UI)
+| Link Type | 색상 |
+|-----------|------|
+| CREATED | Teal (#0891b2) |
+| BASED_ON | Orange |
+| PART_OF | Gray |
+| INFLUENCED | Yellow |

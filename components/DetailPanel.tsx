@@ -566,14 +566,12 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
             </div>
           )}
 
-          {/* Company Categories */}
-          {node.category === Category.COMPANY && node.companyCategories && (
+          {/* Company Role Badge */}
+          {node.category === Category.COMPANY && node.impactRole && (
             <div className="flex flex-wrap gap-2 mt-3">
-              {node.companyCategories.map((cat) => (
-                <span key={cat} className="text-[10px] font-medium px-2 py-0.5 rounded bg-emerald-900/30 text-emerald-300 border border-emerald-800/50">
-                  {cat}
-                </span>
-              ))}
+              <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-emerald-900/30 text-emerald-300 border border-emerald-800/50">
+                {node.impactRole}
+              </span>
             </div>
           )}
 

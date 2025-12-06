@@ -60,7 +60,7 @@ const ListView: React.FC<ListViewProps> = ({ data, onNodeClick, scrollToNodeId, 
       node.label.toLowerCase().includes(lowerQuery) ||
       node.description.toLowerCase().includes(lowerQuery) ||
       (node.role && node.role.toLowerCase().includes(lowerQuery)) ||
-      (node.companyCategories && node.companyCategories.some(cat => cat.toLowerCase().includes(lowerQuery))) ||
+      (node.impactRole && node.impactRole.toLowerCase().includes(lowerQuery)) ||
       (node.techCategoryL1 && node.techCategoryL1.toLowerCase().includes(lowerQuery)) ||
       (node.techCategoryL2 && node.techCategoryL2.toLowerCase().includes(lowerQuery))
     );
@@ -185,14 +185,12 @@ const ListView: React.FC<ListViewProps> = ({ data, onNodeClick, scrollToNodeId, 
                     </div>
                   </div>
 
-                  {/* Company Categories */}
-                  {node.category === Category.COMPANY && node.companyCategories && (
+                  {/* Company Role Badge */}
+                  {node.category === Category.COMPANY && node.impactRole && (
                     <div className="flex flex-wrap gap-1 mb-2">
-                      {node.companyCategories.map((cat) => (
-                        <span key={cat} className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-emerald-900/30 text-emerald-300 border border-emerald-800/50">
-                          {cat}
-                        </span>
-                      ))}
+                      <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-emerald-900/30 text-emerald-300 border border-emerald-800/50">
+                        {node.impactRole}
+                      </span>
                     </div>
                   )}
 

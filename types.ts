@@ -61,14 +61,19 @@ export type TechCategoryL1 =
   | 'System Software'
   | 'Network & Connectivity'
   | 'Digital Services & Platforms'
-  | 'AI & Physical Systems';
+  | 'AI & Physical Systems'
+  | 'Fundamental Concepts';          // NEW: Theories, laws, standards
 
 export type TechCategoryL2 =
   | 'Processors & Compute' | 'Devices & Form Factors' | 'Memory & Storage' | 'Components & Manufacturing'
   | 'Operating Systems (OS)' | 'Development & Languages'
   | 'Telecommunications' | 'Network Architecture'
   | 'Search & Information' | 'Social & Media' | 'Digital Platforms'
-  | 'Artificial Intelligence' | 'Autonomous Mobility' | 'Robotics' | 'Fintech & Crypto' | 'Spatial Computing';
+  | 'Artificial Intelligence' | 'Autonomous Mobility' | 'Robotics' | 'Fintech & Crypto' | 'Spatial Computing'
+  // Fundamental Concepts L2
+  | 'Theories & Architectures'       // ISA designs (RISC, x86, ARM)
+  | 'Laws & Principles'              // Moore's Law, etc.
+  | 'Standards & Protocols';         // PDF, VoIP, WebRTC, UPC
 
 export enum CompanyCategory {
   SEMICONDUCTOR = 'SEMICONDUCTOR',

@@ -44,7 +44,7 @@ export const fetchNodeDetails = async (node: NodeData): Promise<AIResponse> => {
       node.description ? `Description: ${node.description}` : null,
       node.role ? `Role: ${node.role}` : null,
       node.primaryRole ? `Primary Role: ${node.primaryRole}` : null,
-      node.companyCategories?.length ? `Industry: ${node.companyCategories.join(', ')}` : null,
+      node.impactRole ? `Industry Role: ${node.impactRole}` : null,
       node.techCategoryL1 ? `Tech Category: ${node.techCategoryL1}` : null,
       node.marketCap?.current ? `Market Cap: ${node.marketCap.current}` : null,
     ].filter(Boolean).join('\n');
