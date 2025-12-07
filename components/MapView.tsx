@@ -16,6 +16,90 @@ interface MapViewProps {
   featuredNode?: NodeData;
 }
 
+// ============================================================================
+// 🎛️ 물리 엔진 설정 (Physics Configuration)
+// 모든 노드 위치/거리 관련 값을 여기서 조정하세요!
+// 나중에 UI로 조정할 수 있도록 한 곳에 모았습니다.
+// ============================================================================
+const PHYSICS_CONFIG = {
+  // === 화면 비율에 따른 퍼짐 (forceX, forceY) ===
+  // 값이 작을수록 해당 방향으로 더 넓게 퍼짐
+  forceX: {
+    landscape: 0.01,    // 가로모드: X힘 (약할수록 좌우로 넓게) (기본값: 0.01)
+    portrait: 0.5,      // 세로모드: X힘 (기본값: 0.5)
+  },
+  forceY: {
+    landscape: 0.1,     // 가로모드: Y힘 (강할수록 상하로 모임) (기본값: 0.1)
+    portrait: 0.01,     // 세로모드: Y힘 (약할수록 상하로 넓게) (기본값: 0.01)
+  },
+
+  // === 반발력 (Charge - 노드 간 밀어내는 힘) ===
+  // 절대값이 클수록 더 강하게 밀어냄 (음수)
+  charge: {
+    company: -13500,    // 회사 노드 반발력 (기본값: -13500)
+    other: -3750,       // 기술/인물 노드 반발력 (기본값: -3750)
+    distanceMax: 6000,  // 반발력이 적용되는 최대 거리 (기본값: 6000)
+  },
+
+  // === 충돌 방지 (Collide - 노드 간 최소 거리) ===
+  // 값이 클수록 노드간 거리가 멀어짐
+  collide: {
+    companyBuffer: 300, // 회사 노드 추가 버퍼 (기본값: 300)
+    otherBuffer: 90,    // 기술/인물 노드 추가 버퍼 (기본값: 90)
+    strength: 0.9,      // 충돌 회피 강도 (0~1) (기본값: 0.9)
+  },
+
+  // === 링크 거리 (Link Distance) ===
+  link: {
+    base: 540,          // 기본 링크 거리 (기본값: 540)
+    engagesBase: 180,   // ENGAGES 링크 거리 (기본값: 180)
+    // 연결 수에 따른 거리 배율
+    fewLinksMultiplier: 0.5,    // 1~2개 연결: 50% (기본값: 0.5)
+    mediumLinksMultiplier: 0.75, // 3~4개 연결: 75% (기본값: 0.75)
+    manyLinksMultiplier: 1.0,    // 5개 이상: 100% (기본값: 1.0)
+    strengthMultiplier: 1.5,     // 링크 당기는 힘 배율 (기본값: 1.5)
+  },
+
+  // === 중심력 (Center Force) ===
+  center: {
+    strength: 0.03,     // 전체 그래프를 화면 중앙으로 당기는 힘 (기본값: 0.03)
+  },
+
+  // === 시뮬레이션 속도/부드러움 ===
+  simulation: {
+    velocityDecay: 0.75, // 마찰력 (높을수록 부드럽게 멈춤, 0~1) (기본값: 0.75)
+    alphaDecay: 0.02,    // 에너지 감소 속도 (기본값: 0.02)
+    alphaOnLayoutChange: 0.6, // 레이아웃 변경 시 에너지 감소 속도 (기본값: 0.6)
+  },
+
+  // === 회사 간 분리력 ===
+  companySeparation: {
+    strength: 0.0,       // 회사끼리 밀어내는 힘 (기본값: 1.0)
+  },
+
+  // === 연결 기반 중력 ===
+  weightedGravity: {
+    strength: 0.3,       // 연결된 회사로 당기는 힘 (기본값: 0.3)
+  },
+
+  // === Focus Mode 전용 설정 (노드 클릭 시 집중 모드) ===
+  // Focus Mode는 선택한 노드와 연결된 노드만 표시하는 모드
+  // 노드 수가 적으므로 더 촘촘하게 배치
+  focusMode: {
+    forceXY: 0.05,              // X/Y 중심 당기는 힘 (강할수록 중앙에 모임) (기본값: 0.05)
+    chargeCompany: -2000,       // 회사 반발력 (일반 모드보다 약함 = 더 가깝게) (기본값: -2000)
+    chargeOther: -800,          // 기술/인물 반발력 (기본값: -800)
+    collideCompanyBuffer: 150,  // 회사 충돌 버퍼 (일반 모드 300 vs Focus 150) (기본값: 150)
+    collideOtherBuffer: 40,     // 기술/인물 충돌 버퍼 (일반 모드 90 vs Focus 40) (기본값: 40)
+    linkDistance: 80,           // 일반 링크 거리 (일반 모드 540 vs Focus 80) (기본값: 80)
+    linkEngagesDistance: 30,    // ENGAGES 링크 거리 (일반 모드 180 vs Focus 30) (기본값: 30)
+    linkStrengthMultiplier: 0.6, // 링크 당기는 힘 배율 (일반 모드 1.5 vs Focus 0.6) (기본값: 0.6)
+    distanceMax: 1000,          // 반발력 최대 거리 (일반 모드 6000 vs Focus 1000) (기본값: 1000)
+    centerStrength: 0.1,        // 중심력 (일반 모드 0.03 vs Focus 0.1) (기본값: 0.1)
+    velocityDecay: 0.5,         // 마찰력 (높을수록 빨리 멈춤, 일반 0.75 vs Focus 0.5) (기본값: 0.5)
+  },
+};
+
 // Helper to formulate the Sub-Label (Role or Year) based on Category
 const getSubLabel = (node: NodeData) => {
   if (node.category === Category.COMPANY) {
@@ -24,7 +108,7 @@ const getSubLabel = (node: NodeData) => {
   if (node.category === Category.PERSON) {
     return node.primaryRole || null;
   }
-  if (node.category === Category.TECHNOLOGY || node.category === Category.EPISODE) {
+  if (node.category === Category.TECHNOLOGY) {
     return `${node.year}`;
   }
   return null;
@@ -331,6 +415,8 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
   const zoomBehaviorRef = useRef<d3.ZoomBehavior<SVGSVGElement, unknown> | null>(null);
   const zoomSelectionRef = useRef<d3.Selection<SVGSVGElement, unknown, null, undefined> | null>(null);
   const prevFocusNodeIdRef = useRef<string | null>(null);
+  // Track last layout dimensions for recalculation detection
+  const lastLayoutRef = useRef<{ width: number; height: number } | null>(null);
 
 
   const handleNodeClick = (d: NodeData) => {
@@ -356,8 +442,15 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
     const term = e.target.value;
     setSearchTerm(term);
     if (term.length > 0) {
+      // Category priority: COMPANY=0, TECHNOLOGY=1, PERSON=2
+      const categoryOrder = { [Category.COMPANY]: 0, [Category.TECHNOLOGY]: 1, [Category.PERSON]: 2 };
       const matches = data.nodes
         .filter(n => n.label.toLowerCase().includes(term.toLowerCase()))
+        .sort((a, b) => {
+          const catDiff = (categoryOrder[a.category] ?? 3) - (categoryOrder[b.category] ?? 3);
+          if (catDiff !== 0) return catDiff;
+          return a.label.localeCompare(b.label);
+        })
         .slice(0, 5); // Limit to 5 suggestions
       setSuggestions(matches);
       // Ensure focus state is true when typing (fixes issue after search selection)
@@ -599,17 +692,16 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
 
     // Aspect Ratio Logic
     const aspectRatio = width / height;
-    const isPortrait = aspectRatio < 1;
+    const isLandscape = aspectRatio > 1;
 
-    // Portrait: Constrain Width (Strong X), Allow Height (Weak Y)
-    // Landscape: Allow Width (Weak X), Constrain Height (Strong Y)
-    const forceXStrength = isPortrait ? 0.05 : 0.01;
-    const forceYStrength = isPortrait ? 0.01 : 0.05;
+    // === 화면 비율에 따른 퍼짐 설정 (PHYSICS_CONFIG 참조) ===
+    const forceXStrength = isLandscape ? PHYSICS_CONFIG.forceX.landscape : PHYSICS_CONFIG.forceX.portrait;
+    const forceYStrength = isLandscape ? PHYSICS_CONFIG.forceY.landscape : PHYSICS_CONFIG.forceY.portrait;
 
     // Simulation Setup
     const simulation = d3.forceSimulation<NodeData>()
-      .velocityDecay(0.85) // High friction
-      .alphaDecay(0.02)
+      .velocityDecay(PHYSICS_CONFIG.simulation.velocityDecay)
+      .alphaDecay(PHYSICS_CONFIG.simulation.alphaDecay)
       .force("charge", d3.forceManyBody().strength(-250))
       .force("x", d3.forceX(0).strength(forceXStrength))
       .force("y", d3.forceY(0).strength(forceYStrength));
@@ -704,7 +796,7 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
         .attr("stroke", "none")
         .attr("stroke-width", 0)
         .attr("stroke-opacity", 0);
-      // Reset circle strokes (Person, Tech, Episode nodes)
+      // Reset circle strokes (Person, Tech nodes)
       svg.selectAll(".layer-nodes circle")
         .interrupt() // Stop any ongoing transitions
         .transition()
@@ -926,62 +1018,103 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
     // Detect transition from focus mode to normal mode
     const wasJustInFocusMode = prevFocusNodeIdRef.current && !focusNodeId;
 
+    // Detect significant layout change (width/height changed by >100px)
+    const layoutChanged = !lastLayoutRef.current ||
+      Math.abs(lastLayoutRef.current.width - width) > 100 ||
+      Math.abs(lastLayoutRef.current.height - height) > 100;
+
+    // Update layout ref after detection
+    if (layoutChanged) {
+      lastLayoutRef.current = { width, height };
+    }
+
+    // === 화면 비율에 따른 퍼짐 설정 (PHYSICS_CONFIG 참조) ===
+    const aspectRatio = width / height;
+    const isLandscape = aspectRatio > 1;
+    const forceXStrength = isLandscape ? PHYSICS_CONFIG.forceX.landscape : PHYSICS_CONFIG.forceX.portrait;
+    const forceYStrength = isLandscape ? PHYSICS_CONFIG.forceY.landscape : PHYSICS_CONFIG.forceY.portrait;
+
+    // Shorthand for config sections
+    const cfg = PHYSICS_CONFIG;
+    const fm = cfg.focusMode;
+
     simulation
       .force("link", d3.forceLink<NodeData, LinkData>(visibleLinks)
         .id(d => d.id)
         .distance(d => {
           if (isFocusMode) {
-            // Shorter distances in Focus Mode for tighter grouping
-            if (d.type === LinkType.ENGAGES) return 30;
-            return 80;
+            if (d.type === LinkType.ENGAGES) return fm.linkEngagesDistance;
+            return fm.linkDistance;
           }
-          // Full graph: more spread
-          if (d.type === LinkType.ENGAGES) return 60;
-          return 180;
+
+          // 연결이 적은 노드는 거리를 짧게 (화면 밖으로 나가지 않도록)
+          const source = d.source as NodeData;
+          const target = d.target as NodeData;
+          const sourceLinks = visibleLinks.filter(l =>
+            (l.source as NodeData).id === source.id || (l.target as NodeData).id === source.id
+          ).length;
+          const targetLinks = visibleLinks.filter(l =>
+            (l.source as NodeData).id === target.id || (l.target as NodeData).id === target.id
+          ).length;
+          const minLinks = Math.min(sourceLinks, targetLinks);
+
+          // 연결 수에 따른 거리 배율
+          const distanceMultiplier = minLinks <= 2 ? cfg.link.fewLinksMultiplier
+            : (minLinks <= 4 ? cfg.link.mediumLinksMultiplier : cfg.link.manyLinksMultiplier);
+
+          // Full graph
+          if (d.type === LinkType.ENGAGES) return cfg.link.engagesBase * distanceMultiplier;
+          return cfg.link.base * distanceMultiplier;
         })
         .strength(d => {
-          if (isFocusMode) return d.strength * 0.6;
-          return d.strength * 1.5;
+          if (isFocusMode) return d.strength * fm.linkStrengthMultiplier;
+          return d.strength * cfg.link.strengthMultiplier;
         })
       )
       .force("charge", d3.forceManyBody<NodeData>()
         .strength((d: any) => {
-          // Dynamic Repulsion based on Node Count
           if (isFocusMode) {
-            // Focus Mode: Stronger repulsion to separate nodes clearly
-            if (d.category === Category.COMPANY) return -2000;
-            return -800;
+            if (d.category === Category.COMPANY) return fm.chargeCompany;
+            return fm.chargeOther;
           }
-          // Full Graph: Huge repulsion to clear space
-          if (d.category === Category.COMPANY) return -4500;
-          return -1000;
+          if (d.category === Category.COMPANY) return cfg.charge.company;
+          return cfg.charge.other;
         })
-        .distanceMax(isFocusMode ? 1000 : 2000)
+        .distanceMax(isFocusMode ? fm.distanceMax : cfg.charge.distanceMax)
       )
       .force("collide", d3.forceCollide<NodeData>()
         .radius((d: any) => {
-          // Prevent overlap, give Companies extra breathing room
-          const base = (d._radius || 10); // Use _radius for visual size
+          const base = (d._radius || 10);
           if (isFocusMode) {
-            if (d.category === Category.COMPANY) return base + 150; // Even bigger buffer in Focus Mode
-            return base + 40;
+            if (d.category === Category.COMPANY) return base + fm.collideCompanyBuffer;
+            return base + fm.collideOtherBuffer;
           }
-          if (d.category === Category.COMPANY) return base + 100; // Huge buffer
-          return base + 20;
+          if (d.category === Category.COMPANY) return base + cfg.collide.companyBuffer;
+          return base + cfg.collide.otherBuffer;
         })
-        .strength(0.9)
+        .strength(cfg.collide.strength)
       )
-      .force("center", d3.forceCenter(width / 2, height / 2).strength(isFocusMode ? 0.1 : 0.05))
+      .force("center", d3.forceCenter(width / 2, height / 2).strength(isFocusMode ? fm.centerStrength : cfg.center.strength))
+      // Aspect-ratio aware spreading forces
+      .force("x", d3.forceX<NodeData>(width / 2).strength(isFocusMode ? fm.forceXY : forceXStrength))
+      .force("y", d3.forceY<NodeData>(height / 2).strength(isFocusMode ? fm.forceXY : forceYStrength))
       // Custom forces
-      .force("company-separation", forceCompanySeparation(isFocusMode ? 0.1 : 1.0)) // Less separation in focus mode
-      .force("weighted-gravity", forceWeightedGravity(visibleLinks, 0.3)) // Optional: keep or tune
-      .velocityDecay(wasJustInFocusMode ? 0.7 : (isFocusMode ? 0.45 : 0.6)); // High friction on focus exit
+      .force("company-separation", forceCompanySeparation(isFocusMode ? 0.1 : cfg.companySeparation.strength))
+      .force("weighted-gravity", forceWeightedGravity(visibleLinks, cfg.weightedGravity.strength))
+      // Higher friction for smoother, less jittery movement
+      .velocityDecay(wasJustInFocusMode ? 0.8 : (isFocusMode ? fm.velocityDecay : cfg.simulation.velocityDecay));
 
     // Smooth Focus Exit: Use very low energy to minimize jitter
     if (wasJustInFocusMode) {
       simulation
         .alpha(0.05) // Very low energy - minimal movement
         .alphaDecay(0.1) // Fast decay - quick settle
+        .restart();
+    } else if (layoutChanged && !isFocusMode) {
+      // Layout significantly changed: use higher alpha for full recalculation
+      simulation
+        .alpha(0.6)
+        .alphaDecay(0.02)
         .restart();
     } else {
       simulation

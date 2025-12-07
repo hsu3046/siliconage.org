@@ -56,8 +56,8 @@ function extractNodes(): NodeData[] {
 
     const nodes: NodeData[] = [];
 
-    // Match createCompany, createPerson, createTech, createEpisode
-    const regex = /create(Company|Person|Tech|Episode)\s*\(\s*'([^']+)'\s*,\s*'([^']+)'\s*,\s*(\d+)/g;
+    // Match createCompany, createPerson, createTech
+    const regex = /create(Company|Person|Tech)\s*\(\s*'([^']+)'\s*,\s*'([^']+)'\s*,\s*(\d+)/g;
     let match;
 
     while ((match = regex.exec(content)) !== null) {

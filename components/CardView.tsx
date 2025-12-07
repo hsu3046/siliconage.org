@@ -183,19 +183,34 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
               {/* Autocomplete Dropdown */}
               {showSuggestions && filteredSuggestions.length > 0 && (
                 <div className="absolute z-30 w-full mt-1 bg-slate-900 border border-slate-700 rounded-md shadow-lg max-h-60 overflow-auto">
-                  {filteredSuggestions.map((suggestion, index) => (
-                    <div
-                      key={index}
-                      className={`px-4 py-2 hover:bg-slate-800 cursor-pointer text-sm text-slate-300 transition-colors flex items-center justify-between ${suggestion.type === 'CATEGORY' || suggestion.type === 'TECH' ? 'font-bold text-white' : ''
-                        }`}
-                      onClick={() => handleSuggestionClick(suggestion.label)}
-                    >
-                      <span>{suggestion.label}</span>
-                      <span className="text-[10px] text-slate-500 uppercase tracking-wider font-normal opacity-50 ml-2">
-                        {suggestion.type === 'TECH' ? 'CATEGORY' : suggestion.type}
-                      </span>
-                    </div>
-                  ))}
+                  {filteredSuggestions.map((suggestion, index) => {
+                    // Color-coded highlighting based on type
+                    const typeColors = {
+                      'CATEGORY': 'text-red-400 font-bold',
+                      'ROLE': 'text-blue-400 font-bold',
+                      'TECH': 'text-emerald-400 font-bold',
+                    };
+                    const textColor = typeColors[suggestion.type] || 'text-slate-300';
+                    const badgeColors = {
+                      'CATEGORY': 'bg-red-900/30 text-red-400',
+                      'ROLE': 'bg-blue-900/30 text-blue-400',
+                      'TECH': 'bg-emerald-900/30 text-emerald-400',
+                    };
+                    const badgeColor = badgeColors[suggestion.type] || 'bg-slate-800 text-slate-500';
+
+                    return (
+                      <div
+                        key={index}
+                        className={`px-4 py-2 hover:bg-slate-800 cursor-pointer text-sm transition-colors flex items-center justify-between ${textColor}`}
+                        onClick={() => handleSuggestionClick(suggestion.label)}
+                      >
+                        <span>{suggestion.label}</span>
+                        <span className={`text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded ${badgeColor}`}>
+                          {suggestion.type === 'TECH' ? 'CATEGORY' : suggestion.type}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -253,40 +268,24 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
                 <div className="p-5 flex flex-col flex-1">
                   {/* Category / Role Badges */}
                   <div className="min-h-[22px] flex flex-wrap gap-1 mb-2">
-                    {/* Company Category Badge - RED (Muted) */}
+                    {/* Company Category Badge - RED (Muted) - UPPERCASE */}
                     {node.category === Category.COMPANY && node.companyCategories?.[0] && (
                       <span className="text-[9px] font-medium px-1.5 py-1 rounded bg-red-900/20 text-red-400/80 border border-red-800/30">
-                        {CATEGORY_LABELS[node.companyCategories[0]]}
+                        {CATEGORY_LABELS[node.companyCategories[0]].toUpperCase()}
                       </span>
                     )}
 
-                    {/* Person Role Badge (Muted) */}
-                    {node.category === Category.PERSON && node.impactRole && (
+                    {/* Person Role Badge (Muted) - Using primaryRole for display - UPPERCASE */}
+                    {node.category === Category.PERSON && node.primaryRole && (
                       <span className="text-[9px] font-medium px-1.5 py-1 rounded bg-blue-900/20 text-blue-400/80 border border-blue-800/30">
-                        {toTitleCase(node.impactRole)}
+                        {node.primaryRole.toUpperCase()}
                       </span>
                     )}
 
-                    {/* Technology Categories - GREEN (Muted) */}
-                    {node.category === Category.TECHNOLOGY && (
-                      <>
-                        {node.techCategoryL1 && (
-                          <span className="text-[9px] font-medium px-1.5 py-1 rounded bg-emerald-900/20 text-emerald-400/80 border border-emerald-800/30">
-                            {node.techCategoryL1}
-                          </span>
-                        )}
-                        {node.techCategoryL2 && (
-                          <span className="text-[9px] font-medium px-1.5 py-1 rounded bg-emerald-900/20 text-emerald-400/80 border border-emerald-800/30">
-                            {node.techCategoryL2}
-                          </span>
-                        )}
-                      </>
-                    )}
-
-                    {/* Episode Badge - Purple (Muted) */}
-                    {node.category === Category.EPISODE && (
-                      <span className="text-[9px] font-medium px-1.5 py-1 rounded bg-purple-900/20 text-purple-400/80 border border-purple-800/30">
-                        Episode
+                    {/* Technology Categories - GREEN (Muted) - L2 ONLY (L1 still searchable) */}
+                    {node.category === Category.TECHNOLOGY && node.techCategoryL2 && (
+                      <span className="text-[9px] font-medium px-1.5 py-1 rounded bg-emerald-900/20 text-emerald-400/80 border border-emerald-800/30">
+                        {node.techCategoryL2.toUpperCase()}
                       </span>
                     )}
                   </div>
@@ -318,8 +317,6 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
                               return 'text-blue-400 hover:text-blue-300';
                             case Category.TECHNOLOGY:
                               return 'text-emerald-400 hover:text-emerald-300';
-                            case Category.EPISODE:
-                              return 'text-purple-400 hover:text-purple-300';
                             default:
                               return 'text-slate-400 hover:text-slate-300';
                           }

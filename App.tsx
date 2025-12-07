@@ -79,7 +79,6 @@ const App: React.FC = () => {
     [Category.COMPANY]: true,
     [Category.PERSON]: true,
     [Category.TECHNOLOGY]: true,
-    [Category.EPISODE]: true,
   });
 
   const [visibleLinkTypes, setVisibleLinkTypes] = useState<Record<LinkType, boolean>>({

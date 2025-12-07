@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { GraphData, NodeData, Category, LinkType } from '../types';
 import { CATEGORY_COLORS, ERAS, INITIAL_DATA } from '../constants';
+import { getTechVerb, getPersonVerbs } from '../utils/labels';
 
 interface HistoryViewProps {
   data: GraphData;
@@ -50,7 +51,9 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, scrollToNo
 
   // Build creator map from INITIAL_DATA (not filtered data) to always show all created entities
   const creatorMap = useMemo(() => {
-    const map: Record<string, string[]> = {}; // nodeId -> [created node labels]
+    // Achievement structure: { label, year, category }
+    interface Achievement { label: string; year: number; category: Category; }
+    const achievementMap: Record<string, Achievement[]> = {}; // personId -> [achievements]
     const createdByMap: Record<string, string> = {}; // techId -> creator label
 
     INITIAL_DATA.links.forEach(link => {
@@ -62,8 +65,13 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, scrollToNo
         const targetNode = INITIAL_DATA.nodes.find(n => n.id === targetId);
 
         if (sourceNode && targetNode) {
-          if (!map[sourceId]) map[sourceId] = [];
-          map[sourceId].push(targetNode.label);
+          // Build achievements with year and category
+          if (!achievementMap[sourceId]) achievementMap[sourceId] = [];
+          achievementMap[sourceId].push({
+            label: targetNode.label,
+            year: targetNode.year,
+            category: targetNode.category
+          });
 
           if (targetNode.category === Category.TECHNOLOGY) {
             if (!createdByMap[targetId] || sourceNode.category === Category.COMPANY) {
@@ -74,7 +82,12 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, scrollToNo
       }
     });
 
-    return { created: map, createdBy: createdByMap };
+    // Sort achievements by year for each creator
+    Object.keys(achievementMap).forEach(id => {
+      achievementMap[id].sort((a, b) => a.year - b.year);
+    });
+
+    return { achievements: achievementMap, createdBy: createdByMap };
   }, []); // No dependencies - always use INITIAL_DATA
 
   // Effect to scroll to specific node
@@ -92,8 +105,15 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, scrollToNo
     const term = e.target.value;
     setSearchTerm(term);
     if (term.length > 0) {
+      // Category priority: COMPANY=0, TECHNOLOGY=1, PERSON=2
+      const categoryOrder = { [Category.COMPANY]: 0, [Category.TECHNOLOGY]: 1, [Category.PERSON]: 2 };
       const matches = data.nodes
         .filter(n => n.label.toLowerCase().includes(term.toLowerCase()))
+        .sort((a, b) => {
+          const catDiff = (categoryOrder[a.category] ?? 3) - (categoryOrder[b.category] ?? 3);
+          if (catDiff !== 0) return catDiff;
+          return a.label.localeCompare(b.label);
+        })
         .slice(0, 5);
       setSuggestions(matches);
       setIsSearchFocused(true);
@@ -189,24 +209,36 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, scrollToNo
     );
   };
 
-  // Get person context based on role
-  const getPersonContext = (node: NodeData) => {
-    const role = node.primaryRole?.toLowerCase() || '';
-    if (role.includes('ceo') || role.includes('leader')) return 'served as Executive at';
-    if (role.includes('founder') || role.includes('co-founder')) return 'Founded';
-    if (role.includes('creator') || role.includes('engineer')) return 'Created';
-    if (role.includes('theorist') || role.includes('researcher') || role.includes('scientist')) return 'Contributed';
-    if (role.includes('architect') || role.includes('designer')) return 'Designed';
-    if (role.includes('investor')) return 'Invested';
-    if (role.includes('inventor')) return 'Invented';
-    return '';
+  // Get person context based on PersonRole (impactRole)
+  const getPersonContext = (node: NodeData): string => {
+    const verbs = getPersonVerbs(node);
+    // For timeline, use createdTech verb as the primary action
+    return verbs.createdTech;
   };
 
   // Render Person Node - dot centered vertically relative to text block
   const renderPersonNode = (node: NodeData, isLeft: boolean) => {
-    const context = getPersonContext(node);
-    const creations = creatorMap.created[node.id] || [];
-    const creationText = creations.slice(0, 2).join(', ');
+    const verbs = getPersonVerbs(node);
+    const achievements = creatorMap.achievements[node.id] || [];
+
+    // Build achievement text with individual years
+    const getAchievementText = () => {
+      if (achievements.length === 0) return '';
+
+      // Format each achievement based on category
+      const formatted = achievements.slice(0, 3).map(a => {
+        if (a.category === Category.COMPANY) {
+          return `${verbs.foundedCompany} ${a.label} (${a.year})`;
+        } else if (a.category === Category.TECHNOLOGY) {
+          return `${verbs.createdTech} ${a.label} (${a.year})`;
+        }
+        return `${a.label} (${a.year})`;
+      });
+
+      return formatted.join(', ');
+    };
+
+    const achievementText = getAchievementText();
 
     return (
       <div
@@ -225,7 +257,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, scrollToNo
         <div className={`flex flex-col items-start text-left ${isLeft ? 'md:items-end md:text-right' : 'md:items-start md:text-left'}`}>
           <span className="text-white text-sm font-medium">{node.label}</span>
           <span className="text-slate-500 text-xs">
-            {context}{creationText ? ` ${creationText}` : ''} ({node.year})
+            {achievementText || `Active since ${node.year}`}
           </span>
         </div>
       </div>
@@ -236,6 +268,23 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, scrollToNo
   const renderTechNode = (node: NodeData, isLeft: boolean) => {
     const radius = node._radius || 15;
     const creator = creatorMap.createdBy[node.id];
+
+    // Get fallback description for tech without creator
+    const getFallbackDescription = () => {
+      const role = node.impactRole;
+      const catL2 = node.techCategoryL2 || node.techCategoryL1;
+
+      // TechRole-based description
+      if (role === 'FOUNDATION') return `Foundational theory`;
+      if (role === 'CORE') return `Core technology`;
+      if (role === 'PLATFORM') return `Platform`;
+      if (role === 'APPLICATION') return `Application`;
+
+      // TechCategoryL2 fallback
+      if (catL2) return catL2;
+
+      return 'Technology';
+    };
 
     // 3 fixed sizes based on radius
     let sizeClass = 'md:w-40'; // small
@@ -250,6 +299,11 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, scrollToNo
       textSize = 'text-sm';
       padding = 'px-3 py-2';
     }
+
+    // Build description text
+    const descriptionText = creator
+      ? `${getTechVerb(node)} by ${creator} (${node.year})`
+      : `${getFallbackDescription()} (${node.year})`;
 
     return (
       <div
@@ -273,29 +327,9 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, scrollToNo
             {node.label}
           </span>
           <span className="text-slate-500 text-xs">
-            {creator ? `Invented by ${creator} (${node.year})` : `(${node.year})`}
+            {descriptionText}
           </span>
         </div>
-      </div>
-    );
-  };
-
-  // Render Episode Node - tighter underline spacing
-  const renderEpisodeNode = (node: NodeData, isLeft: boolean) => {
-    return (
-      <div
-        id={`timeline-node-${node.id}`}
-        onClick={() => onNodeClick(node)}
-        className={`
-          cursor-pointer transition-all duration-200 hover:opacity-80 
-          flex flex-col items-start text-left
-          ${isLeft ? 'md:items-end md:text-right' : 'md:items-start md:text-left'}
-        `}
-      >
-        <span className="border-b-2 border-violet-400 leading-tight">
-          <span className="text-slate-300 text-sm italic">{node.label}</span>
-          <span className="text-slate-500 text-xs ml-1">({node.year})</span>
-        </span>
       </div>
     );
   };
@@ -309,8 +343,6 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, scrollToNo
         return renderPersonNode(node, isLeft);
       case Category.TECHNOLOGY:
         return renderTechNode(node, isLeft);
-      case Category.EPISODE:
-        return renderEpisodeNode(node, isLeft);
       default:
         return renderCompanyNode(node, isLeft);
     }

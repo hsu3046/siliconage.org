@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { NodeData, AIResponse, GraphData, Category } from '../types';
 import { CATEGORY_COLORS, CATEGORY_LABELS } from '../constants';
 import { fetchNodeDetails } from '../services/geminiService';
+import { getTechVerb, getPersonVerbs } from '../utils/labels';
 
 interface DetailPanelProps {
   node: NodeData | null;
@@ -26,12 +27,6 @@ const getSectionHeaders = (category: Category) => {
         significance: 'Career & Legacy',
         keyFacts: 'Major Achievements'
       };
-    case Category.EPISODE:
-      return {
-        summary: 'Event Overview',
-        significance: 'Impact & Aftermath',
-        keyFacts: 'Causes & Timeline'
-      };
     case Category.TECHNOLOGY:
       return {
         summary: 'Core Concept',
@@ -52,30 +47,14 @@ const getExternalLinks = (node: NodeData) => {
   const name = node.label;
   const category = node.category;
 
-  // For EPISODE nodes: Show ONLY Web Search
-  if (category === Category.EPISODE) {
-    return [
-      {
-        label: 'Web Search',
-        url: `https://www.google.com/search?q=${encodeURIComponent(`"${name}" explained history`)}`,
-        icon: (
-          <svg className="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
-          </svg>
-        ),
-        show: true
-      }
-    ];
-  }
-
-  // For all other nodes (Company, Person, Technology)
+  // For all categories (Company, Person, Technology)
   const links: Array<{
     label: string;
     url: string;
     icon: React.ReactNode;
     show: boolean;
   }> = [
-      // 1. Wikipedia (First for non-EPISODE)
+      // 1. Wikipedia
       {
         label: 'Wikipedia',
         url: `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(name)}`,
@@ -154,171 +133,194 @@ const getExternalLinks = (node: NodeData) => {
   return links.filter(link => link.show);
 };
 
-// === HELPER: Generate Natural Language Connection Labels ===
+// ============================================================================
+// HELPER: Generate Natural Language Connection Labels
+// ============================================================================
+// Labels include context: subject node's label + appropriate year
+// Example: "Founder of Google (1998)", "Created by Apple (2007)"
+//
+// === LABEL EXAMPLES BY CATEGORY ===
+//
+// 🔗 ENGAGES:
+//   - HEART icon    → "Strategic partner of {subject}"
+//   - RIVALRY icon  → "Market competitor of {subject}"
+//
+// 🏢 COMPANY (회사 노드를 보고 있을 때):
+//   - Person → COMPANY (CREATES)     → "Founder of {company} ({year})"
+//   - Person → COMPANY (CONTRIBUTES) → "Key contributor to {company}"
+//   - COMPANY → Tech (CREATES)       → "Created by {company} ({year})"
+//   - Tech → COMPANY (POWERS)        → "Powers {company}"
+//   - COMPANY → COMPANY (CONTRIBUTES)→ "Investor in {company}"
+//
+// 👤 PERSON (인물 노드를 보고 있을 때):
+//   - PERSON → Company (CREATES)     → "Founded ({year})"
+//   - PERSON → Tech (CREATES)        → "Invented ({year})"
+//   - PERSON ↔ PERSON (CONTRIBUTES)  → "Mentor to {person}"
+//
+// 💡 TECHNOLOGY (기술 노드를 보고 있을 때):
+//   - Company/Person → TECH (CREATES)→ "Created {tech} ({year})"
+//   - Tech → TECH (POWERS/Inbound)   → "Built on {tech} ({year})"
+// ============================================================================
 const getConnectionLabel = (
   subjectNode: NodeData,
   objectNode: NodeData,
   linkType: string,
-  direction: 'Inbound' | 'Outbound'
+  direction: 'Inbound' | 'Outbound',
+  linkIcon?: string
 ): string => {
-  const subject = subjectNode.label;
-  const object = objectNode.label;
   const subjectCat = subjectNode.category;
   const objectCat = objectNode.category;
+  const subjectLabel = subjectNode.label;
+  const objectLabel = objectNode.label;
+  const subjectYear = subjectNode.year;
+  const objectYear = objectNode.year;
 
-  // === EPISODE CONTEXT HELPERS ===
-  const getEpisodeContext = (episodeNode: NodeData): string => {
-    return episodeNode.eventType?.toLowerCase() || 'event';
-  };
+  // Helper: Format year string
+  const yearStr = (year?: number) => year ? ` (${year})` : '';
 
-  // === CASE A: COMPANY ===
+
+  // === Handle ENGAGES with icon distinction first ===
+  if (linkType === 'ENGAGES') {
+    if (linkIcon === 'HEART') return `Strategic partner of ${subjectLabel}`;
+    if (linkIcon === 'RIVALRY') return `Market competitor of ${subjectLabel}`;
+    if (subjectCat === Category.COMPANY && objectCat === Category.COMPANY) return `Industry peer of ${subjectLabel}`;
+    if (subjectCat === Category.PERSON && objectCat === Category.PERSON) return `Professional ally of ${subjectLabel}`;
+    if (subjectCat === Category.TECHNOLOGY && objectCat === Category.TECHNOLOGY) return `Competing standard with ${subjectLabel}`;
+    return `Related to ${subjectLabel}`;
+  }
+
+  // === CASE A: COMPANY (viewing a Company's connections) ===
   if (subjectCat === Category.COMPANY) {
-    // Person -> Company (INBOUND)
+    // Person → Company (INBOUND)
     if (objectCat === Category.PERSON && direction === 'Inbound') {
-      if (linkType === 'CREATED') return `Founder`;
-      if (linkType === 'PART_OF') return `Former/Current member`;
+      const verbs = getPersonVerbs(objectNode);
+      if (linkType === 'CREATES') return `${verbs.foundedCompany} ${subjectLabel}${yearStr(subjectYear)}`;
+      if (linkType === 'CONTRIBUTES') return `${verbs.contributedCompany} ${subjectLabel}`;
     }
-    // Company -> Person (OUTBOUND to Person)
+    // Company → Person (OUTBOUND)
     if (objectCat === Category.PERSON && direction === 'Outbound') {
-      if (linkType === 'INFLUENCED') return `Mentored by ${subject}`;
+      if (linkType === 'CONTRIBUTES') return `Mentored by ${subjectLabel}`;
     }
-    // Company -> Tech/Product (OUTBOUND)
+    // Company → Technology (OUTBOUND)
     if (objectCat === Category.TECHNOLOGY && direction === 'Outbound') {
-      if (linkType === 'CREATED') return `Product/Service`;
-      if (linkType === 'PART_OF') return `Industry category`;
-      if (linkType === 'BASED_ON') return `Core infrastructure`;
+      const verb = getTechVerb(objectNode);
+      if (linkType === 'CREATES') return `${verb} by ${subjectLabel}${yearStr(objectYear)}`;
+      if (linkType === 'POWERS') return `Powered by ${subjectLabel}`;
+      if (linkType === 'CONTRIBUTES') return `Contribution from ${subjectLabel}`;
     }
-    // Tech -> Company (INBOUND from Tech)
+    // Technology → Company (INBOUND)
     if (objectCat === Category.TECHNOLOGY && direction === 'Inbound') {
-      if (linkType === 'BASED_ON') return `Enabled by this tech`;
-      if (linkType === 'CREATED') return `Created this`;
+      if (linkType === 'POWERS') return `Powers ${subjectLabel}`;
+      if (linkType === 'CREATES') return `Technology behind ${subjectLabel}`;
     }
-    // Company -> Episode (OUTBOUND) - CONTEXT-AWARE
-    if (objectCat === Category.EPISODE && direction === 'Outbound') {
-      const eventType = getEpisodeContext(objectNode);
-      if (linkType === 'INFLUENCED') return `${subject} initiated this ${eventType}`;
-      if (linkType === 'PART_OF') return `${subject} was involved`;
-    }
-    // Episode -> Company (INBOUND)
-    if (objectCat === Category.EPISODE && direction === 'Inbound') {
-      const eventType = getEpisodeContext(objectNode);
-      if (linkType === 'INFLUENCED') return `This ${eventType} affected ${subject}`;
-    }
-    // Company -> Company (VC/Investor INBOUND)
-    if (objectCat === Category.COMPANY && direction === 'Inbound') {
-      if (linkType === 'INFLUENCED') return `Investor`;
-      if (linkType === 'PART_OF') return `Subsidiary of ${subject}`;
-    }
-    // Company -> Company (Subsidiary OUTBOUND)
-    if (objectCat === Category.COMPANY && direction === 'Outbound') {
-      if (linkType === 'PART_OF') return `Acquired/Parent company`;
-      if (linkType === 'INFLUENCED') return `Investment/Influence`;
-      if (linkType === 'BASED_ON') return `Strategic partner`;
+    // Company ↔ Company (non-ENGAGES)
+    if (objectCat === Category.COMPANY) {
+      if (direction === 'Inbound' && linkType === 'CONTRIBUTES') return `Investor in ${subjectLabel}`;
+      if (direction === 'Outbound' && linkType === 'CONTRIBUTES') return `Invested by ${subjectLabel}`;
+      if (direction === 'Inbound' && linkType === 'POWERS') return `Infrastructure for ${subjectLabel}`;
+      if (direction === 'Outbound' && linkType === 'POWERS') return `Uses ${objectLabel}`;
     }
   }
 
-  // === CASE B: PERSON ===
+  // === CASE B: PERSON (viewing a Person's connections) ===
   if (subjectCat === Category.PERSON) {
-    // Person -> Company
+    const verbs = getPersonVerbs(subjectNode);
+
+    // Person → Company (OUTBOUND)
     if (objectCat === Category.COMPANY && direction === 'Outbound') {
-      if (linkType === 'CREATED') return `Founded`;
-      if (linkType === 'PART_OF') return `Worked at`;
+      if (linkType === 'CREATES') return `${verbs.foundedCompany} ${objectLabel}${yearStr(objectYear)}`;
+      if (linkType === 'CONTRIBUTES') return `${verbs.contributedCompany} ${objectLabel}`;
     }
-    // Company -> Person (INBOUND)
+    // Company → Person (INBOUND)
     if (objectCat === Category.COMPANY && direction === 'Inbound') {
-      if (linkType === 'INFLUENCED') return `Mentor organization`;
+      if (linkType === 'CONTRIBUTES') return `At ${objectLabel}`;
     }
-    // Person -> Tech
+    // Person → Technology (OUTBOUND)
     if (objectCat === Category.TECHNOLOGY && direction === 'Outbound') {
-      if (linkType === 'CREATED') return `Inventor`;
+      if (linkType === 'CREATES') return `${verbs.createdTech}${yearStr(objectYear)}`;
+      if (linkType === 'CONTRIBUTES') return `${verbs.contributedTech}${yearStr(objectYear)}`;
     }
-    // Tech -> Person (INBOUND)
+    // Technology → Person (INBOUND)
     if (objectCat === Category.TECHNOLOGY && direction === 'Inbound') {
-      if (linkType === 'CREATED') return `Invented by ${subject}`;
+      if (linkType === 'CREATES') return `Behind ${objectLabel}`;
     }
-    // Person -> Episode (OUTBOUND) - CONTEXT-AWARE
-    if (objectCat === Category.EPISODE && direction === 'Outbound') {
-      const eventType = getEpisodeContext(objectNode);
-      if (linkType === 'INFLUENCED') return `${subject} initiated this ${eventType}`;
-      if (linkType === 'PART_OF') return `${subject} participated`;
-    }
-    // Episode -> Person (INBOUND)
-    if (objectCat === Category.EPISODE && direction === 'Inbound') {
-      const eventType = getEpisodeContext(objectNode);
-      if (linkType === 'INFLUENCED') return `This ${eventType} affected ${subject}`;
-    }
-    // Person -> Person
+    // Person ↔ Person (non-ENGAGES)
     if (objectCat === Category.PERSON) {
-      if (direction === 'Outbound' && linkType === 'INFLUENCED') return `Mentor`;
-      if (direction === 'Inbound' && linkType === 'INFLUENCED') return `Influenced by`;
+      if (direction === 'Outbound' && linkType === 'CONTRIBUTES') return `${verbs.mentored} ${objectLabel}`;
+      if (direction === 'Inbound' && linkType === 'CONTRIBUTES') return `${verbs.mentoredBy} ${objectLabel}`;
     }
   }
 
-  // === CASE C: TECHNOLOGY ===
+  // === CASE C: TECHNOLOGY (viewing a Technology's connections) ===
   if (subjectCat === Category.TECHNOLOGY) {
-    // Company/Person -> Tech (INBOUND - Creator)
+    const verb = getTechVerb(subjectNode);
+    const subjectRole = subjectNode.impactRole;
+
+    // Helper: Get TechRole-specific relation description for Tech ↔ Tech
+    const getTechRelationLabel = (
+      subjectTechRole: string | undefined,
+      objectTechRole: string | undefined,
+      linkType: string,
+      dir: 'Inbound' | 'Outbound'
+    ): string | null => {
+      // POWERS relationship
+      if (linkType === 'POWERS') {
+        if (dir === 'Outbound') {
+          // This tech's foundation is objectNode
+          if (objectTechRole === 'FOUNDATION') return `Based on theory`;
+          if (objectTechRole === 'CORE') return `Built on core`;
+          if (objectTechRole === 'PLATFORM') return `Runs on`;
+          return `Powered by`;
+        } else {
+          // objectNode is built on this tech
+          if (subjectTechRole === 'FOUNDATION') return `Theoretical foundation for`;
+          if (subjectTechRole === 'CORE') return `Core architecture for`;
+          if (subjectTechRole === 'PLATFORM') return `Platform layer for`;
+          return `Powers`;
+        }
+      }
+      // CONTRIBUTES relationship
+      if (linkType === 'CONTRIBUTES') {
+        if (dir === 'Outbound') {
+          // This tech was influenced by objectNode
+          if (objectTechRole === 'FOUNDATION') return `Evolved from theory`;
+          if (objectTechRole === 'CORE') return `Extended from`;
+          return `Inspired by`;
+        } else {
+          // This tech influenced objectNode
+          if (subjectTechRole === 'FOUNDATION') return `Theoretical basis for`;
+          if (subjectTechRole === 'CORE') return `Technical inspiration for`;
+          return `Influenced`;
+        }
+      }
+      return null;
+    };
+
+    // Company/Person → Tech (INBOUND)
     if ((objectCat === Category.COMPANY || objectCat === Category.PERSON) && direction === 'Inbound') {
-      if (linkType === 'CREATED') return `Creator`;
+      if (linkType === 'CREATES') return `${verb} ${subjectLabel}${yearStr(subjectYear)}`;
+      if (linkType === 'CONTRIBUTES') return `Contributed to ${subjectLabel}`;
     }
-    // Tech -> Company/Person (OUTBOUND - Used by)
+    // Tech → Company/Person (OUTBOUND)
     if ((objectCat === Category.COMPANY || objectCat === Category.PERSON) && direction === 'Outbound') {
-      if (linkType === 'BASED_ON') return `Dependency`;
+      if (linkType === 'POWERS') return `${subjectLabel} powers this`;
     }
-    // Tech -> Tech (Base)
+    // Tech → Tech (OUTBOUND - this tech depends on object tech)
     if (objectCat === Category.TECHNOLOGY && direction === 'Outbound') {
-      if (linkType === 'BASED_ON') return `Built on`;
-      if (linkType === 'INFLUENCED') return `Inspired by`;
-      if (linkType === 'CREATED') return `Created this`;
+      const objectRole = objectNode.impactRole;
+      const label = getTechRelationLabel(subjectRole, objectRole, linkType, 'Outbound');
+      if (label) return `${label}: ${objectLabel}${yearStr(objectYear)}`;
     }
-    // Tech -> Tech (Derivative INBOUND)
+    // Tech → Tech (INBOUND - object tech depends on this tech)
     if (objectCat === Category.TECHNOLOGY && direction === 'Inbound') {
-      if (linkType === 'BASED_ON') return `Foundation for`;
-      if (linkType === 'INFLUENCED') return `Led to`;
-      if (linkType === 'CREATED') return `Created`;
-    }
-    // Tech -> Episode
-    if (objectCat === Category.EPISODE && direction === 'Outbound') {
-      const eventType = getEpisodeContext(objectNode);
-      if (linkType === 'INFLUENCED') return `Caused this ${eventType}`;
-      if (linkType === 'PART_OF') return `Related ${eventType}`;
+      const objectRole = objectNode.impactRole;
+      const label = getTechRelationLabel(subjectRole, objectRole, linkType, 'Inbound');
+      if (label) return `${label} ${objectLabel}`;
     }
   }
 
-  // === CASE D: EPISODE ===
-  if (subjectCat === Category.EPISODE) {
-    const subjectEventType = getEpisodeContext(subjectNode);
-    const isActor = objectCat === Category.COMPANY || objectCat === Category.PERSON;
-
-    // 1. INBOUND (Who caused/joined it?) -> Actor -> Episode
-    if (direction === 'Inbound') {
-      if (linkType === 'INFLUENCED') return `Main cause of this ${subjectEventType}`;
-      if (linkType === 'PART_OF') return `Key participant`;
-    }
-
-    // 2. OUTBOUND (What did it affect/include?) -> Episode -> Target
-    if (direction === 'Outbound') {
-      // If linked to a Company/Person via PART_OF, they are MEMBERS, not outcomes.
-      if (linkType === 'PART_OF') {
-        return isActor
-          ? `Key player in this ${subjectEventType}`
-          : `Part of this ${subjectEventType}`;
-      }
-
-      // If linked via TRIGGERED, it is likely a consequence/impact.
-      if (linkType === 'INFLUENCED') {
-        return `Consequence of this ${subjectEventType}`;
-      }
-    }
-  }
-
-  // Fallback: Return simple description
-  const verb = linkType === 'CREATED' ? 'Creator'
-    : linkType === 'PART_OF' ? 'Related'
-      : linkType === 'BASED_ON' ? 'Dependency'
-        : linkType === 'INFLUENCED' ? 'Influence'
-          : 'Connection';
-
-  return verb;
+  // === Fallback ===
+  return `Connected to ${subjectLabel}`;
 };
 
 
@@ -340,20 +342,96 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
   const connections = useMemo(() => {
     if (!node) return [];
 
-    // Define category priority order based on current node type
+    // ============================================================================
+    // CONNECTION SORTING STRATEGY
+    // ============================================================================
+    // 1st: Category Order (varies by viewing node type)
+    // 2nd: LinkType Priority (within same category)
+    // 3rd: Alphabetical by label (within same category + linkType)
+    // ============================================================================
+
+    // Category priority order based on current node type
     const getCategoryOrder = (nodeCategory: Category): Record<Category, number> => {
       switch (nodeCategory) {
         case Category.COMPANY:
-          return { [Category.PERSON]: 0, [Category.TECHNOLOGY]: 1, [Category.COMPANY]: 2, [Category.EPISODE]: 3 };
+          // PERSON → TECHNOLOGY → COMPANY
+          return { [Category.PERSON]: 0, [Category.TECHNOLOGY]: 1, [Category.COMPANY]: 2 };
         case Category.PERSON:
-          return { [Category.COMPANY]: 0, [Category.TECHNOLOGY]: 1, [Category.PERSON]: 2, [Category.EPISODE]: 3 };
+          // COMPANY → TECHNOLOGY → PERSON
+          return { [Category.COMPANY]: 0, [Category.TECHNOLOGY]: 1, [Category.PERSON]: 2 };
         case Category.TECHNOLOGY:
-          return { [Category.TECHNOLOGY]: 0, [Category.PERSON]: 1, [Category.COMPANY]: 2, [Category.EPISODE]: 3 };
-        case Category.EPISODE:
-          return { [Category.COMPANY]: 0, [Category.TECHNOLOGY]: 1, [Category.PERSON]: 2, [Category.EPISODE]: 3 };
+          // PERSON/COMPANY (Creators) → TECHNOLOGY
+          return { [Category.PERSON]: 0, [Category.COMPANY]: 1, [Category.TECHNOLOGY]: 2 };
         default:
-          return { [Category.PERSON]: 0, [Category.TECHNOLOGY]: 1, [Category.COMPANY]: 2, [Category.EPISODE]: 3 };
+          return { [Category.PERSON]: 0, [Category.TECHNOLOGY]: 1, [Category.COMPANY]: 2 };
       }
+    };
+
+    // LinkType priority within each category (lower = higher priority)
+    const getLinkTypePriority = (
+      viewingCategory: Category,
+      otherCategory: Category,
+      linkType: string,
+      relation: string,
+      linkIcon?: string
+    ): number => {
+      // === COMPANY viewing ===
+      if (viewingCategory === Category.COMPANY) {
+        if (otherCategory === Category.PERSON) {
+          if (linkType === 'CREATES' && relation === 'Inbound') return 0; // Founder
+          if (linkType === 'CONTRIBUTES' && relation === 'Inbound') return 1; // Key contributor
+          return 2;
+        }
+        if (otherCategory === Category.TECHNOLOGY) {
+          if (linkType === 'CREATES' && relation === 'Outbound') return 0; // Product/Service
+          if (linkType === 'POWERS') return 1; // Infrastructure
+          if (linkType === 'CONTRIBUTES') return 2;
+          return 3;
+        }
+        if (otherCategory === Category.COMPANY) {
+          if (linkType === 'ENGAGES' && linkIcon === 'HEART') return 0; // Partner
+          if (linkType === 'ENGAGES' && linkIcon === 'RIVALRY') return 1; // Rival
+          if (linkType === 'CONTRIBUTES') return 2; // Investor
+          return 3;
+        }
+      }
+
+      // === PERSON viewing ===
+      if (viewingCategory === Category.PERSON) {
+        if (otherCategory === Category.COMPANY) {
+          if (linkType === 'CREATES' && relation === 'Outbound') return 0; // Founded
+          if (linkType === 'CONTRIBUTES') return 1;
+          return 2;
+        }
+        if (otherCategory === Category.TECHNOLOGY) {
+          if (linkType === 'CREATES' && relation === 'Outbound') return 0; // Invented
+          if (linkType === 'CONTRIBUTES') return 1;
+          return 2;
+        }
+        if (otherCategory === Category.PERSON) {
+          if (linkType === 'CONTRIBUTES') return 0;
+          if (linkType === 'ENGAGES') return 1;
+          return 2;
+        }
+      }
+
+      // === TECHNOLOGY viewing ===
+      if (viewingCategory === Category.TECHNOLOGY) {
+        if (otherCategory === Category.PERSON || otherCategory === Category.COMPANY) {
+          if (linkType === 'CREATES' && relation === 'Inbound') return 0; // Creator
+          if (linkType === 'CONTRIBUTES' && relation === 'Inbound') return 1; // Contributor
+          return 2;
+        }
+        if (otherCategory === Category.TECHNOLOGY) {
+          if (linkType === 'POWERS' && relation === 'Outbound') return 0; // Built on
+          if (linkType === 'POWERS' && relation === 'Inbound') return 1; // Foundation for
+          if (linkType === 'CONTRIBUTES') return 2;
+          if (linkType === 'ENGAGES') return 3; // Competing
+          return 4;
+        }
+      }
+
+      return 99;
     };
 
     const categoryOrder = getCategoryOrder(node.category);
@@ -387,17 +465,24 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
       return true;
     });
 
-    // Sort: 1st by category order, 2nd by year (descending)
+    // Sort: 1st Category → 2nd LinkType Priority → 3rd Alphabetical
     return dedupedConnections.sort((a, b) => {
+      // 1st: Category Order
       const catA = categoryOrder[a!.otherNode.category] ?? 99;
       const catB = categoryOrder[b!.otherNode.category] ?? 99;
-
       if (catA !== catB) return catA - catB;
 
-      // Same category: sort by year descending
-      const yearA = a!.otherNode.year || 0;
-      const yearB = b!.otherNode.year || 0;
-      return yearB - yearA;
+      // 2nd: LinkType Priority
+      const linkPriorityA = getLinkTypePriority(
+        node.category, a!.otherNode.category, a!.type, a!.relation, a!.link.icon
+      );
+      const linkPriorityB = getLinkTypePriority(
+        node.category, b!.otherNode.category, b!.type, b!.relation, b!.link.icon
+      );
+      if (linkPriorityA !== linkPriorityB) return linkPriorityA - linkPriorityB;
+
+      // 3rd: Alphabetical by label
+      return a!.otherNode.label.localeCompare(b!.otherNode.label);
     });
   }, [node, data]);
 
@@ -479,28 +564,12 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
         }
         return null;
 
-      case Category.EPISODE:
-        // Event Type + Impact Scale
-        if (node.eventType || node.impactScale) {
-          return (
-            <div className="flex items-center gap-2 mt-2 text-sm">
-              {node.eventType && (
-                <span className="text-violet-400">{node.eventType}</span>
-              )}
-              {node.eventType && node.impactScale && <span className="text-slate-500">•</span>}
-              {node.impactScale && (
-                <span className="text-slate-300">{node.impactScale}</span>
-              )}
-            </div>
-          );
-        }
-        return null;
-
       case Category.TECHNOLOGY:
-        // Lifecycle display - JUST YEAR (User Request)
+        // Lifecycle display - Verb + Year (e.g., "Invented in 1973")
+        const techVerb = getTechVerb(node).toLowerCase();
         return (
-          <div className="flex items-center gap-2 mt-2 text-sm text-slate-400 font-mono">
-            {node.year}
+          <div className="flex items-center gap-2 mt-2 text-sm text-slate-400">
+            {techVerb} in {node.year}
           </div>
         );
 
@@ -531,17 +600,14 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
                       ? toFirstCap(CATEGORY_LABELS[node.companyCategories[0]] || node.companyCategories[0])
                       : toFirstCap(node.category);
                   case Category.TECHNOLOGY:
-                    // Category: Title case for multi-word categories (e.g. "Hardware & Robotics")
-                    const techCategory = node.techCategoryL1 || node.category;
-                    if (techCategory === "HARDWARE & ROBOTICS") {
-                      return "Hardware & Robotics";
-                    }
-                    return toTitleCase(techCategory);
+                    // Show L2 category only (L1 still searchable via CardView)
+                    const l2 = node.techCategoryL2 || node.techCategoryL1;
+                    return l2 ? l2.toUpperCase() : node.category.toUpperCase();
                   case Category.PERSON:
                     // Impact Role: First letter capital only (e.g. "Founder")
                     return toFirstCap(node.impactRole || node.category);
                   default:
-                    return node.category; // "EPISODE"
+                    return node.category;
                 }
               })()}
             </span>
@@ -555,13 +621,13 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
           {/* Fallback: Original year display (only if no dynamic metadata) */}
           {!renderDynamicMetadata() && (
             <div className="flex items-center gap-2 mt-2">
-              {/* Logic for Year Display: Show Range for Companies, Single Year for Tech/Episodes, Hidden for Persons */}
+              {/* Logic for Year Display: Show Range for Companies, Single Year for Tech, Hidden for Persons */}
               {node.category === Category.COMPANY && (
                 <span className="text-slate-400 font-mono text-sm">
                   {node.year} - Current
                 </span>
               )}
-              {(node.category === Category.TECHNOLOGY || node.category === Category.EPISODE) && (
+              {node.category === Category.TECHNOLOGY && (
                 <span className="text-slate-400 font-mono text-sm">
                   {node.year}
                 </span>
@@ -696,12 +762,6 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
                         </svg>
                       );
-                    case Category.EPISODE:
-                      return (
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-                        </svg>
-                      );
                     default:
                       return (
                         <div className="w-2 h-2 rounded-full" style={{ backgroundColor: CATEGORY_COLORS[conn?.otherNode.category || 'COMPANY'] }}></div>
@@ -725,7 +785,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
                       <div>
                         <div className="text-sm font-bold text-slate-200 group-hover:text-white">{conn?.otherNode.label}</div>
                         <div className="text-[10px] text-slate-400 italic">
-                          {conn && node && getConnectionLabel(node, conn.otherNode, conn.type, conn.relation as 'Inbound' | 'Outbound')}
+                          {conn && node && getConnectionLabel(node, conn.otherNode, conn.type, conn.relation as 'Inbound' | 'Outbound', conn.link.icon)}
                         </div>
                       </div>
                     </div>

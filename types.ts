@@ -3,7 +3,6 @@ export enum Category {
   COMPANY = 'COMPANY',
   PERSON = 'PERSON',
   TECHNOLOGY = 'TECHNOLOGY',
-  EPISODE = 'EPISODE',
 }
 
 export enum LinkType {
@@ -53,13 +52,7 @@ export enum TechRole {
   L3_END_APPLICATION = 'APPLICATION',   // Consumer facing (iPhone, ChatGPT) - Score boosted
 }
 
-export enum EpisodeRole {
-  MILESTONE = 'MILESTONE', // Launch, Breakthrough - High weight
-  DEAL = 'DEAL',           // Acquisition, Investment - Low weight
-  CRISIS = 'CRISIS',       // Scandal, Failure
-}
-
-export type Role = CompanyRole | PersonRole | TechRole | EpisodeRole;
+export type Role = CompanyRole | PersonRole | TechRole;
 
 export type CompanyMode = 'FULL' | 'MINIMAL' | 'HIDDEN';
 
@@ -123,10 +116,6 @@ export interface NodeData {
   secondaryRole?: string; // e.g. "CEO of SpaceX" (Optional)
   birthYear?: number;
   deathYear?: number;     // undefined = "Present"
-
-  // === NEW: Episode Specific ===
-  eventType?: string;     // e.g. "Investment", "Security Breach"
-  impactScale?: string;   // e.g. "$13B Deal", "Global Impact"
 
   // === NEW: Company Specific ===
   marketCap?: {
