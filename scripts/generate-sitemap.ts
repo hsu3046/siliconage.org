@@ -22,7 +22,7 @@ function generateSitemap(): string {
     // Generate node URLs
     const nodeUrls = INITIAL_DATA.nodes.map(node => ({
         loc: `/?node=${encodeURIComponent(node.id)}`,
-        priority: node.importance === 1 ? '0.7' : node.importance === 2 ? '0.6' : '0.5',
+        priority: '0.6',
         changefreq: 'monthly'
     }));
 

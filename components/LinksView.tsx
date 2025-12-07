@@ -12,13 +12,13 @@ interface LinksViewProps {
 // Human-readable relationship labels
 const getRelationshipLabel = (type: LinkType, isInbound: boolean): string => {
     switch (type) {
-        case LinkType.CREATED:
+        case LinkType.CREATES:
             return isInbound ? 'Created by' : 'Created';
-        case LinkType.BASED_ON:
+        case LinkType.POWERS:
             return isInbound ? 'Based on' : 'Foundation for';
-        case LinkType.INFLUENCED:
+        case LinkType.CONTRIBUTES:
             return isInbound ? 'Influenced by' : 'Influenced';
-        case LinkType.PART_OF:
+        case LinkType.ENGAGES:
             return isInbound ? 'Member of' : 'Contains';
         default:
             return type;

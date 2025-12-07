@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { NodeData, AIResponse, GraphData, LinkDirection, Category } from '../types';
+import { NodeData, AIResponse, GraphData, Category } from '../types';
 import { CATEGORY_COLORS, CATEGORY_LABELS } from '../constants';
 import { fetchNodeDetails } from '../services/geminiService';
 
@@ -387,17 +387,17 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
       return true;
     });
 
-    // Sort: 1st by category order, 2nd by impact score (descending)
+    // Sort: 1st by category order, 2nd by year (descending)
     return dedupedConnections.sort((a, b) => {
       const catA = categoryOrder[a!.otherNode.category] ?? 99;
       const catB = categoryOrder[b!.otherNode.category] ?? 99;
 
       if (catA !== catB) return catA - catB;
 
-      // Same category: sort by score descending
-      const scoreA = a!.otherNode._score || 0;
-      const scoreB = b!.otherNode._score || 0;
-      return scoreB - scoreA;
+      // Same category: sort by year descending
+      const yearA = a!.otherNode.year || 0;
+      const yearB = b!.otherNode.year || 0;
+      return yearB - yearA;
     });
   }, [node, data]);
 
@@ -545,16 +545,6 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
                 }
               })()}
             </span>
-            {/* 1. Impact Factor Score in Header */}
-            <div
-              className="flex items-center gap-1 bg-slate-800/80 px-2 py-1 rounded-sm border border-slate-700/50"
-              title="Impact Factor"
-            >
-              <svg className="w-3 h-3 text-yellow-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-              <span className="text-[10px] font-mono font-bold text-slate-300">
-                {(node._score || 0).toFixed(1)}
-              </span>
-            </div>
           </div>
 
           <h2 className="text-3xl font-bold text-white mt-3 leading-tight">{node.label}</h2>
@@ -740,17 +730,8 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
                       </div>
                     </div>
 
-                    {/* 2. Relationship Score Display */}
+                    {/* Arrow indicator */}
                     <div className="flex items-center gap-3">
-                      <div
-                        className="flex items-center gap-1 bg-slate-900/50 px-1.5 py-0.5 rounded border border-slate-700/50"
-                        title={`Impact Factor: ${(conn?.otherNode._score || 0).toFixed(1)}`}
-                      >
-                        <svg className="w-2.5 h-2.5 text-yellow-500/70" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <span className="text-[10px] font-mono text-slate-400 group-hover:text-slate-300">
-                          {(conn?.otherNode._score || 0).toFixed(0)}
-                        </span>
-                      </div>
                       <svg className="w-4 h-4 text-slate-600 group-hover:text-primary transform group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
                     </div>
                   </button>

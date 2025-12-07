@@ -62,9 +62,13 @@ const App: React.FC = () => {
   const featuredNode = useMemo(() => {
     const today = new Date();
     const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-    const importantNodes = INITIAL_DATA.nodes.filter(n => n.importance === 1);
-    const index = seed % importantNodes.length;
-    return importantNodes[index];
+    // Select from foundational technology nodes (L0/L1)
+    const foundationalNodes = INITIAL_DATA.nodes.filter(n =>
+      n.category === Category.TECHNOLOGY &&
+      (n.impactRole === 'FOUNDATION' || n.impactRole === 'CORE')
+    );
+    const index = seed % foundationalNodes.length;
+    return foundationalNodes[index];
   }, []);
 
   const [companyMode, setCompanyMode] = useState<CompanyMode>('FULL');
@@ -79,10 +83,10 @@ const App: React.FC = () => {
   });
 
   const [visibleLinkTypes, setVisibleLinkTypes] = useState<Record<LinkType, boolean>>({
-    [LinkType.CREATED]: true,
-    [LinkType.BASED_ON]: true,
-    [LinkType.INFLUENCED]: true,
-    [LinkType.PART_OF]: true,
+    [LinkType.CREATES]: true,
+    [LinkType.POWERS]: true,
+    [LinkType.CONTRIBUTES]: true,
+    [LinkType.ENGAGES]: true,
   });
 
   const { width, height } = useWindowSize();
@@ -460,10 +464,10 @@ const App: React.FC = () => {
                   const isActive = visibleLinkTypes[type];
                   const getLineStyle = () => {
                     switch (type) {
-                      case LinkType.BASED_ON: return "border-b-2 w-4 border-orange-700 border-solid";
-                      case LinkType.CREATED: return "border-b-2 w-4 border-teal-600";
-                      case LinkType.INFLUENCED: return "border-b w-4 border-purple-300 border-dotted";
-                      case LinkType.PART_OF: return "border-b w-4 border-slate-400";
+                      case LinkType.POWERS: return "border-b-2 w-4 border-orange-700 border-solid";
+                      case LinkType.CREATES: return "border-b-2 w-4 border-teal-600";
+                      case LinkType.CONTRIBUTES: return "border-b w-4 border-purple-300 border-dotted";
+                      case LinkType.ENGAGES: return "border-b w-4 border-slate-400";
                       default: return "w-4 border-b";
                     }
                   };
@@ -471,10 +475,10 @@ const App: React.FC = () => {
                   // Human-readable link type labels
                   const getLinkTypeLabel = () => {
                     switch (type) {
-                      case LinkType.BASED_ON: return "Based on";
-                      case LinkType.CREATED: return "Created";
-                      case LinkType.INFLUENCED: return "Influenced";
-                      case LinkType.PART_OF: return "Part of";
+                      case LinkType.POWERS: return "POWERS";
+                      case LinkType.CREATES: return "CREATES";
+                      case LinkType.CONTRIBUTES: return "CONTRIBUTES";
+                      case LinkType.ENGAGES: return "ENGAGES";
                       default: return type;
                     }
                   };
@@ -482,10 +486,10 @@ const App: React.FC = () => {
                   const getBorderColor = () => {
                     if (!isActive) return undefined; // Grey border when OFF (from className)
                     switch (type) {
-                      case LinkType.BASED_ON: return "rgba(194, 65, 12, 1)";  // #c2410c
-                      case LinkType.CREATED: return "rgba(8, 145, 178, 1)";  // #0891b2
-                      case LinkType.INFLUENCED: return "rgba(216, 180, 254, 1)"; // #d8b4fe
-                      case LinkType.PART_OF: return "rgba(148, 163, 184, 1)"; // #94a3b8
+                      case LinkType.POWERS: return "rgba(194, 65, 12, 1)";  // #c2410c
+                      case LinkType.CREATES: return "rgba(8, 145, 178, 1)";  // #0891b2
+                      case LinkType.CONTRIBUTES: return "rgba(216, 180, 254, 1)"; // #d8b4fe
+                      case LinkType.ENGAGES: return "rgba(148, 163, 184, 1)"; // #94a3b8
                       default: return undefined;
                     }
                   };
@@ -596,10 +600,10 @@ const App: React.FC = () => {
                     const isActive = visibleLinkTypes[type];
                     const getLineStyle = () => {
                       switch (type) {
-                        case LinkType.BASED_ON: return "border-b-2 w-4 border-orange-700 border-solid";
-                        case LinkType.CREATED: return "border-b-2 w-4 border-cyan-400";
-                        case LinkType.INFLUENCED: return "border-b w-4 border-purple-300 border-dotted";
-                        case LinkType.PART_OF: return "border-b w-4 border-slate-400";
+                        case LinkType.POWERS: return "border-b-2 w-4 border-orange-700 border-solid";
+                        case LinkType.CREATES: return "border-b-2 w-4 border-cyan-400";
+                        case LinkType.CONTRIBUTES: return "border-b w-4 border-purple-300 border-dotted";
+                        case LinkType.ENGAGES: return "border-b w-4 border-slate-400";
                         default: return "w-4 border-b";
                       }
                     };
@@ -607,10 +611,10 @@ const App: React.FC = () => {
                     const getBorderColor = () => {
                       if (!isActive) return undefined;
                       switch (type) {
-                        case LinkType.BASED_ON: return "rgba(194, 65, 12, 1)";  // #c2410c
-                        case LinkType.CREATED: return "rgba(34, 211, 238, 1)";  // #22d3ee
-                        case LinkType.INFLUENCED: return "rgba(216, 180, 254, 1)"; // #d8b4fe
-                        case LinkType.PART_OF: return "rgba(148, 163, 184, 1)"; // #94a3b8
+                        case LinkType.POWERS: return "rgba(194, 65, 12, 1)";  // #c2410c
+                        case LinkType.CREATES: return "rgba(34, 211, 238, 1)";  // #22d3ee
+                        case LinkType.CONTRIBUTES: return "rgba(216, 180, 254, 1)"; // #d8b4fe
+                        case LinkType.ENGAGES: return "rgba(148, 163, 184, 1)"; // #94a3b8
                         default: return undefined;
                       }
                     };

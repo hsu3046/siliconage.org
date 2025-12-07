@@ -129,7 +129,7 @@ const ChangeLog: React.FC<ChangeLogProps> = ({ isOpen, onClose }) => {
                                 <ul className="space-y-2 text-slate-300 text-sm">
                                     <li className="flex items-start gap-2">
                                         <span className="text-amber-400 mt-1">•</span>
-                                        <span><strong className="text-white">Impact Score:</strong> Rebalanced algorithm - boosted foundational tech, nerfed founder scores</span>
+                                        <span><strong className="text-white">Node Sizing:</strong> Improved sizing algorithm based on technology layers (L0-L3)</span>
                                     </li>
                                     <li className="flex items-start gap-2">
                                         <span className="text-amber-400 mt-1">•</span>

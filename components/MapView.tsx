@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import * as d3 from 'd3';
-import { GraphData, NodeData, LinkData, Category, LinkType, LinkDirection, CompanyMode } from '../types';
+import { GraphData, NodeData, LinkData, Category, LinkType, ArrowHead, LinkIcon, CompanyMode } from '../types';
 import { CATEGORY_COLORS } from '../constants';
 
 interface MapViewProps {
@@ -47,24 +47,20 @@ const getLabelDimensions = (label: string, category: Category) => {
 // Define styles for different link types
 const getLinkStyle = (type: LinkType) => {
   switch (type) {
-    case LinkType.CREATED:    // Creation, Launch, Founding
-      // Darker Teal, Solid (Main Focus)
-      return { dasharray: "0", width: 1.5, color: "#0891b2", opacity: 1.0 };
+    case LinkType.CREATES:    // Creation, Launch, Founding
+      return { dasharray: "none", width: 1.5, color: "#06b6d4", opacity: 1.0 }; // Cyan, Solid
 
-    case LinkType.BASED_ON:   // Usage, Infrastructure, Foundation
-      // Dark Orange, Solid, Subtle (Background)
-      return { dasharray: "0", width: 1.5, color: "#c2410c", opacity: 0.5 };
+    case LinkType.POWERS:     // Dependency, Infrastructure, Foundation
+      return { dasharray: "none", width: 1.0, color: "#f97316", opacity: .8 }; // Orange, Solid
 
-    case LinkType.INFLUENCED: // Investment, Cause/Effect, Inspiration (Was TRIGGERED)
-      // Soft Purple, Dotted (Narrative)
-      return { dasharray: "3,3", width: 1.5, color: "#d8b4fe", opacity: 0.7 };
+    case LinkType.CONTRIBUTES: // Evolution, Influence, Inspiration
+      return { dasharray: "5,2", width: 1.5, color: "#a78bfa", opacity: 0.8 }; // Purple, Dashed
 
-    case LinkType.PART_OF:    // Membership, Ownership, Category
-      // Slate, Solid, Neutral (Structure)
-      return { dasharray: "0", width: 1, color: "#94a3b8", opacity: 0.5 };
+    case LinkType.ENGAGES:    // Interaction, Rivalry, Partnership
+      return { dasharray: "none", width: 1.5, color: "#10b981", opacity: 0.8 }; // Emerald, Solid
 
     default:
-      return { dasharray: "0", width: 1, color: "#94a3b8", opacity: 0.5 };
+      return { dasharray: "none", width: 1, color: "#94a3b8", opacity: 0.5 };
   }
 };
 
@@ -446,10 +442,10 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
     const defs = svg.append("defs");
 
     const markerTypes = [
-      { id: "arrow-created", color: "#0891b2" },     // Darker Teal (Main Focus)
-      { id: "arrow-based_on", color: "#c2410c" },    // Dark Orange (Background)
-      { id: "arrow-influenced", color: "#d8b4fe" },  // Soft Purple (Narrative)
-      { id: "arrow-part_of", color: "#94a3b8" },     // Slate 400 (Structure)
+      { id: "arrow-creates", color: "#06b6d4" },     // Cyan (Creates)
+      { id: "arrow-powers", color: "#f97316" },      // Orange (Powers)
+      { id: "arrow-contributes", color: "#a78bfa" }, // Purple (Contributes)
+      { id: "arrow-engages", color: "#10b981" },     // Emerald (Engages)
     ];
 
     markerTypes.forEach(m => {
@@ -481,6 +477,39 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
         .attr("d", "M10,-5L0,0L10,5")
         .attr("fill", m.color);
     });
+
+    // --- DEFINE LINK ICON SYMBOLS ---
+    // HEART icon (Co-op/Partnership)
+    defs.append("symbol")
+      .attr("id", "icon-heart")
+      .attr("viewBox", "0 0 24 24")
+      .append("path")
+      .attr("d", "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z")
+      .attr("fill", "#f472b6"); // Pink
+
+    // RIVALRY icon (Boxing gloves - simplified fist)
+    defs.append("symbol")
+      .attr("id", "icon-rivalry")
+      .attr("viewBox", "0 0 24 24")
+      .append("path")
+      .attr("d", "M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm-1.5 14.5l-3-3 1.41-1.42L10.5 13.67l4.59-4.58L16.5 10.5l-6 6z")
+      .attr("fill", "#f97316"); // Orange
+
+    // POWERS icon (Lightning bolt)
+    defs.append("symbol")
+      .attr("id", "icon-powers")
+      .attr("viewBox", "0 0 24 24")
+      .append("path")
+      .attr("d", "M7 2v11h3v9l7-12h-4l4-8z")
+      .attr("fill", "#fbbf24"); // Yellow
+
+    // SPARK icon (Sparkle/Star)
+    defs.append("symbol")
+      .attr("id", "icon-spark")
+      .attr("viewBox", "0 0 24 24")
+      .append("path")
+      .attr("d", "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z")
+      .attr("fill", "#06b6d4"); // Cyan
 
     // --- FOCUS MODE: Pulsing Glow Effect ---
     const glowFilter = defs.append("filter")
@@ -563,6 +592,7 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
     // Layers
     rootGroup.append("g").attr("class", "layer-company-zone");
     rootGroup.append("g").attr("class", "layer-links");
+    rootGroup.append("g").attr("class", "layer-link-icons"); // NEW: Icons on links
     rootGroup.append("g").attr("class", "layer-company-labels");
     rootGroup.append("g").attr("class", "layer-nodes");
     rootGroup.append("g").attr("class", "layer-labels");
@@ -902,11 +932,11 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
         .distance(d => {
           if (isFocusMode) {
             // Shorter distances in Focus Mode for tighter grouping
-            if (d.type === LinkType.PART_OF) return 30;
+            if (d.type === LinkType.ENGAGES) return 30;
             return 80;
           }
           // Full graph: more spread
-          if (d.type === LinkType.PART_OF) return 60;
+          if (d.type === LinkType.ENGAGES) return 60;
           return 180;
         })
         .strength(d => {
@@ -1067,7 +1097,6 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
                 label: d.label,
                 category: d.category,
                 description: d.description,
-                score: d._score || 0,
                 companyRole: d.impactRole as string | undefined,
                 techCategoryL1: d.techCategoryL1,
                 techCategoryL2: d.techCategoryL2,
@@ -1100,11 +1129,28 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
       const sourceDist = sourceNode?._focusDistance;
       const targetDist = targetNode?._focusDistance;
 
-      // If both nodes are 2nd degree, dim the link significantly
-      if (sourceDist === 2 && targetDist === 2) return getLinkStyle(d.type).opacity * 0.15;
-      // If either node is 2nd degree, dim
-      if (sourceDist === 2 || targetDist === 2) return getLinkStyle(d.type).opacity * 0.25;
+      // In Focus Mode: Only links directly connected to focus node (distance 0) should be fully visible
+      // If neither node is the focus node (distance 0), dim the link
+      if (sourceDist !== undefined && targetDist !== undefined) {
+        // Both nodes are 2nd degree -> very dim
+        if (sourceDist === 2 && targetDist === 2) return getLinkStyle(d.type).opacity * 0.15;
+        // Neither node is the focus node (0) -> this is a "secondary" link (e.g., 1st-to-1st)
+        if (sourceDist !== 0 && targetDist !== 0) return getLinkStyle(d.type).opacity * 0.25;
+      }
       return getLinkStyle(d.type).opacity;
+    };
+
+    // Helper to check if link should be dimmed (not directly connected to focus node)
+    const isSecondaryLink = (d: any): boolean => {
+      const sourceNode = visibleNodes.find(n => n.id === (typeof d.source === 'object' ? d.source.id : d.source));
+      const targetNode = visibleNodes.find(n => n.id === (typeof d.target === 'object' ? d.target.id : d.target));
+      const sourceDist = sourceNode?._focusDistance;
+      const targetDist = targetNode?._focusDistance;
+      // If neither node is the focus node (distance 0), it's a secondary link
+      if (sourceDist !== undefined && targetDist !== undefined) {
+        return sourceDist !== 0 && targetDist !== 0;
+      }
+      return false;
     };
 
     // 3. Links
@@ -1119,18 +1165,52 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
       .attr("stroke-dasharray", d => getLinkStyle(d.type).dasharray === "none" ? null : getLinkStyle(d.type).dasharray)
       .attr("stroke-linecap", "butt")
       .attr("marker-end", d => {
-        // Show arrow by default (FORWARD or undefined), hide only for REVERSE
-        if (d.direction !== LinkDirection.REVERSE) {
+        // Hide arrows for 2nd-degree links
+        if (isSecondaryLink(d)) return null;
+        // Show arrow at end for SINGLE or DOUBLE
+        if (d.arrow === ArrowHead.SINGLE || d.arrow === ArrowHead.DOUBLE) {
           return `url(#arrow-${d.type.toLowerCase()})`;
         }
         return null;
       })
       .attr("marker-start", d => {
-        if (d.direction === LinkDirection.REVERSE) {
+        // Hide arrows for 2nd-degree links
+        if (isSecondaryLink(d)) return null;
+        // Show arrow at start for DOUBLE only
+        if (d.arrow === ArrowHead.DOUBLE) {
           return `url(#arrow-${d.type.toLowerCase()}-reverse)`;
         }
         return null;
       });
+
+    // 3.1 Link Icons (NEW)
+    const getIconSymbolId = (icon: LinkIcon | undefined): string | null => {
+      switch (icon) {
+        case LinkIcon.HEART: return "icon-heart";
+        case LinkIcon.RIVALRY: return "icon-rivalry";
+        case LinkIcon.POWERS: return "icon-powers";
+        case LinkIcon.SPARK: return "icon-spark";
+        default: return null;
+      }
+    };
+
+    const linksWithIcons = visibleLinks.filter(l => l.icon && l.icon !== LinkIcon.NONE);
+    const iconsSel = rootGroup.select(".layer-link-icons")
+      .selectAll("use")
+      .data(linksWithIcons, (d: any) => `icon-${d.source.id}-${d.target.id}`)
+      .join(
+        enter => enter.append("use")
+          .attr("width", 12)
+          .attr("height", 12)
+          .attr("href", d => `#${getIconSymbolId(d.icon)}`)
+          .style("pointer-events", "none")
+          .style("opacity", 0)
+          .call(enter => enter.transition(t).style("opacity", (d: any) => isSecondaryLink(d) ? 0.25 : 0.9)),
+        update => update
+          .attr("href", d => `#${getIconSymbolId(d.icon)}`)
+          .call(update => update.transition(t).style("opacity", (d: any) => isSecondaryLink(d) ? 0.25 : 0.9)),
+        exit => exit.transition(t).style("opacity", 0).remove()
+      );
 
     // 4. Other Nodes
     const otherNodesData = visibleNodes.filter(d => d.category !== Category.COMPANY);
@@ -1141,6 +1221,7 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
         enter => enter.append("circle")
           .attr("r", 0)
           .attr("fill", d => CATEGORY_COLORS[d.category])
+          .attr("fill-opacity", (d: any) => d._focusDistance === 2 ? 0.3 : 1)
           .attr("stroke", "#0f172a")
           .attr("stroke-width", 2)
           .attr("cursor", "pointer")
@@ -1168,7 +1249,6 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
               label: d.label,
               category: d.category,
               description: d.description,
-              score: d._score || 0,
               companyRole: d.impactRole as string | undefined,
               techCategoryL1: d.techCategoryL1,
               techCategoryL2: d.techCategoryL2,
@@ -1177,7 +1257,9 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
           })
           .on("mousemove", (event) => setTooltip(prev => prev ? { ...prev, x: event.clientX, y: event.clientY } : null))
           .on("mouseleave", () => setTooltip(null)),
-        update => update.transition(t).attr("r", (d: any) => d._radius || 10),
+        update => update.transition(t)
+          .attr("r", (d: any) => d._radius || 10)
+          .attr("fill-opacity", (d: any) => d._focusDistance === 2 ? 0.3 : 1),
         exit => exit.transition(t).attr("r", 0).remove()
       );
 
@@ -1188,8 +1270,10 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
       .join(
         enter => {
           const text = enter.append("text")
-            .attr("x", (d: any) => (d._radius || 10) + 6)
-            .attr("y", 4)
+            .attr("x", (d: any) => (d._radius || 10) + 12)
+            .attr("y", 0)
+            .attr("text-anchor", "start")
+            .attr("dominant-baseline", "middle")
             .style("font-family", "Inter, sans-serif")
             .style("pointer-events", "none")
             .style("text-shadow", "0px 1px 3px #0f172a")
@@ -1206,18 +1290,18 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
               const subLabel = getSubLabel(d);
               return subLabel ? subLabel : "";
             })
-            .attr("x", (d: any) => (d._radius || 10) + 6)
+            .attr("x", (d: any) => (d._radius || 10) + 12)
             .attr("dy", "1.2em")
             .style("font-size", "10px")
             .style("font-weight", "400")
             .style("fill", "#94a3b8");
 
-          return text.call(enter => enter.transition(t).style("opacity", 1));
+          return text.call(enter => enter.transition(t).style("opacity", (d: any) => d._focusDistance === 2 ? 0.3 : 1));
         },
         update => {
-          const text = update.transition(t).style("opacity", 1);
-          text.attr("x", (d: any) => (d._radius || 10) + 6);
-          text.selectAll("tspan").attr("x", (d: any) => (d._radius || 10) + 6);
+          const text = update.transition(t).style("opacity", (d: any) => d._focusDistance === 2 ? 0.3 : 1);
+          text.attr("x", (d: any) => (d._radius || 10) + 12);
+          text.selectAll("tspan").attr("x", (d: any) => (d._radius || 10) + 12);
           return text;
         },
         exit => exit.transition(t).style("opacity", 0).remove()
@@ -1249,6 +1333,17 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
           .attr("y1", p1.y)
           .attr("x2", p2.x)
           .attr("y2", p2.y);
+      });
+
+      // Update icon positions at link midpoints
+      iconsSel.each(function (d: any) {
+        const p1 = calculatePoint(d.source, d.target);
+        const p2 = calculatePoint(d.target, d.source);
+        const midX = (p1.x + p2.x) / 2 - 6; // offset by half icon width
+        const midY = (p1.y + p2.y) / 2 - 6; // offset by half icon height
+        d3.select(this)
+          .attr("x", midX)
+          .attr("y", midY);
       });
 
       nodesSel.attr("cx", (d: any) => d.x).attr("cy", (d: any) => d.y);
@@ -1338,15 +1433,6 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
           <p className="text-xs text-slate-300 mt-1 leading-snug border-t border-slate-700 pt-2 opacity-90">
             {tooltip.description}
           </p>
-          {/* UPDATED TOOLTIP: Simplified */}
-          <div className="mt-2 flex items-center gap-1">
-            <svg className="w-3 h-3 text-yellow-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-            <span className="text-xs font-mono font-bold text-slate-300">
-              {(data.nodes.find(n => n.id === tooltip.label || n.label === tooltip.label) || {} as any)._score?.toFixed(1) || '0.0'}
-            </span>
-          </div>
-
-
 
           {/* Hashtags */}
           {tooltip.hashtags && tooltip.hashtags.length > 0 && (

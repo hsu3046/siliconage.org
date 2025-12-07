@@ -7,15 +7,26 @@ export enum Category {
 }
 
 export enum LinkType {
-  CREATED = 'CREATED',       // (Was MAKER) - Creation, Launch, Founding
-  BASED_ON = 'BASED_ON',     // (Was DEPENDENCY) - Usage, Infrastructure, Foundation
-  PART_OF = 'PART_OF',       // (Was BELONGING) - Membership, Ownership, Category
-  INFLUENCED = 'INFLUENCED', // (Was TRIGGERED) - Investment, Cause/Effect, Inspiration
+  POWERS = 'POWERS',           // Dependency, Infrastructure, Foundation
+  CREATES = 'CREATES',         // Creation, Launch, Founding
+  CONTRIBUTES = 'CONTRIBUTES', // Evolution, Influence, Inspiration
+  ENGAGES = 'ENGAGES',         // Interaction, Rivalry, Partnership
 }
 
-export enum LinkDirection {
-  FORWARD = 'FORWARD', // Source -> Target
-  REVERSE = 'REVERSE', // Target -> Source
+// ArrowHead: 화살표 표시 방식
+export enum ArrowHead {
+  SINGLE = 'SINGLE',   // ──►
+  DOUBLE = 'DOUBLE',   // ◄──►
+  NONE = 'NONE',       // ─────
+}
+
+// LinkIcon: 선 중앙 아이콘 (optional)
+export enum LinkIcon {
+  NONE = 'NONE',       // 아이콘 없음
+  HEART = 'HEART',     // ❤️ Co-op/Partnership
+  RIVALRY = 'RIVALRY', // 🥊 Competition/Rivalry
+  POWERS = 'POWERS',   // ⚡ Infrastructure/Foundation
+  SPARK = 'SPARK',     // ✨ Innovation/Creation
 }
 
 // --- NEW ROLE DEFINITIONS ---
@@ -36,10 +47,10 @@ export enum PersonRole {
 }
 
 export enum TechRole {
-  PRODUCT = 'PRODUCT',   // Consumer facing (iPhone, ChatGPT) - Score boosted
-  CORE = 'CORE',         // Underlying tech (Transformer, PageRank)
-  STANDARD = 'STANDARD', // Protocols (HTTP, x86)
-  PLATFORM = 'PLATFORM', // Added for Platforms like Android/CUDA
+  L0_THEORY_PHYSICS = 'FOUNDATION',         // Underlying tech (Transformer, PageRank)
+  L1_CORE_HARDWARE = 'CORE', // Protocols (HTTP, x86)
+  L2_RUNTIME_PLATFORM = 'PLATFORM', // Added for Platforms like Android/CUDA
+  L3_END_APPLICATION = 'APPLICATION',   // Consumer facing (iPhone, ChatGPT) - Score boosted
 }
 
 export enum EpisodeRole {
@@ -97,9 +108,7 @@ export interface NodeData {
   description: string;
   image?: string;
   radius?: number;
-  importance: number; // Now required
-
-  // Impact Score Role Classification (used for score multipliers)
+  // Role Classification
   impactRole?: Role;
 
   // Search & SEO
@@ -128,8 +137,7 @@ export interface NodeData {
   // === NEW: Technology Specific ===
   endYear?: number;       // For lifecycle display (undefined = "Present")
 
-  // Computed Properties (Impact Factor)
-  _score?: number;
+  // Computed Properties
   _radius?: number;
   _zoneRadius?: number;
 
@@ -151,7 +159,8 @@ export interface LinkData {
   target: string | NodeData;
   label?: string;
   type: LinkType;
-  direction: LinkDirection;
+  arrow: ArrowHead;
+  icon?: LinkIcon;
   strength: number;
 }
 

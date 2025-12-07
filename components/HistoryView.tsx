@@ -14,10 +14,10 @@ const getEraForYear = (year: number) => {
   return ERAS.find(era => year >= era.startYear && year <= era.endYear);
 };
 
-// Get node size class based on impact score
-const getNodeSizeClass = (score: number) => {
-  if (score >= 4) return 'large';
-  if (score >= 2.5) return 'medium';
+// Get node size class based on radius
+const getNodeSizeClass = (radius: number) => {
+  if (radius >= 35) return 'large';
+  if (radius >= 25) return 'medium';
   return 'small';
 };
 
@@ -54,7 +54,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, scrollToNo
     const createdByMap: Record<string, string> = {}; // techId -> creator label
 
     INITIAL_DATA.links.forEach(link => {
-      if (link.type === LinkType.CREATED) {
+      if (link.type === LinkType.CREATES) {
         const sourceId = typeof link.source === 'object' ? (link.source as any).id : link.source;
         const targetId = typeof link.target === 'object' ? (link.target as any).id : link.target;
 
@@ -150,8 +150,8 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, scrollToNo
 
   // Render Company Node
   const renderCompanyNode = (node: NodeData, isLeft: boolean) => {
-    const score = node._score || 0;
-    const sizeClass = getNodeSizeClass(score);
+    const radius = node._radius || 15;
+    const sizeClass = getNodeSizeClass(radius);
 
     const sizeStyles = {
       large: 'py-3 px-4',
@@ -234,18 +234,18 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, scrollToNo
 
   // Render Technology Node - full width on mobile, 3 fixed sizes on desktop
   const renderTechNode = (node: NodeData, isLeft: boolean) => {
-    const score = node._score || 0;
+    const radius = node._radius || 15;
     const creator = creatorMap.createdBy[node.id];
 
-    // 3 fixed sizes based on Impact Score
+    // 3 fixed sizes based on radius
     let sizeClass = 'md:w-40'; // small
     let textSize = 'text-sm';
     let padding = 'px-3 py-1.5';
-    if (score >= 4) {
+    if (radius >= 35) {
       sizeClass = 'md:w-64'; // large
       textSize = 'text-base';
       padding = 'px-4 py-2';
-    } else if (score >= 2.5) {
+    } else if (radius >= 25) {
       sizeClass = 'md:w-52'; // medium
       textSize = 'text-sm';
       padding = 'px-3 py-2';

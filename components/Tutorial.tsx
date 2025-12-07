@@ -31,7 +31,7 @@ const Tutorial: React.FC<TutorialProps> = ({ isOpen, onClose }) => {
         },
         {
             title: "Card View",
-            description: "Filter and sort all nodes by name, category, or impact score. Great for quick lookups.",
+            description: "Filter and sort all nodes by name, category, or year. Great for quick lookups.",
             icon: <LayoutGrid className="w-6 h-6" />,
         },
         {
