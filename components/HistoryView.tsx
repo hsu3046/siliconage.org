@@ -31,6 +31,48 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
   const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
+  // Long Press State
+  const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isLongPressRef = useRef<boolean>(false);
+
+  // Long Press Handlers
+  const handleTouchStart = (event: React.TouchEvent, node: NodeData) => {
+    isLongPressRef.current = false;
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+    }
+
+    longPressTimerRef.current = setTimeout(() => {
+      isLongPressRef.current = true;
+
+      // Haptic feedback
+      try {
+        if ('vibrate' in navigator) {
+          navigator.vibrate(50);
+        }
+      } catch (error) {
+        console.log('Haptic feedback not supported:', error);
+      }
+
+      // Enter Focus Mode
+      onNodeDoubleClick?.(node);
+      longPressTimerRef.current = null;
+    }, 500);
+  };
+
+  const handleTouchEnd = (event: React.TouchEvent) => {
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+
+    if (isLongPressRef.current) {
+      event.preventDefault();
+      event.stopPropagation();
+      isLongPressRef.current = false;
+    }
+  };
+
   // Sort nodes by year
   const sortedNodes = useMemo(() => {
     return [...data.nodes].sort((a, b) => a.year - b.year);
@@ -191,12 +233,17 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
         id={`timeline-node-${node.id}`}
         onClick={() => onNodeClick(node)}
         onDoubleClick={() => onNodeDoubleClick?.(node)}
+        onTouchStart={(e) => handleTouchStart(e, node)}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
         className={`
           cursor-pointer transition-all duration-200 hover:scale-[1.02]
           bg-slate-800/50 border-l-4 border-red-500 rounded-r-lg
+          select-none
           ${sizeStyles[sizeClass]}
           ${isLeft ? 'md:text-right text-left' : 'text-left'}
         `}
+        style={{ WebkitUserSelect: 'none', userSelect: 'none', WebkitTouchCallout: 'none' }}
       >
         <div className={`flex items-baseline gap-1 flex-wrap ${isLeft ? 'md:justify-end justify-start' : 'justify-start'}`}>
           <span className={`font-bold text-white ${textSizeStyles[sizeClass]}`}>{node.label}</span>
@@ -247,12 +294,17 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
         id={`timeline-node-${node.id}`}
         onClick={() => onNodeClick(node)}
         onDoubleClick={() => onNodeDoubleClick?.(node)}
+        onTouchStart={(e) => handleTouchStart(e, node)}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
         className={`
-          cursor-pointer transition-all duration-200 hover:opacity-80 
+          cursor-pointer transition-all duration-200 hover:opacity-80
           flex items-center gap-2
           flex-row
+          select-none
           ${isLeft ? 'md:flex-row-reverse' : 'md:flex-row'}
         `}
+        style={{ WebkitUserSelect: 'none', userSelect: 'none', WebkitTouchCallout: 'none' }}
       >
         {/* Dot - centered via items-center on container */}
         <div className="w-2.5 h-2.5 rounded-full bg-blue-500 shrink-0" />
@@ -313,11 +365,16 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
         id={`timeline-node-${node.id}`}
         onClick={() => onNodeClick(node)}
         onDoubleClick={() => onNodeDoubleClick?.(node)}
+        onTouchStart={(e) => handleTouchStart(e, node)}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
         className={`
-          cursor-pointer transition-all duration-200 hover:scale-105 
+          cursor-pointer transition-all duration-200 hover:scale-105
           w-full ${sizeClass}
+          select-none
           ${isLeft ? 'md:ml-auto' : 'md:mr-auto'}
         `}
+        style={{ WebkitUserSelect: 'none', userSelect: 'none', WebkitTouchCallout: 'none' }}
       >
         <div
           className={`

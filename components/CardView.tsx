@@ -30,6 +30,48 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
   const [showSuggestions, setShowSuggestions] = useState(false);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
+  // Long Press State
+  const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isLongPressRef = useRef<boolean>(false);
+
+  // Long Press Handlers
+  const handleTouchStart = (event: React.TouchEvent, node: NodeData) => {
+    isLongPressRef.current = false;
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+    }
+
+    longPressTimerRef.current = setTimeout(() => {
+      isLongPressRef.current = true;
+
+      // Haptic feedback
+      try {
+        if ('vibrate' in navigator) {
+          navigator.vibrate(50);
+        }
+      } catch (error) {
+        console.log('Haptic feedback not supported:', error);
+      }
+
+      // Enter Focus Mode
+      onNodeDoubleClick?.(node);
+      longPressTimerRef.current = null;
+    }, 500);
+  };
+
+  const handleTouchEnd = (event: React.TouchEvent) => {
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+
+    if (isLongPressRef.current) {
+      event.preventDefault();
+      event.stopPropagation();
+      isLongPressRef.current = false;
+    }
+  };
+
   // Close suggestions when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -263,7 +305,11 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
                 id={`list-node-${node.id}`}
                 onClick={() => onNodeClick(node)}
                 onDoubleClick={() => onNodeDoubleClick?.(node)}
-                className="group relative bg-surface border border-slate-700 rounded-xl overflow-hidden cursor-pointer hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col"
+                onTouchStart={(e) => handleTouchStart(e, node)}
+                onTouchEnd={handleTouchEnd}
+                onTouchCancel={handleTouchEnd}
+                className="group relative bg-surface border border-slate-700 rounded-xl overflow-hidden cursor-pointer hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col select-none"
+                style={{ WebkitUserSelect: 'none', userSelect: 'none', WebkitTouchCallout: 'none' }}
               >
                 <div className="h-1.5 w-full" style={{ backgroundColor: CATEGORY_COLORS[node.category] }}></div>
 

@@ -107,6 +107,48 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
     const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
 
+    // Long Press State
+    const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const isLongPressRef = useRef<boolean>(false);
+
+    // Long Press Handlers
+    const handleTouchStart = (event: React.TouchEvent, nodeId: string) => {
+        isLongPressRef.current = false;
+        if (longPressTimerRef.current) {
+            clearTimeout(longPressTimerRef.current);
+        }
+
+        longPressTimerRef.current = setTimeout(() => {
+            isLongPressRef.current = true;
+
+            // Haptic feedback
+            try {
+                if ('vibrate' in navigator) {
+                    navigator.vibrate(50);
+                }
+            } catch (error) {
+                console.log('Haptic feedback not supported:', error);
+            }
+
+            // Enter Focus Mode
+            onNodeFocus?.(nodeId);
+            longPressTimerRef.current = null;
+        }, 500);
+    };
+
+    const handleTouchEnd = (event: React.TouchEvent) => {
+        if (longPressTimerRef.current) {
+            clearTimeout(longPressTimerRef.current);
+            longPressTimerRef.current = null;
+        }
+
+        if (isLongPressRef.current) {
+            event.preventDefault();
+            event.stopPropagation();
+            isLongPressRef.current = false;
+        }
+    };
+
     // Collapsed Sections State
     const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
 
@@ -338,7 +380,11 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
             key={`${conn.node.id}-${idx}`}
             onClick={() => onNodeClick(conn.node)}
             onDoubleClick={() => onNodeFocus?.(conn.node.id)}
-            className="w-full p-3.5 flex flex-col gap-2 bg-slate-800/60 hover:bg-slate-700/70 border border-slate-700/50 hover:border-slate-600 rounded-xl transition-all duration-200 text-left group relative overflow-hidden hover:scale-[1.01] hover:shadow-lg hover:shadow-black/20"
+            onTouchStart={(e) => handleTouchStart(e, conn.node.id)}
+            onTouchEnd={handleTouchEnd}
+            onTouchCancel={handleTouchEnd}
+            className="w-full p-3.5 flex flex-col gap-2 bg-slate-800/60 hover:bg-slate-700/70 border border-slate-700/50 hover:border-slate-600 rounded-xl transition-all duration-200 text-left group relative overflow-hidden hover:scale-[1.01] hover:shadow-lg hover:shadow-black/20 select-none"
+            style={{ WebkitUserSelect: 'none', userSelect: 'none', WebkitTouchCallout: 'none' }}
         >
             {/* Top color bar */}
             <div
@@ -377,7 +423,11 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                 key={`engages-${conn.node.id}-${idx}`}
                 onClick={() => onNodeClick(conn.node)}
                 onDoubleClick={() => onNodeFocus?.(conn.node.id)}
-                className="w-full p-3.5 flex flex-col gap-2 bg-slate-800/60 hover:bg-slate-700/70 border border-slate-700/50 hover:border-slate-600 rounded-xl transition-all duration-200 text-left group relative overflow-hidden hover:scale-[1.01] hover:shadow-lg hover:shadow-black/20"
+                onTouchStart={(e) => handleTouchStart(e, conn.node.id)}
+                onTouchEnd={handleTouchEnd}
+                onTouchCancel={handleTouchEnd}
+                className="w-full p-3.5 flex flex-col gap-2 bg-slate-800/60 hover:bg-slate-700/70 border border-slate-700/50 hover:border-slate-600 rounded-xl transition-all duration-200 text-left group relative overflow-hidden hover:scale-[1.01] hover:shadow-lg hover:shadow-black/20 select-none"
+                style={{ WebkitUserSelect: 'none', userSelect: 'none', WebkitTouchCallout: 'none' }}
             >
                 {/* Top color bar */}
                 <div
