@@ -7,6 +7,7 @@ interface CardViewProps {
   fullData: GraphData;
   onNodeClick: (node: NodeData) => void;
   onTagClick: (node: NodeData) => void;
+  onNodeDoubleClick?: (node: NodeData) => void;
   scrollToNodeId?: string | null;
   focusNodeId?: string | null;
 }
@@ -23,7 +24,7 @@ const toTitleCase = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
 
-const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagClick, scrollToNodeId, focusNodeId }) => {
+const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagClick, onNodeDoubleClick, scrollToNodeId, focusNodeId }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('YEAR_NEWEST');
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -261,6 +262,7 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
                 key={node.id}
                 id={`list-node-${node.id}`}
                 onClick={() => onNodeClick(node)}
+                onDoubleClick={() => onNodeDoubleClick?.(node)}
                 className="group relative bg-surface border border-slate-700 rounded-xl overflow-hidden cursor-pointer hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col"
               >
                 <div className="h-1.5 w-full" style={{ backgroundColor: CATEGORY_COLORS[node.category] }}></div>

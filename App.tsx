@@ -230,6 +230,10 @@ const App: React.FC = () => {
   };
 
   const handleNodeDoubleClick = (node: NodeData) => {
+    if (clickTimeoutRef.current) {
+      clearTimeout(clickTimeoutRef.current);
+      clickTimeoutRef.current = null;
+    }
     setFocusNodeId(node.id);
     setSelectedNode(null); // Auto-close Detail Panel
     updateUrl(node.id);
@@ -246,12 +250,25 @@ const App: React.FC = () => {
     updateUrl(null);
   };
 
+  // Click handler with debounce for double-click support
+  const clickTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const handleNodeSelect = (node: NodeData) => {
-    setSelectedNode(node);
-    setScrollToNodeId(node.id);
-    if (viewMode === 'MAP') {
-      updateUrl(node.id);
+    if (clickTimeoutRef.current) {
+      clearTimeout(clickTimeoutRef.current);
+      clickTimeoutRef.current = null;
+      // Double click logic handled in handleNodeDoubleClick, but we clear timeout here to prevent single click
+      return;
     }
+
+    clickTimeoutRef.current = setTimeout(() => {
+      setSelectedNode(node);
+      setScrollToNodeId(node.id);
+      if (viewMode === 'MAP') {
+        updateUrl(node.id);
+      }
+      clickTimeoutRef.current = null;
+    }, 250); // 250ms delay to wait for potential double click
   };
 
   // For search: focus on node by ID (used by LinksView)
@@ -537,15 +554,17 @@ const App: React.FC = () => {
           const focusNode = INITIAL_DATA.nodes.find(n => n.id === focusNodeId);
           const nodeColor = focusNode ? CATEGORY_COLORS[focusNode.category] : '#22d3ee';
           return (
-            <div className="h-14 flex items-center px-4 bg-slate-900/30 border-b border-slate-700/50 relative">
-              {/* Centered Focus Text */}
-              <div className="absolute left-1/2 transform -translate-x-1/2 flex flex-col items-center">
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider">Focus on</span>
-                <span className="text-lg font-bold" style={{ color: nodeColor }}>
-                  {focusNode?.label}
-                </span>
+            <div className="h-14 flex items-center bg-slate-900/30 border-b border-slate-700/50 relative">
+              {/* Centered Focus Text - flex-1 with center using the container width */}
+              <div className="flex-1 flex justify-center">
+                <div className="flex flex-col items-center">
+                  <span className="text-[10px] text-slate-500 uppercase tracking-wider">Focus on</span>
+                  <span className="text-lg font-bold" style={{ color: nodeColor }}>
+                    {focusNode?.label}
+                  </span>
+                </div>
               </div>
-              {/* Exit button on the right */}
+              {/* Exit button - positioned absolutely on the right side */}
               <button
                 onClick={exitFocusMode}
                 className="absolute right-4 px-2 py-0.5 bg-red-500/10 border border-red-500/50 text-red-400 rounded-full text-[10px] font-bold hover:bg-red-500 hover:text-white transition-all flex items-center gap-1"
@@ -659,6 +678,7 @@ const App: React.FC = () => {
           <HistoryView
             data={filteredData}
             onNodeClick={handleNodeSelect}
+            onNodeDoubleClick={handleNodeDoubleClick}
             scrollToNodeId={scrollToNodeId}
             focusNodeId={focusNodeId}
           />
@@ -670,6 +690,7 @@ const App: React.FC = () => {
             fullData={INITIAL_DATA}
             onNodeClick={handleNodeSelect}
             onTagClick={handleTagClick}
+            onNodeDoubleClick={handleNodeDoubleClick}
             scrollToNodeId={scrollToNodeId}
             focusNodeId={focusNodeId}
           />

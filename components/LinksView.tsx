@@ -1,8 +1,8 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { NodeData, LinkData, GraphData, LinkType, Category } from '../types';
 import { CATEGORY_COLORS, CATEGORY_LABELS } from '../constants';
 import { getPersonVerbs, getTechVerb } from '../utils/labels';
-import { Handshake, Swords } from 'lucide-react';
+import { Handshake, Swords, ChevronDown, ChevronRight } from 'lucide-react';
 
 interface LinksViewProps {
     data: GraphData;
@@ -24,19 +24,20 @@ interface EngagesItem extends ConnectionItem {
     color: string;
 }
 
-// LinkType display info with colors
-const LINK_TYPE_INFO: Record<LinkType, { label: string; icon: string; color: string; bgColor: string }> = {
-    [LinkType.CREATES]: { label: 'Created', icon: '🔨', color: 'text-amber-400', bgColor: 'bg-amber-500/10' },
-    [LinkType.POWERS]: { label: 'Powers', icon: '⚡', color: 'text-yellow-400', bgColor: 'bg-yellow-500/10' },
-    [LinkType.CONTRIBUTES]: { label: 'Contributed', icon: '💡', color: 'text-purple-400', bgColor: 'bg-purple-500/10' },
-    [LinkType.ENGAGES]: { label: 'Relationships', icon: '🔗', color: 'text-cyan-400', bgColor: 'bg-cyan-500/10' },
+// LinkType display info with unified Yellow color for headers
+const LINK_TYPE_INFO: Record<LinkType, { label: string; icon: string; }> = {
+    [LinkType.CREATES]: { label: 'Created', icon: '🔨' },
+    [LinkType.POWERS]: { label: 'Powers', icon: '⚡' },
+    [LinkType.CONTRIBUTES]: { label: 'Contributed', icon: '💡' },
+    [LinkType.ENGAGES]: { label: 'Relationships', icon: '🔗' },
 };
 
 // Get ENGAGES relationship icon and label
 const getEngagesDisplay = (linkIcon?: string) => {
-    if (linkIcon === 'HEART') return { icon: <Handshake className="w-4 h-4" />, label: 'Partner', color: 'text-amber-400' };
-    if (linkIcon === 'RIVALRY') return { icon: <Swords className="w-4 h-4" />, label: 'Rival', color: 'text-orange-400' };
-    return { icon: '🔗', label: 'Connected', color: 'text-slate-400' };
+    // Colors updated: Partner=Blue, Rival=Yellow (Amber)
+    if (linkIcon === 'HEART') return { icon: <Handshake className="w-6 h-6" />, label: 'Partner', color: 'text-blue-500' };
+    if (linkIcon === 'RIVALRY') return { icon: <Swords className="w-6 h-6" />, label: 'Rival', color: 'text-amber-500' };
+    return { icon: <span className="text-xl">🔗</span>, label: 'Connected', color: 'text-slate-400' };
 };
 
 // Get relationship description using labels.ts
@@ -106,9 +107,30 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
     const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
 
+    // Collapsed Sections State
+    const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
+
+    const toggleSection = (key: string) => {
+        setCollapsedSections(prev => ({ ...prev, [key]: !prev[key] }));
+    };
+
     const focusNode = useMemo(() => {
         return data.nodes.find(n => n.id === focusNodeId);
     }, [data.nodes, focusNodeId]);
+
+    // Mobile: Scroll to flow arrows when focus changes
+    useEffect(() => {
+        if (focusNodeId) {
+            // Small delay to ensure DOM is ready
+            const timer = setTimeout(() => {
+                const arrowEl = document.getElementById('mobile-flow-arrow-1');
+                if (arrowEl) {
+                    arrowEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [focusNodeId]);
 
     // Categorize connections by LinkType
     const { originsGrouped, impactGrouped, engages } = useMemo(() => {
@@ -138,6 +160,11 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
             const sourceId = typeof link.source === 'string' ? link.source : link.source.id;
             const targetId = typeof link.target === 'string' ? link.target : link.target.id;
 
+            // ... helper to push to arrays
+            const addToMap = (map: Record<LinkType, ConnectionItem[]>, type: LinkType, item: ConnectionItem) => {
+                map[type].push(item);
+            };
+
             if (sourceId === focusNodeId) {
                 const targetNode = data.nodes.find(n => n.id === targetId);
                 if (targetNode) {
@@ -152,7 +179,7 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                             color: display.color
                         });
                     } else {
-                        impactMap[link.type].push({
+                        addToMap(impactMap, link.type, {
                             node: targetNode,
                             link,
                             description: getConnectionDescription(focusNode, targetNode, link.type, false),
@@ -174,7 +201,7 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                             color: display.color
                         });
                     } else {
-                        originsMap[link.type].push({
+                        addToMap(originsMap, link.type, {
                             node: sourceNode,
                             link,
                             description: getConnectionDescription(focusNode, sourceNode, link.type, true),
@@ -185,13 +212,28 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
             }
         });
 
-        // Sort each group alphabetically
-        const sortFn = (a: ConnectionItem, b: ConnectionItem) =>
-            a.node.label.localeCompare(b.node.label);
+        // Sort fn: Company -> Person -> Technology, then Alphabetical
+        const sortFn = (a: ConnectionItem, b: ConnectionItem) => {
+            const categoryOrder = { [Category.COMPANY]: 0, [Category.PERSON]: 1, [Category.TECHNOLOGY]: 2 };
+            const catDiff = (categoryOrder[a.node.category] ?? 3) - (categoryOrder[b.node.category] ?? 3);
+            if (catDiff !== 0) return catDiff;
+            return a.node.label.localeCompare(b.node.label);
+        };
+
+        // Engages Sort: Partner -> Rival, then Company->Person->Technology
+        const engagesSortFn = (a: EngagesItem, b: EngagesItem) => {
+            // Partner (Heart) first
+            const isAPartner = a.description === 'Partner';
+            const isBPartner = b.description === 'Partner';
+            if (isAPartner && !isBPartner) return -1;
+            if (!isAPartner && isBPartner) return 1;
+
+            return sortFn(a, b);
+        };
 
         Object.values(originsMap).forEach(arr => arr.sort(sortFn));
         Object.values(impactMap).forEach(arr => arr.sort(sortFn));
-        engagesArr.sort((a, b) => a.node.label.localeCompare(b.node.label));
+        engagesArr.sort(engagesSortFn);
 
         return { originsGrouped: originsMap, impactGrouped: impactMap, engages: engagesArr };
     }, [data, focusNodeId, focusNode]);
@@ -216,7 +258,6 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
             setSuggestions([]);
         }
     };
-
     const handleSearchSelect = (node: NodeData) => {
         if (blurTimeoutRef.current) {
             clearTimeout(blurTimeoutRef.current);
@@ -228,37 +269,12 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
         searchInputRef.current?.blur();
         if (onNodeFocus) onNodeFocus(node.id);
     };
+    const handleSearchFocus = () => { if (blurTimeoutRef.current) { clearTimeout(blurTimeoutRef.current); blurTimeoutRef.current = null; } setIsSearchFocused(true); };
+    const handleSearchBlur = () => { blurTimeoutRef.current = setTimeout(() => { setIsSearchFocused(false); blurTimeoutRef.current = null; }, 250); };
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => { if (e.key === 'Enter' && suggestions.length > 0) { handleSearchSelect(suggestions[0]); } };
 
-    const handleSearchFocus = () => {
-        if (blurTimeoutRef.current) {
-            clearTimeout(blurTimeoutRef.current);
-            blurTimeoutRef.current = null;
-        }
-        setIsSearchFocused(true);
-    };
 
-    const handleSearchBlur = () => {
-        blurTimeoutRef.current = setTimeout(() => {
-            setIsSearchFocused(false);
-            blurTimeoutRef.current = null;
-        }, 250);
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter' && suggestions.length > 0) {
-            handleSearchSelect(suggestions[0]);
-        }
-    };
-
-    // Calculate total connections for stats
-    const totalConnections = useMemo(() => {
-        const linkTypeOrder: LinkType[] = [LinkType.CREATES, LinkType.POWERS, LinkType.CONTRIBUTES];
-        const originsCount = linkTypeOrder.reduce((sum, lt) => sum + (originsGrouped[lt]?.length || 0), 0);
-        const impactCount = linkTypeOrder.reduce((sum, lt) => sum + (impactGrouped[lt]?.length || 0), 0);
-        return originsCount + impactCount + engages.length;
-    }, [originsGrouped, impactGrouped, engages]);
-
-    // Helper: Get category badge (same as CardView)
+    // Helper: Category badge
     const getCategoryBadge = (node: NodeData) => {
         if (node.category === Category.COMPANY && node.companyCategories?.[0]) {
             return (
@@ -284,38 +300,44 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
         return null;
     };
 
-    // Helper: Get category icon (SVG from DetailPanel style)
-    const getCategoryIcon = (category: Category) => {
-        const iconClass = "w-4 h-4";
-        const iconColor = CATEGORY_COLORS[category];
-
+    // Helper: Category icon
+    const getCategoryIcon = (category: Category, sizeClass = "w-4 h-4") => {
         switch (category) {
             case Category.COMPANY:
                 return (
-                    <svg className={iconClass} fill="none" stroke={iconColor} viewBox="0 0 24 24" strokeWidth="2">
+                    <svg className={sizeClass} fill="none" stroke={CATEGORY_COLORS[Category.COMPANY]} viewBox="0 0 24 24" strokeWidth="2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                     </svg>
                 );
             case Category.PERSON:
                 return (
-                    <svg className={iconClass} fill="none" stroke={iconColor} viewBox="0 0 24 24" strokeWidth="2">
+                    <svg className={sizeClass} fill="none" stroke={CATEGORY_COLORS[Category.PERSON]} viewBox="0 0 24 24" strokeWidth="2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                 );
             case Category.TECHNOLOGY:
                 return (
-                    <svg className={iconClass} fill="none" stroke={iconColor} viewBox="0 0 24 24" strokeWidth="2">
+                    <svg className={sizeClass} fill="none" stroke={CATEGORY_COLORS[Category.TECHNOLOGY]} viewBox="0 0 24 24" strokeWidth="2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
                     </svg>
                 );
         }
     };
 
-    // Render node card with CardView-style design
+    // Helper: Extra description
+    const getNodeExtraDescription = (node: NodeData) => {
+        if (node.category === Category.COMPANY) return "Company";
+        if (node.category === Category.PERSON) return node.primaryRole || "Person";
+        if (node.category === Category.TECHNOLOGY) return node.techCategoryL2 || "Technology";
+        return "";
+    };
+
+    // Render node card with Double Click support
     const renderNodeCard = (conn: ConnectionItem, idx: number) => (
         <button
             key={`${conn.node.id}-${idx}`}
             onClick={() => onNodeClick(conn.node)}
+            onDoubleClick={() => onNodeFocus?.(conn.node.id)}
             className="w-full p-3.5 flex flex-col gap-2 bg-slate-800/60 hover:bg-slate-700/70 border border-slate-700/50 hover:border-slate-600 rounded-xl transition-all duration-200 text-left group relative overflow-hidden hover:scale-[1.01] hover:shadow-lg hover:shadow-black/20"
         >
             {/* Top color bar */}
@@ -324,40 +346,38 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                 style={{ backgroundColor: CATEGORY_COLORS[conn.node.category] }}
             />
 
-            {/* Category Badge (CardView style) */}
+            {/* Category Badge */}
             <div className="flex items-center gap-2 mt-1">
                 {getCategoryBadge(conn.node)}
             </div>
 
-            {/* Title with Icon */}
+            {/* Title + Inline Description */}
             <div className="flex items-start gap-2.5">
                 <div className="flex-shrink-0 mt-0.5">
                     {getCategoryIcon(conn.node.category)}
                 </div>
                 <div className="flex-1 min-w-0">
-                    <div className="font-semibold text-white text-sm leading-tight group-hover:text-cyan-300 transition-colors">
-                        {conn.node.label}
+                    <div className="flex items-baseline gap-2 flex-wrap">
+                        <span className="font-semibold text-white text-sm leading-tight group-hover:text-cyan-300 transition-colors">
+                            {conn.node.label}
+                        </span>
+                        <span className="text-[10px] text-slate-500 font-medium whitespace-nowrap">
+                            {conn.description}
+                        </span>
                     </div>
                 </div>
             </div>
         </button>
     );
 
-    // Render ENGAGES item with enhanced design
+    // Render ENGAGES item with Double Click support
     const renderEngagesCard = (conn: EngagesItem, idx: number) => {
-        const isPartner = conn.description === 'Partner';
-        const isRival = conn.description === 'Rival';
-
         return (
             <button
                 key={`engages-${conn.node.id}-${idx}`}
                 onClick={() => onNodeClick(conn.node)}
-                className={`w-full p-3.5 flex flex-col gap-2 border rounded-xl transition-all duration-200 text-left group relative overflow-hidden hover:scale-[1.01] hover:shadow-lg hover:shadow-black/20 ${isPartner
-                        ? 'bg-amber-500/10 border-amber-500/30 hover:border-amber-500/50'
-                        : isRival
-                            ? 'bg-orange-500/10 border-orange-500/30 hover:border-orange-500/50'
-                            : 'bg-slate-800/60 border-slate-700/50 hover:border-slate-600'
-                    }`}
+                onDoubleClick={() => onNodeFocus?.(conn.node.id)}
+                className="w-full p-3.5 flex flex-col gap-2 bg-slate-800/60 hover:bg-slate-700/70 border border-slate-700/50 hover:border-slate-600 rounded-xl transition-all duration-200 text-left group relative overflow-hidden hover:scale-[1.01] hover:shadow-lg hover:shadow-black/20"
             >
                 {/* Top color bar */}
                 <div
@@ -365,23 +385,31 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                     style={{ backgroundColor: CATEGORY_COLORS[conn.node.category] }}
                 />
 
-                {/* Category Badge */}
-                <div className="flex items-center gap-2 mt-1">
+                {/* Category Badge + Relationship Info */}
+                <div className="flex items-center justify-between mt-1">
                     {getCategoryBadge(conn.node)}
+                    <div className={`flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wide ${conn.description === 'Partner' ? 'text-blue-500' : conn.description === 'Rival' ? 'text-amber-500' : 'text-slate-400'}`}>
+                        {conn.icon}
+                        <span>{conn.description}</span>
+                    </div>
                 </div>
 
-                {/* Title with Relationship Icon */}
-                <div className="flex items-start gap-2.5">
-                    <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center mt-0.5 ${isPartner ? 'bg-amber-500/20 text-amber-400' : isRival ? 'bg-orange-500/20 text-orange-400' : 'bg-slate-700/50'
-                        }`}>
-                        {conn.icon}
+                {/* Main Content */}
+                <div className="flex items-center gap-2.5">
+                    {/* Node Type Icon */}
+                    <div className="flex-shrink-0 mt-0.5">
+                        {getCategoryIcon(conn.node.category)}
                     </div>
+
+                    {/* Node Label & Description */}
                     <div className="flex-1 min-w-0">
-                        <div className="font-semibold text-white text-sm leading-tight group-hover:text-cyan-300 transition-colors">
-                            {conn.node.label}
-                        </div>
-                        <div className={`text-[10px] mt-1 font-medium ${conn.color}`}>
-                            {conn.description}
+                        <div className="flex items-baseline gap-2 flex-wrap">
+                            <span className="font-semibold text-white text-sm leading-tight group-hover:text-cyan-300 transition-colors">
+                                {conn.node.label}
+                            </span>
+                            <span className="text-[10px] text-slate-500 font-medium whitespace-nowrap">
+                                {getNodeExtraDescription(conn.node)}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -389,45 +417,53 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
         );
     };
 
-    // Render grouped section by LinkType with enhanced headers
-    const renderGroupedSection = (grouped: Record<LinkType, ConnectionItem[]>, direction: 'origins' | 'impact') => {
+    // Render grouped section with COLLAPSIBLE Logic
+    const renderGroupedSection = (grouped: Record<LinkType, ConnectionItem[]>, sectionPrefix: string) => {
         const linkTypeOrder: LinkType[] = [LinkType.CREATES, LinkType.POWERS, LinkType.CONTRIBUTES];
         const hasItems = linkTypeOrder.some(lt => grouped[lt].length > 0);
 
         if (!hasItems) {
             return (
-                <div className="flex flex-col items-center justify-center py-12 text-slate-600">
-                    <div className="w-16 h-16 rounded-2xl bg-slate-800/50 flex items-center justify-center text-2xl mb-3">
-                        {direction === 'origins' ? '🌱' : '🌟'}
-                    </div>
-                    <p className="text-sm font-medium text-slate-500">
-                        {direction === 'origins' ? 'The beginning' : 'Story continues...'}
-                    </p>
-                    <p className="text-xs text-slate-600 mt-1">
-                        {direction === 'origins' ? 'No predecessors found' : 'No successors yet'}
-                    </p>
+                <div className="flex flex-col items-center justify-center py-12 text-slate-600 opacity-50">
+                    <p className="text-sm font-medium">No direct impact</p>
                 </div>
             );
         }
 
         return (
-            <div className="space-y-5">
+            <div className="space-y-6">
                 {linkTypeOrder.map(linkType => {
                     const items = grouped[linkType];
                     if (items.length === 0) return null;
 
                     const info = LINK_TYPE_INFO[linkType];
+                    const sectionKey = `${sectionPrefix}-${linkType}`;
+                    const isCollapsed = collapsedSections[sectionKey];
+
                     return (
                         <div key={linkType}>
-                            {/* Simple section header */}
-                            <div className="flex items-center gap-2 mb-3 px-2 py-1.5">
-                                <span className={`text-[11px] font-semibold uppercase tracking-wide ${info.color}`}>
-                                    {info.label}
-                                </span>
+                            {/* Header with Toggle + Count */}
+                            <div className="flex items-center justify-center gap-3 mb-2 cursor-pointer group hover:bg-slate-800/20 rounded py-1 transition-colors"
+                                onClick={() => toggleSection(sectionKey)}>
+                                <div className="h-px flex-1 bg-amber-500/20" />
+                                <div className="flex items-center gap-1.5 text-amber-500">
+                                    <span className="text-[11px] font-bold uppercase tracking-widest">
+                                        {info.label}
+                                    </span>
+                                    <span className="text-[10px] font-medium opacity-70">
+                                        ({items.length})
+                                    </span>
+                                    {isCollapsed ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
+                                </div>
+                                <div className="h-px flex-1 bg-amber-500/20" />
                             </div>
-                            <div className="space-y-2.5">
-                                {items.map((item, idx) => renderNodeCard(item, idx))}
-                            </div>
+
+                            {/* Items (Conditionally Rendered) */}
+                            {!isCollapsed && (
+                                <div className="space-y-2">
+                                    {items.map((item, idx) => renderNodeCard(item, idx))}
+                                </div>
+                            )}
                         </div>
                     );
                 })}
@@ -435,11 +471,11 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
         );
     };
 
-    // Empty state with search
+    // Empty state search
     if (!focusNodeId || !focusNode) {
+        // ... (Same Empty State Code as Previous - Retained for brevity/completeness, but no changes requested here)
         return (
             <div className="flex-1 flex flex-col bg-slate-900 h-full overflow-hidden">
-                {/* Search Header */}
                 <div className="sticky top-0 z-30 bg-slate-900/95 backdrop-blur-md p-4 border-b border-slate-800">
                     <div className="max-w-2xl mx-auto">
                         <div className="relative">
@@ -459,19 +495,12 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                                 onFocus={handleSearchFocus}
                                 onBlur={handleSearchBlur}
                             />
-                            {/* Suggestions */}
                             {isSearchFocused && suggestions.length > 0 && (
                                 <div className="absolute mt-1 w-full bg-slate-900 border border-slate-600 rounded-lg shadow-2xl overflow-hidden z-50">
                                     {suggestions.map((node) => (
-                                        <div
-                                            key={node.id}
-                                            className="cursor-pointer py-2 px-4 hover:bg-slate-800 text-slate-300 transition-colors flex items-center gap-2"
-                                            onClick={() => handleSearchSelect(node)}
-                                        >
-                                            <div
-                                                className="w-2 h-2 rounded-full"
-                                                style={{ backgroundColor: CATEGORY_COLORS[node.category] }}
-                                            />
+                                        <div key={node.id} className="cursor-pointer py-2 px-4 hover:bg-slate-800 text-slate-300 transition-colors flex items-center gap-2"
+                                            onClick={() => handleSearchSelect(node)}>
+                                            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: CATEGORY_COLORS[node.category] }} />
                                             <span className="truncate text-sm">{node.label}</span>
                                         </div>
                                     ))}
@@ -480,8 +509,6 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                         </div>
                     </div>
                 </div>
-
-                {/* Empty State */}
                 <div className="flex-1 flex items-center justify-center">
                     <div className="text-center p-8">
                         <div className="text-6xl mb-4">🔗</div>
@@ -493,192 +520,176 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
         );
     }
 
+    const enagagesSectionKey = 'engages';
+    const isEngagesCollapsed = collapsedSections[enagagesSectionKey];
+
     // Main flow view
     return (
-        <div className="flex-1 bg-slate-900 flex flex-col h-full overflow-hidden">
-            {/* Mobile Layout */}
-            <div className="md:hidden flex-1 overflow-y-auto">
-                <div className="p-3 space-y-4">
-                    {/* Focus Node */}
-                    <div
-                        className="p-4 rounded-xl border-2 text-center"
-                        style={{
-                            borderColor: CATEGORY_COLORS[focusNode.category],
-                            backgroundColor: `${CATEGORY_COLORS[focusNode.category]}10`
-                        }}
-                    >
-                        <div className="text-xl font-bold text-white">{focusNode.label}</div>
-                        <div className="text-xs text-slate-400 mt-1">
-                            {focusNode.category === Category.COMPANY && `${focusNode.year} - Current`}
-                            {focusNode.category === Category.PERSON && focusNode.primaryRole}
-                            {focusNode.category === Category.TECHNOLOGY && focusNode.year}
-                        </div>
-                    </div>
-
-                    {/* Origins */}
-                    <div>
-                        <div className="flex items-center gap-2 mb-2 text-slate-500 text-xs px-1">
-                            <span>←</span>
-                            <span className="uppercase tracking-wider font-medium">Origins</span>
-                        </div>
-                        {renderGroupedSection(originsGrouped, 'origins')}
-                    </div>
-
-                    {/* ENGAGES */}
-                    {engages.length > 0 && (
-                        <div>
-                            <div className="flex items-center gap-1.5 mb-1.5 px-1">
-                                <span className="text-xs">🔗</span>
-                                <span className="text-[10px] font-medium text-slate-500 uppercase tracking-wider">
-                                    Relationships
-                                </span>
-                                <span className="text-[10px] text-slate-600">({engages.length})</span>
-                            </div>
-                            <div className="space-y-2">
-                                {engages.map((item, idx) => renderEngagesCard(item, idx))}
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Impact */}
-                    <div>
-                        <div className="flex items-center gap-2 mb-2 text-slate-500 text-xs px-1 justify-end">
-                            <span className="uppercase tracking-wider font-medium">Impact</span>
-                            <span>→</span>
-                        </div>
-                        {renderGroupedSection(impactGrouped, 'impact')}
-                    </div>
-                </div>
+        <div className="flex-1 bg-slate-900 flex flex-col h-full overflow-hidden relative">
+            {/* Background Flow Arrow (Desktop Only) - Darker Blue Body */}
+            <div className="absolute inset-0 hidden md:flex items-center justify-center pointer-events-none z-0 opacity-20 text-blue-900/40">
+                <svg className="w-full h-full" viewBox="0 0 800 400" preserveAspectRatio="none">
+                    <polygon points="50,150 630,150 630,80 780,200 630,320 630,250 50,250" fill="currentColor" />
+                </svg>
             </div>
 
-            {/* Desktop Layout: 3 columns with enhanced design */}
-            <div className="hidden md:flex md:items-stretch flex-1 overflow-y-auto">
-                <div className="flex items-stretch p-6 gap-4 min-h-full w-full">
-                    {/* Origins Column (Left) */}
-                    <div className="flex-1 max-w-sm flex flex-col">
-                        {/* Column Header - Enhanced */}
-                        <div className="flex items-center gap-3 mb-5 pb-4 border-b border-slate-700/50 bg-gradient-to-r from-slate-800/50 to-transparent rounded-lg px-3 py-2">
-                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-600 to-slate-700 flex items-center justify-center shadow-lg">
-                                <svg className="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 className="text-sm font-bold text-white tracking-wide">Origins</h3>
-                                <p className="text-[10px] text-slate-400 font-medium">What shaped this</p>
-                            </div>
-                        </div>
+            <div className="hidden md:flex md:items-stretch flex-1 overflow-y-auto relative z-10 w-full px-4 pt-6 pb-20">
+                <div className="grid grid-cols-3 gap-8 min-h-full w-full">
+
+                    {/* Origins Column */}
+                    <div className="flex flex-col">
                         <div className="flex-1">
                             {renderGroupedSection(originsGrouped, 'origins')}
                         </div>
                     </div>
 
-                    {/* Animated Arrow Left - Simple and Elegant */}
-                    <div className="flex flex-col items-center justify-center px-2">
-                        <svg className="w-8 h-8 text-slate-500/60" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                        </svg>
-                    </div>
-
-                    {/* Focus Node (Center) - Enhanced */}
-                    <div className="flex-1 max-w-md flex flex-col items-center">
-                        {/* Main Focus Card with premium design */}
+                    {/* Focus Node (Center) */}
+                    <div className="flex flex-col items-center justify-start pt-0">
+                        {/* Focus Card */}
                         <div
-                            className="w-full p-7 rounded-2xl border-2 text-center relative overflow-hidden shadow-2xl"
+                            className="w-full p-5 rounded-3xl border-2 text-center relative overflow-hidden shadow-2xl mb-8"
                             style={{
                                 borderColor: CATEGORY_COLORS[focusNode.category],
                                 background: `linear-gradient(135deg, ${CATEGORY_COLORS[focusNode.category]}18 0%, ${CATEGORY_COLORS[focusNode.category]}08 50%, transparent 100%)`,
                                 boxShadow: `0 8px 32px ${CATEGORY_COLORS[focusNode.category]}25, 0 0 60px ${CATEGORY_COLORS[focusNode.category]}15`
                             }}
                         >
-                            {/* Premium background effects */}
-                            <div
-                                className="absolute inset-0 opacity-20"
-                                style={{
-                                    background: `radial-gradient(circle at 50% 30%, ${CATEGORY_COLORS[focusNode.category]}40 0%, transparent 65%)`
-                                }}
-                            />
+                            <div className="absolute inset-0 opacity-20" style={{ background: `radial-gradient(circle at 50% 30%, ${CATEGORY_COLORS[focusNode.category]}40 0%, transparent 65%)` }} />
                             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-900/30" />
 
-                            {/* Content */}
-                            <div className="relative z-10">
-                                {/* Category Badge (CardView style) */}
-                                <div className="flex justify-center mb-3">
-                                    {getCategoryBadge(focusNode)}
-                                </div>
-
-                                {/* Category Icon - Larger and more prominent */}
-                                <div className="mb-4 flex justify-center">
-                                    {getCategoryIcon(focusNode.category)}
-                                </div>
-
-                                <div className="text-2xl font-bold text-white mb-3 leading-tight">{focusNode.label}</div>
-
-                                <div className="text-sm text-slate-300 font-medium mb-4">
+                            <div className="relative z-10 flex flex-col items-center">
+                                <div className="mb-2 p-1">{getCategoryIcon(focusNode.category, "w-10 h-10")}</div>
+                                <div className="mb-2">{getCategoryBadge(focusNode)}</div>
+                                <div className="text-3xl font-extrabold text-white mb-1 leading-tight tracking-tight">{focusNode.label}</div>
+                                <div className="text-sm text-slate-300 font-medium mb-4 opacity-80">
                                     {focusNode.category === Category.COMPANY && `Founded ${focusNode.year}`}
                                     {focusNode.category === Category.PERSON && focusNode.primaryRole}
                                     {focusNode.category === Category.TECHNOLOGY && `Introduced ${focusNode.year}`}
                                 </div>
-
-                                <div className="text-xs text-slate-400 line-clamp-3 leading-relaxed px-2">
-                                    {focusNode.description}
-                                </div>
-
-                                {/* Connection Stats Badge - Premium style */}
-                                <div className="mt-5 pt-5 border-t border-slate-700/50">
-                                    <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-slate-800/70 backdrop-blur-sm rounded-full border border-slate-700/50 shadow-lg">
-                                        <svg className="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                                        </svg>
-                                        <span className="text-sm font-bold text-white">{totalConnections}</span>
-                                        <span className="text-xs text-slate-400 font-medium">connections</span>
-                                    </div>
-                                </div>
+                                <div className="w-full text-left text-sm text-slate-300 leading-relaxed px-1">{focusNode.description}</div>
                             </div>
                         </div>
 
-                        {/* ENGAGES Section - Simple Design */}
+                        {/* ENGAGES Section - Collapsible */}
                         {engages.length > 0 && (
-                            <div className="w-full mt-7">
-                                <div className="flex items-center justify-center gap-3 mb-4">
-                                    <div className="h-px flex-1 bg-slate-700/50" />
-                                    <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wide px-2">
-                                        Relationships
-                                    </span>
-                                    <div className="h-px flex-1 bg-slate-700/50" />
+                            <div className="w-full">
+                                {/* Header */}
+                                <div className="flex items-center justify-center gap-3 mb-3 cursor-pointer group hover:bg-slate-800/20 rounded py-1 transition-colors"
+                                    onClick={() => toggleSection(enagagesSectionKey)}>
+                                    <div className="h-px flex-1 bg-amber-500/20" />
+                                    <div className="flex items-center gap-1.5 text-amber-500">
+                                        <span className="text-[11px] font-bold uppercase tracking-widest">Relationships</span>
+                                        <span className="text-[10px] font-medium opacity-70">({engages.length})</span>
+                                        {isEngagesCollapsed ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
+                                    </div>
+                                    <div className="h-px flex-1 bg-amber-500/20" />
                                 </div>
-                                <div className="space-y-2.5">
-                                    {engages.map((item, idx) => renderEngagesCard(item, idx))}
-                                </div>
+                                {/* Items */}
+                                {!isEngagesCollapsed && (
+                                    <div className="space-y-2">
+                                        {engages.map((item, idx) => renderEngagesCard(item, idx))}
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>
 
-                    {/* Animated Arrow Right - Simple and Elegant */}
-                    <div className="flex flex-col items-center justify-center px-2">
-                        <svg className="w-8 h-8 text-slate-500/60" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                        </svg>
-                    </div>
-
-                    {/* Impact Column (Right) */}
-                    <div className="flex-1 max-w-sm flex flex-col">
-                        {/* Column Header - Enhanced */}
-                        <div className="flex items-center gap-3 mb-5 pb-4 border-b border-slate-700/50 bg-gradient-to-l from-slate-800/50 to-transparent rounded-lg px-3 py-2">
-                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-600 to-slate-700 flex items-center justify-center shadow-lg">
-                                <svg className="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 className="text-sm font-bold text-white tracking-wide">Impact</h3>
-                                <p className="text-[10px] text-slate-400 font-medium">What this shaped</p>
-                            </div>
-                        </div>
+                    {/* Impact Column */}
+                    <div className="flex flex-col">
                         <div className="flex-1">
                             {renderGroupedSection(impactGrouped, 'impact')}
                         </div>
                     </div>
+                </div>
+            </div>
+
+            {/* Mobile Layout - PC 컬럼 순서대로: Origins → Focus+Relationships → Impact */}
+            <div className="md:hidden flex-1 overflow-y-auto relative z-10">
+                <div className="p-4 space-y-4">
+                    {/* 1. Origins (PC 왼쪽 컬럼) */}
+                    <div>
+                        {renderGroupedSection(originsGrouped, 'm-origins')}
+                    </div>
+
+                    {/* Flow Arrow ↓ - 3개 with wider spacing + bigger */}
+                    <div id="mobile-flow-arrow-1" className="flex justify-center items-center gap-12 py-3">
+                        <svg width="32" height="24" viewBox="0 0 32 24" className="text-blue-600/70">
+                            <polygon points="16,24 0,0 32,0" fill="currentColor" />
+                        </svg>
+                        <svg width="32" height="24" viewBox="0 0 32 24" className="text-blue-600/70">
+                            <polygon points="16,24 0,0 32,0" fill="currentColor" />
+                        </svg>
+                        <svg width="32" height="24" viewBox="0 0 32 24" className="text-blue-600/70">
+                            <polygon points="16,24 0,0 32,0" fill="currentColor" />
+                        </svg>
+                    </div>
+
+                    {/* 2. Focus Node (PC 중앙 컬럼) - PC와 동일한 정보 */}
+                    <div className="p-4 rounded-2xl border-2 relative overflow-hidden"
+                        style={{ borderColor: CATEGORY_COLORS[focusNode.category], backgroundColor: `${CATEGORY_COLORS[focusNode.category]}10` }}>
+                        <div className="flex flex-col items-center">
+                            {/* Category Icon */}
+                            <div className="mb-2">{getCategoryIcon(focusNode.category, "w-8 h-8")}</div>
+                            {/* Category Badge */}
+                            <div className="mb-2">{getCategoryBadge(focusNode)}</div>
+                            {/* Name */}
+                            <div className="text-xl font-bold text-white mb-1">{focusNode.label}</div>
+                            {/* Date Info - like PC */}
+                            <div className="text-sm text-slate-300 font-medium mb-3 opacity-80">
+                                {focusNode.category === Category.COMPANY && `Founded ${focusNode.year}`}
+                                {focusNode.category === Category.PERSON && focusNode.primaryRole}
+                                {focusNode.category === Category.TECHNOLOGY && `Introduced ${focusNode.year}`}
+                            </div>
+                            {/* Description - Left aligned like PC */}
+                            <div className="w-full text-left text-sm text-slate-300 leading-relaxed">{focusNode.description}</div>
+                        </div>
+                    </div>
+
+                    {/* Relationships - Same grouped section style (no icon) */}
+                    {engages.length > 0 && (
+                        <div className="space-y-2">
+                            {/* Header - Collapsible */}
+                            <div
+                                className="flex items-center justify-center gap-2 cursor-pointer group hover:bg-slate-800/20 rounded py-1 transition-colors"
+                                onClick={() => toggleSection('m-engages')}
+                            >
+                                <div className="h-px flex-1 bg-amber-500/30" />
+                                <div className="flex items-center gap-1.5 text-amber-500">
+                                    <span className="text-[10px] font-bold uppercase tracking-wider">Relationships</span>
+                                    <span className="text-[9px] font-medium opacity-70">({engages.length})</span>
+                                    {collapsedSections['m-engages'] ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
+                                </div>
+                                <div className="h-px flex-1 bg-amber-500/30" />
+                            </div>
+                            {/* Items */}
+                            {!collapsedSections['m-engages'] && (
+                                <div className="space-y-2">
+                                    {engages.map((item, idx) => renderEngagesCard(item, idx))}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {/* Flow Arrow ↓ - 3개 with wider spacing + bigger */}
+                    <div className="flex justify-center items-center gap-12 py-3">
+                        <svg width="32" height="24" viewBox="0 0 32 24" className="text-blue-600/70">
+                            <polygon points="16,24 0,0 32,0" fill="currentColor" />
+                        </svg>
+                        <svg width="32" height="24" viewBox="0 0 32 24" className="text-blue-600/70">
+                            <polygon points="16,24 0,0 32,0" fill="currentColor" />
+                        </svg>
+                        <svg width="32" height="24" viewBox="0 0 32 24" className="text-blue-600/70">
+                            <polygon points="16,24 0,0 32,0" fill="currentColor" />
+                        </svg>
+                    </div>
+
+                    {/* 3. Impact (PC 오른쪽 컬럼) */}
+                    <div>
+                        {renderGroupedSection(impactGrouped, 'm-impact')}
+                    </div>
+
+                    {/* Bottom padding */}
+                    <div className="h-20" />
                 </div>
             </div>
         </div>

@@ -6,6 +6,7 @@ import { getTechVerb, getPersonVerbs } from '../utils/labels';
 interface HistoryViewProps {
   data: GraphData;
   onNodeClick: (node: NodeData) => void;
+  onNodeDoubleClick?: (node: NodeData) => void;
   scrollToNodeId?: string | null;
   focusNodeId?: string | null;
 }
@@ -22,7 +23,7 @@ const getNodeSizeClass = (radius: number) => {
   return 'small';
 };
 
-const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, scrollToNodeId, focusNodeId }) => {
+const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoubleClick, scrollToNodeId, focusNodeId }) => {
   // Search State
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState<NodeData[]>([]);
@@ -189,6 +190,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, scrollToNo
       <div
         id={`timeline-node-${node.id}`}
         onClick={() => onNodeClick(node)}
+        onDoubleClick={() => onNodeDoubleClick?.(node)}
         className={`
           cursor-pointer transition-all duration-200 hover:scale-[1.02]
           bg-slate-800/50 border-l-4 border-red-500 rounded-r-lg
@@ -244,6 +246,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, scrollToNo
       <div
         id={`timeline-node-${node.id}`}
         onClick={() => onNodeClick(node)}
+        onDoubleClick={() => onNodeDoubleClick?.(node)}
         className={`
           cursor-pointer transition-all duration-200 hover:opacity-80 
           flex items-center gap-2
@@ -309,6 +312,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, scrollToNo
       <div
         id={`timeline-node-${node.id}`}
         onClick={() => onNodeClick(node)}
+        onDoubleClick={() => onNodeDoubleClick?.(node)}
         className={`
           cursor-pointer transition-all duration-200 hover:scale-105 
           w-full ${sizeClass}
@@ -383,6 +387,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, scrollToNo
                         key={node.id}
                         className="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-slate-800 text-slate-300 transition-colors border-b border-slate-800/50 last:border-0"
                         onClick={() => handleSearchSelect(node)}
+                        onDoubleClick={() => onNodeDoubleClick?.(node)}
                       >
                         <div className="flex items-center">
                           <span className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: CATEGORY_COLORS[node.category] }} />
