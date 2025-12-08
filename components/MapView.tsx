@@ -389,8 +389,6 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
   const svgRef = useRef<SVGSVGElement>(null);
   const clickTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pulseIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const isLongPressRef = useRef<boolean>(false);
 
   // START AT LEVEL 1 (Zoom Out)
   const [zoomLevel, setZoomLevel] = useState<number>(1);
@@ -441,91 +439,6 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
       clickTimerRef.current = null;
     }
     onNodeDoubleClick(d);
-  };
-
-  // Haptic Touch (Long Press) Handlers for Mobile
-  const handleTouchStart = (event: any, d: NodeData) => {
-    // Reset long press flag
-    isLongPressRef.current = false;
-
-    // Clear any existing long press timer
-    if (longPressTimerRef.current) {
-      clearTimeout(longPressTimerRef.current);
-    }
-
-    // Start long press timer (500ms)
-    longPressTimerRef.current = setTimeout(() => {
-      // Mark as long press
-      isLongPressRef.current = true;
-
-      // Trigger haptic feedback (multiple methods for cross-platform support)
-      try {
-        // Method 1: Standard Vibration API (Android)
-        if ('vibrate' in navigator) {
-          navigator.vibrate(50);
-          console.log('Vibration triggered (standard API)');
-        }
-
-        // Method 2: iOS Haptic Feedback (if available - iOS 13+)
-        if ('ontouchstart' in window) {
-          // Create a brief visual feedback for iOS (since direct vibration isn't supported)
-          const feedbackElement = document.createElement('div');
-          feedbackElement.style.cssText = `
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100px;
-            height: 100px;
-            background: rgba(251, 191, 36, 0.3);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            animation: haptic-pulse 200ms ease-out;
-          `;
-
-          // Add keyframe animation
-          const style = document.createElement('style');
-          style.textContent = `
-            @keyframes haptic-pulse {
-              0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
-              100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
-            }
-          `;
-          document.head.appendChild(style);
-          document.body.appendChild(feedbackElement);
-
-          setTimeout(() => {
-            document.body.removeChild(feedbackElement);
-            document.head.removeChild(style);
-          }, 200);
-
-          console.log('iOS visual haptic feedback triggered');
-        }
-      } catch (error) {
-        console.log('Haptic feedback not supported:', error);
-      }
-
-      // Enter Focus Mode (same as double click)
-      handleNodeDoubleClick(d);
-
-      longPressTimerRef.current = null;
-    }, 500);
-  };
-
-  const handleTouchEnd = (event: any) => {
-    // Clear long press timer if touch ends before 500ms
-    if (longPressTimerRef.current) {
-      clearTimeout(longPressTimerRef.current);
-      longPressTimerRef.current = null;
-    }
-
-    // If it was a long press, prevent the click event from firing
-    if (isLongPressRef.current) {
-      event.preventDefault();
-      event.stopPropagation();
-      isLongPressRef.current = false;
-    }
   };
 
   // Search Logic
@@ -1731,16 +1644,6 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
         <button onClick={() => zoomToLevel(Math.max(zoomLevel - 1, 1))} className="w-8 h-8 flex items-center justify-center text-slate-300 hover:text-white bg-slate-800 rounded hover:bg-slate-700 transition-colors">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 12H4"></path></svg>
         </button>
-      </div>
-
-      {/* Desktop hint */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 pointer-events-none opacity-50 text-xs text-slate-400 hidden sm:block">
-        Scroll to Zoom • Double Click Node to Focus
-      </div>
-
-      {/* Mobile hint */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 pointer-events-none opacity-50 text-xs text-slate-400 block sm:hidden">
-        Long Press Node to Focus
       </div>
     </div>
   );

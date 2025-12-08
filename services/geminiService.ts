@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 import { GoogleGenAI, Type } from "@google/genai";
 import { AIResponse, NodeData } from "../types";
-import { STATIC_CACHE } from "./staticCache";
+import { staticCache } from "./staticCache";
 
 const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
 
@@ -13,20 +13,29 @@ const ai = new GoogleGenAI({ apiKey: apiKey });
 
 const CACHE_PREFIX = 'silicon_age_ai_cache_';
 
-export const fetchNodeDetails = async (node: NodeData): Promise<AIResponse> => {
-  const cacheKey = `${CACHE_PREFIX}${node.id}`;
+// Language mapping for Gemini prompts
+const LANGUAGE_NAMES: Record<string, string> = {
+  en: 'English',
+  ko: 'Korean',
+  ja: 'Japanese',
+};
+
+export const fetchNodeDetails = async (node: NodeData, locale: string = 'en'): Promise<AIResponse> => {
+  // Include locale in cache key for language-specific caching
+  const cacheKey = `${CACHE_PREFIX}${node.id}_${locale}`;
+  const langName = LANGUAGE_NAMES[locale] || 'English';
 
   // 1. Check Server-Side Static Cache (Fastest, Free)
-  if (STATIC_CACHE[node.id]) {
+  if (staticCache[node.id]) {
     console.log(`[Static Cache] Serving pre-computed data for ${node.id}`);
-    return STATIC_CACHE[node.id];
+    return staticCache[node.id];
   }
 
   // 2. Check Client-Side LocalStorage Cache (Persistence for non-static nodes)
   try {
     const cachedData = localStorage.getItem(cacheKey);
     if (cachedData) {
-      console.log(`[Local Cache] Serving local data for ${node.id}`);
+      console.log(`[Local Cache] Serving local data for ${node.id} (${locale})`);
       return JSON.parse(cachedData) as AIResponse;
     }
   } catch (e) {
@@ -35,7 +44,7 @@ export const fetchNodeDetails = async (node: NodeData): Promise<AIResponse> => {
 
   // 3. Fetch from API with enhanced context
   try {
-    console.log(`[API Call] Fetching Gemini data for ${node.id}`);
+    console.log(`[API Call] Fetching Gemini data for ${node.id} in ${langName}`);
 
     // Build rich context from node data
     const contextParts = [
@@ -43,7 +52,6 @@ export const fetchNodeDetails = async (node: NodeData): Promise<AIResponse> => {
       `Category: ${node.category}`,
       `Year: ${node.year}`,
       node.description ? `Description: ${node.description}` : null,
-      // node.role removed
       node.primaryRole ? `Primary Role: ${node.primaryRole}` : null,
       node.impactRole ? `Industry Role: ${node.impactRole}` : null,
       node.techCategoryL1 ? `Tech Category: ${node.techCategoryL1}` : null,
@@ -52,6 +60,7 @@ export const fetchNodeDetails = async (node: NodeData): Promise<AIResponse> => {
 
     const prompt = `
 You are an expert technology historian. Analyze the following entity in the context of computing and AI history.
+**IMPORTANT: Respond entirely in ${langName}.**
 
 ${contextParts}
 
@@ -61,6 +70,7 @@ Provide:
 3. 3-5 interesting facts or achievements
 
 Use the latest available information. Be specific with dates, numbers, and achievements.
+Remember: Your entire response must be in ${langName}.
     `.trim();
 
     const response = await ai.models.generateContent({

@@ -15,11 +15,11 @@ body {
 
 /* Language-specific fonts */
 :lang(ko) {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Nanum Gothic', sans-serif;
 }
 
 :lang(ja) {
-  font-family: 'Noto Sans JP', sans-serif;
+  font-family: 'M PLUS Rounded 1c', sans-serif;
 }
 
 @layer utilities {

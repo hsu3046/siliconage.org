@@ -43,6 +43,67 @@ const getSectionHeaders = (category: Category) => {
   }
 };
 
+// === HELPER: Get Stock Ticker for Google Finance ===
+const STOCK_TICKERS: Record<string, { ticker: string; exchange: string }> = {
+  // US Tech Giants
+  'apple': { ticker: 'AAPL', exchange: 'NASDAQ' },
+  'microsoft': { ticker: 'MSFT', exchange: 'NASDAQ' },
+  'google': { ticker: 'GOOGL', exchange: 'NASDAQ' },
+  'amazon': { ticker: 'AMZN', exchange: 'NASDAQ' },
+  'meta': { ticker: 'META', exchange: 'NASDAQ' },
+  'nvidia': { ticker: 'NVDA', exchange: 'NASDAQ' },
+  'tesla': { ticker: 'TSLA', exchange: 'NASDAQ' },
+  'netflix_co': { ticker: 'NFLX', exchange: 'NASDAQ' },
+  'adobe': { ticker: 'ADBE', exchange: 'NASDAQ' },
+  'salesforce_co': { ticker: 'CRM', exchange: 'NYSE' },
+  'oracle': { ticker: 'ORCL', exchange: 'NYSE' },
+  'ibm': { ticker: 'IBM', exchange: 'NYSE' },
+  'intel': { ticker: 'INTC', exchange: 'NASDAQ' },
+  'amd': { ticker: 'AMD', exchange: 'NASDAQ' },
+  'qualcomm': { ticker: 'QCOM', exchange: 'NASDAQ' },
+  'broadcom': { ticker: 'AVGO', exchange: 'NASDAQ' },
+  'cisco': { ticker: 'CSCO', exchange: 'NASDAQ' },
+  'paypal_co': { ticker: 'PYPL', exchange: 'NASDAQ' },
+  'uber_co': { ticker: 'UBER', exchange: 'NYSE' },
+  'spotify_co': { ticker: 'SPOT', exchange: 'NYSE' },
+  'twitter': { ticker: 'X', exchange: 'NYSE' },
+  'snap': { ticker: 'SNAP', exchange: 'NYSE' },
+  'airbnb': { ticker: 'ABNB', exchange: 'NASDAQ' },
+  'coinbase': { ticker: 'COIN', exchange: 'NASDAQ' },
+  'shopify': { ticker: 'SHOP', exchange: 'NYSE' },
+  'zoom': { ticker: 'ZM', exchange: 'NASDAQ' },
+  'cloudflare': { ticker: 'NET', exchange: 'NYSE' },
+  'snowflake': { ticker: 'SNOW', exchange: 'NYSE' },
+  'palantir': { ticker: 'PLTR', exchange: 'NYSE' },
+  'crowdstrike': { ticker: 'CRWD', exchange: 'NASDAQ' },
+  'datadog': { ticker: 'DDOG', exchange: 'NASDAQ' },
+  'mongodb': { ticker: 'MDB', exchange: 'NASDAQ' },
+  'sap': { ticker: 'SAP', exchange: 'NYSE' },
+  'att': { ticker: 'T', exchange: 'NYSE' },  // AT&T
+  // Asian Companies (with US listings)
+  'samsung': { ticker: '005930', exchange: 'KRX' },
+  'tsmc': { ticker: 'TSM', exchange: 'NYSE' },
+  'alibaba': { ticker: 'BABA', exchange: 'NYSE' },
+  'tencent': { ticker: '0700', exchange: 'HKG' },
+  'baidu': { ticker: 'BIDU', exchange: 'NASDAQ' },
+  'sony': { ticker: 'SONY', exchange: 'NYSE' },
+  'nintendo': { ticker: '7974', exchange: 'TYO' },
+  'softbank': { ticker: '9984', exchange: 'TYO' },  // SoftBank Group
+  // AI Companies (Private)
+  'openai': { ticker: '', exchange: '' },
+  'anthropic': { ticker: '', exchange: '' },
+  'deepmind': { ticker: '', exchange: '' },
+  // Defense/Industrial
+  'lockheed': { ticker: 'LMT', exchange: 'NYSE' },
+  'northrop': { ticker: 'NOC', exchange: 'NYSE' },
+  // ARM and others
+  'arm_ltd': { ticker: 'ARM', exchange: 'NASDAQ' },
+};
+
+const getStockTicker = (nodeId: string): { ticker: string; exchange: string } | null => {
+  return STOCK_TICKERS[nodeId] || null;
+};
+
 // === HELPER: Generate Smart External Links ===
 const getExternalLinks = (node: NodeData) => {
   const name = node.label;
@@ -326,8 +387,8 @@ const getConnectionLabel = (
 
 
 const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus, onNodeSelect }) => {
-  // i18n hook
-  const { t } = useLocale();
+  // i18n hook - get locale for AI responses
+  const { t, locale } = useLocale();
 
   const [aiData, setAiData] = useState<AIResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -493,8 +554,8 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
   const loadAiData = () => {
     if (node) {
       setLoading(true);
-      // No force refresh option anymore
-      fetchNodeDetails(node)
+      // Pass locale for language-specific AI responses
+      fetchNodeDetails(node, locale)
         .then(data => setAiData(data))
         .finally(() => setLoading(false));
     }
@@ -502,7 +563,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
 
   useEffect(() => {
     loadAiData();
-  }, [node]);
+  }, [node, locale]);  // Re-fetch when locale changes
 
   if (!node) return null;
 
@@ -526,29 +587,41 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
             {isNotPublic ? (
               // Case A: Not publicly traded - no link
               <span className="text-slate-400 font-medium italic">Not Publicly Traded</span>
-            ) : (
+            ) : (() => {
               // Case B: Standard market cap - clickable to Google Finance
-              <a
-                href={`https://www.google.com/finance/quote/${encodeURIComponent(node.label)}:NASDAQ`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-2 cursor-pointer transition-all duration-200"
-                title="Open Google Finance (External Link)"
-              >
-                <span className="text-emerald-400 font-medium group-hover:text-emerald-200 transition-colors duration-200">
-                  {currentValue}
-                </span>
-                {peakValue && (
-                  <span className="text-slate-500 group-hover:text-slate-400 transition-colors duration-200">
-                    / Peak {peakValue}
+              const stockInfo = getStockTicker(node.id);
+              const financeUrl = stockInfo?.ticker
+                ? `https://www.google.com/finance/quote/${stockInfo.ticker}:${stockInfo.exchange}`
+                : `https://www.google.com/search?q=${encodeURIComponent(node.label + ' stock')}`;
+
+              return (
+                <a
+                  href={financeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-2 cursor-pointer transition-all duration-200"
+                  title={stockInfo?.ticker ? `${stockInfo.ticker} on ${stockInfo.exchange}` : 'Search on Google Finance'}
+                >
+                  <span className="text-emerald-400 font-medium group-hover:text-emerald-200 transition-colors duration-200">
+                    {currentValue}
                   </span>
-                )}
-                {/* External link indicator */}
-                <svg className="w-3 h-3 text-slate-500 group-hover:text-emerald-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-              </a>
-            )}
+                  {stockInfo?.ticker && (
+                    <span className="text-slate-500 text-xs group-hover:text-slate-400 transition-colors duration-200">
+                      ({stockInfo.ticker})
+                    </span>
+                  )}
+                  {peakValue && (
+                    <span className="text-slate-500 group-hover:text-slate-400 transition-colors duration-200">
+                      / Peak {peakValue}
+                    </span>
+                  )}
+                  {/* External link indicator */}
+                  <svg className="w-3 h-3 text-slate-500 group-hover:text-emerald-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+              );
+            })()}
           </div>
         );
 

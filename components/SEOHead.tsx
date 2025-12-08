@@ -7,7 +7,7 @@
 
 import React, { useEffect } from 'react';
 import { NodeData, Category } from '../types';
-import { STATIC_CACHE } from '../services/staticCache';
+import { staticCache } from '../services/staticCache';
 
 interface SEOHeadProps {
     /** Currently selected node for meta tag updates */
@@ -40,7 +40,7 @@ const getCategoryLabel = (category: Category): string => {
  */
 const generateDescription = (node: NodeData): string => {
     // Try to get cached summary first
-    const cached = STATIC_CACHE[node.id];
+    const cached = staticCache[node.id];
     if (cached?.summary) {
         // Truncate to ~160 chars for meta description
         const summary = cached.summary;
