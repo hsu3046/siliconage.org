@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.0] - 2025-12-08
+
+### Major Updates
+- **Completely New History View UI**: Redesigned for a clearer historical narrative.
+- **Completely New Links View UI**: A fresh interface to explore complex relationships.
+- **Data Overhaul**: Comprehensive review and update of all Companies, Technologies, Persons, and Episodes.
+
+### Enhancements
+- **Search Engine**: Significantly enhanced search functionality across all views.
+
+### Fixed
+- **Bug Fixes**: Miscellaneous bug fixes and stability improvements.
+
 ## [1.3.0] - 2025-12-06
 
 ### Added

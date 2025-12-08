@@ -617,7 +617,7 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, fullData, focusNodeI
     return (
         <div className="flex-1 bg-slate-900 flex flex-col h-full overflow-hidden relative">
             {/* Background Flow Arrow (Desktop Only) - Brighter Blue */}
-            <div className="absolute inset-0 hidden md:flex items-center justify-center pointer-events-none z-0 opacity-30 text-blue-500/40">
+            <div className="absolute inset-0 hidden md:flex items-center justify-center pointer-events-none z-0 opacity-20 text-blue-500/40">
                 <svg className="w-full h-full" viewBox="0 0 800 400" preserveAspectRatio="none">
                     <polygon points="50,150 630,150 630,80 780,200 630,320 630,250 50,250" fill="currentColor" />
                 </svg>
