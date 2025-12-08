@@ -17,6 +17,8 @@ export interface ValidationResult {
   summary: {
     totalNodes: number;
     totalLinks: number;
+    totalEvents: number;
+    linksWithStory: number;
     orphanCount: number;
     brokenLinkCount: number;
     missingDataCount: number;
@@ -258,7 +260,9 @@ function detectDuplicates(nodes: NodeData[], links: LinkData[]): ValidationError
   links.forEach((link, index) => {
     const sourceId = getNodeId(link.source);
     const targetId = getNodeId(link.target);
-    const key = `${sourceId}_${targetId}_${link.type}`;
+    // Include story/timeline in key to allow same link with different stories
+    const storyKey = link.story ? `_${link.story.substring(0, 20)}` : '';
+    const key = `${sourceId}_${targetId}_${link.type}${storyKey}`;
 
     if (seenLinks.has(key)) {
       errors.push({
@@ -266,7 +270,8 @@ function detectDuplicates(nodes: NodeData[], links: LinkData[]): ValidationError
         category: 'duplicate',
         linkIndex: index,
         message: `Duplicate link: ${sourceId} → ${targetId} (${link.type})`,
-        suggestion: 'Remove duplicate relationship'
+        suggestion: 'Remove duplicate relationship',
+        details: link.story ? { story: link.story, startYear: link.startYear, endYear: link.endYear } : undefined
       });
     }
     seenLinks.add(key);
@@ -341,6 +346,8 @@ export function validateGraphData(data: GraphData): ValidationResult {
   const summary = {
     totalNodes: data.nodes.length,
     totalLinks: data.links.length,
+    totalEvents: data.events?.length || 0,
+    linksWithStory: data.links.filter(link => link.story && link.story.trim().length > 0).length,
     orphanCount: allErrors.filter(e => e.category === 'orphan').length,
     brokenLinkCount: allErrors.filter(e => e.category === 'broken-link').length,
     missingDataCount: allErrors.filter(e => e.category === 'missing-data').length,

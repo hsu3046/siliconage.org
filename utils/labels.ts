@@ -562,25 +562,9 @@ export const getNodeSubtitle = (
         return `was founded in ${node.year}`;
     }
 
-    // Person: achievements or "Active since {year}"
+    // Person: "was born in {year}" - now that year = birthYear
     if (node.category === Category.PERSON) {
-        const verbs = getPersonVerbs(node);
-        const achievements = context?.achievements || [];
-
-        if (achievements.length === 0) {
-            return `Active since ${node.year}`;
-        }
-
-        const formatted = achievements.slice(0, 3).map(a => {
-            if (a.category === Category.COMPANY) {
-                return `${verbs.foundedCompany} ${a.label} (${a.year})`;
-            } else if (a.category === Category.TECHNOLOGY) {
-                return `${verbs.createdTech} ${a.label} (${a.year})`;
-            }
-            return `${a.label} (${a.year})`;
-        });
-
-        return formatted.join(', ');
+        return `was born in ${node.year}`;
     }
 
     // Technology: "{verb} by {creator} ({year})" or fallback

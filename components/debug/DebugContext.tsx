@@ -27,7 +27,8 @@ export const DebugProvider: React.FC<DebugProviderProps> = ({ children }) => {
   // Deep copy of INITIAL_DATA for in-memory editing
   const [data, setData] = useState<GraphData>(() => ({
     nodes: INITIAL_DATA.nodes.map(n => ({ ...n })),
-    links: INITIAL_DATA.links.map(l => ({ ...l }))
+    links: INITIAL_DATA.links.map(l => ({ ...l })),
+    events: INITIAL_DATA.events ? INITIAL_DATA.events.map(e => ({ ...e })) : []
   }));
 
   // Track if data has been modified
@@ -38,7 +39,8 @@ export const DebugProvider: React.FC<DebugProviderProps> = ({ children }) => {
   const resetData = () => {
     setData({
       nodes: INITIAL_DATA.nodes.map(n => ({ ...n })),
-      links: INITIAL_DATA.links.map(l => ({ ...l }))
+      links: INITIAL_DATA.links.map(l => ({ ...l })),
+      events: INITIAL_DATA.events ? INITIAL_DATA.events.map(e => ({ ...e })) : []
     });
   };
 

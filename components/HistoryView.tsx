@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { GraphData, NodeData, Category, LinkType } from '../types';
+import { GraphData, NodeData, Category, LinkType, LinkData, EventData } from '../types';
 import { CATEGORY_COLORS, ERAS, INITIAL_DATA } from '../constants';
-import { getTechVerb, getPersonVerbs, getNodeSubtitle, Achievement } from '../utils/labels';
+import { getTechVerb, getPersonVerbs, getNodeSubtitle, Achievement, generateRelationLabel } from '../utils/labels';
 
 interface HistoryViewProps {
   data: GraphData;
@@ -9,6 +9,7 @@ interface HistoryViewProps {
   onNodeDoubleClick?: (node: NodeData) => void;
   scrollToNodeId?: string | null;
   focusNodeId?: string | null;
+  showStories?: boolean;
 }
 
 // Get era for a given year
@@ -23,7 +24,7 @@ const getNodeSizeClass = (radius: number) => {
   return 'small';
 };
 
-const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoubleClick, scrollToNodeId, focusNodeId }) => {
+const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoubleClick, scrollToNodeId, focusNodeId, showStories = true }) => {
   // Search State
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState<NodeData[]>([]);
@@ -37,15 +38,78 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
     return [...data.nodes].sort((a, b) => a.year - b.year);
   }, [data.nodes]);
 
-  // Group by year
+  // Collect link events (links with story + startYear)
+  const linkEvents = useMemo(() => {
+    let events = INITIAL_DATA.links
+      .filter(link => link.story && link.startYear)
+      .map(link => {
+        const sourceId = typeof link.source === 'object' ? (link.source as any).id : link.source;
+        const targetId = typeof link.target === 'object' ? (link.target as any).id : link.target;
+        const sourceNode = INITIAL_DATA.nodes.find(n => n.id === sourceId);
+        const targetNode = INITIAL_DATA.nodes.find(n => n.id === targetId);
+        return {
+          link,
+          sourceNode,
+          targetNode,
+          year: link.startYear!
+        };
+      })
+      .filter(e => e.sourceNode && e.targetNode);
+
+    // Focus Mode: filter to only directly connected links
+    if (focusNodeId) {
+      events = events.filter(e => {
+        const sourceId = typeof e.link.source === 'object' ? (e.link.source as any).id : e.link.source;
+        const targetId = typeof e.link.target === 'object' ? (e.link.target as any).id : e.link.target;
+        return sourceId === focusNodeId || targetId === focusNodeId;
+      });
+    }
+
+    return events;
+  }, [focusNodeId]);
+
+  // Collect standalone events
+  const standaloneEvents = useMemo(() => {
+    let events = (INITIAL_DATA.events || []).map(event => ({
+      event,
+      year: event.year
+    }));
+
+    // Focus Mode: filter to only events connected to focusNodeId
+    if (focusNodeId) {
+      events = events.filter(se => {
+        const relatedNodes = se.event.relatedNodes || [];
+        return relatedNodes.includes(focusNodeId);
+      });
+    }
+
+    return events;
+  }, [focusNodeId]);
+
+  // Group by year (nodes + link events + standalone events)
   const groupedByYear = useMemo(() => {
-    const grouped: Record<number, NodeData[]> = {};
+    const grouped: Record<number, { nodes: NodeData[]; linkEvents: typeof linkEvents; standaloneEvents: typeof standaloneEvents }> = {};
+
+    // Add nodes
     sortedNodes.forEach(node => {
-      if (!grouped[node.year]) grouped[node.year] = [];
-      grouped[node.year].push(node);
+      if (!grouped[node.year]) grouped[node.year] = { nodes: [], linkEvents: [], standaloneEvents: [] };
+      grouped[node.year].nodes.push(node);
     });
+
+    // Add link events
+    linkEvents.forEach(le => {
+      if (!grouped[le.year]) grouped[le.year] = { nodes: [], linkEvents: [], standaloneEvents: [] };
+      grouped[le.year].linkEvents.push(le);
+    });
+
+    // Add standalone events
+    standaloneEvents.forEach(se => {
+      if (!grouped[se.year]) grouped[se.year] = { nodes: [], linkEvents: [], standaloneEvents: [] };
+      grouped[se.year].standaloneEvents.push(se);
+    });
+
     return grouped;
-  }, [sortedNodes]);
+  }, [sortedNodes, linkEvents, standaloneEvents]);
 
   const years = useMemo(() => {
     return Object.keys(groupedByYear).map(Number).sort((a, b) => a - b);
@@ -109,7 +173,14 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const term = e.target.value;
     setSearchTerm(term);
-    if (term.length > 0) {
+
+    // Check if it's a year search (4-digit number)
+    const isYearSearch = /^\d{4}$/.test(term.trim());
+
+    if (isYearSearch) {
+      // Don't show node suggestions for year search
+      setSuggestions([]);
+    } else if (term.length > 0) {
       // Category priority: COMPANY=0, TECHNOLOGY=1, PERSON=2
       const categoryOrder = { [Category.COMPANY]: 0, [Category.TECHNOLOGY]: 1, [Category.PERSON]: 2 };
       const matches = data.nodes
@@ -184,7 +255,22 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
       e.preventDefault();
       setSelectedIndex(prev => Math.max(prev - 1, -1));
     } else if (e.key === 'Enter') {
-      if (selectedIndex >= 0 && selectedIndex < suggestions.length) {
+      // Check for year search first
+      const isYearSearch = /^\d{4}$/.test(searchTerm.trim());
+      if (isYearSearch) {
+        const year = parseInt(searchTerm.trim(), 10);
+        const yearElement = document.getElementById(`timeline-year-${year}`);
+        if (yearElement) {
+          yearElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          // Add highlight effect
+          yearElement.classList.add('ring-2', 'ring-amber-400', 'ring-offset-2', 'ring-offset-slate-900');
+          setTimeout(() => {
+            yearElement.classList.remove('ring-2', 'ring-amber-400', 'ring-offset-2', 'ring-offset-slate-900');
+          }, 2000);
+        }
+        setIsSearchFocused(false);
+        searchInputRef.current?.blur();
+      } else if (selectedIndex >= 0 && selectedIndex < suggestions.length) {
         handleSearchSelect(suggestions[selectedIndex]);
       } else if (suggestions.length > 0) {
         handleSearchSelect(suggestions[0]);
@@ -460,7 +546,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
               {/* Year Content */}
               <div className="mb-6 relative">
                 {/* Year Badge on Timeline */}
-                <div className="flex items-center justify-center mb-4 md:pl-0">
+                <div id={`timeline-year-${year}`} className="flex items-center justify-center mb-4 md:pl-0 transition-all rounded-lg">
                   <span className="text-xs font-mono text-slate-600 bg-slate-900 px-2 py-0.5 rounded z-10">
                     {year}
                   </span>
@@ -468,7 +554,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
 
                 {/* Nodes for this year - closer to center line */}
                 <div className="relative flex flex-col md:flex-row md:flex-wrap w-full gap-3">
-                  {groupedByYear[year].map((node, i) => {
+                  {groupedByYear[year].nodes.map((node, i) => {
                     const isLeft = i % 2 === 0;
 
                     return (
@@ -485,6 +571,52 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
                     );
                   })}
                 </div>
+
+                {/* Link Events for this year - purple bullet style */}
+                {showStories && groupedByYear[year].linkEvents.length > 0 && (
+                  <div className="relative flex flex-col md:flex-row md:flex-wrap w-full gap-2 mt-3">
+                    {groupedByYear[year].linkEvents.map((le, i) => {
+                      const isLeft = i % 2 === 0;
+                      return (
+                        <div
+                          key={`link-${i}-${le.year}`}
+                          className={`
+                            relative w-full md:w-[calc(50%-0.5rem)] flex
+                            ${isLeft ? 'md:pr-4 md:ml-0 md:justify-end' : 'md:pl-4 md:ml-auto justify-start'}
+                          `}
+                        >
+                          <span className={`text-xs text-slate-400 inline-flex items-center gap-1.5 ${isLeft ? 'md:flex-row-reverse md:text-right' : 'flex-row text-left'}`}>
+                            <span className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0"></span>
+                            <span>{le.link.story} ({le.year})</span>
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Standalone Events for this year */}
+                {showStories && groupedByYear[year].standaloneEvents.length > 0 && (
+                  <div className="relative flex flex-col md:flex-row md:flex-wrap w-full gap-2 mt-3">
+                    {groupedByYear[year].standaloneEvents.map((se, i) => {
+                      const isLeft = i % 2 === 0;
+                      return (
+                        <div
+                          key={`event-${se.event.id}`}
+                          className={`
+                            relative w-full md:w-[calc(50%-0.5rem)] flex
+                            ${isLeft ? 'md:pr-4 md:ml-0 md:justify-end' : 'md:pl-4 md:ml-auto justify-start'}
+                          `}
+                        >
+                          <span className={`text-xs text-slate-400 inline-flex items-center gap-1.5 ${isLeft ? 'md:flex-row-reverse md:text-right' : 'flex-row text-left'}`}>
+                            <span className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0"></span>
+                            <span>{se.event.story} ({se.year})</span>
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             </div>
           );

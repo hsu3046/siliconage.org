@@ -155,9 +155,18 @@ export interface LinkData {
   endYear?: number;     // When it ended (undefined = ongoing)
 }
 
+export interface EventData {
+  id: string;                    // unique identifier
+  story: string;                 // event description
+  year: number;                  // when the event happened
+  endYear?: number;              // optional end year
+  relatedNodes?: string[];       // optional node IDs to link (for click navigation)
+}
+
 export interface GraphData {
   nodes: NodeData[];
   links: LinkData[];
+  events?: EventData[];
 }
 
 export interface AIResponse {

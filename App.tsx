@@ -88,6 +88,8 @@ const App: React.FC = () => {
   }, []);
 
   const [companyMode, setCompanyMode] = useState<CompanyMode>('FULL');
+  // Story visibility toggle for History View
+  const [showStories, setShowStories] = useState(true);
   // PC Header Toggle Hover State: Which group is being hovered - Default to CATEGORY
   const [hoverGroupActive, setHoverGroupActive] = useState<'CATEGORY' | 'LINK' | null>('CATEGORY');
 
@@ -255,10 +257,16 @@ const App: React.FC = () => {
   const toggleCategory = (cat: Category) => {
     if (cat === Category.COMPANY) {
       setCompanyMode(prev => {
-        // Mobile toggle order: FULL -> MINIMAL (outline gray) -> HIDDEN (all gray) -> FULL
-        if (prev === 'FULL') return 'MINIMAL';
-        if (prev === 'MINIMAL') return 'HIDDEN';
-        return 'FULL';
+        // History/Card: Direct toggle FULL <-> HIDDEN (1-click)
+        // Map: 3-step cycle FULL -> MINIMAL -> HIDDEN -> FULL
+        if (viewMode === 'MAP') {
+          if (prev === 'FULL') return 'MINIMAL';
+          if (prev === 'MINIMAL') return 'HIDDEN';
+          return 'FULL';
+        } else {
+          // History/Card View: simple toggle
+          return prev === 'HIDDEN' ? 'FULL' : 'HIDDEN';
+        }
       });
     } else {
       setVisibleCategories(prev => ({
@@ -521,7 +529,7 @@ const App: React.FC = () => {
                         // FULL: Solid colored dot
                         // MINIMAL: Solid colored dot (inner stays visible, outer ring is grayed via border)
                         // HIDDEN: Grayed out dot
-                        backgroundColor: (cat === Category.COMPANY && companyMode === 'HIDDEN' && viewMode === 'MAP') ? '#64748b' : color,
+                        backgroundColor: (cat === Category.COMPANY && companyMode === 'HIDDEN') ? '#64748b' : color,
                         opacity: isActive ? 1 : 0.5
                       }}
                     />
@@ -534,6 +542,27 @@ const App: React.FC = () => {
                   </button>
                 );
               })}
+
+              {/* Episode Toggle - History View Only (after Categories) */}
+              {viewMode === 'TIMELINE' && (
+                <button
+                  onClick={() => setShowStories(prev => !prev)}
+                  className={`px-3 py-1 text-xs font-bold rounded-full border transition-all duration-200 flex items-center justify-center gap-2 group min-w-[50px]`}
+                  style={{
+                    backgroundColor: showStories ? 'rgba(30, 41, 59, 1)' : 'transparent',
+                    borderColor: showStories ? '#a855f7' : '#475569',
+                    color: showStories ? 'white' : '#64748b',
+                    opacity: showStories ? 1 : 0.5
+                  }}
+                  title="Click to toggle episode visibility"
+                >
+                  <div
+                    className="w-2 h-2 rounded-full shadow-[0_0_8px_rgba(0,0,0,0.5)] shrink-0"
+                    style={{ backgroundColor: showStories ? '#a855f7' : '#64748b', opacity: showStories ? 1 : 0.5 }}
+                  />
+                  <span className="max-w-xs opacity-100 whitespace-nowrap">EPISODE</span>
+                </button>
+              )}
             </div>
           )}
 
@@ -705,6 +734,25 @@ const App: React.FC = () => {
               })}
             </div>
 
+            {/* Episode Toggle - History View Only (Mobile) */}
+            {viewMode === 'TIMELINE' && (
+              <button
+                onClick={() => setShowStories(prev => !prev)}
+                className="w-8 h-8 rounded-full border flex items-center justify-center transition-all"
+                style={{
+                  backgroundColor: showStories ? 'rgba(30, 41, 59, 0.5)' : 'transparent',
+                  borderColor: showStories ? '#a855f7' : '#475569',
+                  opacity: showStories ? 1 : 0.5
+                }}
+                aria-label="Toggle Episodes"
+              >
+                <div
+                  className="w-2.5 h-2.5 rounded-full"
+                  style={{ backgroundColor: showStories ? '#a855f7' : '#64748b' }}
+                ></div>
+              </button>
+            )}
+
             {viewMode === 'MAP' && (
               <>
                 <div className="w-px h-6 bg-slate-700 shrink-0"></div>
@@ -781,6 +829,7 @@ const App: React.FC = () => {
             onNodeDoubleClick={handleNodeDoubleClick}
             scrollToNodeId={scrollToNodeId}
             focusNodeId={focusNodeId}
+            showStories={showStories}
           />
         )}
 

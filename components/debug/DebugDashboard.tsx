@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { DebugProvider } from './DebugContext';
 import IntegrityChecker from './IntegrityChecker';
 import NodeBrowser from './NodeBrowser';
+import LinkBrowser from './LinkBrowser';
 import RelationshipView from './inspector/RelationshipView';
 import StatsDashboard from './StatsDashboard';
 import DataManager from './DataManager';
 
-type TabType = 'integrity' | 'browser' | 'inspector' | 'stats' | 'manager';
+type TabType = 'integrity' | 'browser' | 'links' | 'inspector' | 'stats' | 'manager';
 
 const DebugDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('integrity');
@@ -26,6 +27,7 @@ const DebugDashboard: React.FC = () => {
   const tabs = [
     { id: 'integrity' as TabType, label: '🚨 Integrity Checker' },
     { id: 'browser' as TabType, label: '🔍 Node Browser' },
+    { id: 'links' as TabType, label: '🔗 Link Browser' },
     { id: 'inspector' as TabType, label: '🕸️ Relationship Inspector' },
     { id: 'stats' as TabType, label: '📊 Statistics' },
     { id: 'manager' as TabType, label: '📝 Data Manager' },
@@ -82,6 +84,7 @@ const DebugDashboard: React.FC = () => {
         <main className="flex-1 overflow-hidden">
           {activeTab === 'integrity' && <IntegrityChecker />}
           {activeTab === 'browser' && <NodeBrowser />}
+          {activeTab === 'links' && <LinkBrowser />}
           {activeTab === 'inspector' && <RelationshipView />}
           {activeTab === 'stats' && <StatsDashboard />}
           {activeTab === 'manager' && <DataManager />}

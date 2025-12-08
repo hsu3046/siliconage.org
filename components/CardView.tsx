@@ -18,6 +18,7 @@ type SortOption = 'IMPORTANCE' | 'ALPHABETICAL' | 'YEAR_OLDEST' | 'YEAR_NEWEST' 
 interface SearchSuggestion {
   label: string;
   type: 'CATEGORY' | 'ROLE' | 'TECH';
+  count?: number;
 }
 
 const toTitleCase = (str: string) => {
@@ -75,16 +76,19 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
     });
   }, [data.nodes, sortBy]);
 
-  // Extract all searchable unique terms for Autocomplete
+  // Extract all searchable unique terms for Autocomplete with counts
   const searchSuggestions = useMemo(() => {
     const suggestionsMap = new Map<string, SearchSuggestion>();
+    const countMap = new Map<string, number>();
 
     data.nodes.forEach(node => {
       // Company Categories
       if (node.category === Category.COMPANY && node.companyCategories) {
         node.companyCategories.forEach(c => {
           if (CATEGORY_LABELS[c]) {
-            suggestionsMap.set(CATEGORY_LABELS[c], { label: CATEGORY_LABELS[c], type: 'CATEGORY' });
+            const label = CATEGORY_LABELS[c];
+            suggestionsMap.set(label, { label, type: 'CATEGORY' });
+            countMap.set(label, (countMap.get(label) || 0) + 1);
           }
         });
       }
@@ -92,19 +96,25 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
       if (node.category === Category.PERSON && node.impactRole) {
         const roleLabel = toTitleCase(node.impactRole);
         suggestionsMap.set(roleLabel, { label: roleLabel, type: 'ROLE' });
+        countMap.set(roleLabel, (countMap.get(roleLabel) || 0) + 1);
       }
       // Tech Categories
       if (node.category === Category.TECHNOLOGY) {
         if (node.techCategoryL1) {
           suggestionsMap.set(node.techCategoryL1, { label: node.techCategoryL1, type: 'TECH' });
+          countMap.set(node.techCategoryL1, (countMap.get(node.techCategoryL1) || 0) + 1);
         }
         if (node.techCategoryL2) {
           suggestionsMap.set(node.techCategoryL2, { label: node.techCategoryL2, type: 'TECH' });
+          countMap.set(node.techCategoryL2, (countMap.get(node.techCategoryL2) || 0) + 1);
         }
       }
     });
 
-    return Array.from(suggestionsMap.values()).sort((a, b) => a.label.localeCompare(b.label));
+    // Add counts to suggestions
+    return Array.from(suggestionsMap.values())
+      .map(s => ({ ...s, count: countMap.get(s.label) || 0 }))
+      .sort((a, b) => a.label.localeCompare(b.label));
   }, [data.nodes]);
 
   // Filter suggestions based on query
@@ -248,7 +258,7 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
                       >
                         <span>{suggestion.label}</span>
                         <span className={`text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded ${badgeColor}`}>
-                          {suggestion.type === 'TECH' ? 'CATEGORY' : suggestion.type}
+                          {suggestion.type === 'TECH' ? 'CATEGORY' : suggestion.type}{suggestion.count ? ` (${suggestion.count})` : ''}
                         </span>
                       </div>
                     );
