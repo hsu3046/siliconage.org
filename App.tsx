@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback, Suspense, lazy } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Logo } from './components/Logo';
 import { INITIAL_DATA, CATEGORY_COLORS } from './constants';
 import { NodeData, Category, GraphData, LinkType, CompanyMode } from './types';
@@ -77,7 +78,11 @@ const App: React.FC = () => {
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
 
   // i18n hook - handles locale initialization and provides t() function
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
+
+  // Router hooks for SEO-friendly URLs
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // Featured Node of the Day - deterministic based on date
   const featuredNode = useMemo(() => {
@@ -183,80 +188,134 @@ const App: React.FC = () => {
   }, [viewMode]);
 
   // --- DEEP LINKING & URL MANAGEMENT ---
+  // Parse path to extract node: /company/apple -> apple, /tech/transistor -> transistor
+  const pathToCategory: Record<string, Category> = {
+    'company': Category.COMPANY,
+    'person': Category.PERSON,
+    'tech': Category.TECHNOLOGY,
+  };
+
+  // View path mapping
+  const pathToView: Record<string, 'MAP' | 'TIMELINE' | 'CARD' | 'LINKS'> = {
+    'history': 'TIMELINE',
+    'cards': 'CARD',
+    'links': 'LINKS',
+  };
+
   useEffect(() => {
-    const handlePopState = () => {
+    const handleUrlChange = () => {
+      const path = window.location.pathname;
+      const pathParts = path.split('/').filter(Boolean);
+
+      // Legacy query param support (for backwards compatibility)
       const params = new URLSearchParams(window.location.search);
-      const nodeId = params.get('node');
-      const aboutParam = params.get('about');
-      const viewParam = params.get('view');
+      const legacyNodeId = params.get('node');
 
-      // Handle about modal
-      if (aboutParam === 'true') {
-        setIsAboutOpen(true);
-      }
-
-      // Handle view mode
-      if (viewParam === 'history') {
-        setViewMode('TIMELINE');
-      } else if (viewParam === 'card') {
-        setViewMode('CARD');
-      } else if (viewParam === 'links') {
-        setViewMode('LINKS');
-      } else if (viewParam === 'map') {
-        setViewMode('MAP');
-      }
-
-      if (nodeId) {
+      // Check for path-based node: /company/apple or /tech/transistor
+      if (pathParts.length >= 2 && pathToCategory[pathParts[0]]) {
+        const nodeId = pathParts[1];
         const node = INITIAL_DATA.nodes.find(n => n.id === nodeId);
         if (node) {
           setFocusNodeId(nodeId);
           setSelectedNode(node);
           setViewMode('MAP');
-          setScrollToNodeId(nodeId); // Trigger scroll/center
+          setScrollToNodeId(nodeId);
+          return;
         }
-      } else {
+      }
+
+      // Check for view paths: /history, /cards, /links
+      if (pathParts.length === 1 && pathToView[pathParts[0]]) {
+        setViewMode(pathToView[pathParts[0]]);
         setFocusNodeId(null);
         setSelectedNode(null);
+        return;
+      }
+
+      // Check for /about path
+      if (pathParts.length === 1 && pathParts[0] === 'about') {
+        setIsAboutOpen(true);
+        return;
+      }
+
+      // Legacy support: ?node=apple
+      if (legacyNodeId) {
+        const node = INITIAL_DATA.nodes.find(n => n.id === legacyNodeId);
+        if (node) {
+          setFocusNodeId(legacyNodeId);
+          setSelectedNode(node);
+          setViewMode('MAP');
+          setScrollToNodeId(legacyNodeId);
+          return;
+        }
+      }
+
+      // Root path - Map View (default)
+      if (path === '/' || pathParts.length === 0) {
+        setFocusNodeId(null);
+        setSelectedNode(null);
+        setViewMode('MAP');
       }
     };
 
-    handlePopState();
+    handleUrlChange();
 
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    window.addEventListener('popstate', handleUrlChange);
+    return () => window.removeEventListener('popstate', handleUrlChange);
   }, []);
 
+  // === SEO-FRIENDLY URL HELPER FUNCTIONS ===
+
+  // Map category to URL path segment
+  const categoryToPath = {
+    [Category.COMPANY]: 'company',
+    [Category.PERSON]: 'person',
+    [Category.TECHNOLOGY]: 'tech',
+  };
+
+  // Navigate to a specific node with SEO-friendly path
+  const navigateToNode = useCallback((node: NodeData | null) => {
+    if (!node) {
+      // Clear selection, go to current view
+      navigate(location.pathname.includes('/about') ? '/about' : '/');
+      return;
+    }
+
+    const categoryPath = categoryToPath[node.category];
+    navigate(`/${categoryPath}/${node.id}`);
+  }, [navigate, location.pathname]);
+
+  // Legacy updateUrl for compatibility (now using navigateToNode)
   const updateUrl = (nodeId: string | null) => {
-    const url = new URL(window.location.href);
     if (nodeId) {
-      url.searchParams.set('node', nodeId);
-    } else {
-      url.searchParams.delete('node');
+      const node = INITIAL_DATA.nodes.find(n => n.id === nodeId);
+      if (node) {
+        navigateToNode(node);
+        return;
+      }
     }
-    window.history.pushState({}, '', url);
+    navigate('/');
   };
 
-  const updateViewUrl = (view: 'MAP' | 'TIMELINE' | 'LIST') => {
-    const url = new URL(window.location.href);
-    if (view === 'TIMELINE') {
-      url.searchParams.set('view', 'history');
-    } else if (view === 'LIST') {
-      url.searchParams.set('view', 'list');
-    } else {
-      url.searchParams.delete('view'); // Map is default
-    }
-    window.history.pushState({}, '', url);
-  };
+  // Navigate to a specific view with SEO-friendly path
+  const updateViewUrl = useCallback((view: 'MAP' | 'TIMELINE' | 'CARD' | 'LINKS') => {
+    const viewToPath: Record<string, string> = {
+      'TIMELINE': '/history',
+      'CARD': '/cards',
+      'LINKS': '/links',
+      'MAP': '/',
+    };
+    navigate(viewToPath[view]);
+  }, [navigate]);
 
-  const updateAboutUrl = (isOpen: boolean) => {
-    const url = new URL(window.location.href);
+  const updateAboutUrl = useCallback((isOpen: boolean) => {
     if (isOpen) {
-      url.searchParams.set('about', 'true');
+      navigate('/about');
     } else {
-      url.searchParams.delete('about');
+      // Go back to previous view
+      navigate('/');
     }
-    window.history.pushState({}, '', url);
-  };
+  }, [navigate]);
 
 
   const toggleCategory = (cat: Category) => {
@@ -323,12 +382,11 @@ const App: React.FC = () => {
     clickTimeoutRef.current = setTimeout(() => {
       setSelectedNode(node);
       setScrollToNodeId(node.id);
-      if (viewMode === 'MAP') {
-        updateUrl(node.id);
-      }
+      // Update URL for all views (SEO-friendly navigation)
+      navigateToNode(node);
       clickTimeoutRef.current = null;
     }, 250); // 250ms delay to wait for potential double click
-  }, [viewMode]);
+  }, [navigateToNode]);
 
   // For search: focus on node by ID (used by LinksView)
   const handleNodeFocusById = (nodeId: string) => {

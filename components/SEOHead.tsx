@@ -61,6 +61,13 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
     node,
     baseUrl = 'https://siliconage.org'
 }) => {
+    // Map category to URL path segment
+    const categoryToPath: Record<Category, string> = {
+        [Category.COMPANY]: 'company',
+        [Category.PERSON]: 'person',
+        [Category.TECHNOLOGY]: 'tech',
+    };
+
     useEffect(() => {
         // Determine values based on node
         const title = node
@@ -71,8 +78,9 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
             ? generateDescription(node)
             : DEFAULT_META.description;
 
+        // SEO-friendly path-based URL
         const url = node
-            ? `${baseUrl}/?node=${node.id}`
+            ? `${baseUrl}/${categoryToPath[node.category]}/${node.id}`
             : baseUrl;
 
         const image = `${baseUrl}${DEFAULT_META.image}`;
