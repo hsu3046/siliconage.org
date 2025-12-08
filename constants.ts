@@ -84,21 +84,31 @@ const linkContributes = (source: string, target: string, strength: number = 0.5)
   links.push({ source, target, type: LinkType.CONTRIBUTES, arrow: ArrowHead.SINGLE, strength });
 };
 
-const linkEngages = (source: string, target: string, strength: number = 0.8, icon: LinkIcon = LinkIcon.RIVALRY) => {
-  links.push({ source, target, type: LinkType.ENGAGES, arrow: ArrowHead.DOUBLE, icon, strength });
+// ENGAGES 관계 함수 (경쟁/협력)
+// linkRival: 경쟁 관계 (예: Apple ↔ Samsung)
+const linkRival = (source: string, target: string, strength: number = 0.8) => {
+  links.push({ source, target, type: LinkType.ENGAGES, arrow: ArrowHead.DOUBLE, icon: LinkIcon.RIVALRY, strength });
+};
+
+// linkPartner: 협력/파트너 관계 (예: Microsoft ↔ OpenAI)
+const linkPartner = (source: string, target: string, strength: number = 0.8) => {
+  links.push({ source, target, type: LinkType.ENGAGES, arrow: ArrowHead.DOUBLE, icon: LinkIcon.HEART, strength });
 };
 
 
 // --- DATA ENTRY START ---
 
-// --- [A] TECHNOLOGY NODES ---
-// L0
+// ==============================================================================
+// 1. TECHNOLOGY NODES [Total: 117]
+// ==============================================================================
+
+// [L0] Theoretical Foundations & Physics [Total: 4]
 createTech('turing_machine', 'Turing Machine', 1936, TechRole.L0_THEORY_PHYSICS, 'The theoretical blueprint for all computers. It defines the limits of what machines can calculate.', 'Fundamental Concepts', 'Theories & Architectures');
 createTech('transistor', 'The Transistor', 1947, TechRole.L0_THEORY_PHYSICS, 'A tiny electronic switch. Billions of them pack onto chips to control the flow of electricity.', 'Hardware & Infrastructure', 'Components & Manufacturing');
 createTech('info_theory', 'Information Theory', 1948, TechRole.L0_THEORY_PHYSICS, 'The math of the digital age. It defined "bits" and how to transmit data without errors.', 'Fundamental Concepts', 'Theories & Architectures');
 createTech('rsa', 'RSA Encryption', 1977, TechRole.L0_THEORY_PHYSICS, 'The digital lock and key system that keeps passwords and credit cards safe on the internet.', 'Fundamental Concepts', 'Theories & Architectures');
 
-// L1
+// [L1] Core Hardware & Infrastructure [Total: 40]
 createTech('lithography', 'Lithography', 1957, TechRole.L1_CORE_HARDWARE, 'A process using light to print incredibly tiny, complex circuit patterns onto silicon chips.', 'Hardware & Infrastructure', 'Components & Manufacturing');
 createTech('ic', 'Integrated Circuit', 1959, TechRole.L1_CORE_HARDWARE, 'Putting many transistors on a single chip. It solved the "tyranny of numbers" and shrank computers.', 'Hardware & Infrastructure', 'Components & Manufacturing');
 createTech('ibm_360', 'IBM System/360', 1964, TechRole.L1_CORE_HARDWARE, 'The mainframe that standardized software, allowing companies to upgrade hardware without rewriting code.', 'Hardware & Infrastructure', 'Processors & Compute');
@@ -138,9 +148,8 @@ createTech('5g_nr', '5G (New Radio)', 2019, TechRole.L1_CORE_HARDWARE, 'The late
 createTech('euv', 'EUV Lithography', 2019, TechRole.L1_CORE_HARDWARE, 'A manufacturing miracle using extreme UV light to print the world\'s most advanced chips.', 'Hardware & Infrastructure', 'Components & Manufacturing');
 createTech('stable_diffusion', 'Stable Diffusion', 2022, TechRole.L1_CORE_HARDWARE, 'An open AI that turns text into images, bringing art generation to personal computers.', 'AI & Physical Systems', 'Artificial Intelligence');
 createTech('nvidia_h100', 'NVIDIA H100', 2022, TechRole.L1_CORE_HARDWARE, 'The engine of the AI revolution. A massive GPU designed specifically to train smart models.', 'Hardware & Infrastructure', 'Processors & Compute');
-createTech('sora', 'Sora', 2024, TechRole.L1_CORE_HARDWARE, 'An AI that dreams up realistic videos from simple text, understanding physics and motion.', 'AI & Physical Systems', 'Artificial Intelligence');
 
-// L2
+// [L2] Runtime, Platforms & Protocols [Total: 23]
 createTech('unix', 'Unix', 1969, TechRole.L2_RUNTIME_PLATFORM, 'An operating system philosophy of simplicity. It is the grandfather of Linux and macOS.', 'System Software', 'Operating Systems (OS)');
 createTech('c_lang', 'C Language', 1972, TechRole.L2_RUNTIME_PLATFORM, 'The building block of software. It allows code to run fast and close to the hardware.', 'System Software', 'Development & Languages');
 createTech('sql', 'SQL', 1974, TechRole.L2_RUNTIME_PLATFORM, 'The standard language for asking questions to databases and managing organized information.', 'System Software', 'Development & Languages');
@@ -165,7 +174,7 @@ createTech('docker', 'Docker', 2013, TechRole.L2_RUNTIME_PLATFORM, 'Packages sof
 createTech('tensorflow', 'TensorFlow', 2015, TechRole.L2_RUNTIME_PLATFORM, 'Google\'s open-source library for building and training machine learning models.', 'System Software', 'Development & Languages');
 createTech('pytorch', 'PyTorch', 2016, TechRole.L2_RUNTIME_PLATFORM, 'Meta\'s AI library. Researchers love it for its flexibility and ease of use.', 'System Software', 'Development & Languages');
 
-// L3
+// [L3] End Applications, Services & Devices [Total: 50]
 createTech('walkman', 'Sony Walkman', 1979, TechRole.L3_END_APPLICATION, 'It allowed people to carry their music with them, changing audio consumption forever.', 'Hardware & Infrastructure', 'Devices & Form Factors');
 createTech('macintosh', 'Macintosh', 1984, TechRole.L3_END_APPLICATION, 'The first mass-market computer with a mouse and graphical screen. It made computing friendly.', 'Hardware & Infrastructure', 'Devices & Form Factors');
 createTech('toshiba_t1100', 'Toshiba T1100', 1985, TechRole.L3_END_APPLICATION, 'The first commercially successful laptop. It established the clamshell shape we use today.', 'Hardware & Infrastructure', 'Devices & Form Factors');
@@ -215,13 +224,16 @@ createTech('starship', 'Starship', 2023, TechRole.L3_END_APPLICATION, 'A massive
 createTech('gemini', 'Google Gemini', 2023, TechRole.L3_END_APPLICATION, 'Google\'s multimodal AI. It understands text, code, images, and video natively.', 'AI & Physical Systems', 'Artificial Intelligence');
 createTech('claude', 'Claude', 2023, TechRole.L3_END_APPLICATION, 'An AI assistant built with safety in mind. It excels at reading long documents.', 'AI & Physical Systems', 'Artificial Intelligence');
 createTech('cursor', 'Cursor', 2023, TechRole.L3_END_APPLICATION, 'A code editor built for the AI era. It integrates LLMs directly into the coding workflow.', 'AI & Physical Systems', 'Artificial Intelligence');
+createTech('sora', 'Sora', 2024, TechRole.L3_END_APPLICATION, 'An AI that dreams up realistic videos from simple text, understanding physics and motion.', 'AI & Physical Systems', 'Artificial Intelligence');
 createTech('vision_pro', 'Apple Vision Pro', 2024, TechRole.L3_END_APPLICATION, 'Apple\'s spatial computer. It blends digital content with the physical world.', 'AI & Physical Systems', 'Spatial Computing');
 
-// --- [B] COMPANY NODES ---
+// ==============================================================================
+// 2. COMPANY NODES [Total: 46]
+// ==============================================================================
+
+// [Semiconductors & Core Infrastructure] Total: 13
 createCompany('bell_labs', 'Bell Labs', 1925, CompanyRole.LAB, 'The "Idea Factory" of the 20th century. Transistors, lasers, and Unix were born here.', CompanyCategory.HARDWARE_ROBOTICS);
 createCompany('fairchild', 'Fairchild Semi', 1957, CompanyRole.INFRA, 'The startup that started it all. Its alumni founded Intel, AMD, and Silicon Valley itself.', CompanyCategory.SEMICONDUCTOR);
-createCompany('xerox_parc', 'Xerox PARC', 1970, CompanyRole.LAB, 'The research lab that invented the mouse, windows, and ethernet, inspiring the modern PC.', CompanyCategory.HARDWARE_ROBOTICS);
-createCompany('att', 'AT&T', 1885, CompanyRole.INFRA, 'The telecom monopoly (Ma Bell) that built the physical network infrastructure of the US.', CompanyCategory.INFRA_TELECOM);
 createCompany('intel', 'Intel', 1968, CompanyRole.INFRA, 'Put the "Silicon" in Silicon Valley. They created the microprocessor and dominate PCs.', CompanyCategory.SEMICONDUCTOR);
 createCompany('amd', 'AMD', 1969, CompanyRole.INFRA, 'The persistent rival. They innovated in high-performance CPUs and challenged Intel\'s dominance.', CompanyCategory.SEMICONDUCTOR);
 createCompany('tsmc', 'TSMC', 1987, CompanyRole.INFRA, 'The world\'s chip factory. They manufacture the advanced chips designed by Apple and NVIDIA.', CompanyCategory.SEMICONDUCTOR);
@@ -230,18 +242,27 @@ createCompany('asml', 'ASML', 1984, CompanyRole.INFRA, 'The only company that ma
 createCompany('arm_ltd', 'Arm Holdings', 1990, CompanyRole.LAB, 'They design the energy-efficient chip architecture found in almost every smartphone.', CompanyCategory.SEMICONDUCTOR);
 createCompany('samsung', 'Samsung', 1969, CompanyRole.INFRA, 'A global electronics titan. They lead the world in memory chips, phones, and displays.', CompanyCategory.SEMICONDUCTOR);
 createCompany('qualcomm', 'Qualcomm', 1985, CompanyRole.INFRA, 'The leader in mobile connectivity. Their tech connects your phone to 4G and 5G networks.', CompanyCategory.SEMICONDUCTOR);
+createCompany('att', 'AT&T', 1885, CompanyRole.INFRA, 'The telecom monopoly (Ma Bell) that built the physical network infrastructure of the US.', CompanyCategory.INFRA_TELECOM);
+createCompany('cisco', 'Cisco', 1984, CompanyRole.INFRA, 'The internet\'s plumber. Their routers and switches direct traffic across the global network.', CompanyCategory.INFRA_TELECOM);
+createCompany('spacex', 'SpaceX', 2002, CompanyRole.INFRA, 'Revolutionizing spaceflight with reusable rockets. Their goal is to make life multi-planetary.', CompanyCategory.HARDWARE_ROBOTICS);
+
+// [Hardware, Robotics & Devices] Total: 7
+createCompany('xerox_parc', 'Xerox PARC', 1970, CompanyRole.LAB, 'The research lab that invented the mouse, windows, and ethernet, inspiring the modern PC.', CompanyCategory.HARDWARE_ROBOTICS);
 createCompany('ibm', 'IBM', 1911, CompanyRole.PLATFORM, 'Big Blue. They defined the mainframe era and helped launch the personal computer market.', CompanyCategory.HARDWARE_ROBOTICS);
 createCompany('apple', 'Apple', 1976, CompanyRole.PLATFORM, 'Design meets technology. They revolutionized computing with the Mac, iPod, and iPhone.', CompanyCategory.HARDWARE_ROBOTICS);
 createCompany('sony', 'Sony', 1946, CompanyRole.PRODUCT, 'Changed entertainment with the Walkman. Now a leader in image sensors and gaming.', CompanyCategory.HARDWARE_ROBOTICS);
 createCompany('tesla', 'Tesla', 2003, CompanyRole.PRODUCT, 'More than a car company. They made EVs desirable and are pushing robotics and autonomy.', CompanyCategory.HARDWARE_ROBOTICS);
-createCompany('spacex', 'SpaceX', 2002, CompanyRole.INFRA, 'Revolutionizing spaceflight with reusable rockets. Their goal is to make life multi-planetary.', CompanyCategory.HARDWARE_ROBOTICS);
 createCompany('dji', 'DJI', 2006, CompanyRole.PRODUCT, 'The absolute leader in consumer drones. They made aerial photography accessible to all.', CompanyCategory.HARDWARE_ROBOTICS);
 createCompany('boston_dynamics', 'Boston Dynamics', 1992, CompanyRole.LAB, 'Engineering dynamic robots that move with uncanny agility, mimicking humans and animals.', CompanyCategory.HARDWARE_ROBOTICS);
+
+// [Software, SaaS & Enterprise] Total: 5
 createCompany('microsoft', 'Microsoft', 1975, CompanyRole.PLATFORM, 'Software for the world. From Windows to Azure and OpenAI, they are a productivity giant.', CompanyCategory.ENTERPRISE_SAAS);
 createCompany('oracle', 'Oracle', 1977, CompanyRole.SERVICE, 'The database giant. Their software manages the critical data for the world\'s largest companies.', CompanyCategory.ENTERPRISE_SAAS);
 createCompany('adobe', 'Adobe', 1982, CompanyRole.SERVICE, 'The creator\'s toolkit. They standardized digital imaging and electronic documents.', CompanyCategory.ENTERPRISE_SAAS);
 createCompany('salesforce_co', 'Salesforce', 1999, CompanyRole.PLATFORM, 'The cloud pioneer. They replaced installed software with web-based business tools.', CompanyCategory.ENTERPRISE_SAAS);
 createCompany('sap', 'SAP', 1972, CompanyRole.SERVICE, 'The backbone of global business. Their software manages operations for huge corporations.', CompanyCategory.ENTERPRISE_SAAS);
+
+// [Internet, Platform & Consumer Services] Total: 13
 createCompany('google', 'Google', 1998, CompanyRole.PLATFORM, 'Organized the world\'s information. From Search to Android, they define the internet.', CompanyCategory.PLATFORM_INTERNET);
 createCompany('amazon', 'Amazon', 1994, CompanyRole.PLATFORM, 'The "Everything Store". They also built AWS, the cloud that runs half the internet.', CompanyCategory.PLATFORM_INTERNET);
 createCompany('meta', 'Meta', 2004, CompanyRole.PLATFORM, 'Connecting people. They own Facebook, Instagram, and WhatsApp, and are betting on VR.', CompanyCategory.PLATFORM_INTERNET);
@@ -252,75 +273,88 @@ createCompany('uber_co', 'Uber', 2009, CompanyRole.SERVICE, 'Transportation on d
 createCompany('airbnb', 'Airbnb', 2008, CompanyRole.SERVICE, 'Hospitality by the people. They turned spare rooms into a global network of accommodations.', CompanyCategory.PLATFORM_INTERNET);
 createCompany('paypal_co', 'PayPal', 1998, CompanyRole.SERVICE, 'The payments pioneer. Its "Mafia" of founders went on to build Tesla, YouTube, and more.', CompanyCategory.PLATFORM_INTERNET);
 createCompany('stripe_co', 'Stripe', 2010, CompanyRole.INFRA, 'Payment infrastructure for the internet. They handle the complexity of money for startups.', CompanyCategory.PLATFORM_INTERNET);
+createCompany('netscape_co', 'Netscape', 1994, CompanyRole.SERVICE, 'The browser that mattered. They commercialized the web and sparked the dot-com boom.', CompanyCategory.PLATFORM_INTERNET);
 createCompany('spotify_co', 'Spotify', 2006, CompanyRole.SERVICE, 'Streaming savior. They convinced the world to pay for music access instead of ownership.', CompanyCategory.MEDIA_CONTENT);
 createCompany('netflix_co', 'Netflix', 1997, CompanyRole.SERVICE, 'Changed TV. They moved from mailing DVDs to streaming, pioneering the binge-watching era.', CompanyCategory.MEDIA_CONTENT);
-createCompany('netscape_co', 'Netscape', 1994, CompanyRole.SERVICE, 'The browser that mattered. They commercialized the web and sparked the dot-com boom.', CompanyCategory.PLATFORM_INTERNET);
-createCompany('cisco', 'Cisco', 1984, CompanyRole.INFRA, 'The internet\'s plumber. Their routers and switches direct traffic across the global network.', CompanyCategory.INFRA_TELECOM);
+
+// [AI Innovation & Labs] Total: 4
 createCompany('deepmind', 'Google DeepMind', 2010, CompanyRole.LAB, 'Solved intelligence. Famous for AlphaGo, they use AI to solve fundamental scientific problems.', CompanyCategory.AI_INNOVATION);
 createCompany('openai', 'OpenAI', 2015, CompanyRole.LAB, 'The lab behind ChatGPT. They pushed AI from research into a product used by millions.', CompanyCategory.AI_INNOVATION);
 createCompany('anthropic', 'Anthropic', 2021, CompanyRole.LAB, 'AI safety first. Founded by former OpenAI members to build reliable, steerable AI.', CompanyCategory.AI_INNOVATION);
 createCompany('huggingface', 'Hugging Face', 2016, CompanyRole.PLATFORM, 'The GitHub of AI. An open community hub for sharing models, datasets, and demos.', CompanyCategory.AI_INNOVATION);
+
+// [Venture Capital & Investment] Total: 4
 createCompany('sequoia', 'Sequoia', 1972, CompanyRole.SERVICE, 'The Midas touch. This VC firm backed Apple, Google, and NVIDIA when they were just ideas.', CompanyCategory.VENTURE_CAPITAL);
 createCompany('ycombinator', 'Y Combinator', 2005, CompanyRole.LAB, 'The startup factory. Their accelerator launched Airbnb, Stripe, and Dropbox.', CompanyCategory.VENTURE_CAPITAL);
 createCompany('a16z', 'a16z', 2009, CompanyRole.SERVICE, 'Software is eating the world. A modern VC firm that provides massive operational support.', CompanyCategory.VENTURE_CAPITAL);
-createCompany('softbank', 'SoftBank', 1981, CompanyRole.SERVICE, 'The Vision Fund. They injected massive capital into unicorns like Uber and WeWork.', CompanyCategory.VENTURE_CAPITAL);
+createCompany('softbank', 'SoftBank Vision Fund', 2017, CompanyRole.SERVICE, 'The world\'s largest technology-focused investment fund. They injected massive capital into unicorns like Uber and WeWork.', CompanyCategory.VENTURE_CAPITAL);
 
-// --- [C] PERSON NODES ---
-// --- [C] PERSON NODES ---
+// ==============================================================================
+// 3. PERSON NODES [Total: 46]
+// ==============================================================================
+
+// [The Pioneers & Theorists] Total: 7
 createPerson('alan_turing', 'Alan Turing', 1936, PersonRole.THEORIST, 'The genius who cracked the Enigma code and conceived the theoretical basis of computers.', { primaryRole: 'Mathematician', secondaryRole: 'Cryptanalyst', birthYear: 1912, deathYear: 1954 });
 createPerson('claude_shannon', 'Claude Shannon', 1948, PersonRole.THEORIST, 'Father of Information Theory. He proved that all communication could be reduced to bits.', { primaryRole: 'Mathematician', secondaryRole: 'Electrical Engineer', birthYear: 1916, deathYear: 2001 });
 createPerson('william_shockley', 'William Shockley', 1947, PersonRole.THEORIST, 'Co-inventor of the transistor. A brilliant physicist whose difficult management sparked the Valley.', { primaryRole: 'Physicist', secondaryRole: 'Founder, Shockley Semi', birthYear: 1910, deathYear: 1989 });
-createPerson('robert_noyce', 'Robert Noyce', 1957, PersonRole.VISIONARY, 'The "Mayor of Silicon Valley". He co-invented the microchip and co-founded Intel.', { primaryRole: 'Co-founder, Intel', secondaryRole: 'Co-founder, Fairchild', birthYear: 1927, deathYear: 1990 });
-createPerson('gordon_moore', 'Gordon Moore', 1965, PersonRole.VISIONARY, 'Predicted computing power would double every two years. His "Law" drove the industry.', { primaryRole: 'Co-founder, Intel', secondaryRole: 'Chairman Emeritus', birthYear: 1929, deathYear: 2023 });
 createPerson('dennis_ritchie', 'Dennis Ritchie', 1972, PersonRole.BUILDER, 'The architect. He created the C language and Unix, the foundation of modern software.', { primaryRole: 'Computer Scientist', secondaryRole: 'Creator of C', birthYear: 1941, deathYear: 2011 });
 createPerson('tim_berners_lee', 'Tim Berners-Lee', 1989, PersonRole.THEORIST, 'He gave the internet a face. He invented the World Wide Web, the browser, and HTML.', { primaryRole: 'Computer Scientist', secondaryRole: 'Inventor of WWW', birthYear: 1955 });
-createPerson('linus_torvalds', 'Linus Torvalds', 1991, PersonRole.BUILDER, 'He wrote Linux for fun. It now runs the cloud. He also gave us Git to manage code.', { primaryRole: 'Software Engineer', secondaryRole: 'Creator of Linux', birthYear: 1969 });
-createPerson('satoshi_nakamoto', 'Satoshi Nakamoto', 2008, PersonRole.THEORIST, 'The mysterious creator of Bitcoin. They solved the problem of digital trust without banks.', { primaryRole: 'Cryptographer', secondaryRole: 'Creator of Bitcoin' });
-createPerson('vitalik_buterin', 'Vitalik Buterin', 2013, PersonRole.VISIONARY, 'The boy genius behind Ethereum. He envisioned a blockchain that could run any program.', { primaryRole: 'Co-founder, Ethereum', secondaryRole: 'Programmer', birthYear: 1994 });
-createPerson('morris_chang', 'Morris Chang', 1987, PersonRole.VISIONARY, 'He revolutionized chips by creating the foundry model, building chips designed by others.', { primaryRole: 'Founder, TSMC', secondaryRole: 'Former Chairman', birthYear: 1931 });
-createPerson('jensen_huang', 'Jensen Huang', 1993, PersonRole.VISIONARY, 'The visionary who bet on GPUs. He turned a graphics company into the engine of AI.', { primaryRole: 'Co-founder & CEO, NVIDIA', secondaryRole: 'Electrical Engineer', birthYear: 1963 });
-createPerson('lisa_su', 'Lisa Su', 2014, PersonRole.LEADER, 'The engineer who saved AMD. She executed one of the greatest turnarounds in tech history.', { primaryRole: 'Chair & CEO, AMD', secondaryRole: 'Electrical Engineer', birthYear: 1969 });
-createPerson('masayoshi_son', 'Masayoshi Son', 1981, PersonRole.INVESTOR, 'The risk-taker. His Vision Fund poured billions into the future of AI and connectivity.', { primaryRole: 'Founder & CEO, SoftBank', secondaryRole: 'Investor', birthYear: 1957 });
+createPerson('geoffrey_hinton', 'Geoffrey Hinton', 2012, PersonRole.THEORIST, 'The Godfather of AI. He believed in neural networks for decades until the world caught up.', { primaryRole: 'AI Researcher', secondaryRole: 'Turing Award Winner', birthYear: 1947 });
+createPerson('yann_lecun', 'Yann LeCun', 2013, PersonRole.THEORIST, 'The AI Scientist. He invented the convolutional networks that let computers "see".', { primaryRole: 'Chief AI Scientist, Meta', secondaryRole: 'Turing Award Winner', birthYear: 1960 });
+
+// [The Builders & Visionary Founders] Total: 11
+createPerson('robert_noyce', 'Robert Noyce', 1957, PersonRole.VISIONARY, 'The "Mayor of Silicon Valley". He co-invented the microchip and co-founded Intel.', { primaryRole: 'Co-founder, Intel', secondaryRole: 'Co-founder, Fairchild', birthYear: 1927, deathYear: 1990 });
+createPerson('gordon_moore', 'Gordon Moore', 1965, PersonRole.VISIONARY, 'Predicted computing power would double every two years. His "Law" drove the industry.', { primaryRole: 'Co-founder, Intel', secondaryRole: 'Chairman Emeritus', birthYear: 1929, deathYear: 2023 });
 createPerson('steve_jobs', 'Steve Jobs', 1976, PersonRole.VISIONARY, 'The visionary who stood at the intersection of art and technology. He made gadgets personal.', { primaryRole: 'Co-founder, Apple', secondaryRole: 'Founder, NeXT', birthYear: 1955, deathYear: 2011 });
 createPerson('steve_wozniak', 'Steve Wozniak', 1976, PersonRole.BUILDER, 'The engineer\'s engineer. He single-handedly designed the Apple I and II computers.', { primaryRole: 'Co-founder, Apple', secondaryRole: 'Computer Engineer', birthYear: 1950 });
 createPerson('bill_gates', 'Bill Gates', 1975, PersonRole.VISIONARY, 'The coder who meant business. He realized software was the key and put Windows everywhere.', { primaryRole: 'Co-founder, Microsoft', secondaryRole: 'Co-chair, Gates Foundation', birthYear: 1955 });
 createPerson('larry_ellison', 'Larry Ellison', 1977, PersonRole.VISIONARY, 'The samurai of software. He built an empire on enterprise databases and ruthless tactics.', { primaryRole: 'Co-founder & CTO, Oracle', secondaryRole: 'Former CEO', birthYear: 1944 });
+createPerson('morris_chang', 'Morris Chang', 1987, PersonRole.VISIONARY, 'He revolutionized chips by creating the foundry model, building chips designed by others.', { primaryRole: 'Founder, TSMC', secondaryRole: 'Former Chairman', birthYear: 1931 });
+createPerson('linus_torvalds', 'Linus Torvalds', 1991, PersonRole.BUILDER, 'He wrote Linux for fun. It now runs the cloud. He also gave us Git to manage code.', { primaryRole: 'Software Engineer', secondaryRole: 'Creator of Linux', birthYear: 1969 });
 createPerson('jeff_bezos', 'Jeff Bezos', 1994, PersonRole.VISIONARY, 'He started selling books and ended up selling everything. He built the cloud (AWS) too.', { primaryRole: 'Founder, Amazon', secondaryRole: 'Founder, Blue Origin', birthYear: 1964 });
+createPerson('jensen_huang', 'Jensen Huang', 1993, PersonRole.VISIONARY, 'The visionary who bet on GPUs. He turned a graphics company into the engine of AI.', { primaryRole: 'Co-founder & CEO, NVIDIA', secondaryRole: 'Electrical Engineer', birthYear: 1963 });
+createPerson('marc_benioff', 'Marc Benioff', 1999, PersonRole.VISIONARY, 'He declared "No Software". He moved business tools to the cloud with Salesforce.', { primaryRole: 'Founder & CEO, Salesforce', secondaryRole: 'Philanthropist', birthYear: 1964 });
+
+// [The Internet Age & Modern Leaders] Total; 19
 createPerson('larry_page', 'Larry Page', 1998, PersonRole.VISIONARY, 'He wanted to download the entire internet. He invented PageRank and co-founded Google.', { primaryRole: 'Co-founder, Google', secondaryRole: 'Former CEO, Alphabet', birthYear: 1973 });
 createPerson('sergey_brin', 'Sergey Brin', 1998, PersonRole.VISIONARY, 'The data scientist who co-founded Google. He helped organize the world\'s information.', { primaryRole: 'Co-founder, Google', secondaryRole: 'Computer Scientist', birthYear: 1973 });
-createPerson('marc_andreessen', 'Marc Andreessen', 1994, PersonRole.INVESTOR, 'He built the first graphical browser. Now he funds the software eating the world.', { primaryRole: 'Co-founder, a16z', secondaryRole: 'Co-founder, Netscape', birthYear: 1971 });
-createPerson('mark_zuckerberg', 'Mark Zuckerberg', 2004, PersonRole.VISIONARY, 'He connected the world. He moved fast, broke things, and built a social empire.', { primaryRole: 'Founder & CEO, Meta', secondaryRole: 'Philanthropist', birthYear: 1984 });
 createPerson('reed_hastings', 'Reed Hastings', 1997, PersonRole.VISIONARY, 'He realized DVDs would die. He pivoted Netflix to streaming and changed TV forever.', { primaryRole: 'Co-founder, Netflix', secondaryRole: 'Executive Chairman', birthYear: 1960 });
+createPerson('elon_musk', 'Elon Musk', 2002, PersonRole.VISIONARY, 'The real-life Tony Stark. He is electrifying transport and building rockets to Mars.', { primaryRole: 'Founder & CEO, SpaceX', secondaryRole: 'CEO, Tesla', birthYear: 1971 });
+createPerson('mark_zuckerberg', 'Mark Zuckerberg', 2004, PersonRole.VISIONARY, 'He connected the world. He moved fast, broke things, and built a social empire.', { primaryRole: 'Founder & CEO, Meta', secondaryRole: 'Philanthropist', birthYear: 1984 });
+createPerson('chad_hurley', 'Chad Hurley', 2005, PersonRole.VISIONARY, 'He made video easy. Co-founded YouTube so anyone could broadcast themselves.', { primaryRole: 'Co-founder, YouTube', secondaryRole: 'Former CEO', birthYear: 1977 });
 createPerson('jack_ma', 'Jack Ma', 1999, PersonRole.VISIONARY, 'The teacher who connected China to the world. He built an e-commerce giant from an apartment.', { primaryRole: 'Co-founder, Alibaba', secondaryRole: 'Philanthropist', birthYear: 1964 });
 createPerson('pony_ma', 'Pony Ma', 1998, PersonRole.VISIONARY, 'The quiet architect of WeChat. He built a digital ecosystem that powers modern China.', { primaryRole: 'Founder & CEO, Tencent', secondaryRole: 'Software Engineer', birthYear: 1971 });
-createPerson('elon_musk', 'Elon Musk', 2002, PersonRole.VISIONARY, 'The real-life Tony Stark. He is electrifying transport and building rockets to Mars.', { primaryRole: 'Founder & CEO, SpaceX', secondaryRole: 'CEO, Tesla', birthYear: 1971 });
-createPerson('peter_thiel', 'Peter Thiel', 1998, PersonRole.INVESTOR, 'The contrarian. He co-founded PayPal, backed Facebook first, and funds big ideas.', { primaryRole: 'Partner, Founders Fund', secondaryRole: 'Co-founder, PayPal', birthYear: 1967 });
-createPerson('reid_hoffman', 'Reid Hoffman', 2002, PersonRole.INVESTOR, 'The networker. He founded LinkedIn and is the "Oracle" connected to everyone in the Valley.', { primaryRole: 'Partner, Greylock', secondaryRole: 'Co-founder, LinkedIn', birthYear: 1967 });
-createPerson('max_levchin', 'Max Levchin', 1998, PersonRole.BUILDER, 'The coder behind PayPal. His work on fraud prevention proved humans are still useful.', { primaryRole: 'Founder & CEO, Affirm', secondaryRole: 'Co-founder, PayPal', birthYear: 1975 });
-createPerson('roelof_botha', 'Roelof Botha', 2003, PersonRole.INVESTOR, 'The PayPal Mafia member who leads Sequoia. He spots the next big thing before anyone else.', { primaryRole: 'Partner, Sequoia', secondaryRole: 'Former CFO, PayPal', birthYear: 1973 });
-createPerson('chad_hurley', 'Chad Hurley', 2005, PersonRole.VISIONARY, 'He made video easy. Co-founded YouTube so anyone could broadcast themselves.', { primaryRole: 'Co-founder, YouTube', secondaryRole: 'Former CEO', birthYear: 1977 });
-createPerson('marc_benioff', 'Marc Benioff', 1999, PersonRole.VISIONARY, 'He declared "No Software". He moved business tools to the cloud with Salesforce.', { primaryRole: 'Founder & CEO, Salesforce', secondaryRole: 'Philanthropist', birthYear: 1964 });
 createPerson('travis_kalanick', 'Travis Kalanick', 2009, PersonRole.VISIONARY, 'He hustled to build Uber. He changed urban transport with the push of a button.', { primaryRole: 'Co-founder, Uber', secondaryRole: 'Former CEO', birthYear: 1976 });
 createPerson('patrick_collison', 'Patrick Collison', 2010, PersonRole.VISIONARY, 'He fixed payments. With Stripe, he made it simple for startups to accept money online.', { primaryRole: 'Co-founder & CEO, Stripe', secondaryRole: 'Entrepreneur', birthYear: 1988 });
-createPerson('geoffrey_hinton', 'Geoffrey Hinton', 2012, PersonRole.THEORIST, 'The Godfather of AI. He believed in neural networks for decades until the world caught up.', { primaryRole: 'AI Researcher', secondaryRole: 'Turing Award Winner', birthYear: 1947 });
+createPerson('satoshi_nakamoto', 'Satoshi Nakamoto', 2008, PersonRole.THEORIST, 'The mysterious creator of Bitcoin. They solved the problem of digital trust without banks.', { primaryRole: 'Cryptographer', secondaryRole: 'Creator of Bitcoin' });
+createPerson('vitalik_buterin', 'Vitalik Buterin', 2013, PersonRole.VISIONARY, 'The boy genius behind Ethereum. He envisioned a blockchain that could run any program.', { primaryRole: 'Co-founder, Ethereum', secondaryRole: 'Programmer', birthYear: 1994 });
+createPerson('tim_cook', 'Tim Cook', 2011, PersonRole.LEADER, 'The operations genius. He took Apple to a $3 trillion valuation by perfecting the supply chain.', { primaryRole: 'CEO, Apple', secondaryRole: 'Former COO', birthYear: 1960 });
+createPerson('satya_nadella', 'Satya Nadella', 2014, PersonRole.LEADER, 'The diplomat. He refreshed Microsoft\'s soul, embracing the cloud and partnering with OpenAI.', { primaryRole: 'CEO, Microsoft', secondaryRole: 'Chairman', birthYear: 1967 });
+createPerson('sundar_pichai', 'Sundar Pichai', 2015, PersonRole.LEADER, 'The product leader. He oversaw Chrome and Android before taking the helm at Google.', { primaryRole: 'CEO, Alphabet & Google', secondaryRole: 'Product Manager', birthYear: 1972 });
+createPerson('lisa_su', 'Lisa Su', 2014, PersonRole.LEADER, 'The engineer who saved AMD. She executed one of the greatest turnarounds in tech history.', { primaryRole: 'Chair & CEO, AMD', secondaryRole: 'Electrical Engineer', birthYear: 1969 });
 createPerson('demis_hassabis', 'Demis Hassabis', 2010, PersonRole.VISIONARY, 'The gamer neuroscientist. He founded DeepMind to solve intelligence and cure diseases.', { primaryRole: 'Co-founder & CEO, DeepMind', secondaryRole: 'AI Researcher', birthYear: 1976 });
 createPerson('sam_altman', 'Sam Altman', 2015, PersonRole.LEADER, 'The operator. He scaled Y Combinator and then led OpenAI to release ChatGPT.', { primaryRole: 'Co-founder & CEO, OpenAI', secondaryRole: 'Former President, YC', birthYear: 1985 });
 createPerson('ilya_sutskever', 'Ilya Sutskever', 2015, PersonRole.THEORIST, 'The brain behind GPT. He led the technical breakthroughs that made AI talk.', { primaryRole: 'Co-founder, OpenAI', secondaryRole: 'Co-founder, SSI', birthYear: 1985 });
-createPerson('satya_nadella', 'Satya Nadella', 2014, PersonRole.LEADER, 'The diplomat. He refreshed Microsoft\'s soul, embracing the cloud and partnering with OpenAI.', { primaryRole: 'CEO, Microsoft', secondaryRole: 'Chairman', birthYear: 1967 });
-createPerson('tim_cook', 'Tim Cook', 2011, PersonRole.LEADER, 'The operations genius. He took Apple to a $3 trillion valuation by perfecting the supply chain.', { primaryRole: 'CEO, Apple', secondaryRole: 'Former COO', birthYear: 1960 });
-createPerson('sundar_pichai', 'Sundar Pichai', 2015, PersonRole.LEADER, 'The product leader. He oversaw Chrome and Android before taking the helm at Google.', { primaryRole: 'CEO, Alphabet & Google', secondaryRole: 'Product Manager', birthYear: 1972 });
-createPerson('yann_lecun', 'Yann LeCun', 2013, PersonRole.THEORIST, 'The AI Scientist. He invented the convolutional networks that let computers "see".', { primaryRole: 'Chief AI Scientist, Meta', secondaryRole: 'Turing Award Winner', birthYear: 1960 });
-createPerson('don_valentine', 'Don Valentine', 1972, PersonRole.INVESTOR, 'The grandfather of VC. His firm Sequoia backed the companies that defined the future.', { primaryRole: 'Founder, Sequoia', secondaryRole: 'Venture Capitalist', birthYear: 1932, deathYear: 2019 });
-createPerson('paul_graham', 'Paul Graham', 2005, PersonRole.INVESTOR, 'The hacker philosopher. He created Y Combinator and wrote the playbook for startups.', { primaryRole: 'Co-founder, Y Combinator', secondaryRole: 'Essayist', birthYear: 1964 });
+
+// [Investors & The PayPal Mafia] Total: 9
 createPerson('arthur_rock', 'Arthur Rock', 1961, PersonRole.INVESTOR, 'The financier. He helped start Intel and Apple, coining the term "Venture Capital".', { primaryRole: 'Venture Capitalist', secondaryRole: 'Early Investor', birthYear: 1926 });
+createPerson('don_valentine', 'Don Valentine', 1972, PersonRole.INVESTOR, 'The grandfather of VC. His firm Sequoia backed the companies that defined the future.', { primaryRole: 'Founder, Sequoia', secondaryRole: 'Venture Capitalist', birthYear: 1932, deathYear: 2019 });
+createPerson('masayoshi_son', 'Masayoshi Son', 1981, PersonRole.INVESTOR, 'The risk-taker. His Vision Fund poured billions into the future of AI and connectivity.', { primaryRole: 'Founder & CEO, SoftBank', secondaryRole: 'Investor', birthYear: 1957 });
+createPerson('marc_andreessen', 'Marc Andreessen', 1994, PersonRole.INVESTOR, 'He built the first graphical browser. Now he funds the software eating the world.', { primaryRole: 'Co-founder, a16z', secondaryRole: 'Co-founder, Netscape', birthYear: 1971 });
+createPerson('peter_thiel', 'Peter Thiel', 1998, PersonRole.INVESTOR, 'The contrarian. He co-founded PayPal, backed Facebook first, and funds big ideas.', { primaryRole: 'Partner, Founders Fund', secondaryRole: 'Co-founder, PayPal', birthYear: 1967 });
+createPerson('reid_hoffman', 'Reid Hoffman', 2002, PersonRole.INVESTOR, 'The networker. He founded LinkedIn and is the "Oracle" connected to everyone in the Valley.', { primaryRole: 'Partner, Greylock', secondaryRole: 'Co-founder, LinkedIn', birthYear: 1967 });
+createPerson('paul_graham', 'Paul Graham', 2005, PersonRole.INVESTOR, 'The hacker philosopher. He created Y Combinator and wrote the playbook for startups.', { primaryRole: 'Co-founder, Y Combinator', secondaryRole: 'Essayist', birthYear: 1964 });
+createPerson('max_levchin', 'Max Levchin', 1998, PersonRole.BUILDER, 'The coder behind PayPal. His work on fraud prevention proved humans are still useful.', { primaryRole: 'Founder & CEO, Affirm', secondaryRole: 'Co-founder, PayPal', birthYear: 1975 });
+createPerson('roelof_botha', 'Roelof Botha', 2003, PersonRole.INVESTOR, 'The PayPal Mafia member who leads Sequoia. He spots the next big thing before anyone else.', { primaryRole: 'Partner, Sequoia', secondaryRole: 'Former CFO, PayPal', birthYear: 1973 });
 
 // ==============================================================================
 // 4. CONNECTIONS: THE SILICON PROTOCOL
 // ==============================================================================
 
 // ------------------------------------------------------------------------------
-// LAYER 1: PEOPLE -> COMPANIES (The Spark)
+// LAYER 1: THE SPARK (People -> Companies & Tech)
 // ------------------------------------------------------------------------------
+// Creation of Companies
 linkCreates('william_shockley', 'fairchild');
 linkCreates('robert_noyce', 'intel');
 linkCreates('gordon_moore', 'intel');
@@ -338,9 +372,9 @@ linkCreates('reed_hastings', 'netflix_co');
 linkCreates('mark_zuckerberg', 'meta');
 linkCreates('peter_thiel', 'paypal_co');
 linkCreates('max_levchin', 'paypal_co');
-linkCreates('elon_musk', 'paypal_co'); // Merger
+linkCreates('elon_musk', 'paypal_co');
 linkCreates('elon_musk', 'spacex');
-linkCreates('elon_musk', 'tesla'); // Architect/CEO
+linkCreates('elon_musk', 'tesla');
 linkCreates('elon_musk', 'openai');
 linkCreates('sam_altman', 'openai');
 linkCreates('demis_hassabis', 'deepmind');
@@ -354,10 +388,11 @@ linkCreates('don_valentine', 'sequoia');
 linkCreates('paul_graham', 'ycombinator');
 linkCreates('marc_andreessen', 'a16z');
 linkCreates('masayoshi_son', 'softbank');
+linkCreates('cisco', 'cisco_router');
+linkCreates('qualcomm', '5g_nr');
+linkCreates('samsung', '5g_nr');
 
-// ------------------------------------------------------------------------------
-// LAYER 2: PEOPLE -> TECHNOLOGY (The Invention - Only if direct)
-// ------------------------------------------------------------------------------
+// Creation of Core Technology (Direct Involvement)
 linkCreates('alan_turing', 'turing_machine');
 linkCreates('claude_shannon', 'info_theory');
 linkCreates('william_shockley', 'transistor');
@@ -370,12 +405,75 @@ linkCreates('linus_torvalds', 'git');
 linkCreates('satoshi_nakamoto', 'bitcoin');
 linkCreates('vitalik_buterin', 'ethereum');
 linkCreates('geoffrey_hinton', 'alexnet');
+linkCreates('yann_lecun', 'alexnet');
 linkCreates('ilya_sutskever', 'transformer');
+linkCreates('google', 'word2vec');
+linkCreates('marc_andreessen', 'mosaic');
+linkCreates('anthropic', 'claude');
+linkCreates('openai', 'sora');
 
 // ------------------------------------------------------------------------------
-// LAYER 3: COMPANIES -> TECHNOLOGY (The Product)
+// LAYER 2: TECHNOLOGY EVOLUTION (Tech -> Tech)
 // ------------------------------------------------------------------------------
-// Hardware & Chips
+// Theoretical foundations leading to Hardware
+linkContributes('turing_machine', 'microprocessor');
+linkContributes('info_theory', 'tcp_ip');
+linkContributes('info_theory', 'cdma');
+linkContributes('info_theory', '5g_nr');
+linkContributes('info_theory', 'mp3');
+linkContributes('transistor', 'ic');
+linkContributes('transistor', 'blue_led');
+
+// Hardware Evolution
+linkPowers('lithography', 'ic');
+linkPowers('lithography', 'euv');
+linkPowers('lithography', 'lidar');
+linkPowers('lithography', 'cmos');
+linkPowers('euv', 'nvidia_h100');
+linkPowers('euv', 'arm_cortex');
+linkPowers('ic', 'microprocessor');
+linkPowers('ic', 'dram');
+linkPowers('ic', 'nand');
+linkContributes('microprocessor', 'x86');
+linkContributes('microprocessor', 'arm_arch');
+linkContributes('dram', 'hbm');
+linkPowers('hbm', 'nvidia_h100');
+linkPowers('hbm', 'tpu');
+
+// Connectivity Evolution
+linkPowers('optical_fiber', 'tcp_ip');
+linkPowers('optical_fiber', '5g_nr');
+linkContributes('tcp_ip', 'ethernet');
+linkContributes('ethernet', 'wifi');
+linkContributes('cdma', 'gsm');
+linkContributes('gsm', 'lte');
+linkContributes('lte', '5g_nr');
+linkContributes('gps', '5g_nr');
+linkPowers('blue_led', 'optical_disc');
+linkPowers('cmos', 'lidar');
+
+// Software & Algorithm Evolution
+linkContributes('unix', 'c_lang');
+linkContributes('unix', 'linux');
+linkContributes('c_lang', 'python');
+linkContributes('c_lang', 'java');
+linkContributes('c_lang', 'sql');
+linkContributes('sql', 'oracle_db');
+linkContributes('bittorrent', 'bitcoin');
+linkContributes('bitcoin', 'ethereum');
+linkContributes('alexnet', 'transformer');
+linkContributes('word2vec', 'transformer');
+linkContributes('word2vec', 'chatgpt');
+linkContributes('gan', 'stable_diffusion');
+linkContributes('gan', 'sora');
+linkContributes('gan', 'midjourney');
+linkContributes('transformer', 'sora');
+linkContributes('floppy', 'optical_disc');
+
+// ------------------------------------------------------------------------------
+// LAYER 3: PRODUCT RELEASES (Companies -> Tech)
+// ------------------------------------------------------------------------------
+// Hardware Products
 linkCreates('bell_labs', 'transistor');
 linkCreates('bell_labs', 'unix');
 linkCreates('bell_labs', 'c_lang');
@@ -395,16 +493,18 @@ linkCreates('sony', 'optical_disc');
 linkCreates('apple', 'macintosh');
 linkCreates('apple', 'iphone');
 linkCreates('apple', 'ios');
-linkCreates('apple', 'vision_pro');
 linkCreates('apple', 'app_store');
+linkCreates('apple', 'vision_pro');
 linkCreates('tesla', 'model_s');
 linkCreates('tesla', 'tesla_autopilot');
 linkCreates('spacex', 'spacex_falcon9');
-linkCreates('spacex', 'starship');
 linkCreates('spacex', 'starlink');
+linkCreates('spacex', 'starship');
 linkCreates('dji', 'dji_phantom');
+linkCreates('xerox_parc', 'ethernet');
+linkCreates('att', 'bell_labs'); // Parent ownership
 
-// Software & Platforms
+// Software & Platform Products
 linkCreates('microsoft', 'windows_95');
 linkCreates('microsoft', 'excel');
 linkCreates('microsoft', 'copilot');
@@ -426,7 +526,6 @@ linkCreates('deepmind', 'alphago_zero');
 linkCreates('meta', 'facebook');
 linkCreates('meta', 'pytorch');
 linkCreates('openai', 'chatgpt');
-linkCreates('openai', 'sora');
 linkCreates('netflix_co', 'netflix');
 linkCreates('spotify_co', 'spotify');
 linkCreates('uber_co', 'uber_app');
@@ -434,92 +533,84 @@ linkCreates('paypal_co', 'paypal');
 linkCreates('stripe_co', 'stripe');
 linkCreates('bytedance', 'tiktok');
 linkCreates('tencent', 'wechat');
+linkCreates('amazon', 'amazon_com');
+linkCreates('fugaku', 'covid_simulation');
 
 // ------------------------------------------------------------------------------
-// LAYER 4: TECHNOLOGY STACK (L0->L1->L2->L3)
+// LAYER 4: INFRASTRUCTURE & DEPENDENCIES (Tech -> Tech/Company)
 // ------------------------------------------------------------------------------
-// Theory -> L1
-linkContributes('turing_machine', 'microprocessor');
-linkContributes('info_theory', 'tcp_ip');
-linkContributes('info_theory', 'cdma');
-linkContributes('transistor', 'ic');
-linkContributes('transistor', 'blue_led');
-
-// L1 -> L1 (Evolution)
-linkPowers('lithography', 'ic');
-linkPowers('lithography', 'euv');
-linkPowers('euv', 'nvidia_h100');
-linkPowers('euv', 'arm_cortex');
-linkPowers('ic', 'microprocessor');
-linkPowers('ic', 'dram');
-linkPowers('ic', 'nand');
-linkContributes('microprocessor', 'x86');
-linkContributes('microprocessor', 'arm_arch');
-linkContributes('dram', 'hbm');
-linkPowers('hbm', 'nvidia_h100');
-linkPowers('hbm', 'tpu');
-linkPowers('optical_fiber', 'tcp_ip');
-linkContributes('tcp_ip', 'ethernet');
-linkContributes('ethernet', 'wifi');
-linkContributes('cdma', 'gsm');
-linkContributes('gsm', 'lte');
-linkContributes('lte', '5g_nr');
-linkPowers('blue_led', 'optical_disc');
-linkPowers('cmos', 'lidar');
-linkContributes('alexnet', 'transformer');
-linkContributes('gan', 'stable_diffusion');
-
-// L1 -> L2 (Hardware powers Runtime)
+// Hardware driving Software/Runtime
 linkPowers('microprocessor', 'unix');
 linkPowers('x86', 'linux');
 linkPowers('x86', 'windows_95');
+linkPowers('x86', 'toshiba_t1100');
 linkPowers('arm_arch', 'ios');
 linkPowers('arm_arch', 'android');
+linkPowers('arm_arch', 'vision_pro');
+linkPowers('arm_arch', 'fugaku');
 linkPowers('gpu_geforce', 'cuda');
+linkPowers('gpu_geforce', 'ethereum');
 linkPowers('nvidia_h100', 'cuda');
 linkPowers('nvidia_h100', 'pytorch');
+linkPowers('nvidia_h100', 'chatgpt');
+linkPowers('nvidia_h100', 'bytedance');
+linkPowers('nvidia_h100', 'tencent');
+linkPowers('nvidia_h100', 'starship');
+linkPowers('nvidia_h100', 'sora');
 linkPowers('tpu', 'tensorflow');
 linkPowers('tcp_ip', 'www');
 linkPowers('tcp_ip', 'aws_cloud');
+linkPowers('tcp_ip', 'skype');
 linkPowers('ssl_tls', 'aws_cloud');
+linkPowers('ssl_tls', 'paypal_co');
+linkPowers('ssl_tls', 'amazon_com');
+linkPowers('ssl_tls', 'zero_trust');
+linkPowers('rsa', 'ssl_tls');
+linkPowers('rsa', 'bitcoin');
+linkPowers('rsa', 'git');
+linkPowers('rsa', 'amazon_com');
 linkPowers('cisco_router', 'aws_cloud');
+linkPowers('cisco_router', 'att');
+linkPowers('cisco_router', 'google');
+linkPowers('optical_fiber', 'att');
+linkPowers('optical_fiber', 'starlink');
 
-// L2 -> L2 (Runtime Dependency)
-linkContributes('unix', 'c_lang');
-linkContributes('unix', 'linux');
-linkContributes('c_lang', 'python');
-linkContributes('c_lang', 'java');
-linkContributes('c_lang', 'sql');
-linkContributes('sql', 'oracle_db');
+// Runtime/Cloud driving Apps & Services
 linkPowers('linux', 'android');
 linkPowers('linux', 'aws_cloud');
 linkPowers('linux', 'docker');
 linkPowers('linux', 'git');
+linkPowers('linux', 'sap');
+linkPowers('linux', 'fugaku');
+linkPowers('linux', 'starship');
+linkPowers('linux', 'raspberry_pi');
 linkPowers('aws_cloud', 'docker');
-linkPowers('java', 'android');
-linkPowers('cuda', 'pytorch');
-linkPowers('cuda', 'tensorflow');
-linkPowers('mapreduce', 'tensorflow'); // Concept
-linkContributes('bittorrent', 'bitcoin');
-
-// L2 -> L3 (Platform powers App)
-linkPowers('ios', 'iphone');
-linkPowers('ios', 'app_store');
-linkPowers('ios', 'vision_pro');
-linkPowers('android', 'model_s');
 linkPowers('aws_cloud', 'netflix');
 linkPowers('aws_cloud', 'zoom');
 linkPowers('aws_cloud', 'slack');
-linkPowers('aws_cloud', 'dropbox'); // Conceptual
+linkPowers('aws_cloud', 'dropbox');
 linkPowers('aws_cloud', 'uber_app');
 linkPowers('aws_cloud', 'stripe');
 linkPowers('aws_cloud', 'copilot');
+linkPowers('aws_cloud', 'netflix_co');
+linkPowers('aws_cloud', 'uber_co');
+linkPowers('aws_cloud', 'stripe_co');
+linkPowers('aws_cloud', 'huggingface');
+linkPowers('aws_cloud', 'anthropic');
+linkPowers('aws_cloud', 'twitter');
+linkPowers('aws_cloud', 'claude');
+linkPowers('java', 'android');
+linkPowers('cuda', 'pytorch');
+linkPowers('cuda', 'tensorflow');
+linkPowers('mapreduce', 'tensorflow');
+linkPowers('sql', 'sap');
 linkPowers('oracle_db', 'salesforce_crm');
-linkPowers('oracle_db', 'sap'); // Conceptual
+linkPowers('oracle_db', 'sap');
+linkPowers('oracle_db', 'amazon_com');
 linkPowers('pytorch', 'chatgpt');
 linkPowers('pytorch', 'stable_diffusion');
 linkPowers('pytorch', 'tesla_autopilot');
-linkPowers('pytorch', 'huggingface'); // Tech->Company exc.
+linkPowers('pytorch', 'huggingface');
 linkPowers('tensorflow', 'alphago');
 linkPowers('tensorflow', 'google_search');
 linkPowers('tensorflow', 'tiktok');
@@ -527,8 +618,24 @@ linkPowers('google_chrome', 'google_search');
 linkPowers('app_store', 'uber_app');
 linkPowers('app_store', 'spotify');
 linkPowers('app_store', 'tiktok');
+linkPowers('app_store', 'twitter');
+linkPowers('www', 'amazon_com');
+linkPowers('www', 'mosaic');
+linkPowers('zero_trust', 'aws_cloud');
+linkPowers('zero_trust', 'salesforce_co');
+linkPowers('zero_trust', 'slack');
+linkPowers('transformer', 'huggingface');
+linkPowers('transformer', 'claude');
+linkPowers('openai', 'perplexity');
+linkPowers('openai', 'cursor');
+linkPowers('claude', 'perplexity');
+linkPowers('claude', 'cursor');
 
-// L1 -> L3 (Direct Hardware Power)
+// Direct Tech Powering Devices/Apps
+linkPowers('ios', 'iphone');
+linkPowers('ios', 'app_store');
+linkPowers('ios', 'vision_pro');
+linkPowers('android', 'model_s');
 linkPowers('li_ion', 'iphone');
 linkPowers('li_ion', 'model_s');
 linkPowers('li_ion', 'dji_phantom');
@@ -539,12 +646,24 @@ linkPowers('oled', 'iphone');
 linkPowers('oled', 'vision_pro');
 linkPowers('bluetooth', 'iphone');
 linkPowers('bluetooth', 'model_s');
-linkPowers('optical_fiber', 'starlink'); // Ground stations
-linkPowers('nvidia_h100', 'chatgpt');
-linkPowers('nvidia_h100', 'starship'); // Simulation
+linkPowers('mp3', 'walkman');
+linkPowers('floppy', 'windows_95');
+linkPowers('floppy', 'macintosh');
+linkPowers('floppy', 'excel');
+linkPowers('lidar', 'boston_dynamics');
+linkPowers('lidar', 'uber_co');
+linkPowers('cmos', 'iphone');
+linkPowers('cmos', 'tesla_autopilot');
+linkPowers('cmos', 'dji_phantom');
+linkPowers('cmos', 'vision_pro');
+linkPowers('arm_cortex', 'raspberry_pi');
+linkPowers('python', 'raspberry_pi');
+linkPowers('5g_nr', 'vision_pro');
+linkPowers('5g_nr', 'dji_phantom');
+linkPowers('5g_nr', 'tesla_autopilot');
 
 // ------------------------------------------------------------------------------
-// LAYER 5: TECHNOLOGY -> COMPANY (Infrastructure Dependency)
+// LAYER 5: INDUSTRY SUPPLY CHAIN (Tech -> Company)
 // ------------------------------------------------------------------------------
 linkPowers('euv', 'tsmc');
 linkPowers('euv', 'samsung');
@@ -560,14 +679,10 @@ linkPowers('nvidia_h100', 'openai');
 linkPowers('nvidia_h100', 'meta');
 linkPowers('nvidia_h100', 'tesla');
 linkPowers('nvidia_h100', 'microsoft');
-linkPowers('aws_cloud', 'netflix_co');
-linkPowers('aws_cloud', 'uber_co');
-linkPowers('aws_cloud', 'stripe_co');
-linkPowers('ssl_tls', 'paypal_co');
-linkPowers('transformer', 'huggingface');
+linkPowers('ai_robotics', 'boston_dynamics');
 
 // ------------------------------------------------------------------------------
-// LAYER 6: CAPITAL & INFLUENCE (PERSON/CO -> CONTRIBUTES -> PERSON/CO)
+// LAYER 6: CAPITAL, LINEAGE & INFLUENCE (VC/People -> Company/People)
 // ------------------------------------------------------------------------------
 // Mentorship & Lineage
 linkContributes('william_shockley', 'robert_noyce');
@@ -578,469 +693,160 @@ linkContributes('don_valentine', 'steve_jobs');
 linkContributes('larry_ellison', 'marc_benioff');
 linkContributes('paul_graham', 'sam_altman');
 linkContributes('paul_graham', 'patrick_collison');
+linkContributes('peter_thiel', 'vitalik_buterin');
+linkContributes('satoshi_nakamoto', 'vitalik_buterin');
+linkContributes('xerox_parc', 'macintosh');
+linkContributes('xerox_parc', 'windows_95');
+linkContributes('xerox_parc', 'adobe');
+linkContributes('xerox_parc', 'microsoft');
+linkContributes('mosaic', 'netscape_co');
+linkContributes('mosaic', 'google_chrome');
+linkContributes('toshiba_t1100', 'macintosh');
+linkContributes('toshiba_t1100', 'thinkpad');
+linkContributes('raspberry_pi', 'steam_deck');
+linkContributes('spacex_falcon9', 'starship');
 
-// Executive Leadership
+// Executive Leadership & Acquisition
 linkContributes('tim_cook', 'apple');
 linkContributes('satya_nadella', 'microsoft');
 linkContributes('satya_nadella', 'openai');
 linkContributes('sundar_pichai', 'google');
 linkContributes('lisa_su', 'amd');
-linkContributes('sheryl_sandberg', 'meta'); // Assumed node exists, or skip if strictly no orphan
+linkContributes('sheryl_sandberg', 'meta');
 linkContributes('roelof_botha', 'sequoia');
+linkContributes('elon_musk', 'twitter');
+linkContributes('microsoft', 'skype');
+linkContributes('microsoft', 'cursor');
+linkContributes('google', 'deepmind');
+linkContributes('google', 'uber_co');
+linkContributes('google', 'boston_dynamics');
+linkContributes('google', 'zero_trust');
+linkContributes('yann_lecun', 'meta');
+linkContributes('yann_lecun', 'pytorch');
+linkContributes('reid_hoffman', 'facebook');
+linkContributes('reid_hoffman', 'airbnb');
+linkContributes('reid_hoffman', 'microsoft');
+linkContributes('reid_hoffman', 'openai');
+linkContributes('sony', 'cmos');
 
-// Investment (VC -> Company)
+// Venture Capital & Investment
 linkContributes('sequoia', 'apple');
 linkContributes('sequoia', 'google');
 linkContributes('sequoia', 'nvidia');
 linkContributes('sequoia', 'paypal_co');
 linkContributes('sequoia', 'youtube');
 linkContributes('sequoia', 'stripe_co');
+linkContributes('sequoia', 'whatsapp');
 linkContributes('ycombinator', 'airbnb');
 linkContributes('ycombinator', 'stripe_co');
 linkContributes('ycombinator', 'openai');
+linkContributes('ycombinator', 'twitch');
 linkContributes('a16z', 'facebook');
-linkContributes('a16z', 'coinbase'); // Conceptual link if node missing
-linkContributes('softbank', 'alibaba');
-linkContributes('softbank', 'uber_co');
-linkContributes('softbank', 'arm_ltd');
-linkContributes('softbank', 'boston_dynamics');
+linkContributes('a16z', 'coinbase');
+linkContributes('a16z', 'ethereum');
+linkContributes('a16z', 'openai');
 linkContributes('arthur_rock', 'intel');
 linkContributes('arthur_rock', 'apple');
 linkContributes('peter_thiel', 'meta');
 linkContributes('masayoshi_son', 'alibaba');
+linkContributes('softbank', 'alibaba');
+linkContributes('softbank', 'arm_ltd');
+linkContributes('softbank', 'uber_co');
+linkContributes('softbank', 'wework');
+linkContributes('softbank', 'boston_dynamics');
+linkContributes('amazon', 'anthropic');
+linkContributes('google', 'anthropic');
+linkContributes('jeff_bezos', 'perplexity');
+linkContributes('nvidia', 'perplexity');
 
-// The PayPal Mafia (Company -> Person -> Company flow simulated via Person)
-// *Note: Using direct person links created in Layer 2/3 mostly covers this.
-// Adding direct Company->Company lineage for clarity
+// The PayPal Mafia Lineage
 linkContributes('fairchild', 'intel');
 linkContributes('fairchild', 'amd');
 linkContributes('fairchild', 'sequoia');
-linkContributes('paypal_co', 'spacex'); // via Musk
-linkContributes('paypal_co', 'tesla'); // via Musk
-linkContributes('paypal_co', 'linkedin'); // via Hoffman
-linkContributes('paypal_co', 'youtube'); // via Hurley
-linkContributes('paypal_co', 'sequoia'); // via Botha
-linkContributes('paypal_co', 'palantir'); // via Thiel
-linkContributes('oracle', 'salesforce_co'); // Benioff lineage
-linkContributes('google', 'deepmind'); // Acquisition
-linkContributes('google', 'uber_co'); // Early investment
+linkContributes('paypal_co', 'spacex');
+linkContributes('paypal_co', 'tesla');
+linkContributes('paypal_co', 'linkedin');
+linkContributes('paypal_co', 'youtube');
+linkContributes('paypal_co', 'sequoia');
+linkContributes('paypal_co', 'palantir');
+linkContributes('paypal_co', 'reid_hoffman');
+linkContributes('oracle', 'salesforce_co');
 
 // ------------------------------------------------------------------------------
-// LAYER 7: RIVALRY & PARTNERSHIP (ENGAGES)
+// LAYER 7: MARKET DYNAMICS (Rivalry & Partnership)
 // ------------------------------------------------------------------------------
 // Partnerships (Heart)
-linkEngages('microsoft', 'intel', 0.9, LinkIcon.HEART);
-linkEngages('microsoft', 'openai', 1.0, LinkIcon.HEART);
-linkEngages('apple', 'tsmc', 1.0, LinkIcon.HEART);
-linkEngages('apple', 'arm_ltd', 0.8, LinkIcon.HEART);
-linkEngages('salesforce_co', 'slack', 0.8, LinkIcon.HEART);
-linkEngages('wikipedia', 'google_search', 0.8, LinkIcon.HEART);
-linkEngages('att', 'cisco', 0.7, LinkIcon.HEART);
+linkPartner('microsoft', 'intel', 0.9);
+linkPartner('microsoft', 'openai', 1.0);
+linkPartner('apple', 'tsmc', 1.0);
+linkPartner('apple', 'arm_ltd');
+linkPartner('salesforce_co', 'slack');
+linkPartner('wikipedia', 'google_search');
+linkPartner('att', 'cisco', 0.7);
+linkPartner('yann_lecun', 'geoffrey_hinton');
 
-// Rivalries (Sword)
-linkEngages('apple', 'google');
-linkEngages('apple', 'microsoft');
-linkEngages('apple', 'samsung');
-linkEngages('apple', 'meta');
-linkEngages('amazon', 'microsoft');
-linkEngages('amazon', 'google');
-linkEngages('google', 'microsoft');
-linkEngages('intel', 'amd');
-linkEngages('nvidia', 'amd');
-linkEngages('nvidia', 'intel');
-linkEngages('meta', 'bytedance');
-linkEngages('google', 'openai');
-linkEngages('openai', 'anthropic');
-linkEngages('oracle', 'salesforce_co');
-linkEngages('uber_co', 'tesla'); // Robo-taxi future rivalry
-linkEngages('netflix_co', 'youtube');
-linkEngages('ios', 'android');
-linkEngages('unreal', 'unity');
-linkEngages('tensorflow', 'pytorch');
-linkEngages('steve_jobs', 'bill_gates');
-linkEngages('elon_musk', 'jeff_bezos');
-linkEngages('elon_musk', 'mark_zuckerberg');
-linkEngages('elon_musk', 'sam_altman');
+// Rivalries (Sword) - Tech Giants
+linkRival('apple', 'google');
+linkRival('apple', 'microsoft');
+linkRival('apple', 'samsung');
+linkRival('apple', 'meta');
+linkRival('amazon', 'microsoft');
+linkRival('amazon', 'google');
+linkRival('google', 'microsoft');
 
-// ==============================================================================
-// [ADDITIONAL LINKS] FILLING THE GAPS & ENRICHING THE GRAPH
-// ==============================================================================
+// Rivalries - Semiconductors
+linkRival('intel', 'amd');
+linkRival('nvidia', 'amd');
+linkRival('nvidia', 'intel');
+linkRival('intel', 'tsmc');
+linkRival('samsung', 'tsmc');
+linkRival('qualcomm', 'apple');
 
-// ------------------------------------------------------------------------------
-// 1. ORPHAN RESCUE & DEEPENING TECH ROOTS
-// ------------------------------------------------------------------------------
-// Boston Dynamics (Robotics Pioneer)
-// *Connection Logic: Started at MIT (no node), owned by Google -> SoftBank -> Hyundai.
-linkContributes('google', 'boston_dynamics');           // Former owner (Capital & Research)
-linkContributes('softbank', 'boston_dynamics');         // Former owner (Capital)
-linkPowers('ai_robotics', 'boston_dynamics');           // *If exists, else conceptual
-linkEngages('boston_dynamics', 'tesla');                // [Rivalry] Atlas vs Optimus
+// Rivalries - Platforms & Apps
+linkRival('meta', 'bytedance');
+linkRival('twitter', 'meta');
+linkRival('twitter', 'tiktok');
+linkRival('ios', 'android');
+linkRival('netflix_co', 'youtube');
+linkRival('amazon_com', 'alibaba');
+linkRival('amazon_com', 'google_search');
+linkRival('huggingface', 'github');
 
-// Hugging Face (The AI Community)
-// *Connection Logic: Runs on Cloud, Partners with Hardware.
-linkPowers('aws_cloud', 'huggingface');                 // Strategic partnership & Hosting
-linkEngages('huggingface', 'github');                   // [Rivalry] Model Hub vs Code Hub
-linkEngages('huggingface', 'openai');                   // [Rivalry] Open vs Closed AI
+// Rivalries - Enterprise
+linkRival('oracle', 'salesforce_co');
+linkRival('sap', 'oracle');
+linkRival('sap', 'salesforce_co');
+linkRival('unreal', 'unity');
+linkRival('skype', 'zoom');
 
-// SAP (The Enterprise Backbone)
-// *Connection Logic: Runs the world's business, competes with Oracle/Salesforce.
-linkPowers('sql', 'sap');                               // Core technology
-linkPowers('linux', 'sap');                             // Hana runs on Linux
-linkEngages('sap', 'oracle');                           // [Rivalry] ERP & Database War
-linkEngages('sap', 'salesforce_co');                    // [Rivalry] CRM Competition
+// Rivalries - AI & Future Tech
+linkRival('google', 'openai');
+linkRival('openai', 'anthropic');
+linkRival('huggingface', 'openai');
+linkRival('tensorflow', 'pytorch');
+linkRival('perplexity', 'google_search');
+linkRival('cursor', 'copilot');
+linkRival('claude', 'chatgpt');
+linkRival('claude', 'gemini');
+linkRival('sora', 'midjourney');
+linkRival('adobe', 'midjourney');
+linkRival('uber_co', 'tesla');
+linkRival('boston_dynamics', 'tesla');
+linkRival('lidar', 'tesla_autopilot');
+linkRival('vision_pro', 'oculus_rift');
+linkRival('starship', 'sls_rocket');
+linkRival('5g_nr', 'starlink');
+linkRival('fugaku', 'nvidia_h100');
 
-// Cisco ( The Internet Plumber)
-// *Connection Logic: Created the routers, partners with Telcos.
-linkCreates('cisco', 'cisco_router');                   // Creator of the hardware
-linkPowers('cisco_router', 'att');                      // AT&T relies on Cisco hardware
-linkPowers('cisco_router', 'google');                   // Data centers rely on networking gear
-
-// ------------------------------------------------------------------------------
-// 2. MODERN AI DYNAMICS (Investments & API Dependencies)
-// ------------------------------------------------------------------------------
-// Anthropic (The funded rival)
-linkContributes('amazon', 'anthropic');                 // Massive Investment ($4B)
-linkContributes('google', 'anthropic');                 // Massive Investment ($2B)
-linkPowers('aws_cloud', 'anthropic');                   // Training Infrastructure
-
-// Perplexity (The Answer Engine)
-linkContributes('jeff_bezos', 'perplexity');            // Investor
-linkContributes('nvidia', 'perplexity');                // Investor
-linkPowers('openai', 'perplexity');                     // Uses GPT-4 API
-linkPowers('claude', 'perplexity');                  // Uses Claude API
-linkEngages('perplexity', 'google_search');             // [Rivalry] Direct threat to search
-
-// Cursor (The AI Editor)
-linkPowers('openai', 'cursor');                         // Uses GPT-4 models
-linkPowers('claude', 'cursor');                      // Uses Claude models
-linkContributes('microsoft', 'cursor');                 // Built on top of VS Code (Open Source)
-linkEngages('cursor', 'copilot');                       // [Rivalry] The AI Coding War
-
-// Sora & Midjourney (Generative Media)
-linkContributes('gan', 'sora');                         // Ancestral tech
-linkContributes('transformer', 'sora');                 // Architecture
-linkContributes('gan', 'midjourney');                   // Ancestral tech
-linkEngages('adobe', 'midjourney');                     // [Rivalry] Photoshop vs GenAI
-
-// ------------------------------------------------------------------------------
-// 3. SEMICONDUCTOR & HARDWARE DEPTH
-// ------------------------------------------------------------------------------
-// TSMC's Reach (Beyond Apple)
-linkPowers('tsmc', 'amd');                              // Manufactures Ryzen/EPYC
-linkPowers('tsmc', 'qualcomm');                         // Manufactures Snapdragon
-linkPowers('tsmc', 'broadcom');                         // *If exists
-linkPowers('asml', 'samsung');                          // Samsung uses EUV
-
-// The Chip Wars
-linkEngages('samsung', 'tsmc');                         // [Rivalry] Foundry business
-linkEngages('qualcomm', 'apple');                       // [Rivalry] Modem chips (and legal wars)
-linkEngages('intel', 'tsmc');                           // [Rivalry] IDM vs Foundry
-
-// ------------------------------------------------------------------------------
-// 4. GLOBAL TECH GIANTS (Asian Tech Integration)
-// ------------------------------------------------------------------------------
-// Alibaba & Tencent
-linkCreates('softbank', 'alibaba');                     // Masayoshi Son's greatest investment
-linkEngages('alibaba', 'tencent');                      // [Rivalry] Payment (Alipay vs WeChat Pay) & Cloud
-linkEngages('alibaba', 'amazon');                       // [Rivalry] Global E-commerce
-linkPowers('nvidia_h100', 'bytedance');                 // Bytedance hoards H100s for TikTok AI
-linkPowers('nvidia_h100', 'tencent');                   // Tencent Cloud AI
-
-// ------------------------------------------------------------------------------
-// 5. HISTORICAL CONTEXT & FOUNDATIONS
-// ------------------------------------------------------------------------------
-// The "Wintel" Era Detail
-linkPowers('intel', 'microsoft', 0.9);                  // Hardware enabling Software
-linkContributes('ibm', 'microsoft');                    // IBM chose DOS, making Microsoft a giant
-
-// The Mobile Revolution Detail
-linkPowers('arm_arch', 'qualcomm');                     // Qualcomm creates Arm-based chips
-linkPowers('arm_arch', 'samsung');                      // Exynos chips
-linkContributes('google', 'samsung');                   // Android OS partner (Symbiosis)
-linkEngages('samsung', 'apple');                        // [Rivalry] Galaxy vs iPhone
-
-// ------------------------------------------------------------------------------
-// 6. VC & MAFIA EXTENSIONS
-// ------------------------------------------------------------------------------
-linkContributes('a16z', 'coinbase');                    // *If node exists (Crypto push)
-linkContributes('a16z', 'openai');                      // *Recent investment? No, mostly Thrive/Microsoft.
-linkContributes('a16z', 'facebook');                    // Early investor
-linkContributes('peter_thiel', 'facebook');             // First outside investor
-linkContributes('peter_thiel', 'openai');               // *Was early donor, but distinct from VC role mostly
-linkContributes('ycombinator', 'twitch');               // *If node exists
-linkContributes('sequoia', 'whatsapp');                 // *If node exists
-
-
-// ==============================================================================
-// 6. FINAL ORPHAN CHECK & ENRICHMENT (Zero-Link Nodes Rescue)
-// ==============================================================================
-
-// ------------------------------------------------------------------------------
-// [A] Xerox PARC (The Forgotten Grandfather)
-// *Current Status: Under-connected. Needs to show it invented the modern PC.*
-// ------------------------------------------------------------------------------
-linkCreates('xerox_parc', 'ethernet');                  // PARC invented Ethernet (Metcalfe)
-linkContributes('xerox_parc', 'macintosh');             // Jobs visited PARC -> Inspired Mac GUI
-linkContributes('xerox_parc', 'windows_95');            // Gates also borrowed PARC concepts
-linkContributes('xerox_parc', 'adobe');                 // Warnock (Adobe Founder) came from PARC
-linkContributes('xerox_parc', 'microsoft');             // Simonyi (Word/Excel creator) came from PARC
-
-// ------------------------------------------------------------------------------
-// [B] Amazon.com (The Service) vs Amazon (The Company)
-// *Current Status: Needs separation of Service utility and Company power.*
-// ------------------------------------------------------------------------------
-linkCreates('amazon', 'amazon_com');                    // Company created the Service
-linkPowers('www', 'amazon_com');                        // The Web powers the Store
-linkPowers('ssl_tls', 'amazon_com');                    // Security made e-commerce possible
-linkPowers('oracle_db', 'amazon_com');                  // (Early days) Amazon ran on Oracle
-linkEngages('amazon_com', 'alibaba');                   // [Rivalry] Global E-commerce War
-linkEngages('amazon_com', 'google_search');             // [Rivalry] Product Search War
-
-// ------------------------------------------------------------------------------
-// [C] Fugaku (The Supercomputer)
-// *Current Status: Likely Isolated.*
-// ------------------------------------------------------------------------------
-linkPowers('arm_arch', 'fugaku');                       // Powered by ARM A64FX chips (First ARM supercomputer #1)
-linkPowers('linux', 'fugaku');                          // Runs on Red Hat Enterprise Linux
-linkCreates('fugaku', 'covid_simulation');              // *Conceptual: Used for COVID research
-linkEngages('fugaku', 'nvidia_h100');                   // [Rivalry] CPU-based HPC vs GPU-based HPC
-
-// ------------------------------------------------------------------------------
-// [D] Raspberry Pi (The Edu-Computer)
-// *Current Status: Needs upstream tech links.*
-// ------------------------------------------------------------------------------
-linkPowers('arm_cortex', 'raspberry_pi');               // Runs on ARM Cortex chips
-linkPowers('linux', 'raspberry_pi');                    // Raspbian is Debian Linux
-linkPowers('python', 'raspberry_pi');                   // Primary educational language
-linkContributes('raspberry_pi', 'steam_deck');          // *Conceptual: Evolution of handheld Linux gaming? (Optional)
-
-// ------------------------------------------------------------------------------
-// [E] Starship (The Mars Rocket)
-// *Current Status: Connected to SpaceX, needs Tech depth.*
-// ------------------------------------------------------------------------------
-linkCreates('spacex', 'starship');                      // Product of SpaceX
-linkContributes('spacex_falcon9', 'starship');          // Evolution of rocketry
-linkPowers('nvidia_h100', 'starship');                  // CFD (Fluid Dynamics) Simulations run on GPUs
-linkPowers('linux', 'starship');                        // Flight software runs on Linux
-linkEngages('starship', 'sls_rocket');                  // *Conceptual: Rivalry with NASA SLS (if node existed)
-
-// ------------------------------------------------------------------------------
-// [F] Vision Pro (Spatial Computing)
-// *Current Status: Needs Ecosystem links.*
-// ------------------------------------------------------------------------------
-linkCreates('apple', 'vision_pro');                     // Product of Apple
-linkPowers('arm_arch', 'vision_pro');                   // Powered by M2/R1 (ARM)
-linkPowers('oled', 'vision_pro');                       // Sony Micro-OLED is key
-linkEngages('vision_pro', 'oculus_rift');               // [Rivalry] Meta Quest vs Vision Pro
-linkContributes('unity', 'vision_pro');                 // Strategic Partnership for Apps
-
-// ------------------------------------------------------------------------------
-// [G] Sora (Video AI)
-// *Current Status: Newer node, likely sparse.*
-// ------------------------------------------------------------------------------
-linkCreates('openai', 'sora');                          // Created by OpenAI
-linkPowers('nvidia_h100', 'sora');                      // Training compute
-linkContributes('transformer', 'sora');                 // Architecture (Space-time patches)
-linkContributes('gan', 'sora');                         // Evolution from GANs
-linkEngages('sora', 'midjourney');                      // [Rivalry] Expansion into Video vs Image
-
-// ------------------------------------------------------------------------------
-// [H] AT&T (The Network)
-// *Current Status: Needs to be the "Pipe".*
-// ------------------------------------------------------------------------------
-linkCreates('att', 'bell_labs');                        // Owner/Parent
-linkPowers('cisco_router', 'att');                      // Hardware powers the network
-linkPowers('optical_fiber', 'att');                     // The physical lines
-linkPowers('att', 'iphone');                            // (Historical) Exclusive launch partner in 2007
-
-// ------------------------------------------------------------------------------
-// [I] SoftBank (The Capital)
-// *Current Status: Needs portfolio connections.*
-// ------------------------------------------------------------------------------
-linkCreates('masayoshi_son', 'softbank');               // Founder
-linkContributes('softbank', 'alibaba');                 // The Investment
-linkContributes('softbank', 'arm_ltd');                 // Ownership
-linkContributes('softbank', 'uber_co');                 // Vision Fund
-linkContributes('softbank', 'wework');                  // The Failure (Conceptual link)
-linkContributes('softbank', 'boston_dynamics');         // Past Owner
-
-// ==============================================================================
-// 7. FINAL PATCH: CONNECTING THE MISSING LINKS
-// ==============================================================================
-
-// ------------------------------------------------------------------------------
-// [A] Zero Trust (Security Paradigm)
-// *Context: "Never trust, always verify". Origins in Google BeyondCorp.*
-// ------------------------------------------------------------------------------
-linkContributes('google', 'zero_trust');                    // Google pioneered it (BeyondCorp)
-linkPowers('ssl_tls', 'zero_trust');                    // Encryption is mandatory for Zero Trust
-linkPowers('zero_trust', 'aws_cloud');                  // Essential for modern cloud security
-linkPowers('zero_trust', 'salesforce_co');              // Essential for Enterprise SaaS security
-linkPowers('zero_trust', 'slack');                      // Enterprise requirement
-
-// ------------------------------------------------------------------------------
-// [B] Twitter (The Town Square)
-// *Context: Created by Dorsey (not in graph), acquired by Musk, runs on Cloud.*
-// ------------------------------------------------------------------------------
-linkContributes('elon_musk', 'twitter');                // Acquired and privatized
-linkPowers('aws_cloud', 'twitter');                     // Runs on Cloud infrastructure
-linkPowers('app_store', 'twitter');                     // Major distribution channel
-linkEngages('twitter', 'meta');                         // [Rivalry] Threads/Facebook vs X
-linkEngages('twitter', 'tiktok');                       // [Rivalry] Battle for attention
-
-// ------------------------------------------------------------------------------
-// [C] Yann LeCun (The CNN Father)
-// *Context: Meta's AI Chief, Turing Award winner, Hinton's peer.*
-// ------------------------------------------------------------------------------
-linkContributes('yann_lecun', 'meta');                  // Chief AI Scientist at Meta (FAIR)
-linkCreates('yann_lecun', 'alexnet');                   // CNN invention (LeNet) led to AlexNet
-linkContributes('yann_lecun', 'pytorch');               // FAIR (Meta AI) developed PyTorch
-linkEngages('yann_lecun', 'geoffrey_hinton');           // [Partnership] Turing Award peers
-linkEngages('yann_lecun', 'elon_musk');                 // [Rivalry] Public debates on AI safety
-
-// ------------------------------------------------------------------------------
-// [D] Word2Vec (The NLP Foundation)
-// *Context: Created at Google, precursor to Transformers.*
-// ------------------------------------------------------------------------------
-linkCreates('google', 'word2vec');                      // Created by Mikolov at Google
-linkContributes('word2vec', 'transformer');             // Embeddings are input to Transformers
-linkContributes('word2vec', 'chatgpt');                 // Conceptually essential for LLMs
-
-// ------------------------------------------------------------------------------
-// [E] Toshiba T1100 (The First Laptop)
-// *Context: Defined the form factor, ran on early silicon.*
-// ------------------------------------------------------------------------------
-linkPowers('x86', 'toshiba_t1100');                     // Powered by Intel 80C88
-linkPowers('floppy', 'toshiba_t1100');                  // Used 3.5" floppy drives
-linkContributes('toshiba_t1100', 'macintosh');          // Portable computing evolution (PowerBook)
-linkContributes('toshiba_t1100', 'thinkpad');           // *Conceptual: Ancestor of modern laptops
-
-// ------------------------------------------------------------------------------
-// [F] RSA Encryption (The Shield)
-// *Context: Public key crypto, enables secure web & crypto.*
-// ------------------------------------------------------------------------------
-linkPowers('rsa', 'ssl_tls');                           // RSA is the math behind early SSL
-linkPowers('rsa', 'bitcoin');                           // Public/Private key concept
-linkPowers('rsa', 'git');                               // SSH keys use RSA logic
-linkPowers('rsa', 'amazon_com');                        // Enabled credit card transactions
-
-// ------------------------------------------------------------------------------
-// [G] Floppy Disk (The Distribution Medium)
-// *Context: How software traveled before the Internet.*
-// ------------------------------------------------------------------------------
-linkPowers('floppy', 'windows_95');                     // Installed via Floppy (or CD)
-linkPowers('floppy', 'macintosh');                      // Original Mac used 3.5" floppy
-linkPowers('floppy', 'excel');                          // Distributed on floppy
-linkContributes('floppy', 'optical_disc');              // Storage evolution
-
-// ------------------------------------------------------------------------------
-// [H] Mosaic Browser (The Web's Spark)
-// *Context: Created by Andreessen, became Netscape.*
-// ------------------------------------------------------------------------------
-linkCreates('marc_andreessen', 'mosaic');               // Created at NCSA
-linkPowers('www', 'mosaic');                            // Built to render the WWW
-linkContributes('mosaic', 'netscape_co');               // Direct lineage (Code & Team)
-linkContributes('mosaic', 'google_chrome');             // Ancestor of all graphical browsers
-
-// ------------------------------------------------------------------------------
-// [I] Skype (VoIP Pioneer)
-// *Context: P2P tech, acquired by MS, precursor to Zoom.*
-// ------------------------------------------------------------------------------
-linkPowers('tcp_ip', 'skype');                          // Runs on IP
-linkContributes('microsoft', 'skype');                  // Acquired by Microsoft
-linkContributes('skype', 'zoom');                       // Normalized video calling
-linkEngages('skype', 'zoom');                           // [Rivalry] Legacy vs Modern
-
-// ------------------------------------------------------------------------------
-// [J] Claude (The Safe AI)
-// *Context: Anthropic's model, rival to GPT.*
-// ------------------------------------------------------------------------------
-linkCreates('anthropic', 'claude');                     // Product of Anthropic
-linkPowers('transformer', 'claude');                    // Architecture
-linkPowers('aws_cloud', 'claude');                      // Trained on AWS (major investment)
-linkEngages('claude', 'chatgpt');                       // [Rivalry] Direct competitor
-linkEngages('claude', 'gemini');                        // [Rivalry] Direct competitor
-
-// ------------------------------------------------------------------------------
-// [K] MP3 (Digital Music)
-// *Context: Killed physical media, birthed streaming.*
-// ------------------------------------------------------------------------------
-linkContributes('info_theory', 'mp3');                  // Compression algorithms
-linkContributes('mp3', 'spotify_co');                   // Enabled streaming technology
-linkContributes('mp3', 'netflix_co');                   // Compression logic influence (Codecs)
-linkPowers('mp3', 'walkman');                           // (Digital era) Sony Walkman MP3 players
-
-// ==============================================================================
-// 8. SPECIFIC RESCUE: CONNECTING THE REMAINING ORPHANS
-// ==============================================================================
-
-// ------------------------------------------------------------------------------
-// [A] Reid Hoffman (The Master Connector)
-// *Context: "The Oracle of Silicon Valley". Connected Facebook, OpenAI, Microsoft.*
-// ------------------------------------------------------------------------------
-linkContributes('reid_hoffman', 'facebook');            // One of the first angel investors
-linkContributes('reid_hoffman', 'airbnb');              // Led Greylock's investment
-linkContributes('reid_hoffman', 'microsoft');           // Board member (after LinkedIn acquisition)
-linkContributes('reid_hoffman', 'openai');              // Early board member and donor
-linkContributes('paypal_co', 'reid_hoffman');           // PayPal Mafia origin (EVP)
-
-// ------------------------------------------------------------------------------
-// [B] LiDAR (The Eye of the Machine)
-// *Context: Essential for AVs and Robotics, controversial in Tesla circles.*
-// ------------------------------------------------------------------------------
-linkPowers('lithography', 'lidar');                     // Manufactured via semi processes
-linkPowers('lidar', 'boston_dynamics');                 // Robots need spatial perception
-linkPowers('lidar', 'uber_co');                         // Essential for Uber's AV fleet research
-linkEngages('lidar', 'tesla_autopilot');                // [Rivalry] Musk famously called LiDAR "a crutch"
-linkContributes('lidar', 'vision_pro');                 // Used for spatial mapping
-
-// ------------------------------------------------------------------------------
-// [C] CMOS Sensor (The Digital Retina)
-// *Context: The reason we share photos. Replaced film.*
-// ------------------------------------------------------------------------------
-linkPowers('lithography', 'cmos');                      // Manufacturing dependency
-linkPowers('cmos', 'iphone');                           // The defining feature of modern smartphones
-linkPowers('cmos', 'tesla_autopilot');                  // Tesla relies 100% on vision (CMOS)
-linkPowers('cmos', 'dji_phantom');                      // Drones are flying cameras
-linkPowers('cmos', 'vision_pro');                       // Passthrough cameras
-linkContributes('sony', 'cmos');                        // Sony dominates the global CMOS market
-
-// ------------------------------------------------------------------------------
-// [D] Ethereum (The World Computer)
-// *Context: Smart contracts, DeFi, NFTs.*
-// ------------------------------------------------------------------------------
-linkContributes('bitcoin', 'ethereum');                 // Blockchain concept evolution
-linkPowers('gpu_geforce', 'ethereum');                  // (Historical) Mining drove GPU demand/prices
-linkContributes('a16z', 'ethereum');                    // Major crypto investor ("Crypto Fund")
-linkEngages('ethereum', 'bitcoin');                     // [Rivalry] Store of Value vs Utility Platform
-linkEngages('ethereum', 'paypal_co');                   // [Rivalry] DeFi vs TradFi
-
-// ------------------------------------------------------------------------------
-// [E] Vitalik Buterin (The Boy Genius)
-// *Context: Thiel Fellow, extended Satoshi's vision.*
-// ------------------------------------------------------------------------------
-linkContributes('peter_thiel', 'vitalik_buterin');      // Received Thiel Fellowship (dropped out to build Eth)
-linkContributes('satoshi_nakamoto', 'vitalik_buterin'); // Intellectual successor
-linkEngages('vitalik_buterin', 'jack_ma');              // [Dialogue] Represents Decentralization vs Centralization
-
-
-// --- 5G Ecosystem Expansion ---
-// 1. Foundations (What makes 5G work)
-linkPowers('optical_fiber', '5g_nr');       // Wired backhaul is essential for wireless speed
-linkContributes('gps', '5g_nr');            // Precise timing synchronization is critical for 5G TDD
-linkContributes('info_theory', '5g_nr');    // Advanced coding schemes (Polar/LDPC)
-
-// 2. Makers (Who defines 5G)
-linkCreates('qualcomm', '5g_nr');           // Qualcomm owns key 5G patents and modems
-linkCreates('samsung', '5g_nr');            // Major infrastructure and device player
-
-// 3. Applications (What 5G enables)
-linkPowers('5g_nr', 'vision_pro');          // High bandwidth for Spatial Computing/XR
-linkPowers('5g_nr', 'dji_phantom');         // Low latency for drone control/video
-linkPowers('5g_nr', 'tesla_autopilot');     // V2X (Vehicle-to-Everything) communication
-
-// 4. Rivalry
-linkEngages('5g_nr', 'starlink');           // Terrestrial Network vs Satellite Network
+// Rivalries - Ideological & Personal
+linkRival('steve_jobs', 'bill_gates');
+linkRival('elon_musk', 'jeff_bezos');
+linkRival('elon_musk', 'mark_zuckerberg');
+linkRival('elon_musk', 'sam_altman');
+linkRival('yann_lecun', 'elon_musk');
+linkRival('ethereum', 'bitcoin');
+linkRival('ethereum', 'paypal_co');
+linkRival('vitalik_buterin', 'jack_ma');
 
 // --- DATA ENTRY END ---
 

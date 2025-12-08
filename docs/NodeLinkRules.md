@@ -85,8 +85,9 @@
 *   **개인의 투자:** `Person` → Contributes → `Target Company`
 
 ### 원칙 5: 경쟁과 협력 (Rivalry & Partnership)
-*   **Engages**는 기본적으로 경쟁(Rivalry)을 의미합니다.
-*   협력 관계일 경우, 함수에 `LinkIcon.HEART`를 명시하거나 주석을 달아 구분합니다.
+*   **경쟁 관계:** `linkRival()` 함수 사용 (기본값, ⚔️ 아이콘)
+*   **협력 관계:** `linkPartner()` 함수 사용 (💖 아이콘)
+*   양방향 관계이므로 `linkRival('A', 'B')`와 `linkRival('B', 'A')`는 같은 관계로 취급됩니다.
 
 ---
 
@@ -109,5 +110,12 @@ linkPowers('euv', 'tsmc'); // EUV Tech powers TSMC Factory
 linkContributes('paypal_co', 'sequoia'); // Roelof Botha (Mafia connection)
 linkContributes('sequoia', 'apple'); // Investment
 
-// 6. Rivals
-linkEngages('google', 'microsoft');
+// 6. Rivalry (경쟁)
+linkRival('google', 'microsoft');
+linkRival('apple', 'samsung');
+linkRival('openai', 'anthropic');
+
+// 7. Partnership (협력)
+linkPartner('microsoft', 'openai');
+linkPartner('apple', 'tsmc');
+```

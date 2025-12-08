@@ -1,8 +1,9 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { NodeData, LinkData, GraphData, LinkType, Category } from '../types';
 import { CATEGORY_COLORS, CATEGORY_LABELS } from '../constants';
-import { getPersonVerbs, getTechVerb } from '../utils/labels';
-import { Handshake, Swords, ChevronDown, ChevronRight } from 'lucide-react';
+import { getPersonVerbs, getTechVerb, getNodeSubtitle } from '../utils/labels';
+import { getLinkIconConfig, getLinkIcon } from '../utils/icons';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 
 interface LinksViewProps {
     data: GraphData;
@@ -11,17 +12,17 @@ interface LinksViewProps {
     onNodeFocus?: (nodeId: string) => void;
 }
 
-// Connection data structure
 interface ConnectionItem {
     node: NodeData;
     link: LinkData;
     description: string;
     linkType: LinkType;
+    sourceCategory: Category;  // 소스 노드 카테고리
+    targetCategory: Category;  // 타겟 노드 카테고리
 }
 
 interface EngagesItem extends ConnectionItem {
-    icon: string;
-    color: string;
+    engagesIcon: string;  // 'HEART' | 'RIVALRY'
 }
 
 // LinkType display info with unified Yellow color for headers
@@ -32,12 +33,13 @@ const LINK_TYPE_INFO: Record<LinkType, { label: string; icon: string; }> = {
     [LinkType.ENGAGES]: { label: 'Relationships', icon: '🔗' },
 };
 
-// Get ENGAGES relationship icon and label
+// Get ENGAGES relationship display using icons.tsx
 const getEngagesDisplay = (linkIcon?: string) => {
-    // Colors updated: Partner=Blue, Rival=Yellow (Amber)
-    if (linkIcon === 'HEART') return { icon: <Handshake className="w-6 h-6" />, label: 'Partner', color: 'text-blue-500' };
-    if (linkIcon === 'RIVALRY') return { icon: <Swords className="w-6 h-6" />, label: 'Rival', color: 'text-amber-500' };
-    return { icon: <span className="text-xl">🔗</span>, label: 'Connected', color: 'text-slate-400' };
+    const config = getLinkIconConfig(LinkType.ENGAGES, undefined, undefined, linkIcon);
+    return {
+        label: config.label,
+        color: config.color
+    };
 };
 
 // Get relationship description using labels.ts
@@ -160,19 +162,8 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
         return data.nodes.find(n => n.id === focusNodeId);
     }, [data.nodes, focusNodeId]);
 
-    // Mobile: Scroll to flow arrows when focus changes
-    useEffect(() => {
-        if (focusNodeId) {
-            // Small delay to ensure DOM is ready
-            const timer = setTimeout(() => {
-                const arrowEl = document.getElementById('mobile-flow-arrow-1');
-                if (arrowEl) {
-                    arrowEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            }, 100);
-            return () => clearTimeout(timer);
-        }
-    }, [focusNodeId]);
+    // Mobile: Removed auto-scroll to prevent viewport jumping issues on iOS
+    // Previously scrolled to 'mobile-flow-arrow-1' but this causes the screen to push up unexpectedly
 
     // Categorize connections by LinkType
     const { originsGrouped, impactGrouped, engages } = useMemo(() => {
@@ -198,57 +189,104 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
         };
         const engagesArr: EngagesItem[] = [];
 
+        // Deduplication trackers: seen (nodeId + linkType) combinations
+        const seenImpact = new Set<string>();
+        const seenOrigins = new Set<string>();
+
         data.links.forEach(link => {
             const sourceId = typeof link.source === 'string' ? link.source : link.source.id;
             const targetId = typeof link.target === 'string' ? link.target : link.target.id;
 
-            // ... helper to push to arrays
-            const addToMap = (map: Record<LinkType, ConnectionItem[]>, type: LinkType, item: ConnectionItem) => {
-                map[type].push(item);
+            // Deduplication: track seen (nodeId + linkType) combinations
+            // For ENGAGES: bidirectional dedup - A↔B and B↔A with same icon = same relationship
+            // Sort IDs alphabetically so both directions produce the same key
+            const getKey = (nodeId: string, linkType: LinkType, icon?: string) => {
+                if (linkType === LinkType.ENGAGES) {
+                    // ENGAGES는 양방향이므로, 두 노드 ID를 정렬해서 키 생성
+                    // 예: (apple, samsung, RIVALRY) → "apple_samsung_ENGAGES_RIVALRY"
+                    const sortedIds = [focusNodeId, nodeId].sort();
+                    return `${sortedIds[0]}_${sortedIds[1]}_${linkType}_${icon || ''}`;
+                }
+                return `${nodeId}_${linkType}`;
+            };
+
+
+            // ... helper to push to arrays with dedup check
+            const addToMapIfNew = (
+                map: Record<LinkType, ConnectionItem[]>,
+                seenSet: Set<string>,
+                type: LinkType,
+                item: ConnectionItem,
+                key: string
+            ) => {
+                if (!seenSet.has(key)) {
+                    seenSet.add(key);
+                    map[type].push(item);
+                }
+            };
+
+            const addToEngagesIfNew = (
+                arr: EngagesItem[],
+                seenSet: Set<string>,
+                item: EngagesItem,
+                key: string
+            ) => {
+                if (!seenSet.has(key)) {
+                    seenSet.add(key);
+                    arr.push(item);
+                }
             };
 
             if (sourceId === focusNodeId) {
                 const targetNode = data.nodes.find(n => n.id === targetId);
                 if (targetNode) {
+                    const key = getKey(targetId, link.type, link.icon);
                     if (link.type === LinkType.ENGAGES) {
                         const display = getEngagesDisplay(link.icon);
-                        engagesArr.push({
+                        addToEngagesIfNew(engagesArr, seenImpact, {
                             node: targetNode,
                             link,
                             description: display.label,
                             linkType: link.type,
-                            icon: display.icon,
-                            color: display.color
-                        });
+                            engagesIcon: link.icon || '',
+                            sourceCategory: focusNode.category,
+                            targetCategory: targetNode.category
+                        }, key);
                     } else {
-                        addToMap(impactMap, link.type, {
+                        addToMapIfNew(impactMap, seenImpact, link.type, {
                             node: targetNode,
                             link,
                             description: getConnectionDescription(focusNode, targetNode, link.type, false),
-                            linkType: link.type
-                        });
+                            linkType: link.type,
+                            sourceCategory: focusNode.category,
+                            targetCategory: targetNode.category
+                        }, key);
                     }
                 }
             } else if (targetId === focusNodeId) {
                 const sourceNode = data.nodes.find(n => n.id === sourceId);
                 if (sourceNode) {
+                    const key = getKey(sourceId, link.type, link.icon);
                     if (link.type === LinkType.ENGAGES) {
                         const display = getEngagesDisplay(link.icon);
-                        engagesArr.push({
+                        addToEngagesIfNew(engagesArr, seenOrigins, {
                             node: sourceNode,
                             link,
                             description: display.label,
                             linkType: link.type,
-                            icon: display.icon,
-                            color: display.color
-                        });
+                            engagesIcon: link.icon || '',
+                            sourceCategory: sourceNode.category,
+                            targetCategory: focusNode.category
+                        }, key);
                     } else {
-                        addToMap(originsMap, link.type, {
+                        addToMapIfNew(originsMap, seenOrigins, link.type, {
                             node: sourceNode,
                             link,
                             description: getConnectionDescription(focusNode, sourceNode, link.type, true),
-                            linkType: link.type
-                        });
+                            linkType: link.type,
+                            sourceCategory: sourceNode.category,
+                            targetCategory: focusNode.category
+                        }, key);
                     }
                 }
             }
@@ -392,9 +430,13 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                 style={{ backgroundColor: CATEGORY_COLORS[conn.node.category] }}
             />
 
-            {/* Category Badge */}
-            <div className="flex items-center gap-2 mt-1">
+            {/* Category Badge + Link Icon */}
+            <div className="flex items-center justify-between mt-1">
                 {getCategoryBadge(conn.node)}
+                <div className="flex items-center gap-1.5 text-[10px] font-medium text-slate-400">
+                    {getLinkIcon(conn.linkType, conn.sourceCategory, conn.targetCategory, undefined, 'w-3.5 h-3.5')}
+                    <span>{conn.description}</span>
+                </div>
             </div>
 
             {/* Title + Inline Description */}
@@ -408,7 +450,7 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                             {conn.node.label}
                         </span>
                         <span className="text-[10px] text-slate-500 font-medium whitespace-nowrap">
-                            {conn.description}
+                            {getNodeSubtitle(conn.node)}
                         </span>
                     </div>
                 </div>
@@ -439,7 +481,7 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                 <div className="flex items-center justify-between mt-1">
                     {getCategoryBadge(conn.node)}
                     <div className={`flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wide ${conn.description === 'Partner' ? 'text-blue-500' : conn.description === 'Rival' ? 'text-amber-500' : 'text-slate-400'}`}>
-                        {conn.icon}
+                        {getLinkIcon(conn.linkType, conn.sourceCategory, conn.targetCategory, conn.engagesIcon, 'w-4 h-4')}
                         <span>{conn.description}</span>
                     </div>
                 </div>
@@ -458,7 +500,7 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                                 {conn.node.label}
                             </span>
                             <span className="text-[10px] text-slate-500 font-medium whitespace-nowrap">
-                                {getNodeExtraDescription(conn.node)}
+                                {getNodeSubtitle(conn.node)}
                             </span>
                         </div>
                     </div>
@@ -587,7 +629,7 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                 <div className="grid grid-cols-3 gap-8 min-h-full w-full">
 
                     {/* Origins Column */}
-                    <div className="flex flex-col">
+                    <div className="flex flex-col pb-8">
                         <div className="flex-1">
                             {renderGroupedSection(originsGrouped, 'origins')}
                         </div>
@@ -595,9 +637,10 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
 
                     {/* Focus Node (Center) */}
                     <div className="flex flex-col items-center justify-start pt-0">
-                        {/* Focus Card */}
+                        {/* Focus Card - Clickable to open Detail Panel */}
                         <div
-                            className="w-full p-5 rounded-3xl border-2 text-center relative overflow-hidden shadow-2xl mb-8"
+                            className="w-full p-5 rounded-3xl border-2 text-center relative overflow-hidden shadow-2xl mb-8 cursor-pointer hover:scale-[1.01] transition-transform"
+                            onClick={() => onNodeClick(focusNode)}
                             style={{
                                 borderColor: CATEGORY_COLORS[focusNode.category],
                                 background: `linear-gradient(135deg, ${CATEGORY_COLORS[focusNode.category]}18 0%, ${CATEGORY_COLORS[focusNode.category]}08 50%, transparent 100%)`,
@@ -645,7 +688,7 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                     </div>
 
                     {/* Impact Column */}
-                    <div className="flex flex-col">
+                    <div className="flex flex-col pb-8">
                         <div className="flex-1">
                             {renderGroupedSection(impactGrouped, 'impact')}
                         </div>
@@ -674,8 +717,9 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                         </svg>
                     </div>
 
-                    {/* 2. Focus Node (PC 중앙 컬럼) - PC와 동일한 정보 */}
-                    <div className="p-4 rounded-2xl border-2 relative overflow-hidden"
+                    {/* 2. Focus Node (PC 중앙 컬럼) - Clickable to open Detail Panel */}
+                    <div className="p-4 rounded-2xl border-2 relative overflow-hidden cursor-pointer active:scale-[0.99] transition-transform"
+                        onClick={() => onNodeClick(focusNode)}
                         style={{ borderColor: CATEGORY_COLORS[focusNode.category], backgroundColor: `${CATEGORY_COLORS[focusNode.category]}10` }}>
                         <div className="flex flex-col items-center">
                             {/* Category Icon */}

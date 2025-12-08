@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, Suspense } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, Suspense } from 'react';
 import { Logo } from './components/Logo';
 import { INITIAL_DATA, CATEGORY_COLORS } from './constants';
 import { NodeData, Category, GraphData, LinkType, CompanyMode } from './types';
@@ -229,7 +229,7 @@ const App: React.FC = () => {
     }));
   };
 
-  const handleNodeDoubleClick = (node: NodeData) => {
+  const handleNodeDoubleClick = useCallback((node: NodeData) => {
     if (clickTimeoutRef.current) {
       clearTimeout(clickTimeoutRef.current);
       clickTimeoutRef.current = null;
@@ -238,7 +238,7 @@ const App: React.FC = () => {
     setSelectedNode(null); // Auto-close Detail Panel
     updateUrl(node.id);
     // Don't change viewMode - stay in current view
-  };
+  }, []);
 
   const exitFocusMode = () => {
     if (focusNodeId) {
@@ -253,7 +253,7 @@ const App: React.FC = () => {
   // Click handler with debounce for double-click support
   const clickTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const handleNodeSelect = (node: NodeData) => {
+  const handleNodeSelect = useCallback((node: NodeData) => {
     if (clickTimeoutRef.current) {
       clearTimeout(clickTimeoutRef.current);
       clickTimeoutRef.current = null;
@@ -269,7 +269,7 @@ const App: React.FC = () => {
       }
       clickTimeoutRef.current = null;
     }, 250); // 250ms delay to wait for potential double click
-  };
+  }, [viewMode]);
 
   // For search: focus on node by ID (used by LinksView)
   const handleNodeFocusById = (nodeId: string) => {
@@ -280,10 +280,10 @@ const App: React.FC = () => {
   };
 
   // For MapView: center on node WITHOUT opening Detail Panel
-  const handleNodeFocus = (node: NodeData) => {
+  const handleNodeFocus = useCallback((node: NodeData) => {
     setScrollToNodeId(node.id);
     // Do NOT set focusNodeId or selectedNode
-  };
+  }, []);
 
   // For CardView hashtags: Open Detail Panel WITHOUT scrolling/jumping
   const handleTagClick = (node: NodeData) => {
@@ -353,12 +353,32 @@ const App: React.FC = () => {
     activeLinks = activeLinks.filter(link => {
       const sourceId = typeof link.source === 'object' ? (link.source as any).id : link.source;
       const targetId = typeof link.target === 'object' ? (link.target as any).id : link.target;
-      const isVisibleType = link.type ? visibleLinkTypes[link.type] : true;
+      // Focus 모드에서는 모든 LinkType 표시 (visibleLinkTypes 무시)
+      const isVisibleType = focusNodeId ? true : (link.type ? visibleLinkTypes[link.type] : true);
       return activeNodeIds.has(sourceId) && activeNodeIds.has(targetId) && isVisibleType;
     });
 
     return { nodes: activeNodes, links: activeLinks };
   }, [visibleCategories, visibleLinkTypes, focusNodeId, companyMode]);
+
+  // Filtered data for HistoryView/CardView: 1st degree only in Focus mode
+  const filteredDataFirstDegree: GraphData = useMemo(() => {
+    if (!focusNodeId) return filteredData;
+
+    // Filter to only show focus node (distance=0) and 1st degree (distance=1)
+    const firstDegreeNodes = filteredData.nodes.filter(node =>
+      node._focusDistance === 0 || node._focusDistance === 1
+    );
+    const firstDegreeNodeIds = new Set(firstDegreeNodes.map(n => n.id));
+
+    const firstDegreeLinks = filteredData.links.filter(link => {
+      const sourceId = typeof link.source === 'object' ? (link.source as any).id : link.source;
+      const targetId = typeof link.target === 'object' ? (link.target as any).id : link.target;
+      return firstDegreeNodeIds.has(sourceId) && firstDegreeNodeIds.has(targetId);
+    });
+
+    return { nodes: firstDegreeNodes, links: firstDegreeLinks };
+  }, [filteredData, focusNodeId]);
 
   return (
     <div className="flex flex-col h-screen w-screen bg-background text-white overflow-hidden" style={{ width: '100vw', height: '100vh', backgroundColor: '#0f172a', overflow: 'hidden' }}>
@@ -676,7 +696,7 @@ const App: React.FC = () => {
 
         {viewMode === 'TIMELINE' && (
           <HistoryView
-            data={filteredData}
+            data={filteredDataFirstDegree}
             onNodeClick={handleNodeSelect}
             onNodeDoubleClick={handleNodeDoubleClick}
             scrollToNodeId={scrollToNodeId}
@@ -686,7 +706,7 @@ const App: React.FC = () => {
 
         {viewMode === 'CARD' && (
           <CardView
-            data={filteredData}
+            data={filteredDataFirstDegree}
             fullData={INITIAL_DATA}
             onNodeClick={handleNodeSelect}
             onTagClick={handleTagClick}

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { GraphData, NodeData, Category, LinkType } from '../types';
 import { CATEGORY_COLORS, ERAS, INITIAL_DATA } from '../constants';
-import { getTechVerb, getPersonVerbs } from '../utils/labels';
+import { getTechVerb, getPersonVerbs, getNodeSubtitle, Achievement } from '../utils/labels';
 
 interface HistoryViewProps {
   data: GraphData;
@@ -95,7 +95,6 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
   // Build creator map from INITIAL_DATA (not filtered data) to always show all created entities
   const creatorMap = useMemo(() => {
     // Achievement structure: { label, year, category }
-    interface Achievement { label: string; year: number; category: Category; }
     const achievementMap: Record<string, Achievement[]> = {}; // personId -> [achievements]
     const createdByMap: Record<string, string> = {}; // techId -> creator label
 
@@ -240,6 +239,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
           cursor-pointer transition-all duration-200 hover:scale-[1.02]
           bg-slate-800/50 border-l-4 border-red-500 rounded-r-lg
           select-none
+          w-full
           ${sizeStyles[sizeClass]}
           ${isLeft ? 'md:text-right text-left' : 'text-left'}
         `}
@@ -247,7 +247,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
       >
         <div className={`flex items-baseline gap-1 flex-wrap ${isLeft ? 'md:justify-end justify-start' : 'justify-start'}`}>
           <span className={`font-bold text-white ${textSizeStyles[sizeClass]}`}>{node.label}</span>
-          <span className="text-slate-500 text-xs">Founded ({node.year})</span>
+          <span className="text-slate-500 text-xs">{getNodeSubtitle(node)}</span>
         </div>
         {node.description && (
           <p className={`text-slate-400 text-xs mt-1 line-clamp-2 ${isLeft ? 'md:text-right text-left' : 'text-left'}`}>
@@ -270,24 +270,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
     const verbs = getPersonVerbs(node);
     const achievements = creatorMap.achievements[node.id] || [];
 
-    // Build achievement text with individual years
-    const getAchievementText = () => {
-      if (achievements.length === 0) return '';
-
-      // Format each achievement based on category
-      const formatted = achievements.slice(0, 3).map(a => {
-        if (a.category === Category.COMPANY) {
-          return `${verbs.foundedCompany} ${a.label} (${a.year})`;
-        } else if (a.category === Category.TECHNOLOGY) {
-          return `${verbs.createdTech} ${a.label} (${a.year})`;
-        }
-        return `${a.label} (${a.year})`;
-      });
-
-      return formatted.join(', ');
-    };
-
-    const achievementText = getAchievementText();
+    const subtitle = getNodeSubtitle(node, { achievements });
 
     return (
       <div
@@ -312,7 +295,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
         <div className={`flex flex-col items-start text-left ${isLeft ? 'md:items-end md:text-right' : 'md:items-start md:text-left'}`}>
           <span className="text-white text-sm font-medium">{node.label}</span>
           <span className="text-slate-500 text-xs">
-            {achievementText || `Active since ${node.year}`}
+            {subtitle}
           </span>
         </div>
       </div>
@@ -355,10 +338,8 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
       padding = 'px-3 py-2';
     }
 
-    // Build description text
-    const descriptionText = creator
-      ? `${getTechVerb(node)} by ${creator} (${node.year})`
-      : `${getFallbackDescription()} (${node.year})`;
+    // Build description text using getNodeSubtitle
+    const descriptionText = getNodeSubtitle(node, { creatorLabel: creator });
 
     return (
       <div
@@ -417,7 +398,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
 
         {/* Search Header - hidden in Focus mode, LEFT aligned */}
         {!focusNodeId && (
-          <div className="sticky top-0 z-30 bg-background/95 backdrop-blur-md pb-4 mb-6">
+          <div className="sticky top-0 z-30 pb-4 mb-6">
             <div className="relative w-full md:w-64">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg className="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -486,7 +467,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
               {/* Year Content */}
               <div className="mb-6 relative">
                 {/* Year Badge on Timeline */}
-                <div className="flex items-center justify-start md:justify-center mb-4 pl-8 md:pl-0">
+                <div className="flex items-center justify-center mb-4 md:pl-0">
                   <span className="text-xs font-mono text-slate-600 bg-slate-900 px-2 py-0.5 rounded z-10">
                     {year}
                   </span>
@@ -502,7 +483,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
                         key={node.id}
                         className={`
                           relative w-full md:w-[calc(50%-0.5rem)]
-                          pl-10 md:pl-0
+                          pl-0 md:pl-0
                           ${isLeft ? 'md:pr-4 md:ml-0' : 'md:pl-4 md:ml-auto'}
                         `}
                       >
