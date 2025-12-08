@@ -56,6 +56,11 @@ export const useLocale = (): UseLocaleReturn => {
                 const initialLocale = await initLocale();
                 setLocaleState(initialLocale);
                 setIsLoaded(true);
+                // Set HTML lang for CSS :lang() font rules
+                document.documentElement.lang = initialLocale;
+            } else {
+                // Already loaded, ensure html lang is set
+                document.documentElement.lang = getLocale();
             }
         };
         init();
@@ -65,6 +70,8 @@ export const useLocale = (): UseLocaleReturn => {
     const setLocale = useCallback(async (newLocale: Locale) => {
         await loadLocale(newLocale);
         setLocaleState(newLocale);
+        // Update HTML lang attribute for CSS :lang() font rules
+        document.documentElement.lang = newLocale;
     }, []);
 
     return {

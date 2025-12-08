@@ -13,6 +13,15 @@ body {
   width: 100%;
 }
 
+/* Language-specific fonts */
+:lang(ko) {
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+:lang(ja) {
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar {
     display: none;

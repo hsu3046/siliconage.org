@@ -1,0 +1,858 @@
+{
+  "fairchild": {
+    "label": "フェアチャイルドセミ",
+    "description": "すべての始まりとなったスタートアップ。卒業生はIntel、AMD、そしてシリコンバレーそのものを設立。"
+  },
+  "intel": {
+    "label": "Intel",
+    "description": "世界最大の半導体メーカーの一つ。"
+  },
+  "amd": {
+    "label": "AMD",
+    "description": "不屈のライバル。高性能CPUで革新を起こし、Intelに挑戦。"
+  },
+  "nvidia": {
+    "label": "NVIDIA",
+    "description": "ゲームグラフィックスから始まり、今やAIのエンジン。彼らのチップが世界を学習させる。"
+  },
+  "arm_ltd": {
+    "label": "Arm Holdings",
+    "description": "ほぼすべてのスマートフォンに搭載されている、エネルギー効率の高いチップアーキテクチャを設計。"
+  },
+  "samsung": {
+    "label": "Samsung",
+    "description": "グローバルなエレクトロニクス大手。メモリチップ、携帯電話、ディスプレイで世界をリード。"
+  },
+  "qualcomm": {
+    "label": "Qualcomm",
+    "description": "モバイル接続のリーダー。彼らの技術があなたの携帯電話を4Gおよび5Gネットワークに接続。"
+  },
+  "att": {
+    "label": "AT&T",
+    "description": "米国の物理ネットワークインフラを構築した通信独占企業（Ma Bell）。"
+  },
+  "cisco": {
+    "label": "Cisco",
+    "description": "インターネットの基盤を構築したネットワーク機器の巨人。"
+  },
+  "spacex": {
+    "label": "SpaceX",
+    "description": "再利用可能なロケットで宇宙飛行に革命を起こしている。彼らの目標は、生命を多惑星的なものにすること。"
+  },
+  "ibm": {
+    "label": "IBM",
+    "description": "「Big Blue」。メインフレーム時代を定義し、パソコン市場の立ち上げを支援。"
+  },
+  "tesla": {
+    "label": "Tesla",
+    "description": "単なる自動車会社ではない。EVを魅力的にし、ロボット工学と自動運転を推進。"
+  },
+  "dji": {
+    "label": "DJI",
+    "description": "コンシューマードローンの絶対的なリーダー。誰でも手軽に空撮できるようにした。"
+  },
+  "boston_dynamics": {
+    "label": "Boston Dynamics",
+    "description": "人間や動物を模倣し、驚くほど機敏に動く動的ロボットを設計。"
+  },
+  "microsoft": {
+    "label": "Microsoft",
+    "description": "世界に向けたソフトウェア。WindowsからAzure、OpenAIまで、生産性の巨人。"
+  },
+  "oracle": {
+    "label": "Oracle",
+    "description": "データベースの巨人。彼らのソフトウェアは、世界の重要なデータを管理。"
+  },
+  "adobe": {
+    "label": "Adobe",
+    "description": "クリエーター"
+  },
+  "salesforce_co": {
+    "label": "Salesforce",
+    "description": "クラウドの先駆者。インストール型ソフトウェアをWebベースのビジネスツールに置き換えた。"
+  },
+  "sap": {
+    "label": "SAP",
+    "description": "グローバルビジネスのバックボーン。彼らのソフトウェアは、巨大企業の業務を管理。"
+  },
+  "google": {
+    "label": "Google",
+    "description": "世界を組織化"
+  },
+  "amazon": {
+    "label": "Amazon",
+    "description": "世界最大のオンライン小売業者。クラウドサービス（AWS）も提供。"
+  },
+  "meta": {
+    "label": "Meta",
+    "description": "人々をつなぐ。Facebook、Instagram、WhatsAppを所有し、VRに注力。"
+  },
+  "tencent": {
+    "label": "Tencent",
+    "description": "WeChatの巨人。中国のソーシャルメディア、ゲーム、決済を支配。"
+  },
+  "alibaba": {
+    "label": "Alibaba",
+    "description": "中国のEコマースの巨人。デジタル小売とフィンテックに革命をもたらした。"
+  },
+  "bytedance": {
+    "label": "ByteDance",
+    "description": "アルゴリズム企業。世界的な人気動画アプリTikTokを開発。"
+  },
+  "uber_co": {
+    "label": "Uber",
+    "description": "オンデマンド交通。ライダーとドライバーを結びつけ、ギグエコノミーを創造。"
+  },
+  "airbnb": {
+    "label": "Airbnb",
+    "description": "人々によるホスピタリティ。空き部屋をグローバルな宿泊ネットワークに変えた。"
+  },
+  "paypal_co": {
+    "label": "PayPal",
+    "description": "決済のパイオニア。オンライン決済を簡素化し、eコマースを促進。"
+  },
+  "stripe_co": {
+    "label": "Stripe",
+    "description": "インターネット決済基盤。スタートアップ向けに複雑な決済処理を代行。"
+  },
+  "netscape_co": {
+    "label": "Netscape",
+    "description": "重要なブラウザ。ウェブを商業化し、ドットコムブームの火付け役となった。"
+  },
+  "spotify_co": {
+    "label": "Spotify",
+    "description": "ストリーミングの救世主。所有からアクセスへ、音楽の楽しみ方を変えた。"
+  },
+  "netflix_co": {
+    "label": "Netflix",
+    "description": "テレビの変革者。DVD郵送からストリーミングへ、イッキ見の時代を切り開いた。"
+  },
+  "deepmind": {
+    "label": "Google DeepMind",
+    "description": "知能の探求。AlphaGoで有名。AIで科学の根本問題を解決。"
+  },
+  "openai": {
+    "label": "OpenAI",
+    "description": "ChatGPTの裏方。AI研究を数百万人が使う製品へと進化させた。"
+  },
+  "anthropic": {
+    "label": "Anthropic",
+    "description": "AIの安全性を重視。OpenAIの元メンバーが設立。信頼できるAIを構築。"
+  },
+  "huggingface": {
+    "label": "Hugging Face",
+    "description": "AIのGitHub。モデル、データセット、デモを共有するオープンなコミュニティ。"
+  },
+  "sequoia": {
+    "label": "Sequoia",
+    "description": "ミダス王の手。Apple、Google、NVIDIAを初期段階で支援したVC。"
+  },
+  "ycombinator": {
+    "label": "Y Combinator",
+    "description": "スタートアップ工場。Airbnb、Stripe、Dropboxを輩出したアクセラレーター。"
+  },
+  "a16z": {
+    "label": "a16z",
+    "description": "ソフトウェアが世界を席巻。手厚い支援を提供する現代的なVC。"
+  },
+  "softbank": {
+    "label": "ソフトバンク・ビジョン・ファンド",
+    "description": "世界"
+  },
+  "xerox_parc": {
+    "label": "Xerox PARC",
+    "description": "マウス、ウィンドウ、イーサネットを発明し、現代のPCに影響を与えた研究所。"
+  },
+  "bell_labs": {
+    "label": "Bell Labs",
+    "description": "トランジスタ、レーザー、情報理論を発明した伝説的な研究所。"
+  },
+  "tsmc": {
+    "label": "TSMC",
+    "description": "世界最大の半導体ファウンドリ。多くの企業がチップ製造を委託している。"
+  },
+  "asml": {
+    "label": "ASML",
+    "description": "最先端チップの製造に必要なEUV露光装置を製造する唯一の企業。"
+  },
+  "apple": {
+    "label": "Apple",
+    "description": "デザインと技術の融合。Mac、iPod、iPhoneでコンピューティングに革命を起こした。"
+  },
+  "sony": {
+    "label": "Sony",
+    "description": "ウォークマンでエンターテインメントを変革。現在はイメージセンサーとゲームのリーダー。"
+  },
+  "alan_turing": {
+    "label": "アラン・チューリング",
+    "description": "エニグマ暗号を解読し、コンピュータの理論的基礎を考案した天才。"
+  },
+  "claude_shannon": {
+    "label": "クロード・シャノン",
+    "description": "情報理論の父。すべての通信がビットに還元できることを証明した。"
+  },
+  "william_shockley": {
+    "label": "ウィリアム・ショックレー",
+    "description": "トランジスタの共同発明者。その難しい経営がシリコンバレーを生んだ。"
+  },
+  "dennis_ritchie": {
+    "label": "デニス・リッチー",
+    "description": "現代ソフトウェアの基礎となるC言語とUnixを開発したアーキテクト。"
+  },
+  "tim_berners_lee": {
+    "label": "Tim Berners-Lee",
+    "description": "インターネットに顔を与えた人物。World Wide Web、ブラウザ、HTMLを発明。"
+  },
+  "geoffrey_hinton": {
+    "label": "Geoffrey Hinton",
+    "description": "AIのゴッドファーザー。世界が追いつくまで、数十年間ニューラルネットワークを信じていた。"
+  },
+  "yann_lecun": {
+    "label": "Yann LeCun",
+    "description": "AI科学者。コンピューターに画像認識を可能にした畳み込みネットワークを発明。"
+  },
+  "robert_noyce": {
+    "label": "Robert Noyce",
+    "description": "集積回路の発明者の一人。"
+  },
+  "gordon_moore": {
+    "label": "Gordon Moore",
+    "description": "コンピューティング能力が2年ごとに倍増すると予測。彼の「ムーアの法則」は半導体産業を導いた。"
+  },
+  "steve_jobs": {
+    "label": "Steve Jobs",
+    "description": "アートとテクノロジーの交差点に立った先見の明のある人物。ガジェットをパーソナルなものにした。Apple創業者。"
+  },
+  "steve_wozniak": {
+    "label": "Steve Wozniak",
+    "description": "Appleの共同創業者であり、エンジニア。"
+  },
+  "bill_gates": {
+    "label": "Bill Gates",
+    "description": "ビジネスを重視したプログラマー。ソフトウェアが重要だと気づき、Windowsを普及させた。Microsoft創業者。"
+  },
+  "larry_ellison": {
+    "label": "Larry Ellison",
+    "description": "ソフトウェアの侍。エンタープライズデータベースと冷酷な戦術で帝国を築いた。Oracle創業者。"
+  },
+  "morris_chang": {
+    "label": "Morris Chang",
+    "description": "ファウンドリモデルを構築し、他社が設計したチップを製造することでチップに革命を起こした。"
+  },
+  "linus_torvalds": {
+    "label": "Linus Torvalds",
+    "description": "彼は趣味でLinuxを書いた。今やクラウドを支え、コード管理のGitも開発。"
+  },
+  "jeff_bezos": {
+    "label": "Jeff Bezos",
+    "description": "彼は本を売り始め、あらゆるものを売るようになった。クラウド（AWS）も構築。"
+  },
+  "jensen_huang": {
+    "label": "Jensen Huang",
+    "description": "GPUに賭けた先見の明のある人物。グラフィックス会社をAIのエンジンに変えた。"
+  },
+  "marc_benioff": {
+    "label": "Marc Benioff",
+    "description": "彼は「"
+  },
+  "larry_page": {
+    "label": "Larry Page",
+    "description": "彼はインターネット全体をダウンロードしたいと考えた。PageRankを発明し、Googleを共同設立。"
+  },
+  "sergey_brin": {
+    "label": "Sergey Brin",
+    "description": "Googleを共同設立したデータ科学者。世界の情報を整理することに貢献。"
+  },
+  "reed_hastings": {
+    "label": "Reed Hastings",
+    "description": "彼はDVDの終焉を悟った。Netflixをストリーミングに転換し、テレビを永遠に変えた。"
+  },
+  "elon_musk": {
+    "label": "Elon Musk",
+    "description": "現実世界のトニー・スターク。輸送を電動化し、火星へのロケットを建造。"
+  },
+  "mark_zuckerberg": {
+    "label": "Mark Zuckerberg",
+    "description": "彼は世界をつなげた。迅速に行動し、破壊し、ソーシャル帝国を築いた。"
+  },
+  "chad_hurley": {
+    "label": "Chad Hurley",
+    "description": "彼はビデオを簡単にした。誰もが自分自身を発信できるようにYouTubeを共同設立。"
+  },
+  "jack_ma": {
+    "label": "ジャック・マー",
+    "description": "中国を世界につないだ教師。アパートからeコマースの巨人を築き上げた。"
+  },
+  "pony_ma": {
+    "label": "ポニー・マー",
+    "description": "WeChatの静かなる設計者。現代中国を動かすデジタルエコシステムを構築。"
+  },
+  "travis_kalanick": {
+    "label": "トラビス・カラニック",
+    "description": "Uberを築き上げるために奔走。ボタン一つで都市交通を変えた。"
+  },
+  "patrick_collison": {
+    "label": "パトリック・コリソン",
+    "description": "決済を改善。Stripeで、スタートアップがオンラインで簡単に支払いを受けられるようにした。"
+  },
+  "satoshi_nakamoto": {
+    "label": "サトシ・ナカモト",
+    "description": "Bitcoinの謎めいた創造者。銀行なしでデジタルの信頼問題を解決。"
+  },
+  "vitalik_buterin": {
+    "label": "ヴィタリック・ブテリン",
+    "description": "Ethereumの天才。あらゆるプログラムを実行できるブロックチェーンを構想。"
+  },
+  "tim_cook": {
+    "label": "ティム・クック",
+    "description": "オペレーションの天才。サプライチェーンを完璧にし、Appleを3兆ドルの評価額に導いた。"
+  },
+  "satya_nadella": {
+    "label": "サティア・ナデラ",
+    "description": "マイクロソフトを刷新した外交官。"
+  },
+  "sundar_pichai": {
+    "label": "スンダー・ピチャイ",
+    "description": "プロダクトリーダー。Googleの舵を取る前にChromeとAndroidを統括。"
+  },
+  "lisa_su": {
+    "label": "リサ・スー",
+    "description": "AMDを救ったエンジニア。テクノロジー史に残る大逆転劇を演出。"
+  },
+  "demis_hassabis": {
+    "label": "デミス・ハサビス",
+    "description": "ゲーマーの神経科学者。DeepMindを設立し、知能の解明と病気の治療を目指す。"
+  },
+  "sam_altman": {
+    "label": "サム・アルトマン",
+    "description": "オペレーター。Y Combinatorを拡大し、OpenAIを率いてChatGPTをリリース。"
+  },
+  "ilya_sutskever": {
+    "label": "イリヤ・サツケヴァー",
+    "description": "GPTの立役者。AIに会話能力をもたらした技術的躍進を主導。"
+  },
+  "arthur_rock": {
+    "label": "アーサー・ロック",
+    "description": "ファイナンシャル。IntelとAppleの設立を支援。"
+  },
+  "don_valentine": {
+    "label": "ドン・バレンタイン",
+    "description": "VCの祖父。彼のSequoiaは未来を定義する企業を支援。"
+  },
+  "masayoshi_son": {
+    "label": "孫 正義",
+    "description": "リスクテイカー。彼のVision FundはAIとコネクティビティの未来に数十億ドルを投資。"
+  },
+  "marc_andreessen": {
+    "label": "マーク・アンドリーセン",
+    "description": "最初のグラフィカルブラウザを構築。ソフトウェアが世界を席巻するのを支援。"
+  },
+  "peter_thiel": {
+    "label": "ピーター・ティール",
+    "description": "逆張り主義者。PayPalを共同設立、Facebookを最初に支援し、大きなアイデアに資金を提供。"
+  },
+  "reid_hoffman": {
+    "label": "リード・ホフマン",
+    "description": "ネットワーク構築者。LinkedInを設立。"
+  },
+  "paul_graham": {
+    "label": "ポール・グレアム",
+    "description": "ハッカー哲学者。Y Combinatorを設立し、スタートアップの戦略を確立。"
+  },
+  "max_levchin": {
+    "label": "Max Levchin",
+    "description": "PayPalの裏にいたコーダー。彼の不正防止策は、人間がまだ役に立つことを証明した。"
+  },
+  "roelof_botha": {
+    "label": "Roelof Botha",
+    "description": "Sequoiaを率いるPayPalマフィアの一員。誰よりも早く次の大物を見抜く。"
+  },
+  "turing_machine": {
+    "label": "チューリングマシン",
+    "description": "すべてのコンピュータの理論的な設計図。機械が計算できる限界を定義する。"
+  },
+  "transistor": {
+    "label": "トランジスタ",
+    "description": "微小な電子スイッチ。数十億個がチップに搭載され、電気の流れを制御する。"
+  },
+  "info_theory": {
+    "label": "情報理論",
+    "description": "デジタル時代の数学。"
+  },
+  "rsa": {
+    "label": "RSA暗号",
+    "description": "インターネット上でパスワードやクレジットカードを安全に保つデジタルロックとキーのシステム。"
+  },
+  "lithography": {
+    "label": "リソグラフィー",
+    "description": "光を使って、信じられないほど微細で複雑な回路パターンをシリコンチップに印刷するプロセス。"
+  },
+  "ic": {
+    "label": "集積回路",
+    "description": "1つのチップに多数のトランジスタを搭載。"
+  },
+  "ibm_360": {
+    "label": "IBM System/360",
+    "description": "ソフトウェアを標準化したメインフレーム。企業はコードを書き直すことなくハードウェアをアップグレードできた。"
+  },
+  "dram": {
+    "label": "DRAM",
+    "description": "コンピュータの"
+  },
+  "optical_fiber": {
+    "label": "光ファイバー",
+    "description": "光のパルスでデータを送信するガラス線維。インターネットの高速バックボーンを形成。"
+  },
+  "microprocessor": {
+    "label": "マイクロプロセッサ",
+    "description": "コンピュータの脳全体を1つのチップに圧縮。PC革命のきっかけ。"
+  },
+  "floppy": {
+    "label": "フロッピーディスク",
+    "description": "現実世界の保存アイコン。インターネット以前にソフトウェアとファイルを移動したポータブルディスク。"
+  },
+  "ethernet": {
+    "label": "イーサネット",
+    "description": "ローカルネットワーク（LAN）でコンピュータを接続するための標準ケーブルシステム。"
+  },
+  "x86": {
+    "label": "x86アーキテクチャ",
+    "description": "PCプロセッサの主要な言語。数十年にわたりデスクトップコンピューティングを定義。"
+  },
+  "gps": {
+    "label": "GPS",
+    "description": "地球上のどこでも正確な位置とタイミングを提供する衛星ネットワーク。"
+  },
+  "optical_disc": {
+    "label": "光ディスク",
+    "description": "レーザー（CD/DVD）を使用するデジタルストレージ形式。音楽とソフトウェアの流通に革命をもたらした。"
+  },
+  "tcp_ip": {
+    "label": "TCP/IP",
+    "description": "異なるネットワークが接続して通信できるようにする、インターネットの共通言語。"
+  },
+  "arm_arch": {
+    "label": "ARMアーキテクチャ",
+    "description": "電力効率の高いチップ設計。スマートフォンバッテリーが一日中持続する理由。"
+  },
+  "cisco_router": {
+    "label": "Ciscoルーター",
+    "description": "インターネットの交通整理。データパケットを正しい宛先に確実に到達させる。"
+  },
+  "foundry_model": {
+    "label": "ファウンドリモデル",
+    "description": "チップ設計と製造を分離するビジネスモデル。NVIDIAとAMDの台頭を可能にした。"
+  },
+  "nand": {
+    "label": "NANDフラッシュ",
+    "description": "電源なしでデータを記憶するストレージ。USBドライブ、SSD、スマートフォンに内蔵。"
+  },
+  "cdma": {
+    "label": "CDMA",
+    "description": "無線信号を最適化するワイヤレス技術。3Gネットワークの基礎を築いた。"
+  },
+  "gsm": {
+    "label": "GSM",
+    "description": "デジタル携帯電話の最初のグローバル標準。SMSと国際ローミングを可能にした。"
+  },
+  "li_ion": {
+    "label": "リチウムイオン電池",
+    "description": "高エネルギー充電式バッテリー。スマートフォン、ラップトップ、電気自動車を可能にする。"
+  },
+  "mp3": {
+    "label": "MP3",
+    "description": "オーディオファイルを圧縮する方法。ポケットに何千もの曲を入れ、音楽業界に革命を起こした。"
+  },
+  "cmos": {
+    "label": "CMOSセンサー",
+    "description": "電子の目。手頃な価格のイメージセンサーで、すべての携帯電話をデジタルカメラに変えた。"
+  },
+  "blue_led": {
+    "label": "青色LED",
+    "description": "白色LEDを作成するために必要なブレークスルー。エネルギー効率の高い画面を可能にした。"
+  },
+  "bluetooth": {
+    "label": "Bluetooth",
+    "description": "ワイヤレスコード。ヘッドフォン、キーボード、マウスを短距離でデバイスに接続する。"
+  },
+  "ssl_tls": {
+    "label": "SSL/TLS",
+    "description": "セキュリティプロトコル。"
+  },
+  "wifi": {
+    "label": "WiFi",
+    "description": "無線インターネット。イーサネットケーブルをなくし、ソファからオンライン接続を可能にした。"
+  },
+  "gpu_geforce": {
+    "label": "GPU (GeForce)",
+    "description": "元はゲーム用グラフィックス向けだが、現在はAIトレーニングと深層学習の主力。"
+  },
+  "arm_cortex": {
+    "label": "ARM Cortex",
+    "description": "ほぼすべての最新AndroidとiPhoneに搭載されているプロセッサコア。"
+  },
+  "lidar": {
+    "label": "LiDAR",
+    "description": "レーザーレーダー。光パルスを使用して3Dマップを作成し、自動運転車の目として機能する。"
+  },
+  "lte": {
+    "label": "LTE (4G)",
+    "description": "真のブロードバンド速度を携帯電話にもたらし、ビデオストリーミングを可能にした第4世代モバイルネットワーク。"
+  },
+  "alexnet": {
+    "label": "AlexNet",
+    "description": "深層学習が機能することを証明したAIモデル。画像コンテストで優勝し、AIブームの火付け役となった。"
+  },
+  "hbm": {
+    "label": "HBM",
+    "description": "積層された超高速メモリ。大規模モデルをトレーニングするのに十分な速さでAIチップにデータを供給する。"
+  },
+  "word2vec": {
+    "label": "Word2Vec",
+    "description": "単語の文脈を分析して、コンピュータに単語の意味を教える技術。"
+  },
+  "gan": {
+    "label": "GAN",
+    "description": "リアルな偽画像を生成するために、互いに競合する2つのAIネットワーク。"
+  },
+  "tpu": {
+    "label": "Google TPU",
+    "description": "Googleが機械学習ワークロードを高速化するために特別に構築したカスタムチップ。"
+  },
+  "transformer": {
+    "label": "トランスフォーマー",
+    "description": "コンテキストを重視するアーキテクチャ。ChatGPTの裏にある秘密のソース。"
+  },
+  "5g_nr": {
+    "label": "5G (New Radio)",
+    "description": "高速と大容量を提供する最新モバイルネットワーク。"
+  },
+  "euv": {
+    "label": "EUVリソグラフィー",
+    "description": "極端な紫外線を使用して世界を印刷する製造技術。"
+  },
+  "stable_diffusion": {
+    "label": "Stable Diffusion",
+    "description": "テキストから画像を生成するオープンAI。アート生成をPCへ。"
+  },
+  "nvidia_h100": {
+    "label": "NVIDIA H100",
+    "description": "AI革命のエンジン。スマートモデルを訓練するために設計されたGPU。"
+  },
+  "unix": {
+    "label": "Unix",
+    "description": "シンプルさのOS哲学。LinuxとmacOSの祖父。"
+  },
+  "c_lang": {
+    "label": "C言語",
+    "description": "ソフトウェアの構成要素。高速でハードウェアに近いコード実行が可能。"
+  },
+  "sql": {
+    "label": "SQL",
+    "description": "データベースに質問し、情報を管理するための標準言語。"
+  },
+  "oracle_db": {
+    "label": "Oracle Database",
+    "description": "エンタープライズデータベースの標準。グローバルビジネスを支援。"
+  },
+  "www": {
+    "label": "World Wide Web",
+    "description": "インターネット経由でアクセスされる相互リンクされたページのシステム。誰もがネットを使用可能に。"
+  },
+  "linux": {
+    "label": "Linuxカーネル",
+    "description": "インターネット、クラウド、すべてのAndroidスマートフォンを動かす、無料のオープンソースOSカーネル。"
+  },
+  "python": {
+    "label": "Python",
+    "description": "AIとデータサイエンスの主要ツールとなった、読みやすいプログラミング言語。"
+  },
+  "windows_95": {
+    "label": "Windows 95",
+    "description": "スタートメニューを導入し、手軽なコンピューティングを大衆にもたらしたOS。"
+  },
+  "java": {
+    "label": "Java",
+    "description": "「"
+  },
+  "javascript": {
+    "label": "JavaScript",
+    "description": "Webブラウザの言語。ウェブサイトを単なる静的なテキストではなく、インタラクティブにする。"
+  },
+  "unreal": {
+    "label": "Unreal Engine",
+    "description": "ゲームや映画制作で使用される、高忠実度3Dグラフィックスのための強力なエンジン。"
+  },
+  "bittorrent": {
+    "label": "BitTorrent",
+    "description": "大規模ファイルを共有する分散型の手法。ピアツーピアネットワークの力を証明した。"
+  },
+  "mapreduce": {
+    "label": "MapReduce",
+    "description": "Googleの"
+  },
+  "git": {
+    "label": "Git",
+    "description": "コードのためのタイムマシン。開発者が変更を追跡し、ソフトウェアで共同作業するのに役立つ。"
+  },
+  "unity": {
+    "label": "Unity",
+    "description": "ゲーム開発を民主化する、ゲームや3Dアプリを構築するための汎用性の高いプラットフォーム。"
+  },
+  "aws_cloud": {
+    "label": "AWSクラウド",
+    "description": "IaaS。インターネット経由で大規模なコンピューティング能力を誰でもレンタル可能にします。"
+  },
+  "cuda": {
+    "label": "CUDA",
+    "description": "NVIDIAのプラットフォーム。"
+  },
+  "ios": {
+    "label": "iOS",
+    "description": "iPhoneのOS。現代のモバイルユーザー体験を定義します。"
+  },
+  "android": {
+    "label": "Android",
+    "description": "世界で最も普及しているオープンソースのモバイルOS。"
+  },
+  "zero_trust": {
+    "label": "ゼロトラスト",
+    "description": "すべてのリクエストを検証し、ユーザーやデバイスの安全性を前提としないセキュリティモデル。"
+  },
+  "docker": {
+    "label": "Docker",
+    "description": "ソフトウェアをコンテナにパッケージ化し、どのマシンでも同じように動作させます。"
+  },
+  "tensorflow": {
+    "label": "TensorFlow",
+    "description": "Google製の機械学習プラットフォーム。"
+  },
+  "pytorch": {
+    "label": "PyTorch",
+    "description": "Meta製の機械学習フレームワーク。"
+  },
+  "walkman": {
+    "label": "ソニーウォークマン",
+    "description": "音楽を持ち運び可能にし、オーディオ消費のあり方を永遠に変えました。"
+  },
+  "macintosh": {
+    "label": "Macintosh",
+    "description": "マウスとグラフィカル画面を備えた初のマスマーケットコンピュータ。コンピューティングを身近にしました。"
+  },
+  "toshiba_t1100": {
+    "label": "Toshiba T1100",
+    "description": "初の商業的に成功したラップトップ。今日のクラムシェル型を確立。"
+  },
+  "excel": {
+    "label": "Microsoft Excel",
+    "description": "決定版スプレッドシート。紙の台帳に取って代わり、ビジネスの共通言語に。"
+  },
+  "photoshop": {
+    "label": "Adobe Photoshop",
+    "description": "画像編集の代名詞。デジタルクリエイティビティの標準を確立。"
+  },
+  "mosaic": {
+    "label": "Mosaic ブラウザ",
+    "description": "画像とテキストをインラインで表示する初のブラウザ。インターネットブームの火付け役。"
+  },
+  "netscape": {
+    "label": "Netscape Navigator",
+    "description": "ウェブを商業化し、最初のブラウザ戦争でMicrosoftと戦ったブラウザ。"
+  },
+  "amazon_com": {
+    "label": "Amazon.com",
+    "description": "最初は書店としてスタートし、"
+  },
+  "netflix": {
+    "label": "Netflix",
+    "description": "DVDレンタルからストリーミングへ移行し、世界のテレビ視聴方法を変えた。"
+  },
+  "google_search": {
+    "label": "Google Search",
+    "description": "世界の情報を整理するエンジン"
+  },
+  "paypal": {
+    "label": "PayPal",
+    "description": "安全なオンライン送金手段。"
+  },
+  "salesforce_crm": {
+    "label": "Salesforce CRM",
+    "description": "先駆け"
+  },
+  "wikipedia": {
+    "label": "Wikipedia",
+    "description": "ボランティアが執筆する無料百科事典。世界を民主化。"
+  },
+  "skype": {
+    "label": "Skype",
+    "description": "無料ビデオ通話を普及させ、世界を身近に感じさせた。"
+  },
+  "linkedin": {
+    "label": "LinkedIn",
+    "description": "仕事用SNS。ローロデックスと履歴書をオンライン化。"
+  },
+  "facebook": {
+    "label": "Facebook",
+    "description": "数十億人をつなげた。ソーシャルメディア時代とニュースフィードを定義。"
+  },
+  "youtube": {
+    "label": "YouTube",
+    "description": "自分を放送しよう。動画作成とエンタメを民主化。"
+  },
+  "twitter": {
+    "label": "Twitter",
+    "description": "インターネットの広場。ニュースと会話のリアルタイムフィード。"
+  },
+  "iphone": {
+    "label": "iPhone",
+    "description": "電話、iPod、インターネット通信機能を統合。インターネットをポケットに。"
+  },
+  "spotify": {
+    "label": "Spotify",
+    "description": "合法的なストリーミングアクセスを提供し、音楽業界を海賊版から救った。"
+  },
+  "app_store": {
+    "label": "App Store",
+    "description": "安全かつ簡単にソフトウェアをインストールできる集中型マーケットプレイス。"
+  },
+  "google_chrome": {
+    "label": "Google Chrome",
+    "description": "高速でミニマルなブラウザ。現代のウェブのOSとなった。"
+  },
+  "github": {
+    "label": "GitHub",
+    "description": "ソーシャルコーディング。オープンソースソフトウェアと開発者コラボレーションの本拠地。"
+  },
+  "bitcoin": {
+    "label": "Bitcoin",
+    "description": "デジタルゴールド。ブロックチェーン技術に基づく最初の分散型通貨。"
+  },
+  "uber_app": {
+    "label": "Uber App",
+    "description": "ボタンを押して配車。ギグエコノミーとオンデマンド輸送の先駆け。"
+  },
+  "stripe": {
+    "label": "Stripe",
+    "description": "ウェブサイトでの支払いを可能にするコード。インターネットのインフラ。"
+  },
+  "wechat": {
+    "label": "WeChat",
+    "description": "中国のスーパーアプリ。メッセージング、ソーシャルメディア、決済を統合。"
+  },
+  "zoom": {
+    "label": "Zoom",
+    "description": "手軽に使えるビデオツール。リモートワークと接続の標準になった。"
+  },
+  "model_s": {
+    "label": "Tesla Model S",
+    "description": "EVが速く、美しく、長距離であることを証明した車。"
+  },
+  "raspberry_pi": {
+    "label": "Raspberry Pi",
+    "description": "コーディングを教え、DIY電子プロジェクトを動かす小型コンピューター。"
+  },
+  "dji_phantom": {
+    "label": "DJI Phantom",
+    "description": "誰でも手軽に空撮できるドローンとして普及。"
+  },
+  "slack": {
+    "label": "Slack",
+    "description": "仕事用チャット。社内メールをチャネルとインスタントメッセージに置き換えた。"
+  },
+  "tesla_autopilot": {
+    "label": "Tesla Autopilot",
+    "description": "Teslaの自動運転技術"
+  },
+  "ethereum": {
+    "label": "Ethereum",
+    "description": "スマートコントラクト、DeFi、NFTを可能にしたブロックチェーン"
+  },
+  "alphago": {
+    "label": "AlphaGo",
+    "description": "囲碁で人間に勝利し世界を驚かせたAI"
+  },
+  "tiktok": {
+    "label": "TikTok",
+    "description": "驚異的なアルゴリズムによる短尺動画。メディア消費を変えた"
+  },
+  "oculus_rift": {
+    "label": "Oculus Rift",
+    "description": "現代のVR市場の先駆けとなったヘッドセット"
+  },
+  "alphago_zero": {
+    "label": "AlphaGo Zero",
+    "description": "人間の棋譜なしで自己対戦で囲碁を学習したAI"
+  },
+  "starlink": {
+    "label": "Starlink",
+    "description": "地球の隅々まで高速インターネットを提供する衛星群"
+  },
+  "fugaku": {
+    "label": "富岳 (Fugaku)",
+    "description": "ARMチップが世界を動かすことを証明したスパコン"
+  },
+  "copilot": {
+    "label": "GitHub Copilot",
+    "description": "AIペアプログラマー。コード補完で開発を支援"
+  },
+  "chatgpt": {
+    "label": "ChatGPT",
+    "description": "人間のように話すチャットボット。AIを主流にした"
+  },
+  "midjourney": {
+    "label": "Midjourney",
+    "description": "AIアーティスト。簡単なテキストから驚くほどリアルな画像を生成。"
+  },
+  "perplexity": {
+    "label": "Perplexity",
+    "description": "AIアンサーエンジン。ウェブを読み込み、引用付きの要約を提供。"
+  },
+  "spacex_falcon9": {
+    "label": "Falcon 9",
+    "description": "着陸するロケット。宇宙へのコストを大幅に削減。"
+  },
+  "starship": {
+    "label": "Starship",
+    "description": "人類を火星へ運ぶために設計された、巨大で完全再利用可能なロケット。"
+  },
+  "gemini": {
+    "label": "Google Gemini",
+    "description": "Googleの最新AIモデル。"
+  },
+  "claude": {
+    "label": "Claude",
+    "description": "安全性を重視して構築されたAIアシスタント。長文の読解に優れる。"
+  },
+  "cursor": {
+    "label": "Cursor",
+    "description": "AI時代のために構築されたコードエディタ。LLMをコーディングワークフローに直接統合。"
+  },
+  "sora": {
+    "label": "Sora",
+    "description": "テキストからリアルな動画を生成するAI。物理学とモーションを理解。"
+  },
+  "vision_pro": {
+    "label": "Apple Vision Pro",
+    "description": "Appleの空間コンピュータ。"
+  },
+  "postscript": {
+    "label": "PostScript",
+    "description": "デスクトップパブリッシング革命の火付け役となったページ記述言語。"
+  },
+  "illustrator": {
+    "label": "Adobe Illustrator",
+    "description": "業界標準のベクターグラフィックスエディター。"
+  },
+  "premiere_pro": {
+    "label": "Adobe Premiere Pro",
+    "description": "タイムラインベースの動画編集ソフトウェア。"
+  },
+  "pdf": {
+    "label": "PDF",
+    "description": "Portable Document Format。デジタルドキュメント交換のグローバルスタンダード。"
+  },
+  "nano_banana": {
+    "label": "Nano Banana",
+    "description": "3Dフィギュアスタイルとテキストレンダリングで有名な、話題のAI画像モデル（Gemini 2.5 Flash）。"
+  }
+}

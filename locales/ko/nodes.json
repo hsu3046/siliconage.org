@@ -1,0 +1,858 @@
+{
+  "fairchild": {
+    "label": "Fairchild Semi",
+    "description": "모든 것의 시작이 된 스타트업. 이 회사 출신들이 Intel, AMD를 세우고 실리콘 밸리를 만들었습니다."
+  },
+  "intel": {
+    "label": "Intel",
+    "description": "세계 최대의 칩 제조업체입니다."
+  },
+  "amd": {
+    "label": "AMD",
+    "description": "끈기있는 라이벌. 고성능 CPU에서 혁신을 이루고 Intel에 도전했습니다."
+  },
+  "nvidia": {
+    "label": "NVIDIA",
+    "description": "게임 그래픽으로 시작하여 현재 AI의 엔진이 되었습니다. 그들의 칩은 세계를 훈련시킵니다."
+  },
+  "arm_ltd": {
+    "label": "Arm Holdings",
+    "description": "거의 모든 스마트폰에서 볼 수 있는 에너지 효율적인 칩 아키텍처를 설계합니다."
+  },
+  "samsung": {
+    "label": "Samsung",
+    "description": "글로벌 전자제품 거물. 메모리 칩, 휴대폰 및 디스플레이 분야에서 세계를 선도합니다."
+  },
+  "qualcomm": {
+    "label": "Qualcomm",
+    "description": "모바일 연결의 선두 주자. 그들의 기술은 휴대폰을 4G 및 5G 네트워크에 연결합니다."
+  },
+  "att": {
+    "label": "AT&T",
+    "description": "미국의 물리적 네트워크 인프라를 구축한 통신 독점 기업 (Ma Bell) 입니다."
+  },
+  "cisco": {
+    "label": "Cisco",
+    "description": "인터넷의 중추. 네트워크 장비의 주요 공급 업체입니다."
+  },
+  "spacex": {
+    "label": "SpaceX",
+    "description": "재사용 가능한 로켓으로 우주 비행에 혁명을 일으키고 있습니다. 목표는 삶을 다중 행성으로 만드는 것입니다."
+  },
+  "ibm": {
+    "label": "IBM",
+    "description": "Big Blue. 메인프레임 시대를 정의했고 개인용 컴퓨터 시장을 열었습니다."
+  },
+  "tesla": {
+    "label": "Tesla",
+    "description": "자동차 회사를 넘어섰습니다. 전기차를 대중화하고 로봇 공학과 자율 주행을 추진하고 있습니다."
+  },
+  "dji": {
+    "label": "DJI",
+    "description": "소비자 드론의 절대적인 선두 주자. 항공 사진을 모든 사람이 접근 가능하게 만들었습니다."
+  },
+  "boston_dynamics": {
+    "label": "Boston Dynamics",
+    "description": "인간과 동물을 흉내 내는 놀라운 민첩성으로 움직이는 다이나믹 로봇을 엔지니어링합니다."
+  },
+  "microsoft": {
+    "label": "Microsoft",
+    "description": "전 세계를 위한 소프트웨어. Windows에서 Azure 및 OpenAI에 이르기까지 생산성 거인입니다."
+  },
+  "oracle": {
+    "label": "Oracle",
+    "description": "데이터베이스 거물. 그들의 소프트웨어는 전 세계의 중요한 데이터를 관리합니다."
+  },
+  "adobe": {
+    "label": "Adobe",
+    "description": "크리에이터"
+  },
+  "salesforce_co": {
+    "label": "Salesforce",
+    "description": "클라우드 개척자. 설치된 소프트웨어를 웹 기반 비즈니스 도구로 대체했습니다."
+  },
+  "sap": {
+    "label": "SAP",
+    "description": "글로벌 비즈니스의 중추. 그들의 소프트웨어는 거대 기업의 운영을 관리합니다."
+  },
+  "google": {
+    "label": "Google",
+    "description": "세상을 조직했다"
+  },
+  "amazon": {
+    "label": "Amazon",
+    "description": "세계 최대 전자상거래 및 클라우드 컴퓨팅 기업입니다."
+  },
+  "meta": {
+    "label": "Meta",
+    "description": "사람들을 연결합니다. Facebook, Instagram, WhatsApp을 소유하고 VR에 투자합니다."
+  },
+  "tencent": {
+    "label": "Tencent",
+    "description": "WeChat의 거대 기업. 중국 소셜 미디어, 게임, 결제를 장악하고 있습니다."
+  },
+  "alibaba": {
+    "label": "Alibaba",
+    "description": "중국의 전자상거래 거물. 디지털 소매 및 핀테크에 혁명을 일으켰습니다."
+  },
+  "bytedance": {
+    "label": "ByteDance",
+    "description": "알고리즘 회사. 세계적인 동영상 플랫폼 TikTok을 만들었습니다."
+  },
+  "uber_co": {
+    "label": "Uber",
+    "description": "온디맨드 운송. 라이더와 드라이버를 연결하여 긱 경제를 창출했습니다."
+  },
+  "airbnb": {
+    "label": "Airbnb",
+    "description": "사람들을 위한 숙박. 남는 방을 글로벌 숙박 네트워크로 전환했습니다."
+  },
+  "paypal_co": {
+    "label": "PayPal",
+    "description": "결제 선구자. 온라인 결제 시스템을 개척했습니다."
+  },
+  "stripe_co": {
+    "label": "Stripe",
+    "description": "인터넷 결제 인프라. 스타트업을 위해 복잡한 결제 처리를 담당합니다."
+  },
+  "netscape_co": {
+    "label": "Netscape",
+    "description": "중요한 브라우저. 웹을 상용화하고 닷컴 붐을 일으켰습니다."
+  },
+  "spotify_co": {
+    "label": "Spotify",
+    "description": "스트리밍 구원자. 소유 대신 음악 접근에 돈을 지불하도록 설득했습니다."
+  },
+  "netflix_co": {
+    "label": "Netflix",
+    "description": "TV를 바꿨습니다. DVD 우편에서 스트리밍으로 전환, 몰아보기 시대를 개척했습니다."
+  },
+  "deepmind": {
+    "label": "Google DeepMind",
+    "description": "지능을 해결했습니다. AlphaGo로 유명하며, AI로 과학적 문제를 해결합니다."
+  },
+  "openai": {
+    "label": "OpenAI",
+    "description": "ChatGPT 배후 연구소. AI를 연구에서 수백만 명이 사용하는 제품으로 발전시켰습니다."
+  },
+  "anthropic": {
+    "label": "Anthropic",
+    "description": "AI 안전 우선. OpenAI 출신들이 설립, 신뢰성 있고 조종 가능한 AI를 구축합니다."
+  },
+  "huggingface": {
+    "label": "Hugging Face",
+    "description": "AI의 GitHub. 모델, 데이터 세트, 데모 공유를 위한 오픈 커뮤니티 허브입니다."
+  },
+  "sequoia": {
+    "label": "Sequoia",
+    "description": "미다스의 손. Apple, Google, NVIDIA가 아이디어에 불과했을 때 투자한 VC입니다."
+  },
+  "ycombinator": {
+    "label": "Y Combinator",
+    "description": "스타트업 공장. Airbnb, Stripe, Dropbox를 배출한 액셀러레이터입니다."
+  },
+  "a16z": {
+    "label": "a16z",
+    "description": "소프트웨어가 세상을 먹어 삼킨다. 막대한 운영 지원을 제공하는 현대적인 VC입니다."
+  },
+  "softbank": {
+    "label": "SoftBank Vision Fund",
+    "description": "세계"
+  },
+  "xerox_parc": {
+    "label": "Xerox PARC",
+    "description": "마우스, 윈도우, 이더넷을 발명하여 현대 PC에 영감을 준 연구소."
+  },
+  "bell_labs": {
+    "label": "Bell Labs",
+    "description": "미래를 발명한 곳. 트랜지스터, 레이저, 정보 이론의 발상지."
+  },
+  "tsmc": {
+    "label": "TSMC",
+    "description": "세계 최대의 반도체 파운드리. Apple, NVIDIA 등 팹리스 기업의 핵심 파트너."
+  },
+  "asml": {
+    "label": "ASML",
+    "description": "최첨단 칩 생산에 필수적인 EUV 노광 장비를 독점 생산하는 기업."
+  },
+  "apple": {
+    "label": "Apple",
+    "description": "디자인과 기술의 만남. Mac, iPod, iPhone으로 컴퓨팅 혁명을 일으켰습니다."
+  },
+  "sony": {
+    "label": "Sony",
+    "description": "워크맨으로 엔터테인먼트 혁신. 현재 이미지 센서 및 게임 분야 선두 주자."
+  },
+  "alan_turing": {
+    "label": "Alan Turing",
+    "description": "에니그마 코드를 해독하고 컴퓨터 이론적 토대를 구상한 천재."
+  },
+  "claude_shannon": {
+    "label": "Claude Shannon",
+    "description": "정보 이론의 아버지. 모든 통신이 비트로 환원될 수 있음을 증명."
+  },
+  "william_shockley": {
+    "label": "William Shockley",
+    "description": "트랜지스터 공동 발명가. 뛰어난 물리학자였지만, 그의 경영 방식은 밸리를 촉발."
+  },
+  "dennis_ritchie": {
+    "label": "Dennis Ritchie",
+    "description": "현대 소프트웨어의 기반인 C 언어와 Unix를 만든 설계자."
+  },
+  "tim_berners_lee": {
+    "label": "Tim Berners-Lee",
+    "description": "인터넷에 얼굴을 부여한 인물. 월드 와이드 웹, 브라우저, HTML을 발명했습니다."
+  },
+  "geoffrey_hinton": {
+    "label": "Geoffrey Hinton",
+    "description": "AI의 대부. 세상이 따라올 때까지 수십 년 동안 신경망을 믿었습니다."
+  },
+  "yann_lecun": {
+    "label": "Yann LeCun",
+    "description": "AI 과학자. 컴퓨터가 이미지를 인식하도록 하는 컨볼루션 네트워크를 발명했습니다."
+  },
+  "robert_noyce": {
+    "label": "Robert Noyce",
+    "description": "집적 회로의 공동 발명가."
+  },
+  "gordon_moore": {
+    "label": "Gordon Moore",
+    "description": "컴퓨팅 성능이 2년마다 두 배로 증가할 것이라고 예측했습니다. 그의 이름을 딴 무어의 법칙이 있습니다."
+  },
+  "steve_jobs": {
+    "label": "Steve Jobs",
+    "description": "예술과 기술의 교차점에 선 선구자. 그는 기기를 개인화했습니다. Apple."
+  },
+  "steve_wozniak": {
+    "label": "Steve Wozniak",
+    "description": "Apple의 엔지니어."
+  },
+  "bill_gates": {
+    "label": "Bill Gates",
+    "description": "비즈니스를 이해한 코더. 소프트웨어가 핵심임을 깨닫고 Windows를 모든 곳에 보급했습니다. Microsoft."
+  },
+  "larry_ellison": {
+    "label": "Larry Ellison",
+    "description": "소프트웨어의 사무라이. 엔터프라이즈 데이터베이스와 무자비한 전술로 제국을 건설했습니다."
+  },
+  "morris_chang": {
+    "label": "Morris Chang",
+    "description": "파운드리 모델을 만들어 다른 사람들이 설계한 칩을 제작하여 칩에 혁명을 일으켰습니다."
+  },
+  "linus_torvalds": {
+    "label": "리누스 토르발스",
+    "description": "재미로 Linux를 만들었고, 지금은 클라우드를 구동합니다. 코드 관리를 위해 Git도 만들었습니다."
+  },
+  "jeff_bezos": {
+    "label": "Jeff Bezos",
+    "description": "책 판매로 시작해 모든 것을 판매하게 되었습니다. 클라우드(AWS)도 구축했습니다."
+  },
+  "jensen_huang": {
+    "label": "Jensen Huang",
+    "description": "GPU에 베팅한 선구자. 그래픽 회사를 AI 엔진으로 탈바꿈시켰습니다."
+  },
+  "marc_benioff": {
+    "label": "Marc Benioff",
+    "description": "\"소프트웨어의 종말\"을 선언했습니다. 그는 클라우드 기반 CRM의 선두 주자입니다."
+  },
+  "larry_page": {
+    "label": "Larry Page",
+    "description": "인터넷 전체를 다운로드하고 싶어했습니다. PageRank를 발명하고 Google을 공동 창업했습니다."
+  },
+  "sergey_brin": {
+    "label": "Sergey Brin",
+    "description": "Google을 공동 창업한 데이터 과학자. 세상의 정보를 정리하는 데 기여했습니다."
+  },
+  "reed_hastings": {
+    "label": "Reed Hastings",
+    "description": "DVD가 사라질 것을 예감했습니다. Netflix를 스트리밍으로 전환하여 TV를 영원히 바꾸었습니다."
+  },
+  "elon_musk": {
+    "label": "Elon Musk",
+    "description": "현실판 토니 스타크. 운송을 전기화하고 화성으로 가는 로켓을 만들고 있습니다."
+  },
+  "mark_zuckerberg": {
+    "label": "Mark Zuckerberg",
+    "description": "세계를 연결했습니다. 빠르게 움직이고, 파괴하고, 소셜 제국을 건설했습니다."
+  },
+  "chad_hurley": {
+    "label": "Chad Hurley",
+    "description": "비디오를 쉽게 만들었습니다. 누구나 자신을 방송할 수 있도록 YouTube를 공동 창업했습니다."
+  },
+  "jack_ma": {
+    "label": "Jack Ma",
+    "description": "중국을 세계와 연결한 교사. 아파트에서 전자상거래 거인을 건설했습니다."
+  },
+  "pony_ma": {
+    "label": "Pony Ma",
+    "description": "WeChat의 조용한 설계자. 현대 중국을 움직이는 디지털 생태계를 구축했습니다."
+  },
+  "travis_kalanick": {
+    "label": "Travis Kalanick",
+    "description": "Uber를 만들기 위해 노력했습니다. 버튼 하나로 도시 교통을 변화시켰습니다."
+  },
+  "patrick_collison": {
+    "label": "Patrick Collison",
+    "description": "결제 시스템을 개선했습니다. Stripe를 통해 스타트업이 온라인으로 쉽게 돈을 받을 수 있도록 했습니다."
+  },
+  "satoshi_nakamoto": {
+    "label": "Satoshi Nakamoto",
+    "description": "비트코인의 미스터리한 창시자. 은행 없이 디지털 신뢰 문제를 해결했습니다."
+  },
+  "vitalik_buterin": {
+    "label": "Vitalik Buterin",
+    "description": "Ethereum의 천재. 모든 프로그램을 실행할 수 있는 블록체인을 구상했습니다."
+  },
+  "tim_cook": {
+    "label": "Tim Cook",
+    "description": "운영의 천재. 공급망을 완벽하게 만들어 Apple을 3조 달러 가치로 끌어올렸습니다."
+  },
+  "satya_nadella": {
+    "label": "Satya Nadella",
+    "description": "Microsoft를 새롭게 단장했습니다."
+  },
+  "sundar_pichai": {
+    "label": "Sundar Pichai",
+    "description": "제품 리더. Google의 책임자가 되기 전에 Chrome과 Android를 감독했습니다."
+  },
+  "lisa_su": {
+    "label": "Lisa Su",
+    "description": "AMD를 구한 엔지니어. 기술 역사상 가장 위대한 전환 중 하나를 실행했습니다."
+  },
+  "demis_hassabis": {
+    "label": "데미스 하사비스",
+    "description": "게이머 출신 신경과학자. DeepMind를 설립하여 지능을 연구하고 질병 치료를 목표로 합니다."
+  },
+  "sam_altman": {
+    "label": "샘 알트만",
+    "description": "실행가. Y Combinator를 키우고 OpenAI를 이끌어 ChatGPT를 출시했습니다."
+  },
+  "ilya_sutskever": {
+    "label": "일리야 Sutskever",
+    "description": "GPT의 핵심 두뇌. AI의 대화를 가능하게 한 기술적 혁신을 주도했습니다."
+  },
+  "arthur_rock": {
+    "label": "아서 록",
+    "description": "금융가. Intel과 Apple 창업을 도왔으며, \""
+  },
+  "don_valentine": {
+    "label": "돈 발렌타인",
+    "description": "VC의 할아버지. 그의 회사 Sequoia는 미래를 정의하는 회사들을 지원했습니다."
+  },
+  "masayoshi_son": {
+    "label": "손 마사요시",
+    "description": "위험 감수자. 그의 Vision Fund는 AI와 연결성의 미래에 수십억 달러를 투자했습니다."
+  },
+  "marc_andreessen": {
+    "label": "마크 앤드리슨",
+    "description": "최초의 그래픽 브라우저를 만들었습니다. 현재는 세상을 삼키는 소프트웨어에 투자합니다."
+  },
+  "peter_thiel": {
+    "label": "피터 틸",
+    "description": "반론자. PayPal을 공동 창업하고 Facebook을 최초로 지원했으며, 큰 아이디어에 투자합니다."
+  },
+  "reid_hoffman": {
+    "label": "리드 호프만",
+    "description": "네트워커. LinkedIn을 설립했으며, \""
+  },
+  "paul_graham": {
+    "label": "폴 그레이엄",
+    "description": "해커 철학자. Y Combinator를 만들고 스타트업 플레이북을 썼습니다."
+  },
+  "max_levchin": {
+    "label": "Max Levchin",
+    "description": "PayPal의 핵심 개발자. 그의 사기 방지 기술은 인간의 유용성을 입증했습니다."
+  },
+  "roelof_botha": {
+    "label": "Roelof Botha",
+    "description": "Sequoia를 이끄는 PayPal 마피아 멤버. 그는 누구보다 먼저 미래의 대박을 알아봅니다."
+  },
+  "turing_machine": {
+    "label": "튜링 머신",
+    "description": "모든 컴퓨터의 이론적 청사진. 기계가 계산할 수 있는 한계를 정의합니다."
+  },
+  "transistor": {
+    "label": "트랜지스터",
+    "description": "작은 전자 스위치. 수십억 개가 칩에 집적되어 전류의 흐름을 제어합니다."
+  },
+  "info_theory": {
+    "label": "정보 이론",
+    "description": "디지털 시대의 수학. 정보의 한계를 정의합니다."
+  },
+  "rsa": {
+    "label": "RSA 암호화",
+    "description": "인터넷에서 비밀번호와 신용카드를 안전하게 지켜주는 디지털 잠금 및 키 시스템입니다."
+  },
+  "lithography": {
+    "label": "리소그래피",
+    "description": "빛을 사용하여 실리콘 칩에 매우 작고 복잡한 회로 패턴을 인쇄하는 공정입니다."
+  },
+  "ic": {
+    "label": "집적 회로",
+    "description": "하나의 칩에 많은 트랜지스터를 넣는 것. 배선 문제를 해결했습니다."
+  },
+  "ibm_360": {
+    "label": "IBM System/360",
+    "description": "소프트웨어를 표준화한 메인프레임으로, 기업이 코드를 다시 작성하지 않고 하드웨어를 업그레이드할 수 있게 했습니다."
+  },
+  "dram": {
+    "label": "DRAM",
+    "description": "컴퓨터의 주 기억 장치입니다."
+  },
+  "optical_fiber": {
+    "label": "광섬유",
+    "description": "빛의 파동으로 데이터를 전송하는 유리 섬유로, 인터넷의 고속 백본을 형성합니다."
+  },
+  "microprocessor": {
+    "label": "마이크로프로세서",
+    "description": "컴퓨터의 두뇌 전체를 하나의 칩에 압축했습니다. PC 혁명을 촉발했습니다."
+  },
+  "floppy": {
+    "label": "플로피 디스크",
+    "description": "실생활의 저장 아이콘입니다. 인터넷 이전의 소프트웨어 및 파일 휴대용 디스크입니다."
+  },
+  "ethernet": {
+    "label": "Ethernet",
+    "description": "근거리 통신망(LAN)에서 컴퓨터를 연결하기 위한 표준 케이블 시스템입니다."
+  },
+  "x86": {
+    "label": "x86 아키텍처",
+    "description": "PC 프로세서의 주요 언어입니다. 수십 년 동안 데스크톱 컴퓨팅을 정의했습니다."
+  },
+  "gps": {
+    "label": "GPS",
+    "description": "지구상의 모든 곳에서 정확한 위치와 시간을 제공하는 위성 네트워크입니다."
+  },
+  "optical_disc": {
+    "label": "광 디스크",
+    "description": "레이저(CD/DVD)를 사용하는 디지털 저장 형식으로, 음악 및 소프트웨어 배포에 혁명을 일으켰습니다."
+  },
+  "tcp_ip": {
+    "label": "TCP/IP",
+    "description": "서로 다른 네트워크가 연결되어 통신할 수 있도록 하는 인터넷의 공통 언어입니다."
+  },
+  "arm_arch": {
+    "label": "ARM 아키텍처",
+    "description": "전력 효율적인 칩 설계입니다. 스마트폰 배터리가 하루 종일 지속되는 이유입니다."
+  },
+  "cisco_router": {
+    "label": "Cisco 라우터",
+    "description": "인터넷의 트래픽 관리자입니다. 데이터 패킷이 올바른 목적지에 도달하도록 지시합니다."
+  },
+  "foundry_model": {
+    "label": "파운드리 모델",
+    "description": "칩 설계를 제조와 분리하는 비즈니스 모델. NVIDIA와 AMD의 성장을 가능하게 했습니다."
+  },
+  "nand": {
+    "label": "NAND 플래시",
+    "description": "전원 없이 데이터를 기억하는 저장 장치. USB 드라이브, SSD, 휴대폰 내부에 있습니다."
+  },
+  "cdma": {
+    "label": "CDMA",
+    "description": "무선 신호를 최적화하여 3G 네트워크의 토대를 마련한 무선 기술입니다."
+  },
+  "gsm": {
+    "label": "GSM",
+    "description": "SMS 및 국제 로밍을 가능하게 한 최초의 디지털 휴대폰 글로벌 표준입니다."
+  },
+  "li_ion": {
+    "label": "리튬 이온 배터리",
+    "description": "고에너지 충전식 배터리. 스마트폰, 노트북, 전기 자동차를 가능하게 합니다."
+  },
+  "mp3": {
+    "label": "MP3",
+    "description": "오디오 파일을 압축하는 방법. 주머니에 수천 곡의 노래를 넣고 음악 산업을 뒤흔들었습니다."
+  },
+  "cmos": {
+    "label": "CMOS 센서",
+    "description": "전자 눈. 모든 휴대폰을 디지털 카메라로 바꿔놓은 저렴한 이미지 센서입니다."
+  },
+  "blue_led": {
+    "label": "청색 LED",
+    "description": "백색 LED 조명을 만드는 데 필요한 획기적인 기술. 에너지 효율적인 화면을 가능하게 했습니다."
+  },
+  "bluetooth": {
+    "label": "Bluetooth",
+    "description": "무선 코드. 헤드폰, 키보드, 마우스를 짧은 거리에서 장치에 연결합니다."
+  },
+  "ssl_tls": {
+    "label": "SSL/TLS",
+    "description": "\"를 넣는 보안 프로토콜"
+  },
+  "wifi": {
+    "label": "WiFi",
+    "description": "무선 인터넷. 이더넷 케이블을 없애고 소파에서도 온라인 접속 가능."
+  },
+  "gpu_geforce": {
+    "label": "GPU (GeForce)",
+    "description": "원래는 게임 그래픽용, 지금은 AI 학습 및 딥러닝의 핵심."
+  },
+  "arm_cortex": {
+    "label": "ARM Cortex",
+    "description": "거의 모든 최신 Android 및 iPhone에 들어가는 프로세서 코어."
+  },
+  "lidar": {
+    "label": "LiDAR",
+    "description": "레이저 레이더. 빛으로 3D 지도를 만들어 자율 주행차의 눈 역할."
+  },
+  "lte": {
+    "label": "LTE (4G)",
+    "description": "진정한 광대역 속도를 폰에 제공하여 비디오 스트리밍을 가능하게 한 4세대 모바일 네트워크."
+  },
+  "alexnet": {
+    "label": "AlexNet",
+    "description": "딥러닝이 효과 있음을 입증한 AI 모델. 이미지 대회 우승으로 AI 붐 시작."
+  },
+  "hbm": {
+    "label": "HBM",
+    "description": "적층형 초고속 메모리. 대규모 모델 학습에 필요한 데이터를 AI 칩에 빠르게 공급."
+  },
+  "word2vec": {
+    "label": "Word2Vec",
+    "description": "컴퓨터에 단어의 의미를 가르치는 기술. 문맥을 분석하여 의미 파악."
+  },
+  "gan": {
+    "label": "GAN",
+    "description": "현실적인 가짜 이미지를 생성하기 위해 서로 경쟁하는 두 개의 AI 네트워크."
+  },
+  "tpu": {
+    "label": "Google TPU",
+    "description": "Google에서 머신 러닝 워크로드를 가속화하기 위해 특별히 제작한 맞춤형 칩."
+  },
+  "transformer": {
+    "label": "트랜스포머",
+    "description": "맥락에 주목하는 아키텍처. ChatGPT의 핵심 기술입니다."
+  },
+  "5g_nr": {
+    "label": "5G (New Radio)",
+    "description": "초연결 세계를 위한 빠른 속도와 용량을 제공하는 최신 모바일 네트워크입니다."
+  },
+  "euv": {
+    "label": "EUV 리소그래피",
+    "description": "극자외선을 사용하여 세계를 인쇄하는 제조 기술의 기적입니다."
+  },
+  "stable_diffusion": {
+    "label": "Stable Diffusion",
+    "description": "텍스트를 이미지로 변환하는 오픈 AI로, 개인 컴퓨터에서 예술 작품 생성을 가능하게 합니다."
+  },
+  "nvidia_h100": {
+    "label": "NVIDIA H100",
+    "description": "AI 혁명의 엔진. 스마트 모델 훈련을 위해 특별히 설계된 대규모 GPU입니다."
+  },
+  "unix": {
+    "label": "Unix",
+    "description": "단순성의 운영체제 철학. Linux와 macOS의 조상입니다."
+  },
+  "c_lang": {
+    "label": "C 언어",
+    "description": "소프트웨어의 기본 구성 요소. 코드가 하드웨어에 가깝게 빠르게 실행되도록 합니다."
+  },
+  "sql": {
+    "label": "SQL",
+    "description": "데이터베이스에 질문하고 조직화된 정보를 관리하기 위한 표준 언어입니다."
+  },
+  "oracle_db": {
+    "label": "Oracle Database",
+    "description": "글로벌 비즈니스의 백엔드를 강화하는 엔터프라이즈 데이터베이스의 표준입니다."
+  },
+  "www": {
+    "label": "World Wide Web",
+    "description": "인터넷을 통해 액세스할 수 있는 상호 연결된 페이지 시스템입니다. 모든 사람이 인터넷을 사용할 수 있게 했습니다."
+  },
+  "linux": {
+    "label": "리눅스 커널",
+    "description": "인터넷, 클라우드, 모든 Android 폰을 구동하는 무료 오픈 소스 OS 커널입니다."
+  },
+  "python": {
+    "label": "Python",
+    "description": "AI 및 데이터 과학의 주요 도구가 된 가독성이 뛰어난 프로그래밍 언어입니다."
+  },
+  "windows_95": {
+    "label": "Windows 95",
+    "description": "시작 메뉴를 도입하고 대중에게 쉬운 컴퓨팅을 제공한 OS입니다."
+  },
+  "java": {
+    "label": "Java",
+    "description": "\"한 번 작성하면 어디서든 실행\"되도록 설계된 언어입니다."
+  },
+  "javascript": {
+    "label": "JavaScript",
+    "description": "웹 브라우저의 언어입니다. 웹사이트를 정적 텍스트 대신 상호 작용적으로 만듭니다."
+  },
+  "unreal": {
+    "label": "Unreal Engine",
+    "description": "게임 및 영화 제작에 사용되는 고 충실도 3D 그래픽을 위한 강력한 엔진입니다."
+  },
+  "bittorrent": {
+    "label": "BitTorrent",
+    "description": "대용량 파일을 공유하는 분산 방식입니다. P2P 네트워크의 힘을 입증했습니다."
+  },
+  "mapreduce": {
+    "label": "MapReduce",
+    "description": "Google의 대규모 데이터 처리를 위한 프로그래밍 모델입니다."
+  },
+  "git": {
+    "label": "Git",
+    "description": "코드를 위한 타임머신입니다. 개발자가 변경 사항을 추적하고 소프트웨어 공동 작업을 수행하도록 돕습니다."
+  },
+  "unity": {
+    "label": "Unity",
+    "description": "게임 및 3D 앱 구축을 위한 다목적 플랫폼으로, 게임 개발을 대중화합니다."
+  },
+  "aws_cloud": {
+    "label": "AWS 클라우드",
+    "description": "서비스형 인프라. 누구나 인터넷을 통해 막대한 컴퓨팅 파워를 임대할 수 있습니다."
+  },
+  "cuda": {
+    "label": "CUDA",
+    "description": "NVIDIA의 병렬 컴퓨팅 플랫폼 및 API입니다."
+  },
+  "ios": {
+    "label": "iOS",
+    "description": "iPhone을 구동하는 운영체제로, 현대적인 모바일 사용자 경험을 정의합니다."
+  },
+  "android": {
+    "label": "Android",
+    "description": "전 세계 대다수를 차지하는 개방형 모바일 OS입니다."
+  },
+  "zero_trust": {
+    "label": "제로 트러스트",
+    "description": "모든 사용자/장치가 안전하지 않다고 가정하고 모든 요청을 검증하는 보안 모델입니다."
+  },
+  "docker": {
+    "label": "Docker",
+    "description": "소프트웨어를 컨테이너로 패키징하여 모든 머신에서 동일하게 실행되도록 합니다."
+  },
+  "tensorflow": {
+    "label": "TensorFlow",
+    "description": "Google에서 개발한 오픈소스 머신러닝 라이브러리입니다."
+  },
+  "pytorch": {
+    "label": "PyTorch",
+    "description": "Meta에서 개발한 오픈소스 머신러닝 프레임워크입니다."
+  },
+  "walkman": {
+    "label": "Sony Walkman",
+    "description": "사람들이 음악을 휴대할 수 있게 하여 오디오 소비 방식을 영원히 바꾸었습니다."
+  },
+  "macintosh": {
+    "label": "Macintosh",
+    "description": "마우스와 그래픽 화면을 갖춘 최초의 대중 시장 컴퓨터. 컴퓨팅을 친숙하게 만들었습니다."
+  },
+  "toshiba_t1100": {
+    "label": "Toshiba T1100",
+    "description": "최초의 상업적 성공을 거둔 노트북. 오늘날 우리가 사용하는 클램셸 형태를 확립했습니다."
+  },
+  "excel": {
+    "label": "Microsoft Excel",
+    "description": "최고의 스프레드시트. 종이 장부를 대체하고 비즈니스 언어가 되었습니다."
+  },
+  "photoshop": {
+    "label": "Adobe Photoshop",
+    "description": "이미지 편집의 대명사. 디지털 창의성의 표준을 세웠습니다."
+  },
+  "mosaic": {
+    "label": "Mosaic Browser",
+    "description": "텍스트와 함께 이미지를 표시한 최초의 웹 브라우저로, 인터넷 붐을 일으켰습니다."
+  },
+  "netscape": {
+    "label": "Netscape Navigator",
+    "description": "웹을 상용화하고 최초의 브라우저 전쟁에서 Microsoft와 싸운 브라우저입니다."
+  },
+  "amazon_com": {
+    "label": "Amazon.com",
+    "description": "서점으로 시작하여 모든 것을 판매하는 곳이 되었습니다."
+  },
+  "netflix": {
+    "label": "Netflix",
+    "description": "DVD 대여에서 스트리밍으로 전환하여 전 세계 TV 시청 방식을 바꾸었습니다."
+  },
+  "google_search": {
+    "label": "Google Search",
+    "description": "전 세계 정보를 체계화하는 엔진입니다."
+  },
+  "paypal": {
+    "label": "PayPal",
+    "description": "안전한 온라인 송금 방식. "
+  },
+  "salesforce_crm": {
+    "label": "Salesforce CRM",
+    "description": "클라우드 기반 CRM을 개척했습니다."
+  },
+  "wikipedia": {
+    "label": "위키백과",
+    "description": "자원봉사자들이 작성하는 무료 백과사전. 지식의 민주화를 이룸."
+  },
+  "skype": {
+    "label": "Skype",
+    "description": "무료 영상 통화를 대중화하여 세상을 더 가깝게 느껴지도록 함."
+  },
+  "linkedin": {
+    "label": "LinkedIn",
+    "description": "업무를 위한 소셜 네트워크. 롤로덱스와 이력서를 온라인으로 옮김."
+  },
+  "facebook": {
+    "label": "Facebook",
+    "description": "수십억 명을 연결. 소셜 미디어 시대와 뉴스 피드를 정의함."
+  },
+  "youtube": {
+    "label": "YouTube",
+    "description": "자신을 방송하세요. 비디오 제작과 엔터테인먼트를 민주화함."
+  },
+  "twitter": {
+    "label": "Twitter",
+    "description": "인터넷의 광장. 뉴스 및 대화의 실시간 피드."
+  },
+  "iphone": {
+    "label": "iPhone",
+    "description": "전화, iPod, 인터넷 커뮤니케이터를 결합. 인터넷을 주머니에 넣음."
+  },
+  "spotify": {
+    "label": "Spotify",
+    "description": "합법적인 즉석 스트리밍 액세스를 제공하여 음악 산업을 불법 복제로부터 구함."
+  },
+  "app_store": {
+    "label": "App Store",
+    "description": "휴대폰에 소프트웨어를 안전하고 쉽게 설치할 수 있도록 만든 중앙 집중식 마켓플레이스."
+  },
+  "google_chrome": {
+    "label": "Google Chrome",
+    "description": "빠르고 미니멀한 브라우저로 현대 웹의 운영 체제가 됨."
+  },
+  "github": {
+    "label": "GitHub",
+    "description": "소셜 코딩. 오픈 소스 소프트웨어 및 개발자 협업의 본거지입니다."
+  },
+  "bitcoin": {
+    "label": "Bitcoin",
+    "description": "디지털 금. 블록체인 기술 기반의 최초 탈중앙화 통화입니다."
+  },
+  "uber_app": {
+    "label": "Uber App",
+    "description": "버튼만 누르면 차량 호출. 긱 경제와 주문형 운송을 개척했습니다."
+  },
+  "stripe": {
+    "label": "Stripe",
+    "description": "웹사이트 결제를 가능하게 하는 코드 7줄. 인터넷 인프라입니다."
+  },
+  "wechat": {
+    "label": "WeChat",
+    "description": "중국의 슈퍼 앱. 메시징, 소셜 미디어, 결제를 하나로 통합했습니다."
+  },
+  "zoom": {
+    "label": "Zoom",
+    "description": "잘 작동하는 화상 통화 도구. 원격 근무 및 연결의 기본이 되었습니다."
+  },
+  "model_s": {
+    "label": "Tesla Model S",
+    "description": "전기차가 빠르고 아름다우며 장거리 주행이 가능하다는 것을 입증한 자동차입니다."
+  },
+  "raspberry_pi": {
+    "label": "Raspberry Pi",
+    "description": "코딩 교육 및 DIY 전자 프로젝트를 위해 설계된 작고 저렴한 컴퓨터입니다."
+  },
+  "dji_phantom": {
+    "label": "DJI Phantom",
+    "description": "누구나 항공 사진을 쉽게 찍을 수 있도록 대중화한 즉시 사용 가능한 드론입니다."
+  },
+  "slack": {
+    "label": "Slack",
+    "description": "업무용 채팅. 내부 이메일을 채널 및 인스턴트 메시징으로 대체했습니다."
+  },
+  "tesla_autopilot": {
+    "label": "Tesla 오토파일럿",
+    "description": "Tesla의 운전 보조 시스템입니다."
+  },
+  "ethereum": {
+    "label": "Ethereum",
+    "description": "코드를 실행하는 블록체인. 스마트 계약, DeFi, NFT를 가능하게 했습니다."
+  },
+  "alphago": {
+    "label": "AlphaGo",
+    "description": "인간 챔피언을 이겨 세계를 놀라게 한 복잡한 게임 Go의 AI."
+  },
+  "tiktok": {
+    "label": "TikTok",
+    "description": "놀라운 알고리즘으로 제공되는 짧은 형식의 비디오. 미디어 소비 방식을 바꿨습니다."
+  },
+  "oculus_rift": {
+    "label": "Oculus Rift",
+    "description": "현대 소비자 가상 현실 시장을 시작한 헤드셋입니다."
+  },
+  "alphago_zero": {
+    "label": "AlphaGo Zero",
+    "description": "인간 게임에서 배우지 않고 스스로 게임을 하면서 Go를 배운 AI."
+  },
+  "starlink": {
+    "label": "Starlink",
+    "description": "지구의 외딴 곳에 고속 인터넷을 제공하는 위성 그룹입니다."
+  },
+  "fugaku": {
+    "label": "Fujitsu Fugaku",
+    "description": "ARM 칩이 세계를 움직일 수 있음을 입증한 슈퍼컴퓨터입니다."
+  },
+  "copilot": {
+    "label": "GitHub Copilot",
+    "description": "AI 페어 프로그래머. 자동 완성 제안으로 개발자가 코드를 더 빨리 작성하도록 돕습니다."
+  },
+  "chatgpt": {
+    "label": "ChatGPT",
+    "description": "인간처럼 말하는 챗봇. AI를 주류 대화로 끌어들였습니다."
+  },
+  "midjourney": {
+    "label": "Midjourney",
+    "description": "AI 아티스트. 간단한 텍스트 프롬프트로 멋진 실사 이미지를 생성합니다."
+  },
+  "perplexity": {
+    "label": "Perplexity",
+    "description": "AI 답변 엔진. 웹을 읽고 인용문과 함께 요약을 제공합니다."
+  },
+  "spacex_falcon9": {
+    "label": "Falcon 9",
+    "description": "착륙하는 로켓. 우주로 가는 비용을 획기적으로 낮췄습니다."
+  },
+  "starship": {
+    "label": "Starship",
+    "description": "인류를 화성으로 데려가기 위해 설계된 거대한 완전 재사용 가능 로켓입니다."
+  },
+  "gemini": {
+    "label": "Google Gemini",
+    "description": "Google의 최첨단 AI 모델입니다."
+  },
+  "claude": {
+    "label": "Claude",
+    "description": "안전을 염두에 두고 구축된 AI 비서. 긴 문서를 읽는 데 탁월합니다."
+  },
+  "cursor": {
+    "label": "Cursor",
+    "description": "AI 시대를 위해 만들어진 코드 편집기. LLM을 코딩 워크플로우에 직접 통합합니다."
+  },
+  "sora": {
+    "label": "Sora",
+    "description": "간단한 텍스트에서 현실적인 비디오를 만들어내는 AI. 물리학과 움직임을 이해합니다."
+  },
+  "vision_pro": {
+    "label": "Apple Vision Pro",
+    "description": "Apple의 공간 컴퓨터입니다."
+  },
+  "postscript": {
+    "label": "PostScript",
+    "description": "데스크톱 출판 혁명을 일으킨 페이지 설명 언어입니다."
+  },
+  "illustrator": {
+    "label": "Adobe Illustrator",
+    "description": "업계 표준 벡터 그래픽 편집기입니다."
+  },
+  "premiere_pro": {
+    "label": "Adobe Premiere Pro",
+    "description": "타임라인 기반의 비디오 편집 소프트웨어입니다."
+  },
+  "pdf": {
+    "label": "PDF",
+    "description": "Portable Document Format. 디지털 문서 교환을 위한 국제 표준입니다."
+  },
+  "nano_banana": {
+    "label": "Nano Banana",
+    "description": "3D 피규어 스타일과 텍스트 렌더링으로 유명한 바이럴 AI 이미지 모델 (Gemini 2.5 Flash)입니다."
+  }
+}
