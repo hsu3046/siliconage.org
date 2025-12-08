@@ -29,13 +29,7 @@ export enum LinkIcon {
 }
 
 // --- NEW ROLE DEFINITIONS ---
-export enum CompanyRole {
-  PLATFORM = 'PLATFORM', // High impact (Google, Apple, Microsoft)
-  LAB = 'LAB',           // Research focused (OpenAI, Bell Labs)
-  INFRA = 'INFRA',       // Supply chain/Hardware (TSMC, ASML) - Score dampened
-  SERVICE = 'SERVICE',   // Service providers
-  PRODUCT = 'PRODUCT',   // Consumer Hardware (iRobot, DJI, GoPro)
-}
+// CompanyRole removed as per request
 
 export enum PersonRole {
   VISIONARY = 'VISIONARY', // Founders/CEOs (Jobs, Gates)
@@ -52,7 +46,7 @@ export enum TechRole {
   L3_END_APPLICATION = 'APPLICATION',   // Consumer facing (iPhone, ChatGPT) - Score boosted
 }
 
-export type Role = CompanyRole | PersonRole | TechRole;
+export type Role = PersonRole | TechRole;
 
 export type CompanyMode = 'FULL' | 'MINIMAL' | 'HIDDEN';
 
@@ -90,6 +84,9 @@ export enum CompanyCategory {
   MEDIA_CONTENT = 'MEDIA_CONTENT',         // Entertainment (Netflix)
   INFRA_TELECOM = 'INFRA_TELECOM',         // Backbone (Cisco, AT&T)
   VENTURE_CAPITAL = 'VENTURE_CAPITAL',     // Funding (Sequoia)
+  ACADEMY_LAB = 'ACADEMY_LAB',             // Research Institutes & Labs
+  MANUFACTURING_SUPPLY = 'MANUFACTURING_SUPPLY', // Supply chain & Manufacturing
+  CONSUMER_DEVICE = 'CONSUMER_DEVICE',     // Consumer Electronics
 }
 
 export interface NodeData {
@@ -162,4 +159,7 @@ export interface AIResponse {
   summary: string;
   significance: string;
   keyFacts: string[];
+  entity?: string;
+  category?: string;
+  year?: number | string;
 }

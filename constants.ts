@@ -1,4 +1,4 @@
-import { Category, GraphData, LinkType, ArrowHead, LinkIcon, NodeData, LinkData, CompanyRole, PersonRole, TechRole, CompanyCategory, Role, TechCategoryL1, TechCategoryL2 } from './types';
+import { Category, GraphData, LinkType, ArrowHead, LinkIcon, NodeData, LinkData, PersonRole, TechRole, CompanyCategory, Role, TechCategoryL1, TechCategoryL2 } from './types';
 
 // Visual Colors mapped to categories
 export const CATEGORY_COLORS: Record<Category, string> = {
@@ -17,6 +17,9 @@ export const COMPANY_CATEGORY_COLORS: Record<CompanyCategory, string> = {
   [CompanyCategory.MEDIA_CONTENT]: '#ec4899',     // Pink
   [CompanyCategory.INFRA_TELECOM]: '#64748b',     // Slate
   [CompanyCategory.VENTURE_CAPITAL]: '#22c55e',   // Green
+  [CompanyCategory.ACADEMY_LAB]: '#a855f7',       // Purple-500
+  [CompanyCategory.MANUFACTURING_SUPPLY]: '#475569', // Slate-600
+  [CompanyCategory.CONSUMER_DEVICE]: '#f59e0b',   // Amber-500
 };
 
 // Company Category Labels for UI display
@@ -29,6 +32,9 @@ export const CATEGORY_LABELS: Record<CompanyCategory, string> = {
   [CompanyCategory.MEDIA_CONTENT]: 'Media & Content',
   [CompanyCategory.INFRA_TELECOM]: 'Infra & Telecom',
   [CompanyCategory.VENTURE_CAPITAL]: 'Venture Capital',
+  [CompanyCategory.ACADEMY_LAB]: 'Academy & Lab',
+  [CompanyCategory.MANUFACTURING_SUPPLY]: 'Manufacturing & Supply',
+  [CompanyCategory.CONSUMER_DEVICE]: 'Consumer Device',
 };
 
 // Era definitions for History View timeline
@@ -49,11 +55,11 @@ const links: LinkData[] = [];
 
 // Extended helper with metadata support
 const createCompany = (
-  id: string, label: string, year: number, impactRole: CompanyRole, description: string,
+  id: string, label: string, year: number, description: string,
   companyCategory: CompanyCategory,
   meta?: { marketCap?: { current?: string; peak?: string } }
 ) => {
-  nodes.push({ id, label, category: Category.COMPANY, year, impactRole, description, companyCategories: [companyCategory], ...meta });
+  nodes.push({ id, label, category: Category.COMPANY, year, description, companyCategories: [companyCategory], ...meta });
 };
 
 const createPerson = (
@@ -231,63 +237,70 @@ createTech('vision_pro', 'Apple Vision Pro', 2024, TechRole.L3_END_APPLICATION, 
 // 2. COMPANY NODES [Total: 46]
 // ==============================================================================
 
-// [Semiconductors & Core Infrastructure] Total: 13
-createCompany('bell_labs', 'Bell Labs', 1925, CompanyRole.LAB, 'The "Idea Factory" of the 20th century. Transistors, lasers, and Unix were born here.', CompanyCategory.HARDWARE_ROBOTICS);
-createCompany('fairchild', 'Fairchild Semi', 1957, CompanyRole.INFRA, 'The startup that started it all. Its alumni founded Intel, AMD, and Silicon Valley itself.', CompanyCategory.SEMICONDUCTOR);
-createCompany('intel', 'Intel', 1968, CompanyRole.INFRA, 'Put the "Silicon" in Silicon Valley. They created the microprocessor and dominate PCs.', CompanyCategory.SEMICONDUCTOR);
-createCompany('amd', 'AMD', 1969, CompanyRole.INFRA, 'The persistent rival. They innovated in high-performance CPUs and challenged Intel\'s dominance.', CompanyCategory.SEMICONDUCTOR);
-createCompany('tsmc', 'TSMC', 1987, CompanyRole.INFRA, 'The world\'s chip factory. They manufacture the advanced chips designed by Apple and NVIDIA.', CompanyCategory.SEMICONDUCTOR);
-createCompany('nvidia', 'NVIDIA', 1993, CompanyRole.INFRA, 'Started with gaming graphics, now the engine of AI. Their chips train the world\'s models.', CompanyCategory.SEMICONDUCTOR);
-createCompany('asml', 'ASML', 1984, CompanyRole.INFRA, 'The only company that makes the EUV machines needed to print the most advanced chips.', CompanyCategory.SEMICONDUCTOR);
-createCompany('arm_ltd', 'Arm Holdings', 1990, CompanyRole.LAB, 'They design the energy-efficient chip architecture found in almost every smartphone.', CompanyCategory.SEMICONDUCTOR);
-createCompany('samsung', 'Samsung', 1969, CompanyRole.INFRA, 'A global electronics titan. They lead the world in memory chips, phones, and displays.', CompanyCategory.SEMICONDUCTOR);
-createCompany('qualcomm', 'Qualcomm', 1985, CompanyRole.INFRA, 'The leader in mobile connectivity. Their tech connects your phone to 4G and 5G networks.', CompanyCategory.SEMICONDUCTOR);
-createCompany('att', 'AT&T', 1885, CompanyRole.INFRA, 'The telecom monopoly (Ma Bell) that built the physical network infrastructure of the US.', CompanyCategory.INFRA_TELECOM);
-createCompany('cisco', 'Cisco', 1984, CompanyRole.INFRA, 'The internet\'s plumber. Their routers and switches direct traffic across the global network.', CompanyCategory.INFRA_TELECOM);
-createCompany('spacex', 'SpaceX', 2002, CompanyRole.INFRA, 'Revolutionizing spaceflight with reusable rockets. Their goal is to make life multi-planetary.', CompanyCategory.HARDWARE_ROBOTICS);
+// [Semiconductors & Core Infrastructure] Total: 10
+createCompany('fairchild', 'Fairchild Semi', 1957, 'The startup that started it all. Its alumni founded Intel, AMD, and Silicon Valley itself.', CompanyCategory.SEMICONDUCTOR);
+createCompany('intel', 'Intel', 1968, 'Put the "Silicon" in Silicon Valley. They created the microprocessor and dominate PCs.', CompanyCategory.SEMICONDUCTOR);
+createCompany('amd', 'AMD', 1969, 'The persistent rival. They innovated in high-performance CPUs and challenged Intel\'s dominance.', CompanyCategory.SEMICONDUCTOR);
+createCompany('nvidia', 'NVIDIA', 1993, 'Started with gaming graphics, now the engine of AI. Their chips train the world\'s models.', CompanyCategory.SEMICONDUCTOR);
+createCompany('arm_ltd', 'Arm Holdings', 1990, 'They design the energy-efficient chip architecture found in almost every smartphone.', CompanyCategory.SEMICONDUCTOR);
+createCompany('samsung', 'Samsung', 1969, 'A global electronics titan. They lead the world in memory chips, phones, and displays.', CompanyCategory.SEMICONDUCTOR);
+createCompany('qualcomm', 'Qualcomm', 1985, 'The leader in mobile connectivity. Their tech connects your phone to 4G and 5G networks.', CompanyCategory.SEMICONDUCTOR);
+createCompany('att', 'AT&T', 1885, 'The telecom monopoly (Ma Bell) that built the physical network infrastructure of the US.', CompanyCategory.INFRA_TELECOM);
+createCompany('cisco', 'Cisco', 1984, 'The internet\'s plumber. Their routers and switches direct traffic across the global network.', CompanyCategory.INFRA_TELECOM);
+createCompany('spacex', 'SpaceX', 2002, 'Revolutionizing spaceflight with reusable rockets. Their goal is to make life multi-planetary.', CompanyCategory.HARDWARE_ROBOTICS);
 
-// [Hardware, Robotics & Devices] Total: 7
-createCompany('xerox_parc', 'Xerox PARC', 1970, CompanyRole.LAB, 'The research lab that invented the mouse, windows, and ethernet, inspiring the modern PC.', CompanyCategory.HARDWARE_ROBOTICS);
-createCompany('ibm', 'IBM', 1911, CompanyRole.PLATFORM, 'Big Blue. They defined the mainframe era and helped launch the personal computer market.', CompanyCategory.HARDWARE_ROBOTICS);
-createCompany('apple', 'Apple', 1976, CompanyRole.PLATFORM, 'Design meets technology. They revolutionized computing with the Mac, iPod, and iPhone.', CompanyCategory.HARDWARE_ROBOTICS);
-createCompany('sony', 'Sony', 1946, CompanyRole.PRODUCT, 'Changed entertainment with the Walkman. Now a leader in image sensors and gaming.', CompanyCategory.HARDWARE_ROBOTICS);
-createCompany('tesla', 'Tesla', 2003, CompanyRole.PRODUCT, 'More than a car company. They made EVs desirable and are pushing robotics and autonomy.', CompanyCategory.HARDWARE_ROBOTICS);
-createCompany('dji', 'DJI', 2006, CompanyRole.PRODUCT, 'The absolute leader in consumer drones. They made aerial photography accessible to all.', CompanyCategory.HARDWARE_ROBOTICS);
-createCompany('boston_dynamics', 'Boston Dynamics', 1992, CompanyRole.LAB, 'Engineering dynamic robots that move with uncanny agility, mimicking humans and animals.', CompanyCategory.HARDWARE_ROBOTICS);
+// [Hardware, Robotics & Devices] Total: 6
+createCompany('ibm', 'IBM', 1911, 'Big Blue. They defined the mainframe era and helped launch the personal computer market.', CompanyCategory.HARDWARE_ROBOTICS);
+createCompany('tesla', 'Tesla', 2003, 'More than a car company. They made EVs desirable and are pushing robotics and autonomy.', CompanyCategory.HARDWARE_ROBOTICS);
+createCompany('dji', 'DJI', 2006, 'The absolute leader in consumer drones. They made aerial photography accessible to all.', CompanyCategory.HARDWARE_ROBOTICS);
+createCompany('boston_dynamics', 'Boston Dynamics', 1992, 'Engineering dynamic robots that move with uncanny agility, mimicking humans and animals.', CompanyCategory.HARDWARE_ROBOTICS);
 
 // [Software, SaaS & Enterprise] Total: 5
-createCompany('microsoft', 'Microsoft', 1975, CompanyRole.PLATFORM, 'Software for the world. From Windows to Azure and OpenAI, they are a productivity giant.', CompanyCategory.ENTERPRISE_SAAS);
-createCompany('oracle', 'Oracle', 1977, CompanyRole.SERVICE, 'The database giant. Their software manages the critical data for the world\'s largest companies.', CompanyCategory.ENTERPRISE_SAAS);
-createCompany('adobe', 'Adobe', 1982, CompanyRole.SERVICE, 'The creator\'s toolkit. They standardized digital imaging and electronic documents.', CompanyCategory.ENTERPRISE_SAAS);
-createCompany('salesforce_co', 'Salesforce', 1999, CompanyRole.PLATFORM, 'The cloud pioneer. They replaced installed software with web-based business tools.', CompanyCategory.ENTERPRISE_SAAS);
-createCompany('sap', 'SAP', 1972, CompanyRole.SERVICE, 'The backbone of global business. Their software manages operations for huge corporations.', CompanyCategory.ENTERPRISE_SAAS);
+createCompany('microsoft', 'Microsoft', 1975, 'Software for the world. From Windows to Azure and OpenAI, they are a productivity giant.', CompanyCategory.ENTERPRISE_SAAS);
+createCompany('oracle', 'Oracle', 1977, 'The database giant. Their software manages the critical data for the world\'s largest companies.', CompanyCategory.ENTERPRISE_SAAS);
+createCompany('adobe', 'Adobe', 1982, 'The creator\'s toolkit. They standardized digital imaging and electronic documents.', CompanyCategory.ENTERPRISE_SAAS);
+createCompany('salesforce_co', 'Salesforce', 1999, 'The cloud pioneer. They replaced installed software with web-based business tools.', CompanyCategory.ENTERPRISE_SAAS);
+createCompany('sap', 'SAP', 1972, 'The backbone of global business. Their software manages operations for huge corporations.', CompanyCategory.ENTERPRISE_SAAS);
 
 // [Internet, Platform & Consumer Services] Total: 13
-createCompany('google', 'Google', 1998, CompanyRole.PLATFORM, 'Organized the world\'s information. From Search to Android, they define the internet.', CompanyCategory.PLATFORM_INTERNET);
-createCompany('amazon', 'Amazon', 1994, CompanyRole.PLATFORM, 'The "Everything Store". They also built AWS, the cloud that runs half the internet.', CompanyCategory.PLATFORM_INTERNET);
-createCompany('meta', 'Meta', 2004, CompanyRole.PLATFORM, 'Connecting people. They own Facebook, Instagram, and WhatsApp, and are betting on VR.', CompanyCategory.PLATFORM_INTERNET);
-createCompany('tencent', 'Tencent', 1998, CompanyRole.PLATFORM, 'The giant behind WeChat. They dominate social media, gaming, and payments in China.', CompanyCategory.PLATFORM_INTERNET);
-createCompany('alibaba', 'Alibaba', 1999, CompanyRole.PLATFORM, 'The e-commerce titan of China. They revolutionized digital retail and fintech.', CompanyCategory.PLATFORM_INTERNET);
-createCompany('bytedance', 'ByteDance', 2012, CompanyRole.PLATFORM, 'The algorithm company. They built TikTok, the world\'s most addictive content platform.', CompanyCategory.PLATFORM_INTERNET);
-createCompany('uber_co', 'Uber', 2009, CompanyRole.SERVICE, 'Transportation on demand. They connected riders and drivers, creating the gig economy.', CompanyCategory.PLATFORM_INTERNET);
-createCompany('airbnb', 'Airbnb', 2008, CompanyRole.SERVICE, 'Hospitality by the people. They turned spare rooms into a global network of accommodations.', CompanyCategory.PLATFORM_INTERNET);
-createCompany('paypal_co', 'PayPal', 1998, CompanyRole.SERVICE, 'The payments pioneer. Its "Mafia" of founders went on to build Tesla, YouTube, and more.', CompanyCategory.PLATFORM_INTERNET);
-createCompany('stripe_co', 'Stripe', 2010, CompanyRole.INFRA, 'Payment infrastructure for the internet. They handle the complexity of money for startups.', CompanyCategory.PLATFORM_INTERNET);
-createCompany('netscape_co', 'Netscape', 1994, CompanyRole.SERVICE, 'The browser that mattered. They commercialized the web and sparked the dot-com boom.', CompanyCategory.PLATFORM_INTERNET);
-createCompany('spotify_co', 'Spotify', 2006, CompanyRole.SERVICE, 'Streaming savior. They convinced the world to pay for music access instead of ownership.', CompanyCategory.MEDIA_CONTENT);
-createCompany('netflix_co', 'Netflix', 1997, CompanyRole.SERVICE, 'Changed TV. They moved from mailing DVDs to streaming, pioneering the binge-watching era.', CompanyCategory.MEDIA_CONTENT);
+createCompany('google', 'Google', 1998, 'Organized the world\'s information. From Search to Android, they define the internet.', CompanyCategory.PLATFORM_INTERNET);
+createCompany('amazon', 'Amazon', 1994, 'The "Everything Store". They also built AWS, the cloud that runs half the internet.', CompanyCategory.PLATFORM_INTERNET);
+createCompany('meta', 'Meta', 2004, 'Connecting people. They own Facebook, Instagram, and WhatsApp, and are betting on VR.', CompanyCategory.PLATFORM_INTERNET);
+createCompany('tencent', 'Tencent', 1998, 'The giant behind WeChat. They dominate social media, gaming, and payments in China.', CompanyCategory.PLATFORM_INTERNET);
+createCompany('alibaba', 'Alibaba', 1999, 'The e-commerce titan of China. They revolutionized digital retail and fintech.', CompanyCategory.PLATFORM_INTERNET);
+createCompany('bytedance', 'ByteDance', 2012, 'The algorithm company. They built TikTok, the world\'s most addictive content platform.', CompanyCategory.PLATFORM_INTERNET);
+createCompany('uber_co', 'Uber', 2009, 'Transportation on demand. They connected riders and drivers, creating the gig economy.', CompanyCategory.PLATFORM_INTERNET);
+createCompany('airbnb', 'Airbnb', 2008, 'Hospitality by the people. They turned spare rooms into a global network of accommodations.', CompanyCategory.PLATFORM_INTERNET);
+createCompany('paypal_co', 'PayPal', 1998, 'The payments pioneer. Its "Mafia" of founders went on to build Tesla, YouTube, and more.', CompanyCategory.PLATFORM_INTERNET);
+createCompany('stripe_co', 'Stripe', 2010, 'Payment infrastructure for the internet. They handle the complexity of money for startups.', CompanyCategory.PLATFORM_INTERNET);
+createCompany('netscape_co', 'Netscape', 1994, 'The browser that mattered. They commercialized the web and sparked the dot-com boom.', CompanyCategory.PLATFORM_INTERNET);
+createCompany('spotify_co', 'Spotify', 2006, 'Streaming savior. They convinced the world to pay for music access instead of ownership.', CompanyCategory.MEDIA_CONTENT);
+createCompany('netflix_co', 'Netflix', 1997, 'Changed TV. They moved from mailing DVDs to streaming, pioneering the binge-watching era.', CompanyCategory.MEDIA_CONTENT);
 
 // [AI Innovation & Labs] Total: 4
-createCompany('deepmind', 'Google DeepMind', 2010, CompanyRole.LAB, 'Solved intelligence. Famous for AlphaGo, they use AI to solve fundamental scientific problems.', CompanyCategory.AI_INNOVATION);
-createCompany('openai', 'OpenAI', 2015, CompanyRole.LAB, 'The lab behind ChatGPT. They pushed AI from research into a product used by millions.', CompanyCategory.AI_INNOVATION);
-createCompany('anthropic', 'Anthropic', 2021, CompanyRole.LAB, 'AI safety first. Founded by former OpenAI members to build reliable, steerable AI.', CompanyCategory.AI_INNOVATION);
-createCompany('huggingface', 'Hugging Face', 2016, CompanyRole.PLATFORM, 'The GitHub of AI. An open community hub for sharing models, datasets, and demos.', CompanyCategory.AI_INNOVATION);
+createCompany('deepmind', 'Google DeepMind', 2010, 'Solved intelligence. Famous for AlphaGo, they use AI to solve fundamental scientific problems.', CompanyCategory.AI_INNOVATION);
+createCompany('openai', 'OpenAI', 2015, 'The lab behind ChatGPT. They pushed AI from research into a product used by millions.', CompanyCategory.AI_INNOVATION);
+createCompany('anthropic', 'Anthropic', 2021, 'AI safety first. Founded by former OpenAI members to build reliable, steerable AI.', CompanyCategory.AI_INNOVATION);
+createCompany('huggingface', 'Hugging Face', 2016, 'The GitHub of AI. An open community hub for sharing models, datasets, and demos.', CompanyCategory.AI_INNOVATION);
 
 // [Venture Capital & Investment] Total: 4
-createCompany('sequoia', 'Sequoia', 1972, CompanyRole.SERVICE, 'The Midas touch. This VC firm backed Apple, Google, and NVIDIA when they were just ideas.', CompanyCategory.VENTURE_CAPITAL);
-createCompany('ycombinator', 'Y Combinator', 2005, CompanyRole.LAB, 'The startup factory. Their accelerator launched Airbnb, Stripe, and Dropbox.', CompanyCategory.VENTURE_CAPITAL);
-createCompany('a16z', 'a16z', 2009, CompanyRole.SERVICE, 'Software is eating the world. A modern VC firm that provides massive operational support.', CompanyCategory.VENTURE_CAPITAL);
-createCompany('softbank', 'SoftBank Vision Fund', 2017, CompanyRole.SERVICE, 'The world\'s largest technology-focused investment fund. They injected massive capital into unicorns like Uber and WeWork.', CompanyCategory.VENTURE_CAPITAL);
+createCompany('sequoia', 'Sequoia', 1972, 'The Midas touch. This VC firm backed Apple, Google, and NVIDIA when they were just ideas.', CompanyCategory.VENTURE_CAPITAL);
+createCompany('ycombinator', 'Y Combinator', 2005, 'The startup factory. Their accelerator launched Airbnb, Stripe, and Dropbox.', CompanyCategory.VENTURE_CAPITAL);
+createCompany('a16z', 'a16z', 2009, 'Software is eating the world. A modern VC firm that provides massive operational support.', CompanyCategory.VENTURE_CAPITAL);
+createCompany('softbank', 'SoftBank Vision Fund', 2017, 'The world\'s largest technology-focused investment fund. They injected massive capital into unicorns like Uber and WeWork.', CompanyCategory.VENTURE_CAPITAL);
+
+// [Academy & Labs] Total: 2
+createCompany('xerox_parc', 'Xerox PARC', 1970, 'The research lab that invented the mouse, windows, and ethernet, inspiring the modern PC.', CompanyCategory.ACADEMY_LAB);
+createCompany('bell_labs', 'Bell Labs', 1925, 'The "Idea Factory" of the 20th century. Transistors, lasers, and Unix were born here.', CompanyCategory.ACADEMY_LAB);
+
+// [Manufacturing Supply Chain] Total: 2
+createCompany('tsmc', 'TSMC', 1987, 'The world\'s chip factory. They manufacture the advanced chips designed by Apple and NVIDIA.', CompanyCategory.MANUFACTURING_SUPPLY);
+createCompany('asml', 'ASML', 1984, 'The only company that makes the EUV machines needed to print the most advanced chips.', CompanyCategory.MANUFACTURING_SUPPLY);
+
+// [Consumer Device] Total: 2
+createCompany('apple', 'Apple', 1976, 'Design meets technology. They revolutionized computing with the Mac, iPod, and iPhone.', CompanyCategory.CONSUMER_DEVICE);
+createCompany('sony', 'Sony', 1946, 'Changed entertainment with the Walkman. Now a leader in image sensors and gaming.', CompanyCategory.CONSUMER_DEVICE);
+
 
 // ==============================================================================
 // 3. PERSON NODES [Total: 46]

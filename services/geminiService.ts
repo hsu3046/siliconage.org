@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import { GoogleGenAI, Type } from "@google/genai";
 import { AIResponse, NodeData } from "../types";
 import { STATIC_CACHE } from "./staticCache";
@@ -42,7 +43,7 @@ export const fetchNodeDetails = async (node: NodeData): Promise<AIResponse> => {
       `Category: ${node.category}`,
       `Year: ${node.year}`,
       node.description ? `Description: ${node.description}` : null,
-      node.role ? `Role: ${node.role}` : null,
+      // node.role removed
       node.primaryRole ? `Primary Role: ${node.primaryRole}` : null,
       node.impactRole ? `Industry Role: ${node.impactRole}` : null,
       node.techCategoryL1 ? `Tech Category: ${node.techCategoryL1}` : null,

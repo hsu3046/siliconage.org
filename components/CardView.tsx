@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { GraphData, NodeData, Category } from '../types';
 import { CATEGORY_COLORS, CATEGORY_LABELS } from '../constants';
+import { getNodeSubtitle, getCompanySubtitle } from '../utils/labels';
 
 interface CardViewProps {
   data: GraphData;
@@ -143,9 +144,11 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
     }
   }, [scrollToNodeId]);
 
+  // Use getNodeSubtitle from labels.ts for consistent labeling
   const getSubLabel = (node: NodeData) => {
     if (node.category === Category.COMPANY) return `Founded in ${node.year}`;
-    if (node.category === Category.PERSON) return node.primaryRole;
+    if (node.category === Category.PERSON) return node.primaryRole || `Active since ${node.year}`;
+    if (node.category === Category.TECHNOLOGY) return node.techCategoryL2 || node.techCategoryL1 || `${node.year}`;
     return `${node.year}`;
   };
 

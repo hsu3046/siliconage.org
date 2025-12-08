@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { NodeData, LinkData, GraphData, LinkType, Category } from '../types';
 import { CATEGORY_COLORS, CATEGORY_LABELS } from '../constants';
-import { getPersonVerbs, getTechVerb, getNodeSubtitle } from '../utils/labels';
+import { getPersonVerbs, getTechVerb, getNodeSubtitle, getConnectionLabel } from '../utils/labels';
 import { getLinkIconConfig, getLinkIcon } from '../utils/icons';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 
@@ -405,7 +405,7 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                             {conn.node.label}
                         </span>
                         <span className="text-[10px] text-slate-500 font-medium whitespace-nowrap">
-                            {getNodeSubtitle(conn.node)}
+                            {focusNode && getConnectionLabel(focusNode, conn.node, conn.link, conn.sourceCategory === focusNode.category)}
                         </span>
                     </div>
                 </div>
@@ -452,7 +452,7 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                                 {conn.node.label}
                             </span>
                             <span className="text-[10px] text-slate-500 font-medium whitespace-nowrap">
-                                {getNodeSubtitle(conn.node)}
+                                {focusNode && getConnectionLabel(focusNode, conn.node, conn.link, conn.sourceCategory === focusNode.category)}
                             </span>
                         </div>
                     </div>

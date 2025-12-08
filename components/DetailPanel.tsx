@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { NodeData, AIResponse, GraphData, Category } from '../types';
 import { CATEGORY_COLORS, CATEGORY_LABELS } from '../constants';
 import { fetchNodeDetails } from '../services/geminiService';
-import { getTechVerb, getPersonVerbs } from '../utils/labels';
+import { getTechVerb, getPersonVerbs, getConnectionLabel as getConnectionLabelFromLabels } from '../utils/labels';
 
 interface DetailPanelProps {
   node: NodeData | null;
@@ -785,7 +785,12 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
                       <div>
                         <div className="text-sm font-bold text-slate-200 group-hover:text-white">{conn?.otherNode.label}</div>
                         <div className="text-[10px] text-slate-400 italic">
-                          {conn && node && getConnectionLabel(node, conn.otherNode, conn.type, conn.relation as 'Inbound' | 'Outbound', conn.link.icon)}
+                          {conn && node && (() => {
+                            const isOutgoing = conn.relation === 'Outbound';
+                            const source = isOutgoing ? node : conn.otherNode;
+                            const target = isOutgoing ? conn.otherNode : node;
+                            return getConnectionLabelFromLabels(node, conn.otherNode, conn.link, isOutgoing);
+                          })()}
                         </div>
                       </div>
                     </div>

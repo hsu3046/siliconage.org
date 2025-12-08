@@ -576,8 +576,9 @@ const App: React.FC = () => {
         {focusNodeId && (() => {
           const focusNode = INITIAL_DATA.nodes.find(n => n.id === focusNodeId);
           const nodeColor = focusNode ? CATEGORY_COLORS[focusNode.category] : '#22d3ee';
+          // Hide on PC for all views (each view has its own focus node display)
           return (
-            <div className="h-14 flex items-center bg-slate-900/30 border-t-2 border-t-red-500/70 border-b-2 border-b-red-500/70 relative">
+            <div className="h-14 flex items-center bg-slate-900/30 border-t-2 border-t-red-500/70 border-b-2 border-b-red-500/70 relative xl:hidden">
               {/* Centered Focus Text - flex-1 with center using the container width */}
               <div className="flex-1 flex justify-center">
                 <div className="flex flex-col items-center">
