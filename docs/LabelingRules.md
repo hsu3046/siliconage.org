@@ -484,7 +484,18 @@
 
 ---
 
-## 8-3. 요약 (Tech-to-Tech Verb Matrix)
+## 8-3. Link Type: ENGAGES (기술 간 경쟁/협력)
+*상황: 기술 표준 간 경쟁 또는 상호 보완 관계.*
+
+| Icon Type | Verb | Example Sentence |
+| :--- | :--- | :--- |
+| `RIVALRY` (🥊) | **competes with** | **VHS competes with Betamax** |
+| `HEART` (❤️) | **complements** | **Docker complements Kubernetes** |
+| *Default* | **interacts with** | **REST interacts with GraphQL** |
+
+---
+
+## 8-4. 요약 (Tech-to-Tech Verb Matrix)
 
 | Link Type | Source Type | Target Type | Verb | Context |
 | :--- | :--- | :--- | :--- | :--- |
@@ -496,3 +507,5 @@
 | **CONTRIBUTES**| AI Model | Service | **is the engine behind**| 핵심 알고리즘 |
 | **CONTRIBUTES**| Mfg Process | Chip | **enables creation of**| 제조 가능케 함 |
 | **CONTRIBUTES**| Old Tech | New Tech | **paved the way for** | 기술적 진화 |
+| **ENGAGES** | Tech (Rival) | Tech | **competes with** | 기술 표준 경쟁 |
+| **ENGAGES** | Tech (Partner) | Tech | **complements** | 상호 보완 |

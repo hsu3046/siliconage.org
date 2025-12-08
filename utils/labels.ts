@@ -277,7 +277,8 @@ const getTechToTechVerb = (
     sourceGroup: TechGroup,
     sourceRole: string | undefined,
     targetGroup: TechGroup,
-    linkType: LinkType
+    linkType: LinkType,
+    icon?: LinkIcon
 ): { active: string; passive: string } => {
     if (linkType === LinkType.POWERS) {
         // GPU/Chip → AI
@@ -317,6 +318,16 @@ const getTechToTechVerb = (
         }
         // Evolution
         return { active: 'paved the way for', passive: 'evolved from' };
+    }
+    // ENGAGES (Tech Rivalry/Partnership)
+    if (linkType === LinkType.ENGAGES) {
+        if (icon === LinkIcon.HEART) {
+            return { active: 'complements', passive: 'complements' };
+        }
+        if (icon === LinkIcon.RIVALRY) {
+            return { active: 'competes with', passive: 'competes with' };
+        }
+        return { active: 'interacts with', passive: 'interacts with' };
     }
     return { active: 'is linked to', passive: 'is linked to' };
 };
@@ -382,7 +393,7 @@ export const generateRelationLabel = (
     }
     // Technology → Technology
     else if (sourceCategory === Category.TECHNOLOGY && targetCategory === Category.TECHNOLOGY) {
-        verbs = getTechToTechVerb(getTechGroup(source), source.impactRole as string, getTechGroup(target), linkType);
+        verbs = getTechToTechVerb(getTechGroup(source), source.impactRole as string, getTechGroup(target), linkType, icon);
     }
 
     // For ENGAGES (bidirectional), use active form with other as subject
