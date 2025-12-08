@@ -7,6 +7,7 @@ import { ChevronDown, ChevronRight } from 'lucide-react';
 
 interface LinksViewProps {
     data: GraphData;
+    fullData: GraphData;  // Full data for search (ignores ON/OFF filters)
     focusNodeId: string | null;
     onNodeClick: (node: NodeData) => void;
     onNodeFocus?: (nodeId: string) => void;
@@ -102,7 +103,7 @@ const getConnectionDescription = (
     }
 };
 
-export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeClick, onNodeFocus }) => {
+export const LinksView: React.FC<LinksViewProps> = ({ data, fullData, focusNodeId, onNodeClick, onNodeFocus }) => {
     // Search State
     const [searchTerm, setSearchTerm] = useState('');
     const [suggestions, setSuggestions] = useState<NodeData[]>([]);
@@ -281,13 +282,13 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
         return { originsGrouped: originsMap, impactGrouped: impactMap, engages: engagesArr };
     }, [data, focusNodeId, focusNode]);
 
-    // Search handlers
+    // Search handlers - Use fullData to search all nodes regardless of ON/OFF state
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const term = e.target.value;
         setSearchTerm(term);
         if (term.length > 0) {
             const categoryOrder = { [Category.COMPANY]: 0, [Category.TECHNOLOGY]: 1, [Category.PERSON]: 2 };
-            const matches = data.nodes
+            const matches = fullData.nodes
                 .filter(n => n.label.toLowerCase().includes(term.toLowerCase()))
                 .sort((a, b) => {
                     const catDiff = (categoryOrder[a.category] ?? 3) - (categoryOrder[b.category] ?? 3);
@@ -428,12 +429,11 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                 style={{ backgroundColor: CATEGORY_COLORS[conn.node.category] }}
             />
 
-            {/* Category Badge + Link Icon */}
+            {/* Category Badge + Link Icon (텍스트 제거, 아이콘만 크게) */}
             <div className="flex items-center justify-between mt-1">
                 {getCategoryBadge(conn.node)}
-                <div className="flex items-center gap-1.5 text-[10px] font-medium text-slate-400">
-                    {getLinkIcon(conn.linkType, conn.sourceCategory, conn.targetCategory, undefined, 'w-3.5 h-3.5')}
-                    <span>{conn.description}</span>
+                <div className="flex items-center text-slate-400">
+                    {getLinkIcon(conn.linkType, conn.sourceCategory, conn.targetCategory, undefined, 'w-6 h-6')}
                 </div>
             </div>
 
@@ -444,7 +444,7 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                 </div>
                 <div className="flex-1 min-w-0">
                     <div className="flex items-baseline gap-2 flex-wrap">
-                        <span className="font-semibold text-white text-sm leading-tight group-hover:text-cyan-300 transition-colors">
+                        <span className="font-semibold text-white text-sm leading-tight group-hover:text-primary transition-colors">
                             {conn.node.label}
                         </span>
                         <span className="text-[10px] text-slate-500 font-medium whitespace-nowrap">
@@ -472,12 +472,11 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                     style={{ backgroundColor: CATEGORY_COLORS[conn.node.category] }}
                 />
 
-                {/* Category Badge + Relationship Info */}
+                {/* Category Badge + Link Type Icon (텍스트 제거, 아이콘만 크게) */}
                 <div className="flex items-center justify-between mt-1">
                     {getCategoryBadge(conn.node)}
-                    <div className={`flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wide ${conn.description === 'Partner' ? 'text-blue-500' : conn.description === 'Rival' ? 'text-amber-500' : 'text-slate-400'}`}>
-                        {getLinkIcon(conn.linkType, conn.sourceCategory, conn.targetCategory, conn.engagesIcon, 'w-4 h-4')}
-                        <span>{conn.description}</span>
+                    <div className={`flex items-center ${conn.description === 'Partner' ? 'text-blue-500' : conn.description === 'Rival' ? 'text-amber-500' : 'text-slate-400'}`}>
+                        {getLinkIcon(conn.linkType, conn.sourceCategory, conn.targetCategory, conn.engagesIcon, 'w-6 h-6')}
                     </div>
                 </div>
 
@@ -491,7 +490,7 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                     {/* Node Label & Description */}
                     <div className="flex-1 min-w-0">
                         <div className="flex items-baseline gap-2 flex-wrap">
-                            <span className="font-semibold text-white text-sm leading-tight group-hover:text-cyan-300 transition-colors">
+                            <span className="font-semibold text-white text-sm leading-tight group-hover:text-primary transition-colors">
                                 {conn.node.label}
                             </span>
                             <span className="text-[10px] text-slate-500 font-medium whitespace-nowrap">
@@ -617,8 +616,8 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
     // Main flow view
     return (
         <div className="flex-1 bg-slate-900 flex flex-col h-full overflow-hidden relative">
-            {/* Background Flow Arrow (Desktop Only) - Darker Blue Body */}
-            <div className="absolute inset-0 hidden md:flex items-center justify-center pointer-events-none z-0 opacity-20 text-blue-900/40">
+            {/* Background Flow Arrow (Desktop Only) - Brighter Blue */}
+            <div className="absolute inset-0 hidden md:flex items-center justify-center pointer-events-none z-0 opacity-30 text-blue-500/40">
                 <svg className="w-full h-full" viewBox="0 0 800 400" preserveAspectRatio="none">
                     <polygon points="50,150 630,150 630,80 780,200 630,320 630,250 50,250" fill="currentColor" />
                 </svg>

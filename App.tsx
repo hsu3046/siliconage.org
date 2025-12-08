@@ -496,20 +496,26 @@ const App: React.FC = () => {
                 if (cat === Category.COMPANY) {
                   isActive = companyMode !== 'HIDDEN';
                   if (viewMode === 'MAP') {
-                    // FULL: Active background, colored border
+                    // Map: 3-step toggle - FULL (active), MINIMAL (semi-active with gray border), HIDDEN (inactive)
+                    // ON/OFF버튼 색상 조절(PC) - COMPANY - Button 전체
                     if (companyMode === 'FULL') bgStyle = { backgroundColor: 'rgba(30, 41, 59, 1)', borderColor: color, color: 'white' };
-                    // MINIMAL: Outer ring grayed out (gray border), inner dot stays colored
-                    else if (companyMode === 'MINIMAL') bgStyle = { backgroundColor: 'transparent', borderColor: '#475569', color: '#94a3b8' };
-                    // HIDDEN: Everything grayed out
-                    else bgStyle = { backgroundColor: 'transparent', borderColor: '#475569', color: '#64748b', opacity: 0.5 };
+                    // ON/OFF버튼 투명도 조절(PC) - COMPANY - MINIMAL 상태 외곽선만 투명도 0.3, Dot은 그대로, TEXT는 흰색
+                    else if (companyMode === 'MINIMAL') bgStyle = { backgroundColor: 'transparent', borderColor: 'rgba(239, 68, 68, 0.3)', color: 'white' };
+                    // ON/OFF버튼 투명도 조절(PC) - COMPANY - HIDDEN 상태 Button 전체
+                    else bgStyle = { backgroundColor: 'transparent', borderColor: color, color: color, opacity: 0.5 };
                   } else {
+                    // History/Card: 2-step toggle - keep color, use opacity
+                    // ON/OFF버튼 색상 조절(PC) - COMPANY - ON 상태 Button 전체
                     if (isActive) bgStyle = { backgroundColor: 'rgba(30, 41, 59, 1)', borderColor: color, color: 'white' };
-                    else bgStyle = { backgroundColor: 'transparent', borderColor: '#475569', color: '#64748b', opacity: 0.5 };
+                    // ON/OFF버튼 투명도 조절(PC) - COMPANY - OFF 상태 Button 전체
+                    else bgStyle = { backgroundColor: 'transparent', borderColor: color, color: color, opacity: 0.5 };
                   }
                 } else {
                   isActive = visibleCategories[cat];
+                  // ON/OFF버튼 색상 조절(PC) - PERSON/TECHNOLOGY - ON 상태 Button 전체
                   if (isActive) bgStyle = { backgroundColor: 'rgba(30, 41, 59, 1)', borderColor: color, color: 'white' };
-                  else bgStyle = { backgroundColor: 'transparent', borderColor: '#475569', color: '#64748b', opacity: 0.5 };
+                  // ON/OFF버튼 투명도 조절(PC) - PERSON/TECHNOLOGY - OFF 상태 Button 전체
+                  else bgStyle = { backgroundColor: 'transparent', borderColor: color, color: color, opacity: 0.5 };
                 }
 
                 return (
@@ -526,9 +532,10 @@ const App: React.FC = () => {
                     <div
                       className={`w-2 h-2 rounded-full shadow-[0_0_8px_rgba(0,0,0,0.5)] shrink-0`}
                       style={{
-                        // All categories: Keep original color, use opacity to show OFF state
+                        // ON/OFF버튼 색상 조절(PC) - COMPANY/PERSON/TECHNOLOGY - Dot 색상 (원래 카테고리 색상 유지)
                         backgroundColor: color,
-                        opacity: isActive ? 1 : 0.5
+                        // ON/OFF버튼 투명도 조절(PC) - COMPANY/PERSON/TECHNOLOGY - Dot 투명도
+                        opacity: isActive ? 1 : 0.7
                       }}
                     />
                     <span className={`transition-all duration-500 ease-out whitespace-nowrap ${viewMode === 'MAP'
@@ -547,16 +554,25 @@ const App: React.FC = () => {
                   onClick={() => setShowStories(prev => !prev)}
                   className={`px-3 py-1 text-xs font-bold rounded-full border transition-all duration-200 flex items-center justify-center gap-2 group min-w-[50px]`}
                   style={{
+                    // ON/OFF버튼 색상 조절(PC) - EPISODE - Button 배경색
                     backgroundColor: showStories ? 'rgba(30, 41, 59, 1)' : 'transparent',
-                    borderColor: showStories ? '#a855f7' : '#475569',
-                    color: showStories ? 'white' : '#64748b',
-                    opacity: showStories ? 1 : 0.5
+                    // ON/OFF버튼 색상 조절(PC) - EPISODE - Button 테두리색 (항상 보라색)
+                    borderColor: '#a855f7',
+                    // ON/OFF버튼 색상 조절(PC) - EPISODE - Button 텍스트색
+                    color: showStories ? 'white' : '#a855f7',
+                    // ON/OFF버튼 투명도 조절(PC) - EPISODE - Button 전체 투명도
+                    opacity: showStories ? 1 : 0.6
                   }}
                   title="Click to toggle episode visibility"
                 >
                   <div
                     className="w-2 h-2 rounded-full shadow-[0_0_8px_rgba(0,0,0,0.5)] shrink-0"
-                    style={{ backgroundColor: showStories ? '#a855f7' : '#64748b', opacity: showStories ? 1 : 0.5 }}
+                    style={{
+                      // ON/OFF버튼 색상 조절(PC) - EPISODE - Dot 색상 (항상 보라색)
+                      backgroundColor: '#a855f7',
+                      // ON/OFF버튼 투명도 조절(PC) - EPISODE - Dot 투명도
+                      opacity: showStories ? 1 : 0.7
+                    }}
                   />
                   <span className="max-w-xs opacity-100 whitespace-nowrap">EPISODE</span>
                 </button>
@@ -685,30 +701,34 @@ const App: React.FC = () => {
 
                 // Default styles
                 let containerClass = 'w-8 h-8 rounded-full border flex items-center justify-center transition-all';
+                // ON/OFF버튼 색상 조절(Mobile) - COMPANY/PERSON/TECHNOLOGY - Button 테두리색 (원래 카테고리 색상)
                 let borderColor = CATEGORY_COLORS[cat];
+                // ON/OFF버튼 색상 조절(Mobile) - COMPANY/PERSON/TECHNOLOGY - Button 배경색
                 let bgColor = isActive ? 'rgba(30, 41, 59, 0.5)' : 'transparent';
+                // ON/OFF버튼 색상 조절(Mobile) - COMPANY/PERSON/TECHNOLOGY - Dot 색상 (원래 카테고리 색상 유지)
                 let dotBg = CATEGORY_COLORS[cat];
                 let dotBorder = 'none';
+                // ON/OFF버튼 투명도 조절(Mobile) - COMPANY/PERSON/TECHNOLOGY - Button 전체 투명도
                 let containerOpacity = isActive ? 1 : 0.5;
 
-                // Company-specific styling
-                if (cat === Category.COMPANY) {
+                // Company-specific styling for Map view (3-step toggle)
+                if (cat === Category.COMPANY && viewMode === 'MAP') {
                   if (companyMode === 'FULL') {
-                    // FULL: normal (colored border, colored dot)
+                    // ON/OFF버튼 색상 조절(Mobile) - COMPANY - FULL 상태 Button 배경색
                     bgColor = 'rgba(30, 41, 59, 0.5)';
                   } else if (companyMode === 'MINIMAL') {
-                    // MINIMAL: outer border gray, dot colored
-                    borderColor = '#64748b'; // slate-500 (gray border)
-                    bgColor = 'transparent';
-                    containerOpacity = 0.7;
+                    // ON/OFF버튼 투명도 조절(Mobile) - COMPANY - MINIMAL 상태 외곽선만 투명도 0.3, Dot은 그대로
+                    borderColor = 'rgba(239, 68, 68, 0.3)';
+                    containerOpacity = 1;
                   } else {
-                    // HIDDEN: all gray
-                    borderColor = '#475569'; // slate-600
+                    // ON/OFF버튼 투명도 조절(Mobile) - COMPANY - HIDDEN 상태 Button 전체 투명도
                     bgColor = 'transparent';
-                    dotBg = 'transparent';
-                    dotBorder = '1px solid #475569';
-                    containerOpacity = 0.4;
+                    containerOpacity = 0.25;
                   }
+                } else if (!isActive) {
+                  // ON/OFF버튼 투명도 조절(Mobile) - PERSON/TECHNOLOGY - OFF 상태 Button 전체 투명도
+                  bgColor = 'transparent';
+                  containerOpacity = 0.3;
                 }
 
                 return (
@@ -738,15 +758,19 @@ const App: React.FC = () => {
                 onClick={() => setShowStories(prev => !prev)}
                 className="w-8 h-8 rounded-full border flex items-center justify-center transition-all"
                 style={{
+                  // ON/OFF버튼 색상 조절(Mobile) - EPISODE - Button 배경색
                   backgroundColor: showStories ? 'rgba(30, 41, 59, 0.5)' : 'transparent',
-                  borderColor: showStories ? '#a855f7' : '#475569',
-                  opacity: showStories ? 1 : 0.5
+                  // ON/OFF버튼 색상 조절(Mobile) - EPISODE - Button 테두리색 (항상 보라색)
+                  borderColor: '#a855f7',
+                  // ON/OFF버튼 투명도 조절(Mobile) - EPISODE - Button 전체 투명도
+                  opacity: showStories ? 1 : 0.3
                 }}
                 aria-label="Toggle Episodes"
               >
                 <div
                   className="w-2.5 h-2.5 rounded-full"
-                  style={{ backgroundColor: showStories ? '#a855f7' : '#64748b' }}
+                  // ON/OFF버튼 색상 조절(Mobile) - EPISODE - Dot 색상 (항상 보라색)
+                  style={{ backgroundColor: '#a855f7' }}
                 ></div>
               </button>
             )}
@@ -846,6 +870,7 @@ const App: React.FC = () => {
         {viewMode === 'LINKS' && (
           <LinksView
             data={filteredData}
+            fullData={INITIAL_DATA}
             focusNodeId={focusNodeId}
             onNodeClick={handleNodeSelect}
             onNodeFocus={handleNodeFocusById}

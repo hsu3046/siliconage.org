@@ -168,7 +168,7 @@ const getCompanyToCompanyVerb = (
             return { active: 'funded', passive: 'was funded by' };
         }
         if (sourceCategory === CompanyCategory.PLATFORM_INTERNET) {
-            return { active: 'acquired', passive: 'was acquired by' };
+            return { active: 'backed', passive: 'received backing from' };
         }
         if (sourceCategory === CompanyCategory.ENTERPRISE_SAAS) {
             return { active: 'strategically backed', passive: 'was strategically backed by' };

@@ -593,17 +593,13 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
       e.preventDefault();
       setSelectedSuggestionIndex(prev => Math.max(prev - 1, -1));
     } else if (e.key === 'Enter') {
+      // Only select from visible suggestions list (already filtered by data.nodes)
       if (selectedSuggestionIndex >= 0 && selectedSuggestionIndex < suggestions.length) {
         handleSearchSelect(suggestions[selectedSuggestionIndex]);
       } else if (suggestions.length > 0) {
         handleSearchSelect(suggestions[0]);
-      } else if (searchTerm) {
-        const match = data.nodes.find(n => n.label.toLowerCase() === searchTerm.toLowerCase())
-          || data.nodes.find(n => n.label.toLowerCase().includes(searchTerm.toLowerCase()));
-        if (match) {
-          handleSearchSelect(match);
-        }
       }
+      // Removed: fallback search in full data.nodes - prevents focusing hidden nodes
     } else if (e.key === 'Escape') {
       setIsSearchFocused(false);
       setSelectedSuggestionIndex(-1);

@@ -27,7 +27,16 @@ const getNodeSizeClass = (radius: number) => {
 const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoubleClick, scrollToNodeId, focusNodeId, showStories = true }) => {
   // Search State
   const [searchTerm, setSearchTerm] = useState("");
-  const [suggestions, setSuggestions] = useState<NodeData[]>([]);
+  // Suggestion can be a node or a story match
+  interface SearchSuggestion {
+    type: 'node' | 'story';
+    node?: NodeData;
+    storyText?: string;
+    storyYear?: number;
+    label: string;
+    category?: Category;
+  }
+  const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([]);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -181,48 +190,78 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
       // Don't show node suggestions for year search
       setSuggestions([]);
     } else if (term.length > 0) {
-      // Category priority: COMPANY=0, TECHNOLOGY=1, PERSON=2
+      const searchResults: SearchSuggestion[] = [];
+
+      // 1. Search nodes
       const categoryOrder = { [Category.COMPANY]: 0, [Category.TECHNOLOGY]: 1, [Category.PERSON]: 2 };
-      const matches = data.nodes
+      const nodeMatches = data.nodes
         .filter(n => n.label.toLowerCase().includes(term.toLowerCase()))
         .sort((a, b) => {
           const catDiff = (categoryOrder[a.category] ?? 3) - (categoryOrder[b.category] ?? 3);
           if (catDiff !== 0) return catDiff;
           return a.label.localeCompare(b.label);
         })
-        .slice(0, 5);
-      setSuggestions(matches);
+        .slice(0, 3)
+        .map(n => ({ type: 'node' as const, node: n, label: n.label, category: n.category }));
+
+      searchResults.push(...nodeMatches);
+
+      // 2. Search story text in links
+      const storyMatches = INITIAL_DATA.links
+        .filter(link => link.story && link.startYear && link.story.toLowerCase().includes(term.toLowerCase()))
+        .slice(0, 2)
+        .map(link => ({
+          type: 'story' as const,
+          storyText: link.story!,
+          storyYear: link.startYear!,
+          label: link.story!.length > 40 ? link.story!.substring(0, 40) + '...' : link.story!
+        }));
+
+      searchResults.push(...storyMatches);
+
+      setSuggestions(searchResults.slice(0, 5));
       setIsSearchFocused(true);
     } else {
       setSuggestions([]);
     }
   };
 
-  const handleSearchSelect = (node: NodeData) => {
+  const handleSearchSelect = (suggestion: SearchSuggestion) => {
     if (blurTimeoutRef.current) {
       clearTimeout(blurTimeoutRef.current);
       blurTimeoutRef.current = null;
     }
-    setSearchTerm(node.label);
+    setSearchTerm(suggestion.label);
     setSuggestions([]);
     setIsSearchFocused(false);
     setSelectedIndex(-1);
     searchInputRef.current?.blur();
 
-    // Scroll to the selected node
-    setTimeout(() => {
-      const element = document.getElementById(`timeline-node-${node.id}`);
-      if (element) {
-        // Use scrollIntoView with block: 'center' for reliable cross-browser support
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-        // Add highlight effect
-        element.classList.add('ring-2', 'ring-cyan-400', 'ring-offset-2', 'ring-offset-slate-900');
-        setTimeout(() => {
-          element.classList.remove('ring-2', 'ring-cyan-400', 'ring-offset-2', 'ring-offset-slate-900');
-        }, 2000);
-      }
-    }, 100);
+    if (suggestion.type === 'node' && suggestion.node) {
+      // Scroll to the selected node
+      setTimeout(() => {
+        const element = document.getElementById(`timeline-node-${suggestion.node!.id}`);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          element.classList.add('ring-2', 'ring-cyan-400', 'ring-offset-2', 'ring-offset-slate-900');
+          setTimeout(() => {
+            element.classList.remove('ring-2', 'ring-cyan-400', 'ring-offset-2', 'ring-offset-slate-900');
+          }, 2000);
+        }
+      }, 100);
+    } else if (suggestion.type === 'story' && suggestion.storyYear) {
+      // Scroll to the year section containing the story
+      setTimeout(() => {
+        const yearElement = document.getElementById(`timeline-year-${suggestion.storyYear}`);
+        if (yearElement) {
+          yearElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          yearElement.classList.add('ring-2', 'ring-purple-400', 'ring-offset-2', 'ring-offset-slate-900');
+          setTimeout(() => {
+            yearElement.classList.remove('ring-2', 'ring-purple-400', 'ring-offset-2', 'ring-offset-slate-900');
+          }, 2000);
+        }
+      }, 100);
+    }
   };
 
   const handleSearchFocus = () => {
@@ -461,12 +500,15 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
         - Arrow body: rect x="35" width="30" height="280" 
         - Arrow head: polygon points controls the triangle shape
       */}
-      <div className="md:hidden fixed top-[80px] inset-x-0 bottom-0 flex items-center justify-center pointer-events-none z-0 opacity-10">
-        <svg className="w-48 h-[70vh]" viewBox="0 0 100 400" fill="none">
-          {/* Thick arrow body - adjust x, width, height for size */}
-          <rect x="35" y="0" width="30" height="280" fill="currentColor" className="text-slate-500" />
-          {/* Triangle arrow head - adjust points for shape */}
-          <polygon points="50,400 0,260 100,260" fill="currentColor" className="text-slate-500" />
+      {/* Mobile Background Arrow (배경 화살표 디자인 수정) */}
+      {/* Position: top-[260px] = below era header, bottom-[40px] = near bottom 네비영역 위 */}
+      {/* Width: w-[60vw] = 60% of screen width (넓게) */}
+      <div className="md:hidden fixed top-[260px] inset-x-0 bottom-[40px] flex items-center justify-center pointer-events-none z-0 opacity-20">
+        <svg className="w-[60vw] h-full" viewBox="0 0 100 400" fill="none" preserveAspectRatio="none">
+          {/* Body: 넓은 화살표 몸통 */}
+          <rect x="25" y="0" width="50" height="320" fill="currentColor" className="text-indigo-900" />
+          {/* Head: 넓은 화살표 머리 */}
+          <polygon points="50,400 0,320 100,320" fill="currentColor" className="text-indigo-900" />
         </svg>
       </div>
 
@@ -498,17 +540,25 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
               {isSearchFocused && suggestions.length > 0 && (
                 <div className="absolute mt-1 w-full bg-slate-900/95 border border-slate-600 rounded-md shadow-2xl backdrop-blur-md overflow-hidden z-50">
                   <ul className="max-h-60 overflow-auto custom-scrollbar">
-                    {suggestions.map((node, index) => (
+                    {suggestions.map((suggestion, index) => (
                       <li
-                        key={node.id}
+                        key={suggestion.type === 'node' ? suggestion.node?.id : `story-${index}`}
                         className={`cursor-pointer select-none relative py-2 pl-3 pr-9 text-slate-300 transition-colors border-b border-slate-800/50 last:border-0 ${index === selectedIndex ? 'bg-slate-700' : 'hover:bg-slate-800'
                           }`}
-                        onClick={() => handleSearchSelect(node)}
-                        onDoubleClick={() => onNodeDoubleClick?.(node)}
+                        onClick={() => handleSearchSelect(suggestion)}
+                        onDoubleClick={() => suggestion.type === 'node' && suggestion.node && onNodeDoubleClick?.(suggestion.node)}
                       >
                         <div className="flex items-center">
-                          <span className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: CATEGORY_COLORS[node.category] }} />
-                          <span className="block truncate font-medium text-sm">{node.label}</span>
+                          {suggestion.type === 'node' && suggestion.category && (
+                            <span className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: CATEGORY_COLORS[suggestion.category] }} />
+                          )}
+                          {suggestion.type === 'story' && (
+                            <span className="text-purple-400 mr-2 text-xs">📖</span>
+                          )}
+                          <span className="block truncate font-medium text-sm">{suggestion.label}</span>
+                          {suggestion.type === 'story' && suggestion.storyYear && (
+                            <span className="ml-auto text-[10px] text-purple-400 bg-purple-900/30 px-1.5 py-0.5 rounded">{suggestion.storyYear}</span>
+                          )}
                         </div>
                       </li>
                     ))}
@@ -627,7 +677,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
           <div className="w-3 h-3 rounded-full bg-slate-700 border-2 border-slate-600" />
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 
