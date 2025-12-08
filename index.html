@@ -1,34 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- Primary Meta Tags -->
-    <title>The Silicon Age | Interactive Map of AI History</title>
-    <meta name="title" content="The Silicon Age | Interactive Map of AI History">
-    <meta name="description" content="Explore the evolution of Artificial Intelligence through an interactive map connecting legendary Companies, Visionary People, and Breakthrough Technologies.">
-    <meta name="keywords" content="AI History, Silicon Valley, Artificial Intelligence, Tech History, Neural Networks, Deep Learning, Graph Visualization, Steve Jobs, Sam Altman, Jensen Huang">
-    <meta name="robots" content="index, follow">
-    <meta name="author" content="The Silicon Age Project">
-    <meta name="language" content="English">
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://the-silicon-age.com/" />
-    <meta property="og:title" content="The Silicon Age - Mapping the AI Revolution" />
-    <meta property="og:description" content="An interactive network graph visualizing the connections between the companies, people, and technologies that built the modern AI era." />
-    <meta property="og:image" content="https://the-silicon-age.com/og-image.jpg" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://the-silicon-age.com/" />
-    <meta property="twitter:title" content="The Silicon Age - AI History Map" />
-    <meta property="twitter:description" content="Explore the connections of AI history. From Turing to Transformers." />
-    <meta property="twitter:image" content="https://the-silicon-age.com/og-image.jpg" />
+  <!-- Primary Meta Tags -->
+  <title>The Silicon Age | Interactive Map of AI History</title>
+  <meta name="title" content="The Silicon Age | Interactive Map of AI History">
+  <meta name="description"
+    content="Explore the evolution of Artificial Intelligence through an interactive map connecting legendary Companies, Visionary People, and Breakthrough Technologies.">
+  <meta name="keywords"
+    content="AI History, Silicon Valley, Artificial Intelligence, Tech History, Neural Networks, Deep Learning, Graph Visualization, Steve Jobs, Sam Altman, Jensen Huang">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="The Silicon Age Project">
+  <meta name="language" content="English">
 
-    <!-- Structured Data (JSON-LD) for Google -->
-    <script type="application/ld+json">
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://siliconage.org/" />
+  <meta property="og:title" content="The Silicon Age - Mapping the AI Revolution" />
+  <meta property="og:description"
+    content="An interactive network graph visualizing the connections between the companies, people, and technologies that built the modern AI era." />
+  <meta property="og:image" content="https://siliconage.org/og-image.jpg" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://siliconage.org/" />
+  <meta property="twitter:title" content="The Silicon Age - AI History Map" />
+  <meta property="twitter:description" content="Explore the connections of AI history. From Turing to Transformers." />
+  <meta property="twitter:image" content="https://siliconage.org/og-image.jpg" />
+
+  <!-- Structured Data (JSON-LD) for Google -->
+  <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
@@ -49,34 +53,43 @@
     </script>
 
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-      body {
-        background-color: #0f172a;
-        color: #e2e8f0;
-        font-family: 'Inter', sans-serif;
-        overflow: hidden; /* Prevent body scroll, handle in components */
-      }
-      /* Custom Scrollbar */
-      ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #1e293b; 
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #475569; 
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #64748b; 
-      }
-    </style>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400&family=Poppins:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    body {
+      background-color: #0f172a;
+      color: #e2e8f0;
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+      /* Prevent body scroll, handle in components */
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #1e293b;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #475569;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #64748b;
+    }
+  </style>
 
 </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
-  </body>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+
 </html>

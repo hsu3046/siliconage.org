@@ -1,5 +1,6 @@
 import React from 'react';
 import { X, MousePointer, Sparkles } from 'lucide-react';
+import { useLocale } from '../hooks/useLocale';
 
 interface WelcomeModalProps {
     isOpen: boolean;
@@ -8,6 +9,9 @@ interface WelcomeModalProps {
 }
 
 const WelcomeModal: React.FC<WelcomeModalProps> = ({ isOpen, onClose, onStartTutorial }) => {
+    // i18n hook (must be before any returns)
+    const { t } = useLocale();
+
     if (!isOpen) return null;
 
     const handleDontShowAgain = () => {
@@ -40,10 +44,10 @@ const WelcomeModal: React.FC<WelcomeModalProps> = ({ isOpen, onClose, onStartTut
                     </div>
 
                     <h1 className="text-2xl font-bold text-white mb-2">
-                        Welcome to The Silicon Age
+                        {t('welcome.title')}
                     </h1>
                     <p className="text-slate-400 text-sm">
-                        From Transistors to AI
+                        {t('about.subtitle')}
                     </p>
                 </div>
 
@@ -70,14 +74,14 @@ const WelcomeModal: React.FC<WelcomeModalProps> = ({ isOpen, onClose, onStartTut
                         onClick={handleStartTutorial}
                         className="w-full py-3 px-4 bg-primary hover:bg-primary/90 text-white font-semibold rounded-xl transition-colors"
                     >
-                        Start Interactive Tutorial
+                        {t('welcome.startTutorial')}
                     </button>
 
                     <button
                         onClick={handleDontShowAgain}
                         className="w-full py-3 px-4 bg-slate-700/50 hover:bg-slate-700 text-slate-300 font-medium rounded-xl transition-colors"
                     >
-                        Skip & Explore on My Own
+                        {t('welcome.skip')}
                     </button>
                 </div>
             </div>

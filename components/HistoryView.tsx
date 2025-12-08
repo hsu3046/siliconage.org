@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { GraphData, NodeData, Category, LinkType, LinkData, EventData } from '../types';
 import { CATEGORY_COLORS, ERAS, INITIAL_DATA } from '../constants';
-import { getTechVerb, getPersonVerbs, getNodeSubtitle, Achievement, generateRelationLabel } from '../utils/labels';
+import { getTechVerb, getPersonVerbs, getNodeSubtitle, Achievement } from '../utils/labels';
+import { useLocale } from '../hooks/useLocale';
 
 interface HistoryViewProps {
   data: GraphData;
@@ -25,6 +26,9 @@ const getNodeSizeClass = (radius: number) => {
 };
 
 const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoubleClick, scrollToNodeId, focusNodeId, showStories = true }) => {
+  // i18n hook
+  const { t } = useLocale();
+
   // Search State
   const [searchTerm, setSearchTerm] = useState("");
   // Suggestion can be a node or a story match
@@ -529,7 +533,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
                 ref={searchInputRef}
                 type="text"
                 className="block w-full pl-10 pr-3 py-2 border border-slate-600 rounded-lg leading-5 bg-slate-900 text-slate-300 placeholder-slate-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary sm:text-sm"
-                placeholder="Find & Jump to a Topic..."
+                placeholder={t('historyView.searchPlaceholder')}
                 value={searchTerm}
                 onChange={handleSearchChange}
                 onKeyDown={handleKeyDown}

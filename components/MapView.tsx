@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useMemo } from 'react';
 import * as d3 from 'd3';
 import { GraphData, NodeData, LinkData, Category, LinkType, ArrowHead, LinkIcon, CompanyMode } from '../types';
 import { CATEGORY_COLORS } from '../constants';
+import { useLocale } from '../hooks/useLocale';
 
 interface MapViewProps {
   data: GraphData;
@@ -382,6 +383,9 @@ const getCircleIntersection = (
 };
 
 const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNodeDoubleClick, width, height, focusNodeId, scrollToNodeId, companyMode, featuredNode }) => {
+  // i18n hook
+  const { t } = useLocale();
+
   const svgRef = useRef<SVGSVGElement>(null);
   const clickTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pulseIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -1620,7 +1624,7 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
             <input
               type="text"
               className="block w-full pl-10 pr-3 py-2 border border-slate-600 rounded-lg leading-5 bg-slate-900/90 text-slate-300 placeholder-slate-500 focus:outline-none focus:bg-slate-900 focus:border-primary focus:ring-1 focus:ring-primary sm:text-sm backdrop-blur-md shadow-xl transition-all"
-              placeholder="Find & Focus on a Topic..."
+              placeholder={t('search.placeholder')}
               value={searchTerm}
               onChange={handleSearchChange}
               onKeyDown={handleKeyDown}

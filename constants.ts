@@ -828,7 +828,9 @@ linkContributes('ycombinator', 'airbnb', 'Y Combinator provided seed funding to 
 linkContributes('ycombinator', 'stripe_co', 'Y Combinator provided seed funding to Stripe', 2010);
 linkContributes('ycombinator', 'openai', 'Sam Altman led Y Combinator during the founding of OpenAI', 2015);
 linkContributes('ycombinator', 'twitch', 'Y Combinator funded Justin.tv which became Twitch', 2007);
-linkContributes('a16z', 'facebook', 'a16z invested in Facebook secondary shares', 2010);
+linkContributes('a16z', 'meta', 'a16z invested in Meta secondary shares', 2010);
+linkContributes('a16z', 'airbnb', 'a16z invested in Airbnb, fueling the sharing economy', 2011);
+linkContributes('a16z', 'stripe_co', 'a16z fueled Stripes rise as a payment giant', 2011);
 linkContributes('a16z', 'ethereum', 'a16z invested in the Ethereum ecosystem', 2016);
 linkContributes('a16z', 'openai', 'a16z invested in OpenAI via tender offer', 2023);
 linkContributes('arthur_rock', 'intel', 'Arthur Rock was the first investor and Chairman of Intel', 1968);
@@ -917,7 +919,6 @@ linkRival('cursor', 'copilot', 'Cursor competes with GitHub Copilot for AI code 
 linkRival('claude', 'chatgpt', 'Claude competes with ChatGPT in LLM performance', 2023);
 linkRival('claude', 'gemini', 'Claude competes with Gemini in LLM performance', 2024);
 linkRival('sora', 'midjourney', 'Sora competes with Midjourney in generative media', 2024);
-linkRival('adobe', 'midjourney', 'Adobe competes with Midjourney in creative tools vs GenAI', 2022);
 linkRival('uber_co', 'tesla', 'Uber competes with Tesla for the future Robotaxi market', 2020);
 linkRival('boston_dynamics', 'tesla', 'Boston Dynamics competes with Tesla (Optimus) in humanoid robotics', 2021);
 linkRival('lidar', 'tesla_autopilot', 'LiDAR tech competes with Tesla\'s vision-only strategy', 2019);
@@ -937,6 +938,25 @@ linkRival('vitalik_buterin', 'jack_ma', 'Vitalik Buterin represents decentraliza
 linkRival('larry_ellison', 'marc_benioff', 'Larry Ellison clashed with Marc Benioff over the vision of cloud computing', 2000);
 
 
+
+// New Techs by Hand
+createTech('postscript', 'PostScript', 1984, TechRole.L2_RUNTIME_PLATFORM, 'A page description language that sparked the desktop publishing revolution.', 'System Software', 'Development & Languages');
+linkCreates('adobe', 'postscript', 'Adobe was founded to develop PostScript, making laser printing possible.', 1984);
+
+createTech('illustrator', 'Adobe Illustrator', 1987, TechRole.L3_END_APPLICATION, 'The industry-standard vector graphics editor.', 'Digital Services & Platforms', 'Digital Platforms');
+linkCreates('adobe', 'illustrator', 'Adobe released Illustrator originally for the Apple Macintosh.', 1987);
+
+createTech('premiere_pro', 'Adobe Premiere Pro', 1991, TechRole.L3_END_APPLICATION, 'A timeline-based video editing software application.', 'Digital Services & Platforms', 'Digital Platforms');
+linkCreates('adobe', 'premiere_pro', 'Adobe launched Premiere, bringing professional video editing to PCs.', 1991);
+
+createTech('pdf', 'PDF', 1993, TechRole.L2_RUNTIME_PLATFORM, 'Portable Document Format. The global standard for digital document exchange.', 'Fundamental Concepts', 'Standards & Protocols');
+linkCreates('adobe', 'pdf', 'Adobe invented PDF to allow documents to be viewed on any system.', 1993);
+linkRival('photoshop', 'midjourney', 'Photoshop competes with Midjourney by offering enterprise-safe image generation.', 2023);
+
+createTech('nano_banana', 'Nano Banana', 2025, TechRole.L3_END_APPLICATION, 'The viral AI image model (Gemini 2.5 Flash) famous for its 3D figurine style and text rendering.', 'AI & Physical Systems', 'Artificial Intelligence');
+linkCreates('deepmind', 'nano_banana', 'Google DeepMind released the Gemini 2.5 Flash Image model under the codename Nano Banana.', 2025);
+linkContributes('gemini', 'nano_banana', 'Nano Banana is built on the multimodal architecture of the Gemini family.', 2025);
+linkRival('nano_banana', 'midjourney', 'Nano Banana challenged Midjourney with superior consistency and character retention.', 2025);
 
 // ==============================================================================
 // 5. HISTORICAL EVENTS (Timeline Markers)

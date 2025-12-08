@@ -3,6 +3,7 @@ import { NodeData, AIResponse, GraphData, Category } from '../types';
 import { CATEGORY_COLORS, CATEGORY_LABELS } from '../constants';
 import { fetchNodeDetails } from '../services/geminiService';
 import { getTechVerb, getPersonVerbs, getConnectionLabel as getConnectionLabelFromLabels } from '../utils/labels';
+import { useLocale } from '../hooks/useLocale';
 
 interface DetailPanelProps {
   node: NodeData | null;
@@ -325,6 +326,9 @@ const getConnectionLabel = (
 
 
 const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus, onNodeSelect }) => {
+  // i18n hook
+  const { t } = useLocale();
+
   const [aiData, setAiData] = useState<AIResponse | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -695,7 +699,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
                 </svg>
                 <h3 className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
-                  AI Deep Dive
+                  {t('detailPanel.aiDeepDive')}
                 </h3>
               </div>
             </div>
@@ -743,7 +747,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
         {/* 2. Connections Section (renamed from Relationships) */}
         {connections && connections.length > 0 && (
           <div>
-            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Connections</h3>
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">{t('detailPanel.connections')}</h3>
             <div className="grid grid-cols-1 gap-2">
               {connections.map((conn, idx) => {
                 // Get appropriate icon for connection type
@@ -814,7 +818,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
         {/* 3. Learn More Section (External Links) */}
         <div>
           <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">
-            Learn More <span className="font-normal text-[10px]">(External Links)</span>
+            {t('detailPanel.learnMore')} <span className="font-normal text-[10px]">{t('detailPanel.externalLinksLabel')}</span>
           </h3>
           <div className="flex flex-wrap gap-3">
             {externalLinks.map((link, idx) => (
@@ -834,7 +838,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
 
         {/* Disclaimer */}
         <p className="text-[10px] text-slate-500 leading-relaxed mt-6 pt-4 border-t border-slate-700/50">
-          The content and links provided on this site are aggregated through AI algorithms based on objective technical keywords, rather than personal curation or subjective selection.
+          {t('detailPanel.disclaimer')}
         </p>
 
       </div>

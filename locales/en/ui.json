@@ -1,0 +1,139 @@
+{
+    "nav": {
+        "map": "Map",
+        "links": "Links",
+        "history": "History",
+        "cards": "Cards"
+    },
+    "search": {
+        "placeholder": "Search companies, technologies, people...",
+        "noResults": "No results found"
+    },
+    "categories": {
+        "company": "Company",
+        "person": "Person",
+        "technology": "Technology"
+    },
+    "companyCategories": {
+        "PLATFORM_INTERNET": "Platform & Internet",
+        "ENTERPRISE_SAAS": "Enterprise & SaaS",
+        "AI_INNOVATION": "AI & Innovation",
+        "HARDWARE_ROBOTICS": "Hardware & Robotics",
+        "SEMICONDUCTOR": "Semiconductor",
+        "MEDIA_CONTENT": "Media & Content",
+        "INFRA_TELECOM": "Infra & Telecom",
+        "VENTURE_CAPITAL": "Venture Capital",
+        "ACADEMY_LAB": "Academy & Lab",
+        "MANUFACTURING_SUPPLY": "Manufacturing & Supply",
+        "CONSUMER_DEVICE": "Consumer Device"
+    },
+    "linkTypes": {
+        "POWERS": "Powers",
+        "CREATES": "Creates",
+        "CONTRIBUTES": "Contributes",
+        "ENGAGES": "Engages"
+    },
+    "toggles": {
+        "episode": "EPISODE"
+    },
+    "about": {
+        "title": "The Silicon Age",
+        "subtitle": "From Transistors to AI",
+        "version": "v1.4.0",
+        "aboutProject": "About Project",
+        "description": "The Silicon Age is an interactive visualization project designed to map the complex evolution of computing and artificial intelligence. By connecting the dots between legendary companies, visionary pioneers, and breakthrough technologies, we aim to provide a holistic view of how we arrived at the modern AI era.",
+        "description2": "Unlike linear timelines, this 4-dimensional map (Graph, Time, List, Space) reveals the hidden influence and structural relationships that define the industry.",
+        "buyMeACoffee": "Buy me a coffee",
+        "disclaimer": "Disclaimer & Terms",
+        "disclaimerAI": "AI-Generated Content:",
+        "disclaimerAIText": "The descriptions, summaries, and key facts presented on this website are generated using large language models (LLMs) to ensure objectivity and coverage. While we strive for accuracy, artificial intelligence can occasionally produce hallucinations or inaccuracies.",
+        "disclaimerNoWarranty": "No Warranty:",
+        "disclaimerNoWarrantyText": "This website is provided \"as is\" without any representations or warranties, express or implied.",
+        "disclaimerLiability": "Limitation of Liability:",
+        "disclaimerLiabilityText": "In no event shall the creators be liable for any errors or omissions in the content.",
+        "feedback": "Feedback & Bug Report",
+        "feedbackEmail": "Your Email",
+        "feedbackMessage": "Message / Correction",
+        "feedbackPlaceholder": "Found a bug? Information correction? Feature request?",
+        "feedbackSend": "Send Feedback",
+        "feedbackSending": "Sending...",
+        "feedbackSuccess": "Message Sent!",
+        "feedbackSuccessDesc": "Thank you for your feedback. We will review it shortly.",
+        "feedbackError": "Something went wrong. Please try again later.",
+        "changelog": "ChangeLog",
+        "copyright": "© 2025 The Silicon Age Project"
+    },
+    "detailPanel": {
+        "connections": "Connections",
+        "aiDeepDive": "AI Deep Dive",
+        "selectNode": "Select a node to analyze its history.",
+        "enterFocusMode": "Enter Focus Mode",
+        "externalLinks": {
+            "wikipedia": "Wikipedia",
+            "youtube": "YouTube",
+            "webSearch": "Web Search",
+            "paper": "Paper",
+            "books": "Books"
+        },
+        "sectionHeaders": {
+            "company": {
+                "summary": "Corporate Profile",
+                "significance": "Market Dominance",
+                "keyFacts": "Key Products & Services"
+            },
+            "person": {
+                "summary": "Biography",
+                "significance": "Career & Legacy",
+                "keyFacts": "Major Achievements"
+            },
+            "technology": {
+                "summary": "Core Concept",
+                "significance": "Why it Matters",
+                "keyFacts": "Technical Specs"
+            }
+        },
+        "notPubliclyTraded": "Not Publicly Traded",
+        "learnMore": "Learn More",
+        "externalLinksLabel": "(External Links)",
+        "disclaimer": "The content and links provided on this site are aggregated through AI algorithms based on objective technical keywords, rather than personal curation or subjective selection."
+    },
+    "historyView": {
+        "showStories": "Show Stories",
+        "hideStories": "Hide Stories",
+        "searchPlaceholder": "Search year, name, or story..."
+    },
+    "linksView": {
+        "noConnectionsTitle": "No Connections",
+        "noConnectionsDesc": "This node has no visible connections.",
+        "exploreConnections": "Explore Connections",
+        "selectNodePrompt": "Search for a topic to see how it connects."
+    },
+    "cardView": {
+        "searchPlaceholder": "Search cards..."
+    },
+    "focus": {
+        "focusOn": "Focus on",
+        "exitFocus": "Exit Focus",
+        "focusMode": "Focus Mode"
+    },
+    "common": {
+        "close": "Close",
+        "loading": "Loading...",
+        "enterFocusMode": "Enter Focus Mode",
+        "exitFocusMode": "Exit Focus Mode"
+    },
+    "welcome": {
+        "title": "Welcome to The Silicon Age",
+        "description": "Explore the interconnected history of technology",
+        "getStarted": "Get Started",
+        "startTutorial": "Start Interactive Tutorial",
+        "skip": "Skip & Explore on My Own",
+        "dontShowAgain": "Don't show again"
+    },
+    "tutorial": {
+        "next": "Next",
+        "previous": "Previous",
+        "finish": "Finish",
+        "skip": "Skip"
+    }
+}

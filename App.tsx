@@ -3,8 +3,9 @@ import { Logo } from './components/Logo';
 import { INITIAL_DATA, CATEGORY_COLORS } from './constants';
 import { NodeData, Category, GraphData, LinkType, CompanyMode } from './types';
 import { calculateSiliconRank } from './utils/ranking';
+import { useLocale } from './hooks/useLocale';
 
-// --- Delete LAZY LOADING FOR PERFORMANCE (Code Splitting) ---
+// Static Imports (non-lazy for performance)
 import MapView from './components/MapView';
 import DetailPanel from './components/DetailPanel';
 import AboutModal from './components/AboutModal';
@@ -14,6 +15,7 @@ import CardView from './components/CardView';
 import LinksView from './components/LinksView';
 import WelcomeModal from './components/WelcomeModal';
 import Tutorial from './components/Tutorial';
+import SEOHead from './components/SEOHead';
 
 // Debug mode - lazy loaded to exclude from production bundle
 const DebugDashboard = lazy(() => import('./components/debug/DebugDashboard'));
@@ -73,6 +75,9 @@ const App: React.FC = () => {
     return !localStorage.getItem('siliconage-welcome-seen');
   });
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
+
+  // i18n hook - handles locale initialization and provides t() function
+  const { t } = useLocale();
 
   // Featured Node of the Day - deterministic based on date
   const featuredNode = useMemo(() => {
@@ -439,6 +444,8 @@ const App: React.FC = () => {
 
   return (
     <div className="flex flex-col h-screen w-screen bg-background text-white overflow-hidden" style={{ width: '100vw', height: '100vh', backgroundColor: '#0f172a', overflow: 'hidden' }}>
+      {/* SEO: Dynamic meta tags based on selected node */}
+      <SEOHead node={selectedNode} />
 
       <header className="h-16 border-b border-slate-700 bg-surface flex items-center justify-between px-4 sm:px-6 z-10 shrink-0 relative">
         <button
@@ -451,7 +458,7 @@ const App: React.FC = () => {
             <h1 className="font-bold tracking-tight text-slate-100 text-base sm:text-lg md:text-xl truncate group-hover:text-primary transition-colors">
               The Silicon Age
             </h1>
-            <span className="block text-xs text-slate-500 -mt-0.5">From Transistors to AI</span>
+            <span className="block text-xs text-slate-500 -mt-0.5">{t('about.subtitle')}</span>
           </div>
         </button>
 
@@ -463,7 +470,7 @@ const App: React.FC = () => {
               <div className="relative flex items-center justify-center shrink-0">
                 {/* Centered Node Text */}
                 <div className="flex flex-col items-center">
-                  <span className="text-[10px] text-slate-500 uppercase tracking-wider">Focus on</span>
+                  <span className="text-[10px] text-slate-500 uppercase tracking-wider">{t('focus.focusOn')}</span>
                   <span className="text-xl font-bold" style={{ color: nodeColor }}>
                     {focusNode?.label}
                   </span>
@@ -542,7 +549,7 @@ const App: React.FC = () => {
                       ? (hoverGroupActive === 'CATEGORY' ? "max-w-xs opacity-100" : "max-w-0 overflow-hidden opacity-0")
                       : "max-w-xs opacity-100"
                       }`}>
-                      {cat}
+                      {t(`categories.${cat.toLowerCase()}`)}
                     </span>
                   </button>
                 );
@@ -574,7 +581,7 @@ const App: React.FC = () => {
                       opacity: showStories ? 1 : 0.7
                     }}
                   />
-                  <span className="max-w-xs opacity-100 whitespace-nowrap">EPISODE</span>
+                  <span className="max-w-xs opacity-100 whitespace-nowrap">{t('toggles.episode')}</span>
                 </button>
               )}
             </div>
@@ -603,10 +610,10 @@ const App: React.FC = () => {
                   // Human-readable link type labels
                   const getLinkTypeLabel = () => {
                     switch (type) {
-                      case LinkType.POWERS: return "POWERS";
-                      case LinkType.CREATES: return "CREATES";
-                      case LinkType.CONTRIBUTES: return "CONTRIBUTES";
-                      case LinkType.ENGAGES: return "ENGAGES";
+                      case LinkType.POWERS: return t('linkTypes.POWERS');
+                      case LinkType.CREATES: return t('linkTypes.CREATES');
+                      case LinkType.CONTRIBUTES: return t('linkTypes.CONTRIBUTES');
+                      case LinkType.ENGAGES: return t('linkTypes.ENGAGES');
                       default: return type;
                     }
                   };
@@ -650,13 +657,13 @@ const App: React.FC = () => {
           {/* Featured Node of the Day - REMOVED for PC */}
 
           <div className="flex bg-slate-900 p-1 rounded-lg border border-slate-700">
-            <button onClick={() => setViewMode('MAP')} className={`px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all ${viewMode === 'MAP' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-white'}`}>Map</button>
-            <button onClick={() => setViewMode('TIMELINE')} className={`px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all ${viewMode === 'TIMELINE' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-white'}`}>History</button>
-            <button onClick={() => setViewMode('CARD')} className={`px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all ${viewMode === 'CARD' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-white'}`}>Card</button>
+            <button onClick={() => setViewMode('MAP')} className={`px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all ${viewMode === 'MAP' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-white'}`}>{t('nav.map')}</button>
+            <button onClick={() => setViewMode('TIMELINE')} className={`px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all ${viewMode === 'TIMELINE' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-white'}`}>{t('nav.history')}</button>
+            <button onClick={() => setViewMode('CARD')} className={`px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all ${viewMode === 'CARD' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-white'}`}>{t('nav.cards')}</button>
             <button
               onClick={() => setViewMode('LINKS')}
               className={`px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all ${viewMode === 'LINKS' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-white'}`}
-            >Links</button>
+            >{t('nav.links')}</button>
           </div>
         </div>
       </header>
@@ -671,7 +678,7 @@ const App: React.FC = () => {
               {/* Centered Focus Text - flex-1 with center using the container width */}
               <div className="flex-1 flex justify-center">
                 <div className="flex flex-col items-center">
-                  <span className="text-[10px] text-slate-500 uppercase tracking-wider">Focus on</span>
+                  <span className="text-[10px] text-slate-500 uppercase tracking-wider">{t('focus.focusOn')}</span>
                   <span className="text-lg font-bold" style={{ color: nodeColor }}>
                     {focusNode?.label}
                   </span>

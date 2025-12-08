@@ -1,7 +1,8 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { GraphData, NodeData, Category } from '../types';
 import { CATEGORY_COLORS, CATEGORY_LABELS } from '../constants';
-import { getNodeSubtitle, getCompanySubtitle } from '../utils/labels';
+import { getNodeSubtitle } from '../utils/labels';
+import { useLocale } from '../hooks/useLocale';
 
 interface CardViewProps {
   data: GraphData;
@@ -27,6 +28,9 @@ const toTitleCase = (str: string) => {
 };
 
 const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagClick, onNodeDoubleClick, scrollToNodeId, focusNodeId }) => {
+  // i18n hook
+  const { t } = useLocale();
+
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('ALPHABETICAL');
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -219,7 +223,7 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
               <input
                 type="text"
                 className="block w-full pl-10 pr-3 py-2 border border-slate-600 rounded-lg leading-5 bg-slate-900 text-slate-100 placeholder-slate-400 focus:outline-none focus:bg-slate-800 focus:border-primary focus:ring-1 focus:ring-primary sm:text-sm transition-colors"
-                placeholder="Search by name, category, role, or tech..."
+                placeholder={t('search.placeholder')}
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);

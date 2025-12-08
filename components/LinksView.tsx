@@ -1,9 +1,10 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { NodeData, LinkData, GraphData, LinkType, Category } from '../types';
 import { CATEGORY_COLORS, CATEGORY_LABELS } from '../constants';
-import { getPersonVerbs, getTechVerb, getNodeSubtitle, getConnectionLabel } from '../utils/labels';
+import { getPersonVerbs, getTechVerb, getConnectionLabel } from '../utils/labels';
 import { getLinkIconConfig, getLinkIcon } from '../utils/icons';
 import { ChevronDown, ChevronRight } from 'lucide-react';
+import { useLocale } from '../hooks/useLocale';
 
 interface LinksViewProps {
     data: GraphData;
@@ -104,6 +105,9 @@ const getConnectionDescription = (
 };
 
 export const LinksView: React.FC<LinksViewProps> = ({ data, fullData, focusNodeId, onNodeClick, onNodeFocus }) => {
+    // i18n hook
+    const { t } = useLocale();
+
     // Search State
     const [searchTerm, setSearchTerm] = useState('');
     const [suggestions, setSuggestions] = useState<NodeData[]>([]);
@@ -574,7 +578,7 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, fullData, focusNodeI
                                 ref={searchInputRef}
                                 type="text"
                                 className="block w-full pl-10 pr-3 py-2 border border-slate-600 rounded-lg leading-5 bg-slate-800 text-slate-300 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 sm:text-sm"
-                                placeholder="Search topics..."
+                                placeholder={t('search.placeholder')}
                                 value={searchTerm}
                                 onChange={handleSearchChange}
                                 onKeyDown={handleKeyDown}
@@ -602,8 +606,8 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, fullData, focusNodeI
                 <div className="flex-1 flex items-center justify-center">
                     <div className="text-center p-8">
                         <div className="text-6xl mb-4">🔗</div>
-                        <h2 className="text-xl font-bold text-white mb-2">Explore Connections</h2>
-                        <p className="text-slate-400">Search for a topic to see how it connects.</p>
+                        <h2 className="text-xl font-bold text-white mb-2">{t('linksView.exploreConnections')}</h2>
+                        <p className="text-slate-400">{t('linksView.selectNodePrompt')}</p>
                     </div>
                 </div>
             </div>
