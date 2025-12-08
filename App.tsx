@@ -526,10 +526,8 @@ const App: React.FC = () => {
                     <div
                       className={`w-2 h-2 rounded-full shadow-[0_0_8px_rgba(0,0,0,0.5)] shrink-0`}
                       style={{
-                        // FULL: Solid colored dot
-                        // MINIMAL: Solid colored dot (inner stays visible, outer ring is grayed via border)
-                        // HIDDEN: Grayed out dot
-                        backgroundColor: (cat === Category.COMPANY && companyMode === 'HIDDEN') ? '#64748b' : color,
+                        // All categories: Keep original color, use opacity to show OFF state
+                        backgroundColor: color,
                         opacity: isActive ? 1 : 0.5
                       }}
                     />

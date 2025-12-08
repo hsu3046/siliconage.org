@@ -277,10 +277,10 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
                 onChange={(e) => setSortBy(e.target.value as SortOption)}
                 className="block w-full pl-10 pr-8 py-2 border border-slate-600 rounded-lg bg-slate-900 text-slate-200 focus:outline-none focus:border-primary text-sm appearance-none cursor-pointer"
               >
-                <option value="YEAR_NEWEST">Year: Newest First</option>
-                <option value="YEAR_OLDEST">Year: Oldest First</option>
                 <option value="ALPHABETICAL">Name (A-Z)</option>
                 <option value="CATEGORY">Category</option>
+                <option value="YEAR_NEWEST">Year: Newest First</option>
+                <option value="YEAR_OLDEST">Year: Oldest First</option>
               </select>
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-400">
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -358,39 +358,6 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
                   <p className="text-sm text-slate-400 line-clamp-3 mb-4 flex-1">
                     {node.description}
                   </p>
-
-                  {hashtags.length > 0 && (
-                    <div className="mt-auto pt-3 border-t border-slate-700/50 flex flex-wrap gap-1.5">
-                      {hashtags.slice(0, 5).map((tag, idx) => {
-                        // Get category color for hashtag
-                        const tagNode = fullData.nodes.find(n => n.id === tag?.id);
-                        const getTagColor = () => {
-                          switch (tagNode?.category) {
-                            case Category.COMPANY:
-                              return 'text-red-400 hover:text-red-300';
-                            case Category.PERSON:
-                              return 'text-blue-400 hover:text-blue-300';
-                            case Category.TECHNOLOGY:
-                              return 'text-emerald-400 hover:text-emerald-300';
-                            default:
-                              return 'text-slate-400 hover:text-slate-300';
-                          }
-                        };
-                        return (
-                          <span
-                            key={`${node.id}-tag-${idx}`}
-                            onClick={(e) => tag && handleTagClick(e, tag.id)}
-                            className={`text-[10px] font-mono ${getTagColor()} cursor-pointer transition-colors`}
-                          >
-                            #{tag?.label.replace(/\s+/g, '')}
-                          </span>
-                        );
-                      })}
-                      {hashtags.length > 5 && (
-                        <span className="text-[10px] text-slate-500">+{hashtags.length - 5} more</span>
-                      )}
-                    </div>
-                  )}
                 </div>
               </div>
             );

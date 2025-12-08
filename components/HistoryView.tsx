@@ -470,7 +470,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
         </svg>
       </div>
 
-      <div className="max-w-4xl mx-auto relative">
+      <div className="max-w-7xl mx-auto relative">
         {/* Central Timeline Line - hidden on mobile, starts from first content on desktop */}
         <div className="hidden md:block absolute md:left-1/2 bottom-0 w-px bg-slate-700 transform md:-translate-x-1/2" style={{ top: '120px' }} />
 
