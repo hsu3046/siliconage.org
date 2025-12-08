@@ -30,48 +30,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
-
-  // Long Press State
-  const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const isLongPressRef = useRef<boolean>(false);
-
-  // Long Press Handlers
-  const handleTouchStart = (event: React.TouchEvent, node: NodeData) => {
-    isLongPressRef.current = false;
-    if (longPressTimerRef.current) {
-      clearTimeout(longPressTimerRef.current);
-    }
-
-    longPressTimerRef.current = setTimeout(() => {
-      isLongPressRef.current = true;
-
-      // Haptic feedback
-      try {
-        if ('vibrate' in navigator) {
-          navigator.vibrate(50);
-        }
-      } catch (error) {
-        console.log('Haptic feedback not supported:', error);
-      }
-
-      // Enter Focus Mode
-      onNodeDoubleClick?.(node);
-      longPressTimerRef.current = null;
-    }, 500);
-  };
-
-  const handleTouchEnd = (event: React.TouchEvent) => {
-    if (longPressTimerRef.current) {
-      clearTimeout(longPressTimerRef.current);
-      longPressTimerRef.current = null;
-    }
-
-    if (isLongPressRef.current) {
-      event.preventDefault();
-      event.stopPropagation();
-      isLongPressRef.current = false;
-    }
-  };
+  const containerRef = useRef<HTMLDivElement>(null); // Scroll container ref
 
   // Sort nodes by year
   const sortedNodes = useMemo(() => {
@@ -132,12 +91,16 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
     return { achievements: achievementMap, createdBy: createdByMap };
   }, []); // No dependencies - always use INITIAL_DATA
 
-  // Effect to scroll to specific node
+  // Effect to scroll to specific node - use container scrollTop to avoid iOS page push
   useEffect(() => {
-    if (scrollToNodeId) {
+    if (scrollToNodeId && containerRef.current) {
       const element = document.getElementById(`timeline-node-${scrollToNodeId}`);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const container = containerRef.current;
+        const elementTop = element.offsetTop;
+        const containerHeight = container.clientHeight;
+        const targetScroll = elementTop - containerHeight / 2 + element.clientHeight / 2;
+        container.scrollTo({ top: targetScroll, behavior: 'smooth' });
       }
     }
   }, [scrollToNodeId]);
@@ -174,10 +137,15 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
     setIsSearchFocused(false);
     searchInputRef.current?.blur();
 
+    // Use container scrollTop instead of scrollIntoView to avoid iOS page push
     setTimeout(() => {
       const element = document.getElementById(`timeline-node-${node.id}`);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (element && containerRef.current) {
+        const container = containerRef.current;
+        const elementTop = element.offsetTop;
+        const containerHeight = container.clientHeight;
+        const targetScroll = elementTop - containerHeight / 2 + element.clientHeight / 2;
+        container.scrollTo({ top: targetScroll, behavior: 'smooth' });
       }
     }, 300);
   };
@@ -232,9 +200,6 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
         id={`timeline-node-${node.id}`}
         onClick={() => onNodeClick(node)}
         onDoubleClick={() => onNodeDoubleClick?.(node)}
-        onTouchStart={(e) => handleTouchStart(e, node)}
-        onTouchEnd={handleTouchEnd}
-        onTouchCancel={handleTouchEnd}
         className={`
           cursor-pointer transition-all duration-200 hover:scale-[1.02]
           bg-slate-800/50 border-l-4 border-red-500 rounded-r-lg
@@ -277,9 +242,6 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
         id={`timeline-node-${node.id}`}
         onClick={() => onNodeClick(node)}
         onDoubleClick={() => onNodeDoubleClick?.(node)}
-        onTouchStart={(e) => handleTouchStart(e, node)}
-        onTouchEnd={handleTouchEnd}
-        onTouchCancel={handleTouchEnd}
         className={`
           cursor-pointer transition-all duration-200 hover:opacity-80
           flex items-center gap-2
@@ -346,9 +308,6 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
         id={`timeline-node-${node.id}`}
         onClick={() => onNodeClick(node)}
         onDoubleClick={() => onNodeDoubleClick?.(node)}
-        onTouchStart={(e) => handleTouchStart(e, node)}
-        onTouchEnd={handleTouchEnd}
-        onTouchCancel={handleTouchEnd}
         className={`
           cursor-pointer transition-all duration-200 hover:scale-105
           w-full ${sizeClass}
@@ -391,7 +350,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
   };
 
   return (
-    <div className="w-full h-full overflow-y-auto bg-background p-4 custom-scrollbar scroll-smooth">
+    <div ref={containerRef} className="w-full h-full overflow-y-auto bg-background p-4 custom-scrollbar scroll-smooth">
       <div className="max-w-4xl mx-auto relative">
         {/* Central Timeline Line - hidden on mobile, starts from first content on desktop */}
         <div className="hidden md:block absolute md:left-1/2 bottom-0 w-px bg-slate-700 transform md:-translate-x-1/2" style={{ top: '120px' }} />

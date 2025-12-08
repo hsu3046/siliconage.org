@@ -29,48 +29,7 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
   const [sortBy, setSortBy] = useState<SortOption>('YEAR_NEWEST');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const searchContainerRef = useRef<HTMLDivElement>(null);
-
-  // Long Press State
-  const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const isLongPressRef = useRef<boolean>(false);
-
-  // Long Press Handlers
-  const handleTouchStart = (event: React.TouchEvent, node: NodeData) => {
-    isLongPressRef.current = false;
-    if (longPressTimerRef.current) {
-      clearTimeout(longPressTimerRef.current);
-    }
-
-    longPressTimerRef.current = setTimeout(() => {
-      isLongPressRef.current = true;
-
-      // Haptic feedback
-      try {
-        if ('vibrate' in navigator) {
-          navigator.vibrate(50);
-        }
-      } catch (error) {
-        console.log('Haptic feedback not supported:', error);
-      }
-
-      // Enter Focus Mode
-      onNodeDoubleClick?.(node);
-      longPressTimerRef.current = null;
-    }, 500);
-  };
-
-  const handleTouchEnd = (event: React.TouchEvent) => {
-    if (longPressTimerRef.current) {
-      clearTimeout(longPressTimerRef.current);
-      longPressTimerRef.current = null;
-    }
-
-    if (isLongPressRef.current) {
-      event.preventDefault();
-      event.stopPropagation();
-      isLongPressRef.current = false;
-    }
-  };
+  const containerRef = useRef<HTMLDivElement>(null); // Scroll container ref
 
   // Close suggestions when clicking outside
   useEffect(() => {
@@ -170,12 +129,16 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
     });
   }, [sortedNodes, searchQuery]);
 
-  // Effect for scrolling
+  // Effect for scrolling - use container scrollTop to avoid iOS page push
   useEffect(() => {
-    if (scrollToNodeId) {
+    if (scrollToNodeId && containerRef.current) {
       const element = document.getElementById(`list-node-${scrollToNodeId}`);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const container = containerRef.current;
+        const elementTop = element.offsetTop;
+        const containerHeight = container.clientHeight;
+        const targetScroll = elementTop - containerHeight / 2 + element.clientHeight / 2;
+        container.scrollTo({ top: targetScroll, behavior: 'smooth' });
       }
     }
   }, [scrollToNodeId]);
@@ -281,7 +244,7 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
       )}
 
       {/* Grid Content */}
-      <div className="flex-1 overflow-y-auto p-4 sm:p-6 custom-scrollbar">
+      <div ref={containerRef} className="flex-1 overflow-y-auto p-4 sm:p-6 custom-scrollbar">
         <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {filteredNodes.map(node => {
             // USE fullData for HASHTAGS to show even if filtered out
@@ -305,9 +268,6 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
                 id={`list-node-${node.id}`}
                 onClick={() => onNodeClick(node)}
                 onDoubleClick={() => onNodeDoubleClick?.(node)}
-                onTouchStart={(e) => handleTouchStart(e, node)}
-                onTouchEnd={handleTouchEnd}
-                onTouchCancel={handleTouchEnd}
                 className="group relative bg-surface border border-slate-700 rounded-xl overflow-hidden cursor-pointer hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col select-none"
                 style={{ WebkitUserSelect: 'none', userSelect: 'none', WebkitTouchCallout: 'none' }}
               >

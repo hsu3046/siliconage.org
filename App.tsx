@@ -105,6 +105,9 @@ const App: React.FC = () => {
 
   // --- SCROLL RESET MANAGEMENT ---
   useEffect(() => {
+    // Skip scroll reset in Focus mode - Focus mode manages its own scroll position
+    if (focusNodeId) return;
+
     // Use setTimeout and requestAnimationFrame to ensure scroll happens after browser settles
     const timeoutId = setTimeout(() => {
       requestAnimationFrame(() => {
@@ -118,7 +121,7 @@ const App: React.FC = () => {
     }, 100); // Small delay to let browser stabilize
 
     return () => clearTimeout(timeoutId);
-  }, [viewMode, selectedNode]);
+  }, [viewMode, selectedNode, focusNodeId]);
 
   // --- SYNC VIEW MODE WITH URL ---
   useEffect(() => {
@@ -569,12 +572,12 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      <div className="xl:hidden border-b border-slate-700 bg-surface/50 flex flex-col">
+      <div className="border-b border-slate-700 bg-surface/50 flex flex-col">
         {focusNodeId && (() => {
           const focusNode = INITIAL_DATA.nodes.find(n => n.id === focusNodeId);
           const nodeColor = focusNode ? CATEGORY_COLORS[focusNode.category] : '#22d3ee';
           return (
-            <div className="h-14 flex items-center bg-slate-900/30 border-b border-slate-700/50 relative">
+            <div className="h-14 flex items-center bg-slate-900/30 border-t-2 border-t-red-500/70 border-b-2 border-b-red-500/70 relative">
               {/* Centered Focus Text - flex-1 with center using the container width */}
               <div className="flex-1 flex justify-center">
                 <div className="flex flex-col items-center">
@@ -596,7 +599,7 @@ const App: React.FC = () => {
           );
         })()}
 
-        {/* Mobile category toggles - hidden in Focus mode AND Links View */}
+        {/* Category toggles - hidden in Focus mode AND Links View (Mobile only) */}
         {!focusNodeId && viewMode !== 'LINKS' && (
           <div className="h-14 flex items-center justify-center px-4 overflow-x-auto gap-4 custom-scrollbar">
             <div className="flex items-center gap-3 shrink-0">
@@ -679,6 +682,10 @@ const App: React.FC = () => {
       </div>
 
       <main className="flex-1 relative overflow-hidden">
+        {/* Focus Mode Bottom Indicator */}
+        {focusNodeId && (
+          <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-red-500/50 z-50" />
+        )}
         {viewMode === 'MAP' && (
           <MapView
             data={filteredData}
