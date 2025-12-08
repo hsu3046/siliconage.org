@@ -13,7 +13,7 @@ interface CardViewProps {
   focusNodeId?: string | null;
 }
 
-type SortOption = 'IMPORTANCE' | 'ALPHABETICAL' | 'YEAR_OLDEST' | 'YEAR_NEWEST';
+type SortOption = 'IMPORTANCE' | 'ALPHABETICAL' | 'YEAR_OLDEST' | 'YEAR_NEWEST' | 'CATEGORY';
 
 interface SearchSuggestion {
   label: string;
@@ -27,7 +27,7 @@ const toTitleCase = (str: string) => {
 
 const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagClick, onNodeDoubleClick, scrollToNodeId, focusNodeId }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState<SortOption>('YEAR_NEWEST');
+  const [sortBy, setSortBy] = useState<SortOption>('ALPHABETICAL');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null); // Scroll container ref
@@ -60,6 +60,14 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
       // YEAR (Newest First)
       if (sortBy === 'YEAR_NEWEST') {
         if (a.year !== b.year) return b.year - a.year;
+        return a.label.localeCompare(b.label);
+      }
+
+      // CATEGORY (Company -> Person -> Technology, then A-Z)
+      if (sortBy === 'CATEGORY') {
+        const categoryOrder = { [Category.COMPANY]: 0, [Category.PERSON]: 1, [Category.TECHNOLOGY]: 2 };
+        const catDiff = (categoryOrder[a.category] ?? 3) - (categoryOrder[b.category] ?? 3);
+        if (catDiff !== 0) return catDiff;
         return a.label.localeCompare(b.label);
       }
 
@@ -162,6 +170,26 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
   const handleSuggestionClick = (suggestion: string) => {
     setSearchQuery(suggestion);
     setShowSuggestions(false);
+    setSelectedSuggestionIndex(-1);
+  };
+
+  // Keyboard navigation for autocomplete
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSelectedSuggestionIndex(prev => Math.min(prev + 1, filteredSuggestions.length - 1));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSelectedSuggestionIndex(prev => Math.max(prev - 1, -1));
+    } else if (e.key === 'Enter' && selectedSuggestionIndex >= 0) {
+      e.preventDefault();
+      handleSuggestionClick(filteredSuggestions[selectedSuggestionIndex].label);
+    } else if (e.key === 'Escape') {
+      setShowSuggestions(false);
+      setSelectedSuggestionIndex(-1);
+    }
   };
 
   return (
@@ -187,7 +215,11 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
                   setSearchQuery(e.target.value);
                   setShowSuggestions(true);
                 }}
-                onFocus={() => setShowSuggestions(true)}
+                onFocus={() => {
+                  setShowSuggestions(true);
+                  setSelectedSuggestionIndex(-1);
+                }}
+                onKeyDown={handleSearchKeyDown}
               />
               {/* Autocomplete Dropdown */}
               {showSuggestions && filteredSuggestions.length > 0 && (
@@ -210,7 +242,8 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
                     return (
                       <div
                         key={index}
-                        className={`px-4 py-2 hover:bg-slate-800 cursor-pointer text-sm transition-colors flex items-center justify-between ${textColor}`}
+                        className={`px-4 py-2 cursor-pointer text-sm transition-colors flex items-center justify-between ${textColor} ${index === selectedSuggestionIndex ? 'bg-slate-700' : 'hover:bg-slate-800'
+                          }`}
                         onClick={() => handleSuggestionClick(suggestion.label)}
                       >
                         <span>{suggestion.label}</span>
@@ -237,6 +270,7 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
                 <option value="YEAR_NEWEST">Year: Newest First</option>
                 <option value="YEAR_OLDEST">Year: Oldest First</option>
                 <option value="ALPHABETICAL">Name (A-Z)</option>
+                <option value="CATEGORY">Category</option>
               </select>
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-400">
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>

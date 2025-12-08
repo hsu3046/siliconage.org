@@ -506,42 +506,47 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
   const renderDynamicMetadata = () => {
     switch (node.category) {
       case Category.COMPANY:
-        // Market Cap display (if available)
-        if (node.marketCap?.current || node.marketCap?.peak) {
-          const currentValue = node.marketCap.current || 'N/A';
-          const isNonProfit = currentValue.toLowerCase().includes('non-profit') ||
-            currentValue.toLowerCase().includes('nonprofit') ||
-            currentValue === 'N/A (Gov)' ||
-            currentValue === 'N/A (Intl Org)';
+        // Market Cap display - always show something
+        const currentValue = node.marketCap?.current || '';
+        const peakValue = node.marketCap?.peak;
+        const isNotPublic = !currentValue ||
+          currentValue.toLowerCase().includes('non-profit') ||
+          currentValue.toLowerCase().includes('nonprofit') ||
+          currentValue === 'N/A (Gov)' ||
+          currentValue === 'N/A (Intl Org)' ||
+          currentValue === 'N/A' ||
+          currentValue.toLowerCase().includes('private');
 
-          return (
-            <div className="flex items-center gap-2 mt-2 text-sm">
-              {isNonProfit ? (
-                // Case A: Non-profit - show only this label
-                <span className="text-slate-400 font-medium">Non-profit</span>
-              ) : (
-                // Case B: Standard market cap - clickable with peak
-                <a
-                  href={`https://www.google.com/search?q=${encodeURIComponent(`${node.label} stock price`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center gap-2 cursor-pointer transition-all duration-200"
-                  title="Open Google Finance (External Link)"
-                >
-                  <span className="text-emerald-400 font-medium group-hover:text-emerald-200 transition-colors duration-200">
-                    {currentValue}
+        return (
+          <div className="flex items-center gap-2 mt-2 text-sm">
+            {isNotPublic ? (
+              // Case A: Not publicly traded - no link
+              <span className="text-slate-400 font-medium italic">Not Publicly Traded</span>
+            ) : (
+              // Case B: Standard market cap - clickable to Google Finance
+              <a
+                href={`https://www.google.com/finance/quote/${encodeURIComponent(node.label)}:NASDAQ`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-2 cursor-pointer transition-all duration-200"
+                title="Open Google Finance (External Link)"
+              >
+                <span className="text-emerald-400 font-medium group-hover:text-emerald-200 transition-colors duration-200">
+                  {currentValue}
+                </span>
+                {peakValue && (
+                  <span className="text-slate-500 group-hover:text-slate-400 transition-colors duration-200">
+                    / Peak {peakValue}
                   </span>
-                  {node.marketCap.peak && (
-                    <span className="text-slate-500 group-hover:text-slate-400 transition-colors duration-200">
-                      / Peak {node.marketCap.peak}
-                    </span>
-                  )}
-                </a>
-              )}
-            </div>
-          );
-        }
-        return null;
+                )}
+                {/* External link indicator */}
+                <svg className="w-3 h-3 text-slate-500 group-hover:text-emerald-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+            )}
+          </div>
+        );
 
       case Category.PERSON:
         // Roles + Birth/Death years - VERTICAL LAYOUT

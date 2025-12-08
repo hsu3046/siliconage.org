@@ -148,6 +148,11 @@ export interface LinkData {
   arrow: ArrowHead;
   icon?: LinkIcon;
   strength: number;
+
+  // Optional: Relationship Story & Timeline
+  story?: string;       // e.g., "Jobs returned to Apple and started the turnaround"
+  startYear?: number;   // When the relationship started
+  endYear?: number;     // When it ended (undefined = ongoing)
 }
 
 export interface GraphData {

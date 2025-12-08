@@ -570,19 +570,32 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
       blurTimeoutRef.current = null;
     }
     setIsSearchFocused(true);
+    setSelectedSuggestionIndex(-1);
   };
 
   const handleSearchBlur = () => {
     // Delay to allow click on suggestions
     blurTimeoutRef.current = setTimeout(() => {
       setIsSearchFocused(false);
+      setSelectedSuggestionIndex(-1);
       blurTimeoutRef.current = null;
     }, 250);
   };
 
+  // Keyboard navigation state for search
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      if (suggestions.length > 0) {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSelectedSuggestionIndex(prev => Math.min(prev + 1, suggestions.length - 1));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSelectedSuggestionIndex(prev => Math.max(prev - 1, -1));
+    } else if (e.key === 'Enter') {
+      if (selectedSuggestionIndex >= 0 && selectedSuggestionIndex < suggestions.length) {
+        handleSearchSelect(suggestions[selectedSuggestionIndex]);
+      } else if (suggestions.length > 0) {
         handleSearchSelect(suggestions[0]);
       } else if (searchTerm) {
         const match = data.nodes.find(n => n.label.toLowerCase() === searchTerm.toLowerCase())
@@ -591,6 +604,9 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
           handleSearchSelect(match);
         }
       }
+    } else if (e.key === 'Escape') {
+      setIsSearchFocused(false);
+      setSelectedSuggestionIndex(-1);
     }
   };
 
@@ -1619,10 +1635,11 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
             {isSearchFocused && suggestions.length > 0 && (
               <div className="absolute mt-1 w-full bg-slate-900/95 border border-slate-600 rounded-md shadow-2xl backdrop-blur-md overflow-hidden">
                 <ul className="max-h-60 overflow-auto custom-scrollbar">
-                  {suggestions.map((node) => (
+                  {suggestions.map((node, index) => (
                     <li
                       key={node.id}
-                      className="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-slate-800 text-slate-300 transition-colors border-b border-slate-800/50 last:border-0"
+                      className={`cursor-pointer select-none relative py-2 pl-3 pr-9 text-slate-300 transition-colors border-b border-slate-800/50 last:border-0 ${index === selectedSuggestionIndex ? 'bg-slate-700' : 'hover:bg-slate-800'
+                        }`}
                       onClick={() => handleSearchSelect(node)}
                     >
                       <div className="flex items-center">

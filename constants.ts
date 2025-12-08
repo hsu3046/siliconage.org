@@ -78,27 +78,93 @@ const createTech = (
 };
 
 // Link helper functions with ArrowHead and optional LinkIcon
-const linkPowers = (source: string, target: string, strength: number = 1.0, icon: LinkIcon = LinkIcon.POWERS) => {
-  links.push({ source, target, type: LinkType.POWERS, arrow: ArrowHead.SINGLE, icon, strength });
+// All functions support optional: story, startYear, endYear
+
+const linkPowers = (
+  source: string,
+  target: string,
+  story?: string,
+  startYear?: number,
+  endYear?: number
+) => {
+  links.push({
+    source, target,
+    type: LinkType.POWERS,
+    arrow: ArrowHead.SINGLE,
+    icon: LinkIcon.POWERS,
+    strength: 1.0,
+    story, startYear, endYear
+  });
 };
 
-const linkCreates = (source: string, target: string, strength: number = 0.9, icon: LinkIcon = LinkIcon.SPARK) => {
-  links.push({ source, target, type: LinkType.CREATES, arrow: ArrowHead.SINGLE, icon, strength });
+const linkCreates = (
+  source: string,
+  target: string,
+  story?: string,
+  startYear?: number,
+  endYear?: number
+) => {
+  links.push({
+    source, target,
+    type: LinkType.CREATES,
+    arrow: ArrowHead.SINGLE,
+    icon: LinkIcon.SPARK,
+    strength: 0.9,
+    story, startYear, endYear
+  });
 };
 
-const linkContributes = (source: string, target: string, strength: number = 0.5) => {
-  links.push({ source, target, type: LinkType.CONTRIBUTES, arrow: ArrowHead.SINGLE, strength });
+const linkContributes = (
+  source: string,
+  target: string,
+  story?: string,
+  startYear?: number,
+  endYear?: number
+) => {
+  links.push({
+    source, target,
+    type: LinkType.CONTRIBUTES,
+    arrow: ArrowHead.SINGLE,
+    strength: 0.5,
+    story, startYear, endYear
+  });
 };
 
 // ENGAGES 관계 함수 (경쟁/협력)
 // linkRival: 경쟁 관계 (예: Apple ↔ Samsung)
-const linkRival = (source: string, target: string, strength: number = 0.8) => {
-  links.push({ source, target, type: LinkType.ENGAGES, arrow: ArrowHead.DOUBLE, icon: LinkIcon.RIVALRY, strength });
+const linkRival = (
+  source: string,
+  target: string,
+  story?: string,
+  startYear?: number,
+  endYear?: number
+) => {
+  links.push({
+    source, target,
+    type: LinkType.ENGAGES,
+    arrow: ArrowHead.DOUBLE,
+    icon: LinkIcon.RIVALRY,
+    strength: 0.8,
+    story, startYear, endYear
+  });
 };
 
 // linkPartner: 협력/파트너 관계 (예: Microsoft ↔ OpenAI)
-const linkPartner = (source: string, target: string, strength: number = 0.8) => {
-  links.push({ source, target, type: LinkType.ENGAGES, arrow: ArrowHead.DOUBLE, icon: LinkIcon.HEART, strength });
+const linkPartner = (
+  source: string,
+  target: string,
+  story?: string,
+  startYear?: number,
+  endYear?: number
+) => {
+  links.push({
+    source, target,
+    type: LinkType.ENGAGES,
+    arrow: ArrowHead.DOUBLE,
+    icon: LinkIcon.HEART,
+    strength: 0.8,
+    story, startYear, endYear
+  });
 };
 
 
@@ -547,7 +613,6 @@ linkCreates('stripe_co', 'stripe');
 linkCreates('bytedance', 'tiktok');
 linkCreates('tencent', 'wechat');
 linkCreates('amazon', 'amazon_com');
-linkCreates('fugaku', 'covid_simulation');
 
 // ------------------------------------------------------------------------------
 // LAYER 4: INFRASTRUCTURE & DEPENDENCIES (Tech -> Tech/Company)
@@ -601,7 +666,6 @@ linkPowers('aws_cloud', 'docker');
 linkPowers('aws_cloud', 'netflix');
 linkPowers('aws_cloud', 'zoom');
 linkPowers('aws_cloud', 'slack');
-linkPowers('aws_cloud', 'dropbox');
 linkPowers('aws_cloud', 'uber_app');
 linkPowers('aws_cloud', 'stripe');
 linkPowers('aws_cloud', 'copilot');
@@ -655,8 +719,6 @@ linkPowers('li_ion', 'dji_phantom');
 linkPowers('gps', 'uber_app');
 linkPowers('gps', 'dji_phantom');
 linkPowers('gps', 'tesla_autopilot');
-linkPowers('oled', 'iphone');
-linkPowers('oled', 'vision_pro');
 linkPowers('bluetooth', 'iphone');
 linkPowers('bluetooth', 'model_s');
 linkPowers('mp3', 'walkman');
@@ -692,7 +754,6 @@ linkPowers('nvidia_h100', 'openai');
 linkPowers('nvidia_h100', 'meta');
 linkPowers('nvidia_h100', 'tesla');
 linkPowers('nvidia_h100', 'microsoft');
-linkPowers('ai_robotics', 'boston_dynamics');
 
 // ------------------------------------------------------------------------------
 // LAYER 6: CAPITAL, LINEAGE & INFLUENCE (VC/People -> Company/People)
@@ -715,8 +776,6 @@ linkContributes('xerox_parc', 'microsoft');
 linkContributes('mosaic', 'netscape_co');
 linkContributes('mosaic', 'google_chrome');
 linkContributes('toshiba_t1100', 'macintosh');
-linkContributes('toshiba_t1100', 'thinkpad');
-linkContributes('raspberry_pi', 'steam_deck');
 linkContributes('spacex_falcon9', 'starship');
 
 // Executive Leadership & Acquisition
@@ -725,7 +784,6 @@ linkContributes('satya_nadella', 'microsoft');
 linkContributes('satya_nadella', 'openai');
 linkContributes('sundar_pichai', 'google');
 linkContributes('lisa_su', 'amd');
-linkContributes('sheryl_sandberg', 'meta');
 linkContributes('roelof_botha', 'sequoia');
 linkContributes('elon_musk', 'twitter');
 linkContributes('microsoft', 'skype');
@@ -749,13 +807,10 @@ linkContributes('sequoia', 'nvidia');
 linkContributes('sequoia', 'paypal_co');
 linkContributes('sequoia', 'youtube');
 linkContributes('sequoia', 'stripe_co');
-linkContributes('sequoia', 'whatsapp');
 linkContributes('ycombinator', 'airbnb');
 linkContributes('ycombinator', 'stripe_co');
 linkContributes('ycombinator', 'openai');
-linkContributes('ycombinator', 'twitch');
 linkContributes('a16z', 'facebook');
-linkContributes('a16z', 'coinbase');
 linkContributes('a16z', 'ethereum');
 linkContributes('a16z', 'openai');
 linkContributes('arthur_rock', 'intel');
@@ -765,7 +820,6 @@ linkContributes('masayoshi_son', 'alibaba');
 linkContributes('softbank', 'alibaba');
 linkContributes('softbank', 'arm_ltd');
 linkContributes('softbank', 'uber_co');
-linkContributes('softbank', 'wework');
 linkContributes('softbank', 'boston_dynamics');
 linkContributes('amazon', 'anthropic');
 linkContributes('google', 'anthropic');
@@ -781,7 +835,6 @@ linkContributes('paypal_co', 'tesla');
 linkContributes('paypal_co', 'linkedin');
 linkContributes('paypal_co', 'youtube');
 linkContributes('paypal_co', 'sequoia');
-linkContributes('paypal_co', 'palantir');
 linkContributes('paypal_co', 'reid_hoffman');
 linkContributes('oracle', 'salesforce_co');
 
@@ -789,13 +842,13 @@ linkContributes('oracle', 'salesforce_co');
 // LAYER 7: MARKET DYNAMICS (Rivalry & Partnership)
 // ------------------------------------------------------------------------------
 // Partnerships (Heart)
-linkPartner('microsoft', 'intel', 0.9);
-linkPartner('microsoft', 'openai', 1.0);
-linkPartner('apple', 'tsmc', 1.0);
+linkPartner('microsoft', 'intel');
+linkPartner('microsoft', 'openai');
+linkPartner('apple', 'tsmc');
 linkPartner('apple', 'arm_ltd');
 linkPartner('salesforce_co', 'slack');
 linkPartner('wikipedia', 'google_search');
-linkPartner('att', 'cisco', 0.7);
+linkPartner('att', 'cisco');
 linkPartner('yann_lecun', 'geoffrey_hinton');
 
 // Rivalries (Sword) - Tech Giants
@@ -847,7 +900,6 @@ linkRival('uber_co', 'tesla');
 linkRival('boston_dynamics', 'tesla');
 linkRival('lidar', 'tesla_autopilot');
 linkRival('vision_pro', 'oculus_rift');
-linkRival('starship', 'sls_rocket');
 linkRival('5g_nr', 'starlink');
 linkRival('fugaku', 'nvidia_h100');
 
@@ -860,6 +912,11 @@ linkRival('yann_lecun', 'elon_musk');
 linkRival('ethereum', 'bitcoin');
 linkRival('ethereum', 'paypal_co');
 linkRival('vitalik_buterin', 'jack_ma');
+
+linkPartner('steve_jobs', 'steve_wozniak');
+linkPartner('larry_page', 'sergey_brin');
+linkPartner('peter_thiel', 'max_levchin'); // PayPal Duo
+linkRival('larry_ellison', 'marc_benioff'); // Oracle vs Salesforce
 
 // --- DATA ENTRY END ---
 

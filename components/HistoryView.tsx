@@ -135,19 +135,23 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
     setSearchTerm(node.label);
     setSuggestions([]);
     setIsSearchFocused(false);
+    setSelectedIndex(-1);
     searchInputRef.current?.blur();
 
-    // Use container scrollTop instead of scrollIntoView to avoid iOS page push
+    // Scroll to the selected node
     setTimeout(() => {
       const element = document.getElementById(`timeline-node-${node.id}`);
-      if (element && containerRef.current) {
-        const container = containerRef.current;
-        const elementTop = element.offsetTop;
-        const containerHeight = container.clientHeight;
-        const targetScroll = elementTop - containerHeight / 2 + element.clientHeight / 2;
-        container.scrollTo({ top: targetScroll, behavior: 'smooth' });
+      if (element) {
+        // Use scrollIntoView with block: 'center' for reliable cross-browser support
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // Add highlight effect
+        element.classList.add('ring-2', 'ring-cyan-400', 'ring-offset-2', 'ring-offset-slate-900');
+        setTimeout(() => {
+          element.classList.remove('ring-2', 'ring-cyan-400', 'ring-offset-2', 'ring-offset-slate-900');
+        }, 2000);
       }
-    }, 300);
+    }, 100);
   };
 
   const handleSearchFocus = () => {
@@ -158,20 +162,37 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
     setSearchTerm("");
     setSuggestions([]);
     setIsSearchFocused(true);
+    setSelectedIndex(-1);
   };
 
   const handleSearchBlur = () => {
     blurTimeoutRef.current = setTimeout(() => {
       setIsSearchFocused(false);
+      setSelectedIndex(-1);
       blurTimeoutRef.current = null;
     }, 250);
   };
 
+  // Keyboard navigation state
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      if (suggestions.length > 0) {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSelectedIndex(prev => Math.min(prev + 1, suggestions.length - 1));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSelectedIndex(prev => Math.max(prev - 1, -1));
+    } else if (e.key === 'Enter') {
+      if (selectedIndex >= 0 && selectedIndex < suggestions.length) {
+        handleSearchSelect(suggestions[selectedIndex]);
+      } else if (suggestions.length > 0) {
         handleSearchSelect(suggestions[0]);
       }
+    } else if (e.key === 'Escape') {
+      setIsSearchFocused(false);
+      setSelectedIndex(-1);
+      searchInputRef.current?.blur();
     }
   };
 
@@ -202,11 +223,14 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
         onDoubleClick={() => onNodeDoubleClick?.(node)}
         className={`
           cursor-pointer transition-all duration-200 hover:scale-[1.02]
-          bg-slate-800/50 border-l-4 border-red-500 rounded-r-lg
+          bg-slate-800/50
           select-none
           w-full
           ${sizeStyles[sizeClass]}
-          ${isLeft ? 'md:text-right text-left' : 'text-left'}
+          ${isLeft
+            ? 'md:text-right text-left border-l-4 md:border-l-0 md:border-r-4 border-red-500 rounded-r-lg md:rounded-r-none md:rounded-l-lg'
+            : 'text-left border-l-4 border-red-500 rounded-r-lg'
+          }
         `}
         style={{ WebkitUserSelect: 'none', userSelect: 'none', WebkitTouchCallout: 'none' }}
       >
@@ -286,19 +310,10 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
       return 'Technology';
     };
 
-    // 3 fixed sizes based on radius
-    let sizeClass = 'md:w-40'; // small
+    // Unified width: ~70% of company box (company is full width, so ~70%)
+    const sizeClass = 'md:w-[70%]';
     let textSize = 'text-sm';
-    let padding = 'px-3 py-1.5';
-    if (radius >= 35) {
-      sizeClass = 'md:w-64'; // large
-      textSize = 'text-base';
-      padding = 'px-4 py-2';
-    } else if (radius >= 25) {
-      sizeClass = 'md:w-52'; // medium
-      textSize = 'text-sm';
-      padding = 'px-3 py-2';
-    }
+    let padding = 'px-3 py-2';
 
     // Build description text using getNodeSubtitle
     const descriptionText = getNodeSubtitle(node, { creatorLabel: creator });
@@ -350,7 +365,25 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
   };
 
   return (
-    <div ref={containerRef} className="w-full h-full overflow-y-auto bg-background p-4 custom-scrollbar scroll-smooth">
+    <div ref={containerRef} className="w-full h-full overflow-y-auto bg-background p-4 custom-scrollbar scroll-smooth relative">
+      {/* 
+        Mobile Background Arrow - Customization Guide:
+        - Position: top-[80px] (below search bar), adjust inset-x-0
+        - Size: w-48 (width), h-[70vh] (height)
+        - Color: text-slate-500 (Tailwind class) or fill="currentColor"
+        - Opacity: opacity-10 (10% opacity)
+        - Arrow body: rect x="35" width="30" height="280" 
+        - Arrow head: polygon points controls the triangle shape
+      */}
+      <div className="md:hidden fixed top-[80px] inset-x-0 bottom-0 flex items-center justify-center pointer-events-none z-0 opacity-10">
+        <svg className="w-48 h-[70vh]" viewBox="0 0 100 400" fill="none">
+          {/* Thick arrow body - adjust x, width, height for size */}
+          <rect x="35" y="0" width="30" height="280" fill="currentColor" className="text-slate-500" />
+          {/* Triangle arrow head - adjust points for shape */}
+          <polygon points="50,400 0,260 100,260" fill="currentColor" className="text-slate-500" />
+        </svg>
+      </div>
+
       <div className="max-w-4xl mx-auto relative">
         {/* Central Timeline Line - hidden on mobile, starts from first content on desktop */}
         <div className="hidden md:block absolute md:left-1/2 bottom-0 w-px bg-slate-700 transform md:-translate-x-1/2" style={{ top: '120px' }} />
@@ -379,10 +412,11 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
               {isSearchFocused && suggestions.length > 0 && (
                 <div className="absolute mt-1 w-full bg-slate-900/95 border border-slate-600 rounded-md shadow-2xl backdrop-blur-md overflow-hidden z-50">
                   <ul className="max-h-60 overflow-auto custom-scrollbar">
-                    {suggestions.map((node) => (
+                    {suggestions.map((node, index) => (
                       <li
                         key={node.id}
-                        className="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-slate-800 text-slate-300 transition-colors border-b border-slate-800/50 last:border-0"
+                        className={`cursor-pointer select-none relative py-2 pl-3 pr-9 text-slate-300 transition-colors border-b border-slate-800/50 last:border-0 ${index === selectedIndex ? 'bg-slate-700' : 'hover:bg-slate-800'
+                          }`}
                         onClick={() => handleSearchSelect(node)}
                         onDoubleClick={() => onNodeDoubleClick?.(node)}
                       >
@@ -414,11 +448,11 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
                   <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-8 bg-background z-10" />
                   {/* Thicker era line - wider with negative margins */}
                   <div className="relative z-20 flex items-center gap-4 px-4 md:px-12">
-                    <div className="flex-1 h-0.5 bg-slate-600" />
-                    <span className="text-xs font-mono text-slate-400 tracking-widest whitespace-nowrap bg-background px-3">
+                    <div className="flex-1 h-0.5" style={{ backgroundColor: '#e9a23b' }} />
+                    <span className="text-xs font-mono tracking-widest whitespace-nowrap bg-background px-3" style={{ color: '#e9a23b' }}>
                       {currentEra.label} {currentEra.startYear}-{currentEra.endYear === 2099 ? 'NOW' : currentEra.endYear}
                     </span>
-                    <div className="flex-1 h-0.5 bg-slate-600" />
+                    <div className="flex-1 h-0.5" style={{ backgroundColor: '#e9a23b' }} />
                   </div>
                 </div>
               )}

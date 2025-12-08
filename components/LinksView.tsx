@@ -19,6 +19,7 @@ interface ConnectionItem {
     linkType: LinkType;
     sourceCategory: Category;  // 소스 노드 카테고리
     targetCategory: Category;  // 타겟 노드 카테고리
+    isOutgoing: boolean;       // Focus 노드가 source인지 (true) target인지 (false)
 }
 
 interface EngagesItem extends ConnectionItem {
@@ -208,7 +209,8 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                             linkType: link.type,
                             engagesIcon: link.icon || '',
                             sourceCategory: focusNode.category,
-                            targetCategory: targetNode.category
+                            targetCategory: targetNode.category,
+                            isOutgoing: true  // Focus is SOURCE
                         }, key);
                     } else {
                         addToMapIfNew(impactMap, seenImpact, link.type, {
@@ -217,7 +219,8 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                             description: getConnectionDescription(focusNode, targetNode, link.type, false),
                             linkType: link.type,
                             sourceCategory: focusNode.category,
-                            targetCategory: targetNode.category
+                            targetCategory: targetNode.category,
+                            isOutgoing: true  // Focus is SOURCE
                         }, key);
                     }
                 }
@@ -234,7 +237,8 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                             linkType: link.type,
                             engagesIcon: link.icon || '',
                             sourceCategory: sourceNode.category,
-                            targetCategory: focusNode.category
+                            targetCategory: focusNode.category,
+                            isOutgoing: false  // Focus is TARGET
                         }, key);
                     } else {
                         addToMapIfNew(originsMap, seenOrigins, link.type, {
@@ -243,16 +247,17 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                             description: getConnectionDescription(focusNode, sourceNode, link.type, true),
                             linkType: link.type,
                             sourceCategory: sourceNode.category,
-                            targetCategory: focusNode.category
+                            targetCategory: focusNode.category,
+                            isOutgoing: false  // Focus is TARGET
                         }, key);
                     }
                 }
             }
         });
 
-        // Sort fn: Company -> Person -> Technology, then Alphabetical
+        // Sort fn: Person -> Technology -> Company, then Alphabetical
         const sortFn = (a: ConnectionItem, b: ConnectionItem) => {
-            const categoryOrder = { [Category.COMPANY]: 0, [Category.PERSON]: 1, [Category.TECHNOLOGY]: 2 };
+            const categoryOrder = { [Category.PERSON]: 0, [Category.TECHNOLOGY]: 1, [Category.COMPANY]: 2 };
             const catDiff = (categoryOrder[a.node.category] ?? 3) - (categoryOrder[b.node.category] ?? 3);
             if (catDiff !== 0) return catDiff;
             return a.node.label.localeCompare(b.node.label);
@@ -304,12 +309,50 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
         setSearchTerm('');
         setSuggestions([]);
         setIsSearchFocused(false);
+        setSelectedSuggestionIndex(-1);
         searchInputRef.current?.blur();
         if (onNodeFocus) onNodeFocus(node.id);
     };
-    const handleSearchFocus = () => { if (blurTimeoutRef.current) { clearTimeout(blurTimeoutRef.current); blurTimeoutRef.current = null; } setIsSearchFocused(true); };
-    const handleSearchBlur = () => { blurTimeoutRef.current = setTimeout(() => { setIsSearchFocused(false); blurTimeoutRef.current = null; }, 250); };
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => { if (e.key === 'Enter' && suggestions.length > 0) { handleSearchSelect(suggestions[0]); } };
+
+    // Keyboard navigation state
+    const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+
+    const handleSearchFocus = () => {
+        if (blurTimeoutRef.current) {
+            clearTimeout(blurTimeoutRef.current);
+            blurTimeoutRef.current = null;
+        }
+        setIsSearchFocused(true);
+        setSelectedSuggestionIndex(-1);
+    };
+
+    const handleSearchBlur = () => {
+        blurTimeoutRef.current = setTimeout(() => {
+            setIsSearchFocused(false);
+            setSelectedSuggestionIndex(-1);
+            blurTimeoutRef.current = null;
+        }, 250);
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            setSelectedSuggestionIndex(prev => Math.min(prev + 1, suggestions.length - 1));
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            setSelectedSuggestionIndex(prev => Math.max(prev - 1, -1));
+        } else if (e.key === 'Enter') {
+            if (selectedSuggestionIndex >= 0 && selectedSuggestionIndex < suggestions.length) {
+                handleSearchSelect(suggestions[selectedSuggestionIndex]);
+            } else if (suggestions.length > 0) {
+                handleSearchSelect(suggestions[0]);
+            }
+        } else if (e.key === 'Escape') {
+            setIsSearchFocused(false);
+            setSelectedSuggestionIndex(-1);
+            searchInputRef.current?.blur();
+        }
+    };
 
 
     // Helper: Category badge
@@ -405,7 +448,7 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                             {conn.node.label}
                         </span>
                         <span className="text-[10px] text-slate-500 font-medium whitespace-nowrap">
-                            {focusNode && getConnectionLabel(focusNode, conn.node, conn.link, conn.sourceCategory === focusNode.category)}
+                            {focusNode && getConnectionLabel(focusNode, conn.node, conn.link, conn.isOutgoing)}
                         </span>
                     </div>
                 </div>
@@ -452,7 +495,7 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                                 {conn.node.label}
                             </span>
                             <span className="text-[10px] text-slate-500 font-medium whitespace-nowrap">
-                                {focusNode && getConnectionLabel(focusNode, conn.node, conn.link, conn.sourceCategory === focusNode.category)}
+                                {focusNode && getConnectionLabel(focusNode, conn.node, conn.link, conn.isOutgoing)}
                             </span>
                         </div>
                     </div>
@@ -541,9 +584,13 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, focusNodeId, onNodeC
                             />
                             {isSearchFocused && suggestions.length > 0 && (
                                 <div className="absolute mt-1 w-full bg-slate-900 border border-slate-600 rounded-lg shadow-2xl overflow-hidden z-50">
-                                    {suggestions.map((node) => (
-                                        <div key={node.id} className="cursor-pointer py-2 px-4 hover:bg-slate-800 text-slate-300 transition-colors flex items-center gap-2"
-                                            onClick={() => handleSearchSelect(node)}>
+                                    {suggestions.map((node, index) => (
+                                        <div
+                                            key={node.id}
+                                            className={`cursor-pointer py-2 px-4 text-slate-300 transition-colors flex items-center gap-2 ${index === selectedSuggestionIndex ? 'bg-slate-700' : 'hover:bg-slate-800'
+                                                }`}
+                                            onClick={() => handleSearchSelect(node)}
+                                        >
                                             <div className="w-2 h-2 rounded-full" style={{ backgroundColor: CATEGORY_COLORS[node.category] }} />
                                             <span className="truncate text-sm">{node.label}</span>
                                         </div>

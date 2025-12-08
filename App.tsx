@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback, Suspense } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, Suspense, lazy } from 'react';
 import { Logo } from './components/Logo';
 import { INITIAL_DATA, CATEGORY_COLORS } from './constants';
 import { NodeData, Category, GraphData, LinkType, CompanyMode } from './types';
@@ -14,6 +14,10 @@ import CardView from './components/CardView';
 import LinksView from './components/LinksView';
 import WelcomeModal from './components/WelcomeModal';
 import Tutorial from './components/Tutorial';
+
+// Debug mode - lazy loaded to exclude from production bundle
+const DebugDashboard = lazy(() => import('./components/debug/DebugDashboard'));
+
 const LoadingSpinner = () => (
   <div className="w-full h-full flex items-center justify-center bg-background">
     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
@@ -45,6 +49,18 @@ const useWindowSize = () => {
 }
 
 const App: React.FC = () => {
+  // Check if we're in debug mode (only in development)
+  const isDebugMode = import.meta.env.DEV && window.location.pathname === '/debug';
+
+  // If debug mode, render DebugDashboard
+  if (isDebugMode) {
+    return (
+      <Suspense fallback={<LoadingSpinner />}>
+        <DebugDashboard />
+      </Suspense>
+    );
+  }
+
   const [viewMode, setViewMode] = useState<'MAP' | 'TIMELINE' | 'CARD' | 'LINKS'>('MAP');
   const [lastViewMode, setLastViewMode] = useState<'MAP' | 'TIMELINE' | 'CARD' | 'LINKS'>('MAP');
   const [selectedNode, setSelectedNode] = useState<NodeData | null>(null);
@@ -90,6 +106,37 @@ const App: React.FC = () => {
 
   const { width, height } = useWindowSize();
   const contentHeight = height - 64;
+
+  // --- GLOBAL KEYBOARD SHORTCUTS ---
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      // ESC: Exit Focus Mode
+      if (e.key === 'Escape' && focusNodeId) {
+        // Exit focus mode
+        if (focusNodeId) {
+          setScrollToNodeId(focusNodeId);
+        }
+        setFocusNodeId(null);
+        setScrollToNodeId(null);
+        updateUrl(null);
+        return;
+      }
+
+      // Cmd+F (Mac) or Ctrl+F (Windows): Focus search input
+      if ((e.metaKey || e.ctrlKey) && e.key === 'f') {
+        e.preventDefault(); // Prevent browser's default find
+        // Find and focus the search input based on current view
+        const searchInput = document.querySelector('input[type="text"][placeholder*="Search"], input[type="text"][placeholder*="Find"]') as HTMLInputElement;
+        if (searchInput) {
+          searchInput.focus();
+          searchInput.select();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleGlobalKeyDown);
+    return () => document.removeEventListener('keydown', handleGlobalKeyDown);
+  }, [focusNodeId]);
 
   // --- DYNAMIC TITLE MANAGEMENT (SEO) ---
   useEffect(() => {
@@ -208,14 +255,10 @@ const App: React.FC = () => {
   const toggleCategory = (cat: Category) => {
     if (cat === Category.COMPANY) {
       setCompanyMode(prev => {
-        if (viewMode === 'MAP') {
-          if (prev === 'FULL') return 'MINIMAL';
-          if (prev === 'MINIMAL') return 'HIDDEN';
-          return 'FULL';
-        } else {
-          if (prev === 'HIDDEN') return 'FULL';
-          return 'HIDDEN';
-        }
+        // Mobile toggle order: FULL -> MINIMAL (outline gray) -> HIDDEN (all gray) -> FULL
+        if (prev === 'FULL') return 'MINIMAL';
+        if (prev === 'MINIMAL') return 'HIDDEN';
+        return 'FULL';
       });
     } else {
       setVisibleCategories(prev => ({
@@ -344,12 +387,15 @@ const App: React.FC = () => {
       });
     }
 
-    activeNodes = activeNodes.filter(node => {
-      if (node.category === Category.COMPANY) {
-        return companyMode !== 'HIDDEN';
-      }
-      return visibleCategories[node.category];
-    });
+    // Focus 모드에서는 카테고리 필터링 무시 - 모든 연결된 노드 표시
+    if (!focusNodeId) {
+      activeNodes = activeNodes.filter(node => {
+        if (node.category === Category.COMPANY) {
+          return companyMode !== 'HIDDEN';
+        }
+        return visibleCategories[node.category];
+      });
+    }
 
     const activeNodeIds = new Set(activeNodes.map(n => n.id));
 
@@ -602,32 +648,58 @@ const App: React.FC = () => {
 
         {/* Category toggles - hidden in Focus mode AND Links View (Mobile only) */}
         {!focusNodeId && viewMode !== 'LINKS' && (
-          <div className="h-14 flex items-center justify-center px-4 overflow-x-auto gap-4 custom-scrollbar">
-            <div className="flex items-center gap-3 shrink-0">
+          <div className="h-14 flex items-center justify-center px-4 overflow-x-auto gap-4 custom-scrollbar xl:hidden">
+            <div className="flex items-center gap-4 shrink-0">
               {Object.keys(CATEGORY_COLORS).map((key) => {
                 const cat = key as Category;
                 let isActive = false;
                 if (cat === Category.COMPANY) isActive = companyMode !== 'HIDDEN';
                 else isActive = visibleCategories[cat];
 
-                let bgStyle = { backgroundColor: 'transparent', borderColor: CATEGORY_COLORS[cat] };
-                let dotStyle = { backgroundColor: CATEGORY_COLORS[cat], border: 'none', opacity: isActive ? 1 : 0.5 };
-                let containerClass = `w-8 h-8 rounded-full border border-slate-600 flex items-center justify-center transition-all ${!isActive && 'opacity-50'}`;
+                // Default styles
+                let containerClass = 'w-8 h-8 rounded-full border flex items-center justify-center transition-all';
+                let borderColor = CATEGORY_COLORS[cat];
+                let bgColor = isActive ? 'rgba(30, 41, 59, 0.5)' : 'transparent';
+                let dotBg = CATEGORY_COLORS[cat];
+                let dotBorder = 'none';
+                let containerOpacity = isActive ? 1 : 0.5;
 
+                // Company-specific styling
                 if (cat === Category.COMPANY) {
-                  if (viewMode === 'MAP') {
-                    if (companyMode === 'FULL' && isActive) bgStyle.backgroundColor = 'rgba(30, 41, 59, 0.5)';
-                    else if (companyMode === 'MINIMAL') dotStyle = { backgroundColor: 'transparent', border: `1px solid ${CATEGORY_COLORS[cat]}`, opacity: isActive ? 1 : 0.5 };
+                  if (companyMode === 'FULL') {
+                    // FULL: normal (colored border, colored dot)
+                    bgColor = 'rgba(30, 41, 59, 0.5)';
+                  } else if (companyMode === 'MINIMAL') {
+                    // MINIMAL: outer border gray, dot colored
+                    borderColor = '#64748b'; // slate-500 (gray border)
+                    bgColor = 'transparent';
+                    containerOpacity = 0.7;
                   } else {
-                    if (isActive) bgStyle.backgroundColor = 'rgba(30, 41, 59, 0.5)';
+                    // HIDDEN: all gray
+                    borderColor = '#475569'; // slate-600
+                    bgColor = 'transparent';
+                    dotBg = 'transparent';
+                    dotBorder = '1px solid #475569';
+                    containerOpacity = 0.4;
                   }
-                } else {
-                  if (isActive) bgStyle.backgroundColor = 'rgba(30, 41, 59, 0.5)';
                 }
 
                 return (
-                  <button key={cat} onClick={() => toggleCategory(cat)} className={containerClass} style={bgStyle} aria-label={`Toggle ${cat}`}>
-                    <div className="w-2.5 h-2.5 rounded-full" style={dotStyle}></div>
+                  <button
+                    key={cat}
+                    onClick={() => toggleCategory(cat)}
+                    className={containerClass}
+                    style={{
+                      borderColor,
+                      backgroundColor: bgColor,
+                      opacity: containerOpacity,
+                    }}
+                    aria-label={`Toggle ${cat}`}
+                  >
+                    <div
+                      className="w-2.5 h-2.5 rounded-full"
+                      style={{ backgroundColor: dotBg, border: dotBorder }}
+                    ></div>
                   </button>
                 );
               })}
@@ -636,7 +708,7 @@ const App: React.FC = () => {
             {viewMode === 'MAP' && (
               <>
                 <div className="w-px h-6 bg-slate-700 shrink-0"></div>
-                <div className="flex items-center gap-3 shrink-0">
+                <div className="flex items-center gap-4 shrink-0">
                   {Object.keys(visibleLinkTypes).map((key) => {
                     const type = key as LinkType;
                     const isActive = visibleLinkTypes[type];
