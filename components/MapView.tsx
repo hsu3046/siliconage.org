@@ -1250,7 +1250,7 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
                 label: d.label,
                 category: d.category,
                 description: d.description,
-                companyRole: d.impactRole as string | undefined,
+                companyRole: d.companyCategories?.[0] || d.impactRole as string | undefined,
                 techCategoryL1: d.techCategoryL1,
                 techCategoryL2: d.techCategoryL2,
                 hashtags: hashtags
@@ -1408,7 +1408,7 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
               label: d.label,
               category: d.category,
               description: d.description,
-              companyRole: d.impactRole as string | undefined,
+              companyRole: d.companyCategories?.[0] || d.impactRole as string | undefined,
               techCategoryL1: d.techCategoryL1,
               techCategoryL2: d.techCategoryL2,
               hashtags: hashtags
@@ -1581,41 +1581,39 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
           </div>
           <span className="text-sm font-bold text-white leading-tight">{tooltip.label}</span>
 
-          {/* Categories */}
-          {(tooltip.companyRole || tooltip.techCategoryL1) && (
-            <div className="flex flex-wrap gap-1 mt-1 mb-1">
-              {tooltip.companyRole && (
-                <span className="text-[9px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-                  {tooltip.companyRole}
-                </span>
-              )}
-              {tooltip.techCategoryL1 && (
-                <span className="text-[9px] px-1.5 py-0.5 rounded bg-blue-900/40 text-blue-300 border border-blue-800/50">
-                  {tooltip.techCategoryL1}
-                </span>
-              )}
-              {tooltip.techCategoryL2 && (
-                <span className="text-[9px] px-1.5 py-0.5 rounded bg-indigo-900/40 text-indigo-300 border border-indigo-800/50">
-                  {tooltip.techCategoryL2}
-                </span>
-              )}
-            </div>
-          )}
+          {/* Categories - Always show for all node types */}
+          <div className="flex flex-wrap gap-1 mt-1 mb-1">
+            {tooltip.companyRole && (
+              <span className="text-[9px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                {tooltip.companyRole.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase())}
+              </span>
+            )}
+            {tooltip.personRole && (
+              <span className="text-[9px] px-1.5 py-0.5 rounded bg-purple-900/40 text-purple-300 border border-purple-800/50">
+                {tooltip.personRole}
+              </span>
+            )}
+            {tooltip.techCategoryL1 && (
+              <span className="text-[9px] px-1.5 py-0.5 rounded bg-blue-900/40 text-blue-300 border border-blue-800/50">
+                {tooltip.techCategoryL1}
+              </span>
+            )}
+            {tooltip.techCategoryL2 && (
+              <span className="text-[9px] px-1.5 py-0.5 rounded bg-indigo-900/40 text-indigo-300 border border-indigo-800/50">
+                {tooltip.techCategoryL2}
+              </span>
+            )}
+          </div>
           <p className="text-xs text-slate-300 mt-1 leading-snug border-t border-slate-700 pt-2 opacity-90">
             {tooltip.description}
           </p>
 
-          {/* Hashtags */}
+          {/* Connection Count - Right aligned, no top border */}
           {tooltip.hashtags && tooltip.hashtags.length > 0 && (
-            <div className="flex flex-wrap gap-1 mt-2 pt-2 border-t border-slate-700/50">
-              {tooltip.hashtags.slice(0, 4).map((tag, idx) => (
-                <span key={`${tag.id}-${idx}`} className="text-[9px] font-mono text-blue-400">
-                  #{tag.label.replace(/\s+/g, '')}
-                </span>
-              ))}
-              {tooltip.hashtags.length > 4 && (
-                <span className="text-[9px] text-slate-500">+{tooltip.hashtags.length - 4}</span>
-              )}
+            <div className="flex justify-end mt-1">
+              <span className="text-[9px] text-slate-500">
+                🔗 {tooltip.hashtags.length} connection{tooltip.hashtags.length > 1 ? 's' : ''}
+              </span>
             </div>
           )}
         </div>

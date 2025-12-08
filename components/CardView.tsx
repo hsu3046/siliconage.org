@@ -359,7 +359,7 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
                     )}
                   </div>
 
-                  <p className="text-sm text-slate-400 line-clamp-3 mb-4 flex-1">
+                  <p className="text-sm text-slate-400 line-clamp-7 mb-4 flex-1">
                     {node.description}
                   </p>
                 </div>
