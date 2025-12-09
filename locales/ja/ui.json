@@ -14,6 +14,15 @@
         "person": "人物",
         "technology": "技術"
     },
+    "eras": {
+        "genesis": "黎明期",
+        "dawn": "シリコンの夜明け",
+        "pc": "PC革命",
+        "internet": "インターネット時代",
+        "mobile": "モバイル革命",
+        "ai_early": "AIの台頭",
+        "ai_renaissance": "AIルネサンス"
+    },
     "companyCategories": {
         "PLATFORM_INTERNET": "プラットフォーム & インターネット",
         "ENTERPRISE_SAAS": "エンタープライズ & SaaS",
@@ -26,6 +35,19 @@
         "ACADEMY_LAB": "学術 & 研究所",
         "MANUFACTURING_SUPPLY": "製造 & サプライチェーン",
         "CONSUMER_DEVICE": "コンシューマーデバイス"
+    },
+    "personRoles": {
+        "VISIONARY": "ビジョナリー",
+        "THEORIST": "理論家",
+        "BUILDER": "ビルダー",
+        "LEADER": "リーダー",
+        "INVESTOR": "投資家"
+    },
+    "techRoles": {
+        "FOUNDATION": "基盤技術",
+        "CORE": "コア技術",
+        "PLATFORM": "プラットフォーム",
+        "APPLICATION": "アプリケーション"
     },
     "linkTypes": {
         "POWERS": "基盤",
@@ -41,16 +63,10 @@
         "subtitle": "トランジスタからAIへ",
         "version": "v1.4.0",
         "aboutProject": "プロジェクト紹介",
-        "description": "シリコンエイジは、コンピューティングと人工知能の複雑な進化を可視化するインタラクティブプロジェクトです。伝説的な企業、先駆者的な人物、革新的な技術の間のつながりを通じて、現代AI時代にどのように至ったかを総合的な視点で提供します。",
-        "description2": "一般的な年表とは異なり、この4次元マップ（グラフ、時間、リスト、空間）は業界を定義する隠れた影響力と構造的関係を明らかにします。",
+        "description": "シリコンエイジは、コンピューティングと人工知能の複雑な進化を可視化するインタラクティブプロジェクトです。伝説的な企業、先駆者的な人物、革新的な技術の間のつながりを通じて、現代AI時代にどのように至ったかを総合的な視点で提供します。\n一般的な年表とは異なり、この4次元マップ（グラフ、時間、リスト、空間）は業界を定義する隠れた影響力と構造的関係を明らかにします。",
         "buyMeACoffee": "コーヒーをおごる",
-        "disclaimer": "免責事項と利用規約",
-        "disclaimerAI": "AI生成コンテンツ：",
-        "disclaimerAIText": "このウェブサイトの説明、要約、主要な事実は、客観性と網羅性を確保するために大規模言語モデル（LLM）を使用して生成されています。正確性に努めていますが、AIは時々幻覚や不正確な情報を生成することがあります。",
-        "disclaimerNoWarranty": "保証の否認：",
-        "disclaimerNoWarrantyText": "このウェブサイトは、明示的または黙示的を問わず、いかなる表明や保証もなく「現状のまま」提供されます。",
-        "disclaimerLiability": "責任の制限：",
-        "disclaimerLiabilityText": "いかなる場合も、制作者はコンテンツの誤りや脱落について責任を負いません。",
+        "disclaimer": "免責事項",
+        "disclaimerText": "このウェブサイトのコンテンツはAI（LLM）を使用して生成されており、不正確な情報が含まれる場合があります。\n本サイトは保証なく「現状のまま」提供され、制作者はコンテンツの誤りについて責任を負いません。",
         "feedback": "フィードバックとバグ報告",
         "feedbackEmail": "メールアドレス",
         "feedbackMessage": "メッセージ / 修正依頼",
@@ -97,6 +113,9 @@
         "externalLinksLabel": "(外部リンク)",
         "disclaimer": "このサイトのコンテンツとリンクは、個人のキュレーションや主観的な選択ではなく、客観的な技術キーワードに基づいてAIアルゴリズムを通じて集約されています。"
     },
+    "mapView": {
+        "searchPlaceholder": "ノードを検索..."
+    },
     "historyView": {
         "showStories": "ストーリーを表示",
         "hideStories": "ストーリーを非表示",
@@ -106,10 +125,17 @@
         "noConnectionsTitle": "つながりなし",
         "noConnectionsDesc": "このノードには表示するつながりがありません。",
         "exploreConnections": "つながりを探索",
-        "selectNodePrompt": "トピックを検索してつながりを確認します。"
+        "selectNodePrompt": "トピックを検索してつながりを確認します。",
+        "searchPlaceholder": "つながりを検索..."
     },
     "cardView": {
-        "searchPlaceholder": "カードを検索..."
+        "searchPlaceholder": "カードを検索...",
+        "sortOptions": {
+            "alphabetical": "あいうえお順",
+            "category": "カテゴリ",
+            "yearNewest": "年: 新しい順",
+            "yearOldest": "年: 古い順"
+        }
     },
     "focus": {
         "focusOn": "フォーカス",
@@ -135,5 +161,34 @@
         "previous": "前へ",
         "finish": "完了",
         "skip": "スキップ"
+    },
+    "techCategoryL1": {
+        "Hardware & Infrastructure": "ハードウェア & インフラ",
+        "System Software": "システムソフトウェア",
+        "Network & Connectivity": "ネットワーク & 接続",
+        "Digital Services & Platforms": "デジタルサービス & プラットフォーム",
+        "AI & Physical Systems": "AI & 物理システム",
+        "Fundamental Concepts": "基礎概念"
+    },
+    "techCategoryL2": {
+        "Processors & Compute": "プロセッサ & コンピュート",
+        "Devices & Form Factors": "デバイス & フォームファクター",
+        "Memory & Storage": "メモリ & ストレージ",
+        "Components & Manufacturing": "部品 & 製造",
+        "Operating Systems (OS)": "OS",
+        "Development & Languages": "開発 & 言語",
+        "Telecommunications": "通信",
+        "Network Architecture": "ネットワークアーキテクチャ",
+        "Search & Information": "検索 & 情報",
+        "Social & Media": "ソーシャル & メディア",
+        "Digital Platforms": "デジタルプラットフォーム",
+        "Artificial Intelligence": "AI",
+        "Autonomous Mobility": "自律モビリティ",
+        "Robotics": "ロボティクス",
+        "Fintech & Crypto": "フィンテック & 暗号通貨",
+        "Spatial Computing": "空間コンピューティング",
+        "Theories & Architectures": "理論 & アーキテクチャ",
+        "Laws & Principles": "法則 & 原理",
+        "Standards & Protocols": "標準 & プロトコル"
     }
 }

@@ -17,7 +17,8 @@ interface CardViewProps {
 type SortOption = 'IMPORTANCE' | 'ALPHABETICAL' | 'YEAR_OLDEST' | 'YEAR_NEWEST' | 'CATEGORY';
 
 interface SearchSuggestion {
-  label: string;
+  label: string;       // 번역된 표시 라벨
+  key: string;         // 원본 키 (검색 매칭용)
   type: 'CATEGORY' | 'ROLE' | 'TECH';
   count?: number;
 }
@@ -80,58 +81,65 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
     });
   }, [data.nodes, sortBy]);
 
-  // Extract all searchable unique terms for Autocomplete with counts
+  // Extract all searchable unique terms for Autocomplete with counts (i18n enabled)
   const searchSuggestions = useMemo(() => {
     const suggestionsMap = new Map<string, SearchSuggestion>();
     const countMap = new Map<string, number>();
 
     data.nodes.forEach(node => {
-      // Company Categories
+      // Company Categories - 번역 적용
       if (node.category === Category.COMPANY && node.companyCategories) {
         node.companyCategories.forEach(c => {
           if (CATEGORY_LABELS[c]) {
-            const label = CATEGORY_LABELS[c];
-            suggestionsMap.set(label, { label, type: 'CATEGORY' });
-            countMap.set(label, (countMap.get(label) || 0) + 1);
+            const key = c; // 원본 키
+            const translatedLabel = t(`companyCategories.${c}`) || CATEGORY_LABELS[c];
+            suggestionsMap.set(key, { label: translatedLabel, key, type: 'CATEGORY' });
+            countMap.set(key, (countMap.get(key) || 0) + 1);
           }
         });
       }
-      // Person Roles
+      // Person Roles - 번역 적용
       if (node.category === Category.PERSON && node.impactRole) {
-        const roleLabel = toTitleCase(node.impactRole);
-        suggestionsMap.set(roleLabel, { label: roleLabel, type: 'ROLE' });
-        countMap.set(roleLabel, (countMap.get(roleLabel) || 0) + 1);
+        const key = node.impactRole; // 원본 키
+        const translatedLabel = t(`personRoles.${node.impactRole}`) || toTitleCase(node.impactRole);
+        suggestionsMap.set(key, { label: translatedLabel, key, type: 'ROLE' });
+        countMap.set(key, (countMap.get(key) || 0) + 1);
       }
-      // Tech Categories
+      // Tech Categories - 번역 적용
       if (node.category === Category.TECHNOLOGY) {
         if (node.techCategoryL1) {
-          suggestionsMap.set(node.techCategoryL1, { label: node.techCategoryL1, type: 'TECH' });
-          countMap.set(node.techCategoryL1, (countMap.get(node.techCategoryL1) || 0) + 1);
+          const key = node.techCategoryL1;
+          const translatedLabel = t(`techCategoryL1.${node.techCategoryL1}`) || node.techCategoryL1;
+          suggestionsMap.set(key, { label: translatedLabel, key, type: 'TECH' });
+          countMap.set(key, (countMap.get(key) || 0) + 1);
         }
         if (node.techCategoryL2) {
-          suggestionsMap.set(node.techCategoryL2, { label: node.techCategoryL2, type: 'TECH' });
-          countMap.set(node.techCategoryL2, (countMap.get(node.techCategoryL2) || 0) + 1);
+          const key = node.techCategoryL2;
+          const translatedLabel = t(`techCategoryL2.${node.techCategoryL2}`) || node.techCategoryL2;
+          suggestionsMap.set(key, { label: translatedLabel, key, type: 'TECH' });
+          countMap.set(key, (countMap.get(key) || 0) + 1);
         }
       }
     });
 
     // Add counts to suggestions
     return Array.from(suggestionsMap.values())
-      .map(s => ({ ...s, count: countMap.get(s.label) || 0 }))
+      .map(s => ({ ...s, count: countMap.get(s.key) || 0 }))
       .sort((a, b) => a.label.localeCompare(b.label));
-  }, [data.nodes]);
+  }, [data.nodes, t]);
 
-  // Filter suggestions based on query
+  // Filter suggestions based on query (검색: 번역 라벨 + 원본 키 둘 다 매칭)
   const filteredSuggestions = useMemo(() => {
     if (!searchQuery.trim()) return [];
     const lowerQuery = searchQuery.toLowerCase();
     // Exclude exact matches to avoid showing what user already typed perfectly
     return searchSuggestions.filter(s =>
-      s.label.toLowerCase().includes(lowerQuery) && s.label.toLowerCase() !== lowerQuery
+      (s.label.toLowerCase().includes(lowerQuery) || s.key.toLowerCase().includes(lowerQuery)) &&
+      s.label.toLowerCase() !== lowerQuery
     ).slice(0, 8); // Limit to 8 suggestions
   }, [searchQuery, searchSuggestions]);
 
-  // Local text filter
+  // Local text filter (검색: 원본 키 + 번역 라벨 둘 다 매칭)
   const filteredNodes = useMemo(() => {
     if (!searchQuery.trim()) return sortedNodes;
     const lowerQuery = searchQuery.toLowerCase();
@@ -141,16 +149,29 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
         node.label.toLowerCase().includes(lowerQuery) ||
         node.description.toLowerCase().includes(lowerQuery);
 
-      // Category/Role precise matching (for when clicking suggestions)
+      // Category/Role precise matching (원본 키 + 번역 라벨 둘 다)
       const categoryMatch =
-        (node.companyCategories?.some(c => CATEGORY_LABELS[c].toLowerCase().includes(lowerQuery))) ||
-        (node.impactRole && node.impactRole.toLowerCase().includes(lowerQuery)) ||
-        (node.techCategoryL1 && node.techCategoryL1.toLowerCase().includes(lowerQuery)) ||
-        (node.techCategoryL2 && node.techCategoryL2.toLowerCase().includes(lowerQuery));
+        (node.companyCategories?.some(c => {
+          const translated = t(`companyCategories.${c}`) || CATEGORY_LABELS[c];
+          return CATEGORY_LABELS[c].toLowerCase().includes(lowerQuery) ||
+            translated.toLowerCase().includes(lowerQuery);
+        })) ||
+        (node.impactRole && (
+          node.impactRole.toLowerCase().includes(lowerQuery) ||
+          (t(`personRoles.${node.impactRole}`) || '').toLowerCase().includes(lowerQuery)
+        )) ||
+        (node.techCategoryL1 && (
+          node.techCategoryL1.toLowerCase().includes(lowerQuery) ||
+          (t(`techCategoryL1.${node.techCategoryL1}`) || '').toLowerCase().includes(lowerQuery)
+        )) ||
+        (node.techCategoryL2 && (
+          node.techCategoryL2.toLowerCase().includes(lowerQuery) ||
+          (t(`techCategoryL2.${node.techCategoryL2}`) || '').toLowerCase().includes(lowerQuery)
+        ));
 
       return textMatch || categoryMatch;
     });
-  }, [sortedNodes, searchQuery]);
+  }, [sortedNodes, searchQuery, t]);
 
   // Effect for scrolling - use container scrollTop to avoid iOS page push
   useEffect(() => {
@@ -223,13 +244,14 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
               <input
                 type="text"
                 className="block w-full pl-10 pr-3 py-2 border border-slate-600 rounded-lg leading-5 bg-slate-900 text-slate-100 placeholder-slate-400 focus:outline-none focus:bg-slate-800 focus:border-primary focus:ring-1 focus:ring-primary sm:text-sm transition-colors"
-                placeholder={t('search.placeholder')}
+                placeholder={t('cardView.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
                   setShowSuggestions(true);
                 }}
                 onFocus={() => {
+                  setSearchQuery('');
                   setShowSuggestions(true);
                   setSelectedSuggestionIndex(-1);
                 }}
@@ -281,10 +303,10 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
                 onChange={(e) => setSortBy(e.target.value as SortOption)}
                 className="block w-full pl-10 pr-8 py-2 border border-slate-600 rounded-lg bg-slate-900 text-slate-200 focus:outline-none focus:border-primary text-sm appearance-none cursor-pointer"
               >
-                <option value="ALPHABETICAL">Name (A-Z)</option>
-                <option value="CATEGORY">Category</option>
-                <option value="YEAR_NEWEST">Year: Newest First</option>
-                <option value="YEAR_OLDEST">Year: Oldest First</option>
+                <option value="ALPHABETICAL">{t('cardView.sortOptions.alphabetical')}</option>
+                <option value="CATEGORY">{t('cardView.sortOptions.category')}</option>
+                <option value="YEAR_NEWEST">{t('cardView.sortOptions.yearNewest')}</option>
+                <option value="YEAR_OLDEST">{t('cardView.sortOptions.yearOldest')}</option>
               </select>
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-400">
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -330,21 +352,21 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
                     {/* Company Category Badge - RED (Muted) - UPPERCASE */}
                     {node.category === Category.COMPANY && node.companyCategories?.[0] && (
                       <span className="text-[9px] font-medium px-1.5 py-1 rounded bg-red-900/20 text-red-400/80 border border-red-800/30">
-                        {CATEGORY_LABELS[node.companyCategories[0]].toUpperCase()}
+                        {(t(`companyCategories.${node.companyCategories[0]}`) || CATEGORY_LABELS[node.companyCategories[0]] || node.companyCategories[0]).toUpperCase()}
                       </span>
                     )}
 
-                    {/* Person Role Badge (Muted) - Using primaryRole for display - UPPERCASE */}
-                    {node.category === Category.PERSON && node.primaryRole && (
+                    {/* Person Role Badge (Muted) - Using impactRole (personRole) for display - UPPERCASE */}
+                    {node.category === Category.PERSON && node.impactRole && (
                       <span className="text-[9px] font-medium px-1.5 py-1 rounded bg-blue-900/20 text-blue-400/80 border border-blue-800/30">
-                        {node.primaryRole.toUpperCase()}
+                        {(t(`personRoles.${node.impactRole}`) || node.impactRole).toUpperCase()}
                       </span>
                     )}
 
                     {/* Technology Categories - GREEN (Muted) - L2 ONLY (L1 still searchable) */}
                     {node.category === Category.TECHNOLOGY && node.techCategoryL2 && (
                       <span className="text-[9px] font-medium px-1.5 py-1 rounded bg-emerald-900/20 text-emerald-400/80 border border-emerald-800/30">
-                        {node.techCategoryL2.toUpperCase()}
+                        {(t(`techCategoryL2.${node.techCategoryL2}`) || node.techCategoryL2).toUpperCase()}
                       </span>
                     )}
                   </div>

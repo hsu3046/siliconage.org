@@ -14,6 +14,15 @@
         "person": "Person",
         "technology": "Technology"
     },
+    "eras": {
+        "genesis": "THE GENESIS",
+        "dawn": "THE SILICON DAWN",
+        "pc": "THE PC REVOLUTION",
+        "internet": "THE INTERNET AGE",
+        "mobile": "THE MOBILE REVOLUTION",
+        "ai_early": "THE RISE OF AI",
+        "ai_renaissance": "THE AI RENAISSANCE"
+    },
     "companyCategories": {
         "PLATFORM_INTERNET": "Platform & Internet",
         "ENTERPRISE_SAAS": "Enterprise & SaaS",
@@ -41,16 +50,10 @@
         "subtitle": "From Transistors to AI",
         "version": "v1.4.0",
         "aboutProject": "About Project",
-        "description": "The Silicon Age is an interactive visualization project designed to map the complex evolution of computing and artificial intelligence. By connecting the dots between legendary companies, visionary pioneers, and breakthrough technologies, we aim to provide a holistic view of how we arrived at the modern AI era.",
-        "description2": "Unlike linear timelines, this 4-dimensional map (Graph, Time, List, Space) reveals the hidden influence and structural relationships that define the industry.",
+        "description": "The Silicon Age is an interactive visualization project designed to map the complex evolution of computing and artificial intelligence. By connecting the dots between legendary companies, visionary pioneers, and breakthrough technologies, we aim to provide a holistic view of how we arrived at the modern AI era.\nUnlike linear timelines, this 4-dimensional map (Graph, Time, List, Space) reveals the hidden influence and structural relationships that define the industry.",
         "buyMeACoffee": "Buy me a coffee",
-        "disclaimer": "Disclaimer & Terms",
-        "disclaimerAI": "AI-Generated Content:",
-        "disclaimerAIText": "The descriptions, summaries, and key facts presented on this website are generated using large language models (LLMs) to ensure objectivity and coverage. While we strive for accuracy, artificial intelligence can occasionally produce hallucinations or inaccuracies.",
-        "disclaimerNoWarranty": "No Warranty:",
-        "disclaimerNoWarrantyText": "This website is provided \"as is\" without any representations or warranties, express or implied.",
-        "disclaimerLiability": "Limitation of Liability:",
-        "disclaimerLiabilityText": "In no event shall the creators be liable for any errors or omissions in the content.",
+        "disclaimer": "Disclaimer",
+        "disclaimerText": "Content on this website is generated using AI (LLM) and may contain inaccuracies.\nThis site is provided \"as is\" without warranty, and the creators are not liable for content errors.",
         "feedback": "Feedback & Bug Report",
         "feedbackEmail": "Your Email",
         "feedbackMessage": "Message / Correction",
@@ -97,6 +100,9 @@
         "externalLinksLabel": "(External Links)",
         "disclaimer": "The content and links provided on this site are aggregated through AI algorithms based on objective technical keywords, rather than personal curation or subjective selection."
     },
+    "mapView": {
+        "searchPlaceholder": "Search nodes..."
+    },
     "historyView": {
         "showStories": "Show Stories",
         "hideStories": "Hide Stories",
@@ -106,10 +112,17 @@
         "noConnectionsTitle": "No Connections",
         "noConnectionsDesc": "This node has no visible connections.",
         "exploreConnections": "Explore Connections",
-        "selectNodePrompt": "Search for a topic to see how it connects."
+        "selectNodePrompt": "Search for a topic to see how it connects.",
+        "searchPlaceholder": "Search connections..."
     },
     "cardView": {
-        "searchPlaceholder": "Search cards..."
+        "searchPlaceholder": "Search cards...",
+        "sortOptions": {
+            "alphabetical": "Name (A-Z)",
+            "category": "Category",
+            "yearNewest": "Year: Newest First",
+            "yearOldest": "Year: Oldest First"
+        }
     },
     "focus": {
         "focusOn": "Focus on",
@@ -135,5 +148,34 @@
         "previous": "Previous",
         "finish": "Finish",
         "skip": "Skip"
+    },
+    "techCategoryL1": {
+        "Hardware & Infrastructure": "Hardware & Infrastructure",
+        "System Software": "System Software",
+        "Network & Connectivity": "Network & Connectivity",
+        "Digital Services & Platforms": "Digital Services & Platforms",
+        "AI & Physical Systems": "AI & Physical Systems",
+        "Fundamental Concepts": "Fundamental Concepts"
+    },
+    "techCategoryL2": {
+        "Processors & Compute": "Processors & Compute",
+        "Devices & Form Factors": "Devices & Form Factors",
+        "Memory & Storage": "Memory & Storage",
+        "Components & Manufacturing": "Components & Manufacturing",
+        "Operating Systems (OS)": "Operating Systems",
+        "Development & Languages": "Development & Languages",
+        "Telecommunications": "Telecommunications",
+        "Network Architecture": "Network Architecture",
+        "Search & Information": "Search & Information",
+        "Social & Media": "Social & Media",
+        "Digital Platforms": "Digital Platforms",
+        "Artificial Intelligence": "AI",
+        "Autonomous Mobility": "Autonomous Mobility",
+        "Robotics": "Robotics",
+        "Fintech & Crypto": "Fintech & Crypto",
+        "Spatial Computing": "Spatial Computing",
+        "Theories & Architectures": "Theories & Architectures",
+        "Laws & Principles": "Laws & Principles",
+        "Standards & Protocols": "Standards & Protocols"
     }
 }

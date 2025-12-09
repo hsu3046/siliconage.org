@@ -14,25 +14,25 @@ interface DetailPanelProps {
 }
 
 // === HELPER: Get Section Headers by Category ===
-const getSectionHeaders = (category: Category) => {
+const getSectionHeaders = (category: Category, t: (key: string) => string) => {
   switch (category) {
     case Category.COMPANY:
       return {
-        summary: 'Corporate Profile',
-        significance: 'Market Dominance',
-        keyFacts: 'Key Products & Services'
+        summary: t('detailPanel.sectionHeaders.company.summary'),
+        significance: t('detailPanel.sectionHeaders.company.significance'),
+        keyFacts: t('detailPanel.sectionHeaders.company.keyFacts')
       };
     case Category.PERSON:
       return {
-        summary: 'Biography',
-        significance: 'Career & Legacy',
-        keyFacts: 'Major Achievements'
+        summary: t('detailPanel.sectionHeaders.person.summary'),
+        significance: t('detailPanel.sectionHeaders.person.significance'),
+        keyFacts: t('detailPanel.sectionHeaders.person.keyFacts')
       };
     case Category.TECHNOLOGY:
       return {
-        summary: 'Core Concept',
-        significance: 'Why it Matters',
-        keyFacts: 'Technical Specs'
+        summary: t('detailPanel.sectionHeaders.technology.summary'),
+        significance: t('detailPanel.sectionHeaders.technology.significance'),
+        keyFacts: t('detailPanel.sectionHeaders.technology.keyFacts')
       };
     default:
       return {
@@ -395,8 +395,8 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
 
   // Get dynamic section headers
   const sectionHeaders = useMemo(() => {
-    return node ? getSectionHeaders(node.category) : getSectionHeaders(Category.TECHNOLOGY);
-  }, [node?.category]);
+    return node ? getSectionHeaders(node.category, t) : getSectionHeaders(Category.TECHNOLOGY, t);
+  }, [node?.category, t]);
 
   // Get smart external links
   const externalLinks = useMemo(() => {
@@ -678,16 +678,27 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
                 switch (node.category) {
                   case Category.COMPANY:
                     // Sub-category: First letter capital only (e.g. "Semiconductor")
-                    return node.companyCategories && node.companyCategories[0]
-                      ? toFirstCap(CATEGORY_LABELS[node.companyCategories[0]] || node.companyCategories[0])
-                      : toFirstCap(node.category);
+                    if (node.companyCategories && node.companyCategories[0]) {
+                      const catKey = node.companyCategories[0];
+                      const translated = t(`companyCategories.${catKey}`);
+                      return toFirstCap(translated || CATEGORY_LABELS[catKey] || catKey);
+                    }
+                    return toFirstCap(node.category);
                   case Category.TECHNOLOGY:
                     // Show L2 category only (L1 still searchable via CardView)
                     const l2 = node.techCategoryL2 || node.techCategoryL1;
-                    return l2 ? l2.toUpperCase() : node.category.toUpperCase();
+                    if (l2) {
+                      const translatedL2 = t(`techCategoryL2.${l2}`) || t(`techCategoryL1.${l2}`);
+                      return (translatedL2 || l2).toUpperCase();
+                    }
+                    return node.category.toUpperCase();
                   case Category.PERSON:
                     // Impact Role: First letter capital only (e.g. "Founder")
-                    return toFirstCap(node.impactRole || node.category);
+                    if (node.impactRole) {
+                      const translatedRole = t(`personRoles.${node.impactRole}`);
+                      return toFirstCap(translatedRole || node.impactRole);
+                    }
+                    return toFirstCap(node.category);
                   default:
                     return node.category;
                 }
@@ -733,7 +744,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
           <button
             onClick={onFocus}
             className="text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 rounded p-1.5 transition-all"
-            title="Enter Focus Mode"
+            title={t('common.enterFocusMode')}
           >
             {/* Target/Crosshair Icon - Outer thick, inner thin */}
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -866,14 +877,11 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
                       </div>
                       <div>
                         <div className="text-sm font-bold text-slate-200 group-hover:text-white">{conn?.otherNode.label}</div>
-                        <div className="text-[10px] text-slate-400 italic">
-                          {conn && node && (() => {
-                            const isOutgoing = conn.relation === 'Outbound';
-                            const source = isOutgoing ? node : conn.otherNode;
-                            const target = isOutgoing ? conn.otherNode : node;
-                            return getConnectionLabelFromLabels(node, conn.otherNode, conn.link, isOutgoing);
-                          })()}
-                        </div>
+                        {conn?.link.story && (
+                          <div className="text-[10px] text-slate-400 font-normal leading-tight mt-0.5">
+                            {conn.link.story}
+                          </div>
+                        )}
                       </div>
                     </div>
 

@@ -75,11 +75,11 @@ const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose, onOpenChangeLo
             <h3 className="text-sm font-bold text-primary uppercase tracking-wider mb-2">
               {t('about.aboutProject')}
             </h3>
-            <p className="leading-relaxed text-sm mb-4">
-              {t('about.description')}
-              <br /><br />
-              {t('about.description2')}
-            </p>
+            <div className="leading-relaxed text-sm mb-4 space-y-3">
+              {t('about.description').split('\n').map((paragraph: string, index: number) => (
+                <p key={index}>{paragraph}</p>
+              ))}
+            </div>
 
             {/* Buy Me A Coffee Button */}
             <a
@@ -88,29 +88,18 @@ const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose, onOpenChangeLo
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-4 py-2 bg-[#FFDD00] text-black rounded-lg hover:bg-[#FFEA00] transition-transform hover:scale-105 active:scale-95 shadow-md group"
             >
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M20.216 6.415l-.132-.666c-.119-.596-.385-1.127-.778-1.547-.417-.444-.969-.74-1.579-.838-1.559-.251-4.706-.251-7.727-.01-2.26.18-4.56.63-6.68 1.3-.11.04-.22.08-.33.12-.5.2-.97.48-1.39.84-.57.49-.96 1.14-1.09 1.88l-1.5 8.35c-.17.95.14 1.93.81 2.65.6.64 1.45 1.01 2.33 1.01h.03c.51-.01 1.02-.13 1.48-.35.43-.2.83-.47 1.18-.79.37-.34.69-.73.93-1.16.27-.47.46-.98.57-1.51l.88-4.13c.04-.2.23-.33.43-.29.2.04.33.23.29.43l-.93 4.35c-.14.66-.38 1.28-.71 1.86-.34.58-.77 1.1-1.28 1.54-.53.46-1.13.82-1.78 1.07-.68.27-1.42.4-2.16.39-.02 0-.05 0-.07 0-1.21 0-2.34-.48-3.18-1.35-.93-.97-1.36-2.31-1.12-3.62l1.5-8.35c.16-.9.65-1.68 1.36-2.27.56-.47 1.2-.81 1.89-1.02.15-.05.3-.09.46-.14 2.21-.7 4.61-1.17 7-1.36 3.19-.25 6.54-.25 8.27.03.8.13 1.51.52 2.06 1.1.52.56.88 1.27 1.03 2.06l.13.67c.04.2.23.33.43.29.2-.04.33-.23.29-.43zm-8.216 6.585h-6c-.55 0-1-.45-1-1s.45-1 1-1h6c.55 0 1 .45 1 1s-.45 1-1 1zm2-3h-8c-.55 0-1-.45-1-1s.45-1 1-1h8c.55 0 1 .45 1 1s-.45 1-1 1z" />
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M17 8h1a4 4 0 1 1 0 8h-1" />
+                <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z" />
+                <line x1="6" x2="6" y1="2" y2="4" />
+                <line x1="10" x2="10" y1="2" y2="4" />
+                <line x1="14" x2="14" y1="2" y2="4" />
               </svg>
               <span className="font-['Poppins',sans-serif] font-medium text-sm">{t('about.buyMeACoffee')}</span>
             </a>
           </section>
 
-          {/* Section 2: Legal Disclaimer */}
-          <section className="bg-slate-900/50 p-4 rounded-lg border border-slate-800">
-            <h3 className="text-sm font-bold text-amber-500 uppercase tracking-wider mb-2 flex items-center gap-2">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-              {t('about.disclaimer')}
-            </h3>
-            <p className="text-xs text-slate-400 leading-relaxed text-justify">
-              <strong>{t('about.disclaimerAI')}</strong> {t('about.disclaimerAIText')}
-              <br /><br />
-              <strong>{t('about.disclaimerNoWarranty')}</strong> {t('about.disclaimerNoWarrantyText')}
-              <br /><br />
-              <strong>{t('about.disclaimerLiability')}</strong> {t('about.disclaimerLiabilityText')}
-            </p>
-          </section>
-
-          {/* Section 3: Feedback Form (Formspree) */}
+          {/* Section 2: Feedback Form (Formspree) */}
           <section>
             <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">
               {t('about.feedback')}
@@ -174,6 +163,15 @@ const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose, onOpenChangeLo
                 </button>
               </form>
             )}
+          </section>
+
+          {/* Section 3: Legal Disclaimer (minimal) */}
+          <section className="pt-2 border-t border-slate-800">
+            <p className="text-[10px] text-slate-500 leading-relaxed">
+              <span className="font-semibold">{t('about.disclaimer')}:</span> {t('about.disclaimerText').split('\n').map((line: string, i: number) => (
+                <span key={i}>{line}{i === 0 && ' '}</span>
+              ))}
+            </p>
           </section>
 
         </div>

@@ -732,7 +732,23 @@ const App: React.FC = () => {
           const nodeColor = focusNode ? CATEGORY_COLORS[focusNode.category] : '#22d3ee';
           // Hide on PC for all views (each view has its own focus node display)
           return (
-            <div className="h-14 flex items-center bg-slate-900/30 border-t-2 border-t-red-500/70 border-b-2 border-b-red-500/70 relative xl:hidden">
+            <div className="h-14 flex items-center bg-slate-900/30 relative xl:hidden">
+              {/* Target icon on the left - exit focus mode */}
+              <button
+                onClick={exitFocusMode}
+                className="absolute left-4 p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-full transition-all"
+                title="Exit Focus Mode"
+              >
+                <svg className="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <circle cx="12" cy="12" r="6" />
+                  <circle cx="12" cy="12" r="2" />
+                  <line x1="12" y1="2" x2="12" y2="6" />
+                  <line x1="12" y1="18" x2="12" y2="22" />
+                  <line x1="2" y1="12" x2="6" y2="12" />
+                  <line x1="18" y1="12" x2="22" y2="12" />
+                </svg>
+              </button>
               {/* Centered Focus Text - flex-1 with center using the container width */}
               <div className="flex-1 flex justify-center">
                 <div className="flex flex-col items-center">

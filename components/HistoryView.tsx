@@ -125,8 +125,17 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
   }, [sortedNodes, linkEvents, standaloneEvents]);
 
   const years = useMemo(() => {
-    return Object.keys(groupedByYear).map(Number).sort((a, b) => a - b);
-  }, [groupedByYear]);
+    return Object.keys(groupedByYear)
+      .map(Number)
+      .filter(year => {
+        // If showStories is false, only show years that have nodes
+        if (!showStories) {
+          return groupedByYear[year].nodes.length > 0;
+        }
+        return true;
+      })
+      .sort((a, b) => a - b);
+  }, [groupedByYear, showStories]);
 
   // Build creator map from INITIAL_DATA (not filtered data) to always show all created entities
   const creatorMap = useMemo(() => {
@@ -242,26 +251,34 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
     searchInputRef.current?.blur();
 
     if (suggestion.type === 'node' && suggestion.node) {
-      // Scroll to the selected node
+      // Scroll to the selected node using container scroll
       setTimeout(() => {
         const element = document.getElementById(`timeline-node-${suggestion.node!.id}`);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          element.classList.add('ring-2', 'ring-cyan-400', 'ring-offset-2', 'ring-offset-slate-900');
+        const container = containerRef.current;
+        if (element && container) {
+          const elementRect = element.getBoundingClientRect();
+          const containerRect = container.getBoundingClientRect();
+          const offset = elementRect.top - containerRect.top + container.scrollTop - 150; // 150px offset for header
+          container.scrollTo({ top: offset, behavior: 'smooth' });
+          element.classList.add('ring-1', 'ring-cyan-400/50', 'ring-offset-2', 'ring-offset-slate-900/50');
           setTimeout(() => {
-            element.classList.remove('ring-2', 'ring-cyan-400', 'ring-offset-2', 'ring-offset-slate-900');
+            element.classList.remove('ring-1', 'ring-cyan-400/50', 'ring-offset-2', 'ring-offset-slate-900/50');
           }, 2000);
         }
       }, 100);
     } else if (suggestion.type === 'story' && suggestion.storyYear) {
-      // Scroll to the year section containing the story
+      // Scroll to the year section containing the story using container scroll
       setTimeout(() => {
         const yearElement = document.getElementById(`timeline-year-${suggestion.storyYear}`);
-        if (yearElement) {
-          yearElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          yearElement.classList.add('ring-2', 'ring-purple-400', 'ring-offset-2', 'ring-offset-slate-900');
+        const container = containerRef.current;
+        if (yearElement && container) {
+          const elementRect = yearElement.getBoundingClientRect();
+          const containerRect = container.getBoundingClientRect();
+          const offset = elementRect.top - containerRect.top + container.scrollTop - 150; // 150px offset for header
+          container.scrollTo({ top: offset, behavior: 'smooth' });
+          yearElement.classList.add('ring-1', 'ring-purple-400/50', 'ring-offset-2', 'ring-offset-slate-900/50');
           setTimeout(() => {
-            yearElement.classList.remove('ring-2', 'ring-purple-400', 'ring-offset-2', 'ring-offset-slate-900');
+            yearElement.classList.remove('ring-1', 'ring-purple-400/50', 'ring-offset-2', 'ring-offset-slate-900/50');
           }, 2000);
         }
       }, 100);
@@ -303,12 +320,16 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
       if (isYearSearch) {
         const year = parseInt(searchTerm.trim(), 10);
         const yearElement = document.getElementById(`timeline-year-${year}`);
-        if (yearElement) {
-          yearElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          // Add highlight effect
-          yearElement.classList.add('ring-2', 'ring-amber-400', 'ring-offset-2', 'ring-offset-slate-900');
+        const container = containerRef.current;
+        if (yearElement && container) {
+          const elementRect = yearElement.getBoundingClientRect();
+          const containerRect = container.getBoundingClientRect();
+          const offset = elementRect.top - containerRect.top + container.scrollTop - 150;
+          container.scrollTo({ top: offset, behavior: 'smooth' });
+          // Add subtle highlight effect
+          yearElement.classList.add('ring-1', 'ring-amber-400/50', 'ring-offset-2', 'ring-offset-slate-900/50');
           setTimeout(() => {
-            yearElement.classList.remove('ring-2', 'ring-amber-400', 'ring-offset-2', 'ring-offset-slate-900');
+            yearElement.classList.remove('ring-1', 'ring-amber-400/50', 'ring-offset-2', 'ring-offset-slate-900/50');
           }, 2000);
         }
         setIsSearchFocused(false);
@@ -368,7 +389,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
           <span className="text-slate-500 text-xs">{getNodeSubtitle(node)}</span>
         </div>
         {node.description && (
-          <p className={`text-slate-400 text-xs mt-1 line-clamp-2 ${isLeft ? 'md:text-right text-left' : 'text-left'}`}>
+          <p className={`text-slate-400 text-xs mt-1 line-clamp-4 ${isLeft ? 'md:text-right text-left' : 'text-left'}`}>
             {node.description}
           </p>
         )}
@@ -557,11 +578,22 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
                             <span className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: CATEGORY_COLORS[suggestion.category] }} />
                           )}
                           {suggestion.type === 'story' && (
-                            <span className="text-purple-400 mr-2 text-xs">📖</span>
+                            <span className="w-2 h-2 rounded-full mr-2 bg-purple-500" />
                           )}
                           <span className="block truncate font-medium text-sm">{suggestion.label}</span>
                           {suggestion.type === 'story' && suggestion.storyYear && (
                             <span className="ml-auto text-[10px] text-purple-400 bg-purple-900/30 px-1.5 py-0.5 rounded">{suggestion.storyYear}</span>
+                          )}
+                          {suggestion.type === 'node' && suggestion.node?.year && (
+                            <span
+                              className="ml-auto text-[10px] px-1.5 py-0.5 rounded"
+                              style={{
+                                color: CATEGORY_COLORS[suggestion.category!],
+                                backgroundColor: `${CATEGORY_COLORS[suggestion.category!]}20`
+                              }}
+                            >
+                              {suggestion.node.year}
+                            </span>
                           )}
                         </div>
                       </li>
@@ -590,7 +622,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
                   <div className="relative z-20 flex items-center gap-4 px-4 md:px-12">
                     <div className="flex-1 h-0.5" style={{ backgroundColor: '#e9a23b' }} />
                     <span className="text-xs font-mono tracking-widest whitespace-nowrap bg-background px-3" style={{ color: '#e9a23b' }}>
-                      {currentEra.label} {currentEra.startYear}-{currentEra.endYear === 2099 ? 'NOW' : currentEra.endYear}
+                      {t(`eras.${currentEra.id}`) || currentEra.label} {currentEra.startYear}-{currentEra.endYear === 2099 ? 'NOW' : currentEra.endYear}
                     </span>
                     <div className="flex-1 h-0.5" style={{ backgroundColor: '#e9a23b' }} />
                   </div>
@@ -641,7 +673,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
                         >
                           <span className={`text-xs text-slate-400 inline-flex items-center gap-1.5 ${isLeft ? 'md:flex-row-reverse md:text-right' : 'flex-row text-left'}`}>
                             <span className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0"></span>
-                            <span>{le.link.story} ({le.year})</span>
+                            <span>{le.link.story}</span>
                           </span>
                         </div>
                       );
@@ -664,7 +696,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
                         >
                           <span className={`text-xs text-slate-400 inline-flex items-center gap-1.5 ${isLeft ? 'md:flex-row-reverse md:text-right' : 'flex-row text-left'}`}>
                             <span className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0"></span>
-                            <span>{se.event.story} ({se.year})</span>
+                            <span>{se.event.story}</span>
                           </span>
                         </div>
                       );

@@ -290,3 +290,377 @@ export function getCategoryBreakdownByYear(nodes: NodeData[]): Array<{
 
   return result.sort((a, b) => a.year - b.year);
 }
+
+/**
+ * =================================================================================
+ * DATA QUALITY & BALANCE ANALYSIS
+ * =================================================================================
+ */
+
+export interface EraBalanceStats {
+  eraName: string;
+  yearRange: string;
+  totalNodes: number;
+  companies: number;
+  people: number;
+  technologies: number;
+  balance: 'excellent' | 'good' | 'fair' | 'poor';
+  diversityScore: number; // 0-100
+  issues: string[];
+}
+
+export interface CategoryBalanceAnalysis {
+  overall: {
+    mostCommon: Category;
+    leastCommon: Category;
+    balanceScore: number; // 0-100, 100 = perfectly balanced
+    isBalanced: boolean;
+  };
+  byEra: EraBalanceStats[];
+  recommendations: string[];
+}
+
+export interface LinkDensityAnalysis {
+  averageLinks: number;
+  companyAvg: number;
+  personAvg: number;
+  techAvg: number;
+  linkTypeBalance: {
+    type: LinkType;
+    count: number;
+    percentage: number;
+    isBalanced: boolean;
+  }[];
+  hubNodes: ConnectionStats[]; // Nodes with unusually high connections
+  isolatedNodes: ConnectionStats[]; // Nodes with very few connections
+  recommendations: string[];
+}
+
+export interface TemporalCoverageAnalysis {
+  coverageByDecade: {
+    decade: string;
+    coverage: 'excellent' | 'good' | 'fair' | 'poor' | 'missing';
+    nodeCount: number;
+    gapYears: number[]; // Years with no nodes
+  }[];
+  gaps: {
+    startYear: number;
+    endYear: number;
+    yearsSpan: number;
+  }[];
+  recommendations: string[];
+}
+
+export interface DataQualityReport {
+  categoryBalance: CategoryBalanceAnalysis;
+  linkDensity: LinkDensityAnalysis;
+  temporalCoverage: TemporalCoverageAnalysis;
+  overallScore: number; // 0-100
+  grade: 'A' | 'B' | 'C' | 'D' | 'F';
+}
+
+/**
+ * Calculate diversity score using Shannon entropy
+ */
+function calculateDiversityScore(counts: number[]): number {
+  const total = counts.reduce((sum, c) => sum + c, 0);
+  if (total === 0) return 0;
+
+  const probabilities = counts.map(c => c / total);
+  const entropy = -probabilities.reduce((sum, p) => {
+    return p > 0 ? sum + p * Math.log2(p) : sum;
+  }, 0);
+
+  // Normalize to 0-100 (max entropy for 3 categories is log2(3) ≈ 1.585)
+  const maxEntropy = Math.log2(counts.length);
+  return Math.round((entropy / maxEntropy) * 100);
+}
+
+/**
+ * Analyze category balance across eras
+ */
+export function analyzeCategoryBalance(data: GraphData): CategoryBalanceAnalysis {
+  const { nodes } = data;
+
+  // Overall distribution
+  const categoryCount = {
+    [Category.COMPANY]: 0,
+    [Category.PERSON]: 0,
+    [Category.TECHNOLOGY]: 0,
+  };
+
+  nodes.forEach(node => {
+    categoryCount[node.category]++;
+  });
+
+  const counts = Object.values(categoryCount);
+  const total = nodes.length;
+  const balanceScore = calculateDiversityScore(counts);
+
+  // Find most/least common
+  const entries = Object.entries(categoryCount) as [Category, number][];
+  entries.sort((a, b) => b[1] - a[1]);
+  const mostCommon = entries[0][0];
+  const leastCommon = entries[entries.length - 1][0];
+
+  // Era-based analysis (simplified - using decades)
+  const decades = calculateTimelineDistribution(nodes);
+  const byEra: EraBalanceStats[] = decades.map(decade => {
+    const total = decade.companies + decade.people + decade.technologies;
+    const diversityScore = calculateDiversityScore([decade.companies, decade.people, decade.technologies]);
+
+    let balance: 'excellent' | 'good' | 'fair' | 'poor' = 'poor';
+    if (diversityScore >= 90) balance = 'excellent';
+    else if (diversityScore >= 75) balance = 'good';
+    else if (diversityScore >= 60) balance = 'fair';
+
+    const issues: string[] = [];
+    if (total < 5) issues.push('Low total coverage');
+    if (decade.companies === 0) issues.push('No companies');
+    if (decade.people === 0) issues.push('No people');
+    if (decade.technologies === 0) issues.push('No technologies');
+
+    return {
+      eraName: decade.decade,
+      yearRange: decade.yearRange,
+      totalNodes: total,
+      companies: decade.companies,
+      people: decade.people,
+      technologies: decade.technologies,
+      balance,
+      diversityScore,
+      issues,
+    };
+  });
+
+  // Recommendations
+  const recommendations: string[] = [];
+  if (balanceScore < 75) {
+    recommendations.push(`Category balance could be improved (score: ${balanceScore}/100)`);
+    recommendations.push(`Consider adding more ${leastCommon} nodes to balance the dataset`);
+  }
+
+  byEra.forEach(era => {
+    if (era.issues.length > 0) {
+      recommendations.push(`${era.eraName}: ${era.issues.join(', ')}`);
+    }
+  });
+
+  return {
+    overall: {
+      mostCommon,
+      leastCommon,
+      balanceScore,
+      isBalanced: balanceScore >= 75,
+    },
+    byEra,
+    recommendations,
+  };
+}
+
+/**
+ * Analyze link density and distribution
+ */
+export function analyzeLinkDensity(data: GraphData): LinkDensityAnalysis {
+  const connectionStats = getTopConnectedNodes(data, data.nodes.length);
+
+  // Calculate averages by category
+  const categoryStats = {
+    [Category.COMPANY]: [] as number[],
+    [Category.PERSON]: [] as number[],
+    [Category.TECHNOLOGY]: [] as number[],
+  };
+
+  connectionStats.forEach(stat => {
+    categoryStats[stat.category].push(stat.totalConnections);
+  });
+
+  const avg = (arr: number[]) => arr.length > 0 ? arr.reduce((s, n) => s + n, 0) / arr.length : 0;
+
+  const companyAvg = Math.round(avg(categoryStats[Category.COMPANY]) * 10) / 10;
+  const personAvg = Math.round(avg(categoryStats[Category.PERSON]) * 10) / 10;
+  const techAvg = Math.round(avg(categoryStats[Category.TECHNOLOGY]) * 10) / 10;
+  const averageLinks = Math.round(avg(connectionStats.map(s => s.totalConnections)) * 10) / 10;
+
+  // Link type balance
+  const linkTypeStats = calculateLinkTypeDistribution(data.links);
+  const idealPercentage = 100 / linkTypeStats.length;
+  const linkTypeBalance = linkTypeStats.map(stat => ({
+    ...stat,
+    isBalanced: Math.abs(stat.percentage - idealPercentage) < 15, // Within 15% of ideal
+  }));
+
+  // Hub nodes (>2x average connections)
+  const hubThreshold = averageLinks * 2;
+  const hubNodes = connectionStats.filter(s => s.totalConnections > hubThreshold).slice(0, 10);
+
+  // Isolated nodes (1 or fewer connections)
+  const isolatedNodes = connectionStats.filter(s => s.totalConnections <= 1).slice(0, 10);
+
+  // Recommendations
+  const recommendations: string[] = [];
+
+  if (isolatedNodes.length > 0) {
+    recommendations.push(`${isolatedNodes.length} nodes have 1 or fewer connections`);
+  }
+
+  const unbalancedLinks = linkTypeBalance.filter(l => !l.isBalanced);
+  if (unbalancedLinks.length > 0) {
+    recommendations.push(`Some link types are underrepresented: ${unbalancedLinks.map(l => l.type).join(', ')}`);
+  }
+
+  if (hubNodes.length > 5) {
+    recommendations.push(`${hubNodes.length} hub nodes detected - ensure connections are meaningful`);
+  }
+
+  return {
+    averageLinks,
+    companyAvg,
+    personAvg,
+    techAvg,
+    linkTypeBalance,
+    hubNodes,
+    isolatedNodes,
+    recommendations,
+  };
+}
+
+/**
+ * Analyze temporal coverage
+ */
+export function analyzeTemporalCoverage(nodes: NodeData[]): TemporalCoverageAnalysis {
+  const years = nodes.map(n => n.year).filter(y => y !== undefined) as number[];
+  if (years.length === 0) {
+    return {
+      coverageByDecade: [],
+      gaps: [],
+      recommendations: ['No year data available'],
+    };
+  }
+
+  const minYear = Math.min(...years);
+  const maxYear = Math.max(...years);
+
+  // Year-by-year coverage
+  const yearCoverage = new Map<number, number>();
+  nodes.forEach(node => {
+    if (node.year) {
+      yearCoverage.set(node.year, (yearCoverage.get(node.year) || 0) + 1);
+    }
+  });
+
+  // Decade analysis
+  const decadeStats = calculateTimelineDistribution(nodes);
+  const coverageByDecade = decadeStats.map(stat => {
+    const total = stat.count;
+    let coverage: 'excellent' | 'good' | 'fair' | 'poor' | 'missing' = 'missing';
+
+    if (total >= 15) coverage = 'excellent';
+    else if (total >= 10) coverage = 'good';
+    else if (total >= 5) coverage = 'fair';
+    else if (total > 0) coverage = 'poor';
+
+    // Find gap years in this decade
+    const startDecade = parseInt(stat.decade);
+    const gapYears: number[] = [];
+    for (let y = startDecade; y < startDecade + 10; y++) {
+      if (y >= minYear && y <= maxYear && !yearCoverage.has(y)) {
+        gapYears.push(y);
+      }
+    }
+
+    return {
+      decade: stat.decade,
+      coverage,
+      nodeCount: total,
+      gapYears,
+    };
+  });
+
+  // Find multi-year gaps
+  const gaps: { startYear: number; endYear: number; yearsSpan: number }[] = [];
+  let gapStart: number | null = null;
+
+  for (let y = minYear; y <= maxYear; y++) {
+    if (!yearCoverage.has(y)) {
+      if (gapStart === null) gapStart = y;
+    } else {
+      if (gapStart !== null) {
+        const yearsSpan = y - gapStart;
+        if (yearsSpan >= 2) { // Only report gaps of 2+ years
+          gaps.push({ startYear: gapStart, endYear: y - 1, yearsSpan });
+        }
+        gapStart = null;
+      }
+    }
+  }
+
+  // Recommendations
+  const recommendations: string[] = [];
+
+  const poorDecades = coverageByDecade.filter(d => d.coverage === 'poor' || d.coverage === 'missing');
+  if (poorDecades.length > 0) {
+    recommendations.push(`Low coverage in: ${poorDecades.map(d => d.decade).join(', ')}`);
+  }
+
+  if (gaps.length > 0) {
+    recommendations.push(`${gaps.length} significant time gap(s) detected`);
+    gaps.forEach(gap => {
+      recommendations.push(`  • ${gap.startYear}-${gap.endYear} (${gap.yearsSpan} years)`);
+    });
+  }
+
+  return {
+    coverageByDecade,
+    gaps,
+    recommendations,
+  };
+}
+
+/**
+ * Generate comprehensive data quality report
+ */
+export function generateDataQualityReport(data: GraphData): DataQualityReport {
+  const categoryBalance = analyzeCategoryBalance(data);
+  const linkDensity = analyzeLinkDensity(data);
+  const temporalCoverage = analyzeTemporalCoverage(data.nodes);
+
+  // Calculate overall score (weighted average)
+  const weights = {
+    categoryBalance: 0.3,
+    linkDensity: 0.35,
+    temporalCoverage: 0.35,
+  };
+
+  // Category balance score (already 0-100)
+  const catScore = categoryBalance.overall.balanceScore;
+
+  // Link density score (based on recommendations)
+  const linkScore = Math.max(0, 100 - (linkDensity.recommendations.length * 15));
+
+  // Temporal score (based on coverage quality)
+  const excellentDecades = temporalCoverage.coverageByDecade.filter(d => d.coverage === 'excellent').length;
+  const totalDecades = temporalCoverage.coverageByDecade.length;
+  const tempScore = totalDecades > 0 ? (excellentDecades / totalDecades) * 100 : 0;
+
+  const overallScore = Math.round(
+    catScore * weights.categoryBalance +
+    linkScore * weights.linkDensity +
+    tempScore * weights.temporalCoverage
+  );
+
+  // Grade assignment
+  let grade: 'A' | 'B' | 'C' | 'D' | 'F' = 'F';
+  if (overallScore >= 90) grade = 'A';
+  else if (overallScore >= 80) grade = 'B';
+  else if (overallScore >= 70) grade = 'C';
+  else if (overallScore >= 60) grade = 'D';
+
+  return {
+    categoryBalance,
+    linkDensity,
+    temporalCoverage,
+    overallScore,
+    grade,
+  };
+}

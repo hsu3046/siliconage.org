@@ -280,6 +280,156 @@ function detectDuplicates(nodes: NodeData[], links: LinkData[]): ValidationError
   return errors;
 }
 
+// Rule 6: Detect Self-Links (nodes pointing to themselves)
+function detectSelfLinks(links: LinkData[]): ValidationError[] {
+  const errors: ValidationError[] = [];
+
+  links.forEach((link, index) => {
+    const sourceId = getNodeId(link.source);
+    const targetId = getNodeId(link.target);
+
+    if (sourceId === targetId) {
+      errors.push({
+        severity: 'error',
+        category: 'logic-error',
+        linkIndex: index,
+        message: `Self-link detected: "${sourceId}" points to itself`,
+        suggestion: 'Remove self-referencing link - nodes cannot link to themselves',
+        details: { nodeId: sourceId, type: link.type }
+      });
+    }
+  });
+
+  return errors;
+}
+
+// Rule 7: Detect Missing Link Metadata (story, startYear)
+function detectMissingLinkMetadata(links: LinkData[]): ValidationError[] {
+  const errors: ValidationError[] = [];
+
+  links.forEach((link, index) => {
+    const sourceId = getNodeId(link.source);
+    const targetId = getNodeId(link.target);
+
+    // Check for missing story
+    if (!link.story || link.story.trim().length === 0) {
+      errors.push({
+        severity: 'warning',
+        category: 'missing-data',
+        linkIndex: index,
+        message: `Link #${index} (${sourceId} → ${targetId}) has no story`,
+        suggestion: 'Add a story to explain the relationship context',
+        details: { source: sourceId, target: targetId, type: link.type }
+      });
+    }
+
+    // Check for missing startYear
+    if (!link.startYear) {
+      errors.push({
+        severity: 'warning',
+        category: 'missing-data',
+        linkIndex: index,
+        message: `Link #${index} (${sourceId} → ${targetId}) has no startYear`,
+        suggestion: 'Add startYear to indicate when the relationship began',
+        details: { source: sourceId, target: targetId, type: link.type }
+      });
+    }
+  });
+
+  return errors;
+}
+
+// Rule 8: Detect Circular References (cycles in the graph)
+function detectCircularReferences(nodes: NodeData[], links: LinkData[]): ValidationError[] {
+  const errors: ValidationError[] = [];
+
+  // Build adjacency list (only for directional dependency links)
+  // ENGAGES (Rival/Partner) relationships are bidirectional and should be excluded
+  const graph = new Map<string, string[]>();
+  nodes.forEach(node => graph.set(node.id, []));
+
+  links.forEach(link => {
+    // Only check CREATES, POWERS, CONTRIBUTES for circular dependencies
+    // Skip ENGAGES as it represents non-dependency relationships (rivalry, partnership)
+    if (link.type === LinkType.ENGAGES) {
+      return;
+    }
+
+    const sourceId = getNodeId(link.source);
+    const targetId = getNodeId(link.target);
+    if (graph.has(sourceId)) {
+      graph.get(sourceId)!.push(targetId);
+    }
+  });
+
+  // DFS to detect cycles
+  const visited = new Set<string>();
+  const recursionStack = new Set<string>();
+  const nodeMap = new Map(nodes.map(n => [n.id, n]));
+
+  function findCycle(nodeId: string, path: string[]): string[] | null {
+    if (recursionStack.has(nodeId)) {
+      // Found a cycle - return the cycle path
+      const cycleStart = path.indexOf(nodeId);
+      return path.slice(cycleStart);
+    }
+
+    if (visited.has(nodeId)) {
+      return null;
+    }
+
+    visited.add(nodeId);
+    recursionStack.add(nodeId);
+    path.push(nodeId);
+
+    const neighbors = graph.get(nodeId) || [];
+    for (const neighbor of neighbors) {
+      const cycle = findCycle(neighbor, [...path]);
+      if (cycle) {
+        return cycle;
+      }
+    }
+
+    recursionStack.delete(nodeId);
+    return null;
+  }
+
+  // Find all cycles
+  const foundCycles = new Set<string>(); // To avoid duplicate cycle reports
+
+  for (const nodeId of graph.keys()) {
+    if (!visited.has(nodeId)) {
+      const cycle = findCycle(nodeId, []);
+      if (cycle && cycle.length > 0) {
+        // Create a normalized cycle key to avoid duplicates
+        const sortedCycle = [...cycle].sort();
+        const cycleKey = sortedCycle.join('→');
+
+        if (!foundCycles.has(cycleKey)) {
+          foundCycles.add(cycleKey);
+
+          // Create readable cycle path with labels
+          const cycleLabels = cycle.map(id => {
+            const node = nodeMap.get(id);
+            return node ? node.label : id;
+          });
+          cycleLabels.push(cycleLabels[0]); // Close the cycle
+
+          errors.push({
+            severity: 'info',
+            category: 'logic-error',
+            message: `Circular reference detected: ${cycleLabels.join(' → ')}`,
+            suggestion: 'Circular references are allowed but verify if this dependency cycle is intentional',
+            details: { cycle: cycle, cycleLength: cycle.length }
+          });
+        }
+      }
+    }
+  }
+
+  return errors;
+}
+
 // Helper: Find similar node ID (for typo suggestions)
 function findSimilarNodeId(targetId: string, nodes: NodeData[]): string | undefined {
   const similarities = nodes.map(node => ({
@@ -336,6 +486,9 @@ export function validateGraphData(data: GraphData): ValidationResult {
   allErrors.push(...detectMissingMetadata(data.nodes));
   allErrors.push(...detectLogicViolations(data.nodes, data.links));
   allErrors.push(...detectDuplicates(data.nodes, data.links));
+  allErrors.push(...detectSelfLinks(data.links));
+  allErrors.push(...detectMissingLinkMetadata(data.links));
+  allErrors.push(...detectCircularReferences(data.nodes, data.links));
 
   // Categorize by severity
   const errors = allErrors.filter(e => e.severity === 'error');

@@ -29,7 +29,7 @@ const TECH_ROLE_BONUS: Record<string, number> = {
 // Zone Radius Constants
 const BASE_ZONE_RADIUS = 80;
 const ZONE_SCALE_FACTOR = 3;
-const MAX_ZONE_RADIUS = 250;
+const MAX_ZONE_RADIUS = 350;
 const MIN_ZONE_RADIUS = 80;
 
 /**

@@ -363,23 +363,26 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, fullData, focusNodeI
     // Helper: Category badge
     const getCategoryBadge = (node: NodeData) => {
         if (node.category === Category.COMPANY && node.companyCategories?.[0]) {
+            const catKey = node.companyCategories[0];
+            const translated = t(`companyCategories.${catKey}`);
             return (
                 <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-red-900/20 text-red-400/80 border border-red-800/30">
-                    {CATEGORY_LABELS[node.companyCategories[0]].toUpperCase()}
+                    {(translated || CATEGORY_LABELS[catKey] || catKey).toUpperCase()}
                 </span>
             );
         }
-        if (node.category === Category.PERSON && node.primaryRole) {
+        if (node.category === Category.PERSON && node.impactRole) {
             return (
                 <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-blue-900/20 text-blue-400/80 border border-blue-800/30">
-                    {node.primaryRole.toUpperCase()}
+                    {(t(`personRoles.${node.impactRole}`) || node.impactRole).toUpperCase()}
                 </span>
             );
         }
         if (node.category === Category.TECHNOLOGY && node.techCategoryL2) {
+            const translated = t(`techCategoryL2.${node.techCategoryL2}`);
             return (
                 <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-emerald-900/20 text-emerald-400/80 border border-emerald-800/30">
-                    {node.techCategoryL2.toUpperCase()}
+                    {(translated || node.techCategoryL2).toUpperCase()}
                 </span>
             );
         }
@@ -441,20 +444,20 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, fullData, focusNodeI
                 </div>
             </div>
 
-            {/* Title + Inline Description */}
+            {/* Title + Link Description (줄바꿈) */}
             <div className="flex items-start gap-2.5">
                 <div className="flex-shrink-0 mt-0.5">
                     {getCategoryIcon(conn.node.category)}
                 </div>
                 <div className="flex-1 min-w-0">
-                    <div className="flex items-baseline gap-2 flex-wrap">
-                        <span className="font-semibold text-white text-sm leading-tight group-hover:text-primary transition-colors">
-                            {conn.node.label}
+                    <span className="font-semibold text-white text-sm leading-tight group-hover:text-primary transition-colors block">
+                        {conn.node.label}
+                    </span>
+                    {conn.link.story && (
+                        <span className="text-[10px] text-slate-400 font-normal leading-tight block mt-0.5">
+                            {conn.link.story}
                         </span>
-                        <span className="text-[10px] text-slate-500 font-medium whitespace-nowrap">
-                            {focusNode && getConnectionLabel(focusNode, conn.node, conn.link, conn.isOutgoing)}
-                        </span>
-                    </div>
+                    )}
                 </div>
             </div>
         </button>
@@ -485,22 +488,22 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, fullData, focusNodeI
                 </div>
 
                 {/* Main Content */}
-                <div className="flex items-center gap-2.5">
+                <div className="flex items-start gap-2.5">
                     {/* Node Type Icon */}
                     <div className="flex-shrink-0 mt-0.5">
                         {getCategoryIcon(conn.node.category)}
                     </div>
 
-                    {/* Node Label & Description */}
+                    {/* Node Label & Link Description (줄바꿈) */}
                     <div className="flex-1 min-w-0">
-                        <div className="flex items-baseline gap-2 flex-wrap">
-                            <span className="font-semibold text-white text-sm leading-tight group-hover:text-primary transition-colors">
-                                {conn.node.label}
+                        <span className="font-semibold text-white text-sm leading-tight group-hover:text-primary transition-colors block">
+                            {conn.node.label}
+                        </span>
+                        {conn.link.story && (
+                            <span className="text-[10px] text-slate-400 font-normal leading-tight block mt-0.5">
+                                {conn.link.story}
                             </span>
-                            <span className="text-[10px] text-slate-500 font-medium whitespace-nowrap">
-                                {focusNode && getConnectionLabel(focusNode, conn.node, conn.link, conn.isOutgoing)}
-                            </span>
-                        </div>
+                        )}
                     </div>
                 </div>
             </button>
@@ -513,11 +516,7 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, fullData, focusNodeI
         const hasItems = linkTypeOrder.some(lt => grouped[lt].length > 0);
 
         if (!hasItems) {
-            return (
-                <div className="flex flex-col items-center justify-center py-12 text-slate-600 opacity-50">
-                    <p className="text-sm font-medium">No direct impact</p>
-                </div>
-            );
+            return null;
         }
 
         return (
@@ -538,7 +537,7 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, fullData, focusNodeI
                                 <div className="h-px flex-1 bg-amber-500/20" />
                                 <div className="flex items-center gap-1.5 text-amber-500">
                                     <span className="text-[11px] font-bold uppercase tracking-widest">
-                                        {info.label}
+                                        {t(`linkTypes.${linkType}`) || info.label}
                                     </span>
                                     <span className="text-[10px] font-medium opacity-70">
                                         ({items.length})
@@ -577,8 +576,8 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, fullData, focusNodeI
                             <input
                                 ref={searchInputRef}
                                 type="text"
-                                className="block w-full pl-10 pr-3 py-2 border border-slate-600 rounded-lg leading-5 bg-slate-800 text-slate-300 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 sm:text-sm"
-                                placeholder={t('search.placeholder')}
+                                className="block w-full pl-10 pr-3 py-2 border border-slate-600 rounded-lg leading-5 bg-transparent text-slate-300 placeholder-slate-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary sm:text-sm"
+                                placeholder={t('linksView.searchPlaceholder')}
                                 value={searchTerm}
                                 onChange={handleSearchChange}
                                 onKeyDown={handleKeyDown}
@@ -673,7 +672,7 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, fullData, focusNodeI
                                     onClick={() => toggleSection(enagagesSectionKey)}>
                                     <div className="h-px flex-1 bg-amber-500/20" />
                                     <div className="flex items-center gap-1.5 text-amber-500">
-                                        <span className="text-[11px] font-bold uppercase tracking-widest">Relationships</span>
+                                        <span className="text-[11px] font-bold uppercase tracking-widest">{t('linkTypes.ENGAGES') || 'Relationships'}</span>
                                         <span className="text-[10px] font-medium opacity-70">({engages.length})</span>
                                         {isEngagesCollapsed ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
                                     </div>
@@ -751,7 +750,7 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, fullData, focusNodeI
                             >
                                 <div className="h-px flex-1 bg-amber-500/30" />
                                 <div className="flex items-center gap-1.5 text-amber-500">
-                                    <span className="text-[10px] font-bold uppercase tracking-wider">Relationships</span>
+                                    <span className="text-[10px] font-bold uppercase tracking-wider">{t('linkTypes.ENGAGES') || 'Relationships'}</span>
                                     <span className="text-[9px] font-medium opacity-70">({engages.length})</span>
                                     {collapsedSections['m-engages'] ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
                                 </div>

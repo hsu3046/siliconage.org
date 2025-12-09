@@ -133,16 +133,16 @@ const getLabelDimensions = (label: string, category: Category) => {
 const getLinkStyle = (type: LinkType) => {
   switch (type) {
     case LinkType.CREATES:    // Creation, Launch, Founding
-      return { dasharray: "none", width: 1.5, color: "#06b6d4", opacity: 1.0 }; // Cyan, Solid
+      return { dasharray: "none", width: 1.0, color: "#06b6d4", opacity: 0.7 }; // Cyan, Solid
 
     case LinkType.POWERS:     // Dependency, Infrastructure, Foundation
-      return { dasharray: "none", width: 1.0, color: "#f97316", opacity: .8 }; // Orange, Solid
+      return { dasharray: "none", width: 1.0, color: "#f97316", opacity: 0.7 }; // Orange, Solid
 
     case LinkType.CONTRIBUTES: // Evolution, Influence, Inspiration
-      return { dasharray: "5,2", width: 1.5, color: "#a78bfa", opacity: 0.8 }; // Purple, Dashed
+      return { dasharray: "5,2", width: 1.5, color: "#a78bfa", opacity: 0.6 }; // Purple, Dashed
 
     case LinkType.ENGAGES:    // Interaction, Rivalry, Partnership
-      return { dasharray: "none", width: 1.5, color: "#10b981", opacity: 0.8 }; // Emerald, Solid
+      return { dasharray: "none", width: 2.5, color: "#94a3b8", opacity: 0.8 }; // Emerald, Solid
 
     default:
       return { dasharray: "none", width: 1, color: "#94a3b8", opacity: 0.5 };
@@ -403,6 +403,8 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
     description: string;
     score: number;
     companyRole?: string;
+    personRole?: string;
+    techRole?: string;
     techCategoryL1?: string;
     techCategoryL2?: string;
     hashtags?: { id: string, label: string }[];
@@ -554,7 +556,7 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
       { id: "arrow-creates", color: "#06b6d4" },     // Cyan (Creates)
       { id: "arrow-powers", color: "#f97316" },      // Orange (Powers)
       { id: "arrow-contributes", color: "#a78bfa" }, // Purple (Contributes)
-      { id: "arrow-engages", color: "#10b981" },     // Emerald (Engages)
+      { id: "arrow-engages", color: "#94a3b8" },     // Emerald (Engages)
     ];
 
     markerTypes.forEach(m => {
@@ -563,7 +565,7 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
       defs.append("marker")
         .attr("id", m.id)
         .attr("viewBox", "0 -5 10 10")
-        .attr("refX", 10)
+        .attr("refX", 9)
         .attr("refY", 0)
         .attr("markerWidth", 6)
         .attr("markerHeight", 6)
@@ -577,7 +579,7 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
       defs.append("marker")
         .attr("id", `${m.id}-reverse`)
         .attr("viewBox", "0 -5 10 10")
-        .attr("refX", 0)
+        .attr("refX", 2)
         .attr("refY", 0)
         .attr("markerWidth", 6)
         .attr("markerHeight", 6)
@@ -588,21 +590,28 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
     });
 
     // --- DEFINE LINK ICON SYMBOLS ---
-    // HEART icon (Co-op/Partnership)
+    // HEART icon (Partnership) - Handshake icon from lucide (actual)
     defs.append("symbol")
       .attr("id", "icon-heart")
       .attr("viewBox", "0 0 24 24")
-      .append("path")
-      .attr("d", "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z")
-      .attr("fill", "#f472b6"); // Pink
+      .attr("fill", "none")
+      .attr("stroke", "#3b82f6") // Blue
+      .attr("stroke-width", "2")
+      .attr("stroke-linecap", "round")
+      .attr("stroke-linejoin", "round")
+      .html('<path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/>');
 
-    // RIVALRY icon (Boxing gloves - simplified fist)
+    // RIVALRY icon (Rival) - Swords icon from lucide
     defs.append("symbol")
       .attr("id", "icon-rivalry")
       .attr("viewBox", "0 0 24 24")
-      .append("path")
-      .attr("d", "M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm-1.5 14.5l-3-3 1.41-1.42L10.5 13.67l4.59-4.58L16.5 10.5l-6 6z")
-      .attr("fill", "#f97316"); // Orange
+      .attr("fill", "none")
+      .attr("stroke", "#f59e0b") // Amber
+      .attr("stroke-width", "2")
+      .attr("stroke-linecap", "round")
+      .attr("stroke-linejoin", "round")
+      .html('<polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" x2="19" y1="19" y2="13"/><line x1="16" x2="20" y1="16" y2="20"/><line x1="19" x2="21" y1="21" y2="19"/><polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5"/><line x1="5" x2="9" y1="14" y2="18"/><line x1="7" x2="4" y1="17" y2="20"/><line x1="3" x2="5" y1="19" y2="21"/>');
+
 
     // POWERS icon (Lightning bolt)
     defs.append("symbol")
@@ -1157,7 +1166,7 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
             return 0.15;
           })
           .attr("stroke", d => d._focusDistance === 2 ? CATEGORY_COLORS[d.category] : "none")
-          .attr("stroke-opacity", d => d._focusDistance === 2 ? 0.15 : 0)
+          .attr("stroke-opacity", d => d._focusDistance === 2 ? 0.08 : 0)
           .attr("stroke-width", 1)
           .attr("pointer-events", "none")
           .call(enter => enter.transition(t).attr("r", (d: any) => d._zoneRadius || 150)),
@@ -1169,7 +1178,7 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
             return 0.15;
           })
           .attr("stroke", (d: any) => d._focusDistance === 2 ? CATEGORY_COLORS[d.category] : "none")
-          .attr("stroke-opacity", (d: any) => d._focusDistance === 2 ? 0.15 : 0),
+          .attr("stroke-opacity", (d: any) => d._focusDistance === 2 ? 0.08 : 0),
         exit => exit.transition(t).attr("r", 0).remove()
       );
 
@@ -1250,7 +1259,10 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
                 label: d.label,
                 category: d.category,
                 description: d.description,
-                companyRole: d.companyCategories?.[0] || d.impactRole as string | undefined,
+                // Assign roles based on node category
+                companyRole: d.category === Category.COMPANY ? d.companyCategories?.[0] : undefined,
+                personRole: d.category === Category.PERSON ? (d.impactRole as string) : undefined,
+                techRole: d.category === Category.TECHNOLOGY ? (d.impactRole as string) : undefined,
                 techCategoryL1: d.techCategoryL1,
                 techCategoryL2: d.techCategoryL2,
                 hashtags: hashtags
@@ -1286,9 +1298,9 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
       // If neither node is the focus node (distance 0), dim the link
       if (sourceDist !== undefined && targetDist !== undefined) {
         // Both nodes are 2nd degree -> very dim
-        if (sourceDist === 2 && targetDist === 2) return getLinkStyle(d.type).opacity * 0.15;
+        if (sourceDist === 2 && targetDist === 2) return getLinkStyle(d.type).opacity * 0.08;
         // Neither node is the focus node (0) -> this is a "secondary" link (e.g., 1st-to-1st)
-        if (sourceDist !== 0 && targetDist !== 0) return getLinkStyle(d.type).opacity * 0.25;
+        if (sourceDist !== 0 && targetDist !== 0) return getLinkStyle(d.type).opacity * 0.12;
       }
       return getLinkStyle(d.type).opacity;
     };
@@ -1347,14 +1359,18 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
       }
     };
 
-    const linksWithIcons = visibleLinks.filter(l => l.icon && l.icon !== LinkIcon.NONE);
+    // 3.1 Link Icons - Only show ENGAGES icons (Partner/Rival)
+    // Note: POWERS and CONTRIBUTES icons are disabled but function is preserved for future use
+    const linksWithIcons = visibleLinks.filter(l =>
+      l.icon && l.icon !== LinkIcon.NONE && l.type === LinkType.ENGAGES
+    );
     const iconsSel = rootGroup.select(".layer-link-icons")
       .selectAll("use")
       .data(linksWithIcons, (d: any) => `icon-${d.source.id}-${d.target.id}`)
       .join(
         enter => enter.append("use")
-          .attr("width", 12)
-          .attr("height", 12)
+          .attr("width", 24)
+          .attr("height", 24)
           .attr("href", d => `#${getIconSymbolId(d.icon)}`)
           .style("pointer-events", "none")
           .style("opacity", 0)
@@ -1374,9 +1390,8 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
         enter => enter.append("circle")
           .attr("r", 0)
           .attr("fill", d => CATEGORY_COLORS[d.category])
-          .attr("fill-opacity", (d: any) => d._focusDistance === 2 ? 0.3 : 1)
-          .attr("stroke", "#0f172a")
-          .attr("stroke-width", 2)
+          .attr("fill-opacity", (d: any) => d._focusDistance === 2 ? 0.15 : 1)
+          .attr("stroke", "none")
           .attr("cursor", "pointer")
           .call(enter => enter.transition(t).attr("r", (d: any) => d._radius || 10))
           .on("click", (event, d) => { event.stopPropagation(); handleNodeClick(d); })
@@ -1408,7 +1423,10 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
               label: d.label,
               category: d.category,
               description: d.description,
-              companyRole: d.companyCategories?.[0] || d.impactRole as string | undefined,
+              // Assign roles based on node category
+              companyRole: d.category === Category.COMPANY ? d.companyCategories?.[0] : undefined,
+              personRole: d.category === Category.PERSON ? (d.impactRole as string) : undefined,
+              techRole: d.category === Category.TECHNOLOGY ? (d.impactRole as string) : undefined,
               techCategoryL1: d.techCategoryL1,
               techCategoryL2: d.techCategoryL2,
               hashtags: hashtags
@@ -1418,7 +1436,7 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
           .on("mouseleave", () => setTooltip(null)),
         update => update.transition(t)
           .attr("r", (d: any) => d._radius || 10)
-          .attr("fill-opacity", (d: any) => d._focusDistance === 2 ? 0.3 : 1),
+          .attr("fill-opacity", (d: any) => d._focusDistance === 2 ? 0.15 : 1),
         exit => exit.transition(t).attr("r", 0).remove()
       );
 
@@ -1455,10 +1473,10 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
             .style("font-weight", "400")
             .style("fill", "#94a3b8");
 
-          return text.call(enter => enter.transition(t).style("opacity", (d: any) => d._focusDistance === 2 ? 0.3 : 1));
+          return text.call(enter => enter.transition(t).style("opacity", (d: any) => d._focusDistance === 2 ? 0.5 : 1));
         },
         update => {
-          const text = update.transition(t).style("opacity", (d: any) => d._focusDistance === 2 ? 0.3 : 1);
+          const text = update.transition(t).style("opacity", (d: any) => d._focusDistance === 2 ? 0.5 : 1);
           text.attr("x", (d: any) => (d._radius || 10) + 12);
           text.selectAll("tspan").attr("x", (d: any) => (d._radius || 10) + 12);
           return text;
@@ -1498,8 +1516,8 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
       iconsSel.each(function (d: any) {
         const p1 = calculatePoint(d.source, d.target);
         const p2 = calculatePoint(d.target, d.source);
-        const midX = (p1.x + p2.x) / 2 - 6; // offset by half icon width
-        const midY = (p1.y + p2.y) / 2 - 6; // offset by half icon height
+        const midX = (p1.x + p2.x) / 2 - 12; // offset by half icon width
+        const midY = (p1.y + p2.y) / 2 - 12; // offset by half icon height
         d3.select(this)
           .attr("x", midX)
           .attr("y", midY);
@@ -1537,7 +1555,7 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
             <input
               type="text"
               className="block w-full pl-10 pr-3 py-2 border border-slate-600 rounded-lg leading-5 bg-slate-900/90 text-slate-300 placeholder-slate-500 focus:outline-none focus:bg-slate-900 focus:border-primary focus:ring-1 focus:ring-primary sm:text-sm backdrop-blur-md shadow-xl transition-all"
-              placeholder={t('search.placeholder')}
+              placeholder={t('mapView.searchPlaceholder')}
               value={searchTerm}
               onChange={handleSearchChange}
               onKeyDown={handleKeyDown}
@@ -1577,7 +1595,7 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
         >
           <div className="flex items-center gap-2 mb-1">
             <div className="w-2 h-2 rounded-full shadow-[0_0_5px_currentColor]" style={{ backgroundColor: CATEGORY_COLORS[tooltip.category], color: CATEGORY_COLORS[tooltip.category] }}></div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{tooltip.category}</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{t(`categories.${tooltip.category.toLowerCase()}`) || tooltip.category}</span>
           </div>
           <span className="text-sm font-bold text-white leading-tight">{tooltip.label}</span>
 
@@ -1585,22 +1603,27 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
           <div className="flex flex-wrap gap-1 mt-1 mb-1">
             {tooltip.companyRole && (
               <span className="text-[9px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-                {tooltip.companyRole.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase())}
+                {t(`companyCategories.${tooltip.companyRole}`) || tooltip.companyRole.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase())}
               </span>
             )}
             {tooltip.personRole && (
               <span className="text-[9px] px-1.5 py-0.5 rounded bg-purple-900/40 text-purple-300 border border-purple-800/50">
-                {tooltip.personRole}
+                {t(`personRoles.${tooltip.personRole}`) || tooltip.personRole}
+              </span>
+            )}
+            {tooltip.techRole && (
+              <span className="text-[9px] px-1.5 py-0.5 rounded bg-green-900/40 text-green-300 border border-green-800/50">
+                {t(`techRoles.${tooltip.techRole}`) || tooltip.techRole}
               </span>
             )}
             {tooltip.techCategoryL1 && (
               <span className="text-[9px] px-1.5 py-0.5 rounded bg-blue-900/40 text-blue-300 border border-blue-800/50">
-                {tooltip.techCategoryL1}
+                {t(`techCategoryL1.${tooltip.techCategoryL1}`) || tooltip.techCategoryL1}
               </span>
             )}
             {tooltip.techCategoryL2 && (
               <span className="text-[9px] px-1.5 py-0.5 rounded bg-indigo-900/40 text-indigo-300 border border-indigo-800/50">
-                {tooltip.techCategoryL2}
+                {t(`techCategoryL2.${tooltip.techCategoryL2}`) || tooltip.techCategoryL2}
               </span>
             )}
           </div>

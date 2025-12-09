@@ -101,26 +101,28 @@ const DataManager: React.FC = () => {
           {/* Instructions */}
           <div className="p-6 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 border border-cyan-500/30 rounded-xl">
             <h3 className="text-lg font-bold text-white mb-3">📘 How to Use</h3>
+            <div className="mb-4 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+              <p className="text-sm text-blue-300">
+                <strong>Note:</strong> This tool exports your <strong>current</strong> dataset from <code className="px-1 bg-slate-900/50 rounded">constants.ts</code> as TypeScript code.
+                To modify data, edit <code className="px-1 bg-slate-900/50 rounded">constants.ts</code> directly.
+              </p>
+            </div>
             <ol className="space-y-2 text-sm text-slate-300">
               <li className="flex gap-2">
                 <span className="font-bold text-cyan-400">1.</span>
-                <span>Make changes to your data in other tabs (Node Browser, etc.)</span>
+                <span>Click "Generate Code" to export your current dataset as TypeScript</span>
               </li>
               <li className="flex gap-2">
                 <span className="font-bold text-cyan-400">2.</span>
-                <span>Click "Generate Code" to create TypeScript code</span>
+                <span>Review the generated code in the preview below</span>
               </li>
               <li className="flex gap-2">
                 <span className="font-bold text-cyan-400">3.</span>
-                <span>Review the generated code in the preview</span>
+                <span>Copy to clipboard or download as a backup file</span>
               </li>
               <li className="flex gap-2">
                 <span className="font-bold text-cyan-400">4.</span>
-                <span>Copy to clipboard or download as file</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="font-bold text-cyan-400">5.</span>
-                <span>Paste into <code className="px-1 bg-slate-900/50 rounded">constants.ts</code> manually</span>
+                <span>Use this as a reference or backup of your data structure</span>
               </li>
             </ol>
           </div>
