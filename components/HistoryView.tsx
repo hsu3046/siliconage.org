@@ -53,13 +53,13 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
 
   // Collect link events (links with story + startYear)
   const linkEvents = useMemo(() => {
-    let events = INITIAL_DATA.links
+    let events = data.links
       .filter(link => link.story && link.startYear)
       .map(link => {
         const sourceId = typeof link.source === 'object' ? (link.source as any).id : link.source;
         const targetId = typeof link.target === 'object' ? (link.target as any).id : link.target;
-        const sourceNode = INITIAL_DATA.nodes.find(n => n.id === sourceId);
-        const targetNode = INITIAL_DATA.nodes.find(n => n.id === targetId);
+        const sourceNode = data.nodes.find(n => n.id === sourceId);
+        const targetNode = data.nodes.find(n => n.id === targetId);
         return {
           link,
           sourceNode,
@@ -79,7 +79,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
     }
 
     return events;
-  }, [focusNodeId]);
+  }, [focusNodeId, data.links, data.nodes]);
 
   // Collect standalone events
   const standaloneEvents = useMemo(() => {
@@ -220,7 +220,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
       searchResults.push(...nodeMatches);
 
       // 2. Search story text in links
-      const storyMatches = INITIAL_DATA.links
+      const storyMatches = data.links
         .filter(link => link.story && link.startYear && link.story.toLowerCase().includes(term.toLowerCase()))
         .slice(0, 2)
         .map(link => ({

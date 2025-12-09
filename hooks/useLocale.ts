@@ -11,6 +11,8 @@ import {
     getLocale,
     initLocale,
     t as translate,
+    translateNode,
+    translateLink,
     AVAILABLE_LOCALES,
     isLocaleLoaded
 } from '../utils/i18n';
@@ -20,6 +22,10 @@ interface UseLocaleReturn {
     locale: Locale;
     /** Translation function */
     t: typeof translate;
+    /** Translate node data (label and description) */
+    translateNode: typeof translateNode;
+    /** Translate link story */
+    translateLink: typeof translateLink;
     /** Change locale */
     setLocale: (locale: Locale) => Promise<void>;
     /** Available locales for UI selector */
@@ -77,6 +83,8 @@ export const useLocale = (): UseLocaleReturn => {
     return {
         locale,
         t: translate,
+        translateNode,
+        translateLink,
         setLocale,
         availableLocales: AVAILABLE_LOCALES,
         isLoaded,

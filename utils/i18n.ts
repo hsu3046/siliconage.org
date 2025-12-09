@@ -14,6 +14,7 @@ const DEFAULT_LOCALE: Locale = 'en';
 let currentLocale: Locale = DEFAULT_LOCALE;
 let translations: Record<string, any> = {};
 let nodeTranslations: Record<string, { label: string; description: string }> = {};
+let linkTranslations: Record<string, { story: string }> = {};
 let isLoaded = false;
 
 /**
@@ -31,6 +32,15 @@ export const loadLocale = async (locale: Locale): Promise<void> => {
         } catch (nodeError) {
             console.warn(`Node translations not found for locale: ${locale}`);
             nodeTranslations = {};
+        }
+
+        // Load link translations
+        try {
+            const linksModule = await import(`../locales/${locale}/links.json`);
+            linkTranslations = linksModule.default || linksModule;
+        } catch (linkError) {
+            console.warn(`Link translations not found for locale: ${locale}`);
+            linkTranslations = {};
         }
 
         currentLocale = locale;
@@ -98,6 +108,68 @@ export const t = (key: string, params?: Record<string, string | number>): string
     }
 
     return value;
+};
+
+/**
+ * Translate node data (label and description)
+ * 
+ * @param nodeId - Node ID from constants.ts
+ * @param fallbackLabel - Original label (fallback if translation not found)
+ * @param fallbackDescription - Original description (fallback if translation not found)
+ * @returns Object with translated label and description
+ */
+export const translateNode = (
+    nodeId: string,
+    fallbackLabel?: string,
+    fallbackDescription?: string
+): { label: string; description: string } => {
+    if (!isLoaded || currentLocale === 'en') {
+        return {
+            label: fallbackLabel || nodeId,
+            description: fallbackDescription || ''
+        };
+    }
+
+    const translation = nodeTranslations[nodeId];
+
+    if (translation) {
+        return {
+            label: translation.label || fallbackLabel || nodeId,
+            description: translation.description || fallbackDescription || ''
+        };
+    }
+
+    return {
+        label: fallbackLabel || nodeId,
+        description: fallbackDescription || ''
+    };
+};
+
+/**
+ * Translate link story
+ * 
+ * @param source - Source node ID
+ * @param target - Target node ID
+ * @param fallbackStory - Original story (fallback if translation not found)
+ * @returns Translated story string
+ */
+export const translateLink = (
+    source: string,
+    target: string,
+    fallbackStory?: string
+): string => {
+    if (!isLoaded || currentLocale === 'en') {
+        return fallbackStory || '';
+    }
+
+    const key = `${source}__${target}`;
+    const translation = linkTranslations[key];
+
+    if (translation?.story) {
+        return translation.story;
+    }
+
+    return fallbackStory || '';
 };
 
 /**

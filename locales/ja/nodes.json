@@ -299,10 +299,6 @@
     "label": "サトシ・ナカモト",
     "description": "Bitcoinの謎めいた創造者。銀行なしでデジタルの信頼問題を解決。"
   },
-  "vitalik_buterin": {
-    "label": "ヴィタリック・ブテリン",
-    "description": "Ethereumの天才。あらゆるプログラムを実行できるブロックチェーンを構想。"
-  },
   "tim_cook": {
     "label": "ティム・クック",
     "description": "オペレーションの天才。サプライチェーンを完璧にし、Appleを3兆ドルの評価額に導いた。"
@@ -894,5 +890,9 @@
   "arpanet": {
     "label": "ARPANET",
     "description": "現代のインターネットの直接の祖先であるAdvanced Research Projects Agency Network。DARPAの資金提供により、パケット交換を使用して大学と研究所を接続。1969年に送信された最初のメッセージは、2文字後にクラッシュ。この実験的なネットワークは、分散型通信が機能することを証明し、TCP/IPとWorld Wide Webの基礎を築いた。"
+  },
+  "vitalik_buterin": {
+    "label": "Vitalik Buterin",
+    "description": "19歳でEthereumを考案したロシア系カナダ人プログラマー。「スマートコントラクト」としてコードが実行される「ワールドコンピューター」を構築。DeFi、NFT、DAOを可能にした。数十億を寄付。暗号通貨の哲人王。今もコーディングと協調問題について執筆。"
   }
 }

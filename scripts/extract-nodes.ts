@@ -37,35 +37,57 @@ function extractNodesFromConstants(): NodesJson {
     const result: NodesJson = {};
 
     // Regex patterns for createCompany, createPerson, createTech
-    // Match: createXxx('id', 'label', year, ..., 'description', ...)
+    // Updated to handle escaped quotes in descriptions
+
+    // Helper: Match string with escaped quotes - matches 'text with \\'escaped\\' quotes'
+    const stringPattern = `'((?:[^'\\\\]|\\\\.)*)'`;
 
     // Pattern for createCompany: createCompany('id', 'label', year, 'description', ...)
-    const companyRegex = /createCompany\(\s*['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]\s*,\s*\d+\s*,\s*['"]([^'"]+)['"]/g;
+    const companyRegex = new RegExp(
+        `createCompany\\(\\s*${stringPattern}\\s*,\\s*${stringPattern}\\s*,\\s*\\d+\\s*,\\s*${stringPattern}`,
+        'g'
+    );
 
     // Pattern for createPerson: createPerson('id', 'label', year, PersonRole, 'description', ...)
-    const personRegex = /createPerson\(\s*['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]\s*,\s*\d+\s*,\s*\S+\s*,\s*['"]([^'"]+)['"]/g;
+    const personRegex = new RegExp(
+        `createPerson\\(\\s*${stringPattern}\\s*,\\s*${stringPattern}\\s*,\\s*\\d+\\s*,\\s*\\S+\\s*,\\s*${stringPattern}`,
+        'g'
+    );
 
     // Pattern for createTech: createTech('id', 'label', year, TechRole, 'description', ...)
-    const techRegex = /createTech\(\s*['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]\s*,\s*\d+\s*,\s*\S+\s*,\s*['"]([^'"]+)['"]/g;
+    const techRegex = new RegExp(
+        `createTech\\(\\s*${stringPattern}\\s*,\\s*${stringPattern}\\s*,\\s*\\d+\\s*,\\s*\\S+\\s*,\\s*${stringPattern}`,
+        'g'
+    );
 
     let match;
 
     // Extract companies
     while ((match = companyRegex.exec(content)) !== null) {
         const [, id, label, description] = match;
-        result[id] = { label, description };
+        // Unescape the strings
+        result[id] = {
+            label: label.replace(/\\'/g, "'"),
+            description: description.replace(/\\'/g, "'")
+        };
     }
 
     // Extract persons
     while ((match = personRegex.exec(content)) !== null) {
         const [, id, label, description] = match;
-        result[id] = { label, description };
+        result[id] = {
+            label: label.replace(/\\'/g, "'"),
+            description: description.replace(/\\'/g, "'")
+        };
     }
 
     // Extract technologies
     while ((match = techRegex.exec(content)) !== null) {
         const [, id, label, description] = match;
-        result[id] = { label, description };
+        result[id] = {
+            label: label.replace(/\\'/g, "'"),
+            description: description.replace(/\\'/g, "'")
+        };
     }
 
     return result;

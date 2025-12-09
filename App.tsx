@@ -78,11 +78,39 @@ const App: React.FC = () => {
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
 
   // i18n hook - handles locale initialization and provides t() function
-  const { t, locale } = useLocale();
+  const { t, locale, translateNode, translateLink } = useLocale();
 
   // Router hooks for SEO-friendly URLs
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Translate node and link data when locale changes
+  const translatedData = useMemo(() => {
+    const translatedNodes = INITIAL_DATA.nodes.map(node => {
+      const translated = translateNode(node.id, node.label, node.description);
+      return {
+        ...node,
+        label: translated.label,
+        description: translated.description
+      };
+    });
+
+    const translatedLinks = INITIAL_DATA.links.map(link => {
+      const sourceId = typeof link.source === 'object' ? (link.source as any).id : link.source;
+      const targetId = typeof link.target === 'object' ? (link.target as any).id : link.target;
+      const translatedStory = translateLink(sourceId, targetId, link.story);
+      return {
+        ...link,
+        story: translatedStory
+      };
+    });
+
+    return {
+      nodes: translatedNodes,
+      links: translatedLinks,
+      events: INITIAL_DATA.events
+    };
+  }, [locale, translateNode, translateLink]);
 
   // Featured Node of the Day - deterministic based on date
   const featuredNode = useMemo(() => {
@@ -412,8 +440,8 @@ const App: React.FC = () => {
   };
 
   const filteredData: GraphData = useMemo(() => {
-    let activeNodes = INITIAL_DATA.nodes.map(node => ({ ...node }));
-    let activeLinks = INITIAL_DATA.links.map(link => ({ ...link }));
+    let activeNodes = translatedData.nodes.map(node => ({ ...node }));
+    let activeLinks = translatedData.links.map(link => ({ ...link }));
 
     if (focusNodeId) {
       const firstDegreeIds = new Set<string>();
@@ -421,7 +449,7 @@ const App: React.FC = () => {
       firstDegreeIds.add(focusNodeId);
 
       // Find 1st-degree connections
-      INITIAL_DATA.links.forEach(link => {
+      translatedData.links.forEach(link => {
         const source = typeof link.source === 'object' ? (link.source as any).id : link.source;
         const target = typeof link.target === 'object' ? (link.target as any).id : link.target;
 
@@ -430,7 +458,7 @@ const App: React.FC = () => {
       });
 
       // Find 2nd-degree connections
-      INITIAL_DATA.links.forEach(link => {
+      translatedData.links.forEach(link => {
         const source = typeof link.source === 'object' ? (link.source as any).id : link.source;
         const target = typeof link.target === 'object' ? (link.target as any).id : link.target;
 
@@ -479,7 +507,7 @@ const App: React.FC = () => {
     });
 
     return { nodes: activeNodes, links: activeLinks };
-  }, [visibleCategories, visibleLinkTypes, focusNodeId, companyMode]);
+  }, [visibleCategories, visibleLinkTypes, focusNodeId, companyMode, translatedData]);
 
   // Filtered data for HistoryView/CardView: 1st degree only in Focus mode
   const filteredDataFirstDegree: GraphData = useMemo(() => {
@@ -939,7 +967,7 @@ const App: React.FC = () => {
         {viewMode === 'CARD' && (
           <CardView
             data={filteredDataFirstDegree}
-            fullData={INITIAL_DATA}
+            fullData={translatedData}
             onNodeClick={handleNodeSelect}
             onTagClick={handleTagClick}
             onNodeDoubleClick={handleNodeDoubleClick}
@@ -951,7 +979,7 @@ const App: React.FC = () => {
         {viewMode === 'LINKS' && (
           <LinksView
             data={filteredData}
-            fullData={INITIAL_DATA}
+            fullData={translatedData}
             focusNodeId={focusNodeId}
             onNodeClick={handleNodeSelect}
             onNodeFocus={handleNodeFocusById}

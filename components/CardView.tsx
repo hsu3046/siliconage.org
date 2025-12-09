@@ -191,7 +191,12 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
   const getSubLabel = (node: NodeData) => {
     if (node.category === Category.COMPANY) return `Founded in ${node.year}`;
     if (node.category === Category.PERSON) return node.primaryRole || `Active since ${node.year}`;
-    if (node.category === Category.TECHNOLOGY) return node.techCategoryL2 || node.techCategoryL1 || `${node.year}`;
+    if (node.category === Category.TECHNOLOGY) {
+      if (node.techCategoryL2) {
+        return t(`techCategoryL2.${node.techCategoryL2}`) || node.techCategoryL2;
+      }
+      return `${node.year}`;
+    }
     return `${node.year}`;
   };
 
@@ -363,10 +368,10 @@ const CardView: React.FC<CardViewProps> = ({ data, fullData, onNodeClick, onTagC
                       </span>
                     )}
 
-                    {/* Technology Categories - GREEN (Muted) - L2 ONLY (L1 still searchable) */}
-                    {node.category === Category.TECHNOLOGY && node.techCategoryL2 && (
+                    {/* Technology Categories - GREEN (Muted) - L1 (broad category) */}
+                    {node.category === Category.TECHNOLOGY && node.techCategoryL1 && (
                       <span className="text-[9px] font-medium px-1.5 py-1 rounded bg-emerald-900/20 text-emerald-400/80 border border-emerald-800/30">
-                        {(t(`techCategoryL2.${node.techCategoryL2}`) || node.techCategoryL2).toUpperCase()}
+                        {(t(`techCategoryL1.${node.techCategoryL1}`) || node.techCategoryL1).toUpperCase()}
                       </span>
                     )}
                   </div>

@@ -9,8 +9,12 @@
     "preview": "vite preview",
     "generate-cache": "npx tsx scripts/generateCache.ts",
     "i18n:extract": "npx tsx scripts/extract-nodes.ts",
+    "i18n:extract-links": "npx tsx scripts/extract-links.ts",
     "i18n:translate": "npx tsx scripts/translate-nodes.ts",
-    "i18n:sync": "npm run i18n:extract && npm run i18n:translate"
+    "i18n:translate-links": "npx tsx scripts/translate-links.ts",
+    "i18n:sync": "npm run i18n:extract && npm run i18n:translate",
+    "i18n:sync-links": "npm run i18n:extract-links && npm run i18n:translate-links",
+    "i18n:sync-all": "npm run i18n:sync && npm run i18n:sync-links"
   },
   "dependencies": {
     "@formspree/react": "^2.5.1",

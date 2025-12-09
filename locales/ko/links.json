@@ -1,0 +1,1496 @@
+{
+    "william_shockley__fairchild": {
+        "story": "쇼클리 경영 방식에 반발한 8인이 페어차일드 설립"
+    },
+    "robert_noyce__intel": {
+        "story": "로버트 노이스가 인텔의 전신인 NM 일렉트로닉스 설립"
+    },
+    "gordon_moore__intel": {
+        "story": "반도체 메모리 집중 위해 인텔 공동 설립"
+    },
+    "morris_chang__tsmc": {
+        "story": "대만 정부의 지원을 받아 TSMC 설립"
+    },
+    "jensen_huang__nvidia": {
+        "story": "3D 그래픽 가속을 위해 엔비디아 공동 설립"
+    },
+    "steve_jobs__apple": {
+        "story": "애플 I 판매를 위해 차고에서 애플 창업"
+    },
+    "steve_wozniak__apple": {
+        "story": "애플 I과 II 컴퓨터 설계"
+    },
+    "bill_gates__microsoft": {
+        "story": "알테어용 베이직 인터프리터 개발 위해 MS 설립"
+    },
+    "larry_ellison__oracle": {
+        "story": "오라클의 전신인 SDL 설립"
+    },
+    "jeff_bezos__amazon": {
+        "story": "온라인 서점으로 아마존 창업"
+    },
+    "larry_page__google": {
+        "story": "페이지랭크 알고리즘 기반으로 구글 설립"
+    },
+    "sergey_brin__google": {
+        "story": "스탠퍼드 연구 중 구글 공동 설립"
+    },
+    "marc_andreessen__netscape_co": {
+        "story": "모자이크 브라우저 상용화 위해 넷스케이프 설립"
+    },
+    "reed_hastings__netflix_co": {
+        "story": "DVD 우편 대여 서비스로 넷플릭스 공동 설립"
+    },
+    "mark_zuckerberg__meta": {
+        "story": "하버드 기숙사에서 페이스북 출시"
+    },
+    "peter_thiel__paypal_co": {
+        "story": "훗날 페이팔이 되는 컨피니티 공동 설립"
+    },
+    "max_levchin__paypal_co": {
+        "story": "페이팔의 사기 방지 시스템 개발"
+    },
+    "elon_musk__paypal_co": {
+        "story": "X.com과 컨피니티 합병으로 페이팔 결성"
+    },
+    "elon_musk__spacex": {
+        "story": "우주 운송 비용 절감을 위해 스페이스X 설립"
+    },
+    "elon_musk__tesla": {
+        "story": "테슬라에 투자자로 합류 및 의장 취임"
+    },
+    "elon_musk__openai": {
+        "story": "비영리 AI 연구소로 오픈AI 공동 설립"
+    },
+    "sam_altman__openai": {
+        "story": "오픈AI 공동 설립 후 CEO 취임"
+    },
+    "demis_hassabis__deepmind": {
+        "story": "일반 인공지능 해결 위해 딥마인드 설립"
+    },
+    "jack_ma__alibaba": {
+        "story": "아파트에서 친구 17명과 알리바바 창업"
+    },
+    "pony_ma__tencent": {
+        "story": "OICQ 메신저 출시 위해 텐센트 설립"
+    },
+    "chad_hurley__youtube": {
+        "story": "동영상 공유 플랫폼 유튜브 공동 설립"
+    },
+    "travis_kalanick__uber_co": {
+        "story": "우버캡이란 이름으로 우버 공동 창업"
+    },
+    "patrick_collison__stripe_co": {
+        "story": "온라인 결제 단순화 위해 스트라이프 설립"
+    },
+    "marc_benioff__salesforce_co": {
+        "story": "클라우드 소프트웨어 제공 위해 세일즈포스 설립"
+    },
+    "don_valentine__sequoia": {
+        "story": "벤처 캐피탈 세콰이어 캐피탈 설립"
+    },
+    "paul_graham__ycombinator": {
+        "story": "스타트업 액셀러레이터 와이콤비네이터 공동 설립"
+    },
+    "marc_andreessen__a16z": {
+        "story": "벤처 캐피탈 a16z 공동 설립"
+    },
+    "masayoshi_son__softbank": {
+        "story": "소프트웨어 유통업체로 소프트뱅크 설립"
+    },
+    "cisco__cisco_router": {
+        "story": "상업적 성공 거둔 멀티 프로토콜 라우터 개발"
+    },
+    "qualcomm__5g_nr": {
+        "story": "글로벌 5G 표준 개발 주도"
+    },
+    "samsung__5g_nr": {
+        "story": "5G 네트워크 장비 초기 상용화 주도"
+    },
+    "alan_turing__turing_machine": {
+        "story": "계산의 수학적 모델인 튜링 머신 제안"
+    },
+    "claude_shannon__info_theory": {
+        "story": "\"통신의 수학적 이론\" 발표"
+    },
+    "william_shockley__transistor": {
+        "story": "점접촉 트랜지스터 공동 발명"
+    },
+    "robert_noyce__ic": {
+        "story": "단일 칩 집적회로 발명"
+    },
+    "tim_berners_lee__www": {
+        "story": "CERN에서 HTML, HTTP 및 웹 브라우저 개발"
+    },
+    "dennis_ritchie__unix": {
+        "story": "벨 연구소에서 유닉스 운영체제 공동 개발"
+    },
+    "dennis_ritchie__c_lang": {
+        "story": "유닉스 시스템용 C언어 개발"
+    },
+    "linus_torvalds__linux": {
+        "story": "리눅스 커널을 자유 소프트웨어로 공개"
+    },
+    "linus_torvalds__git": {
+        "story": "리눅스 커널 개발을 위해 깃 개발"
+    },
+    "satoshi_nakamoto__bitcoin": {
+        "story": "백서 발표 및 비트코인 제네시스 블록 채굴"
+    },
+    "vitalik_buterin__ethereum": {
+        "story": "이더리움을 탈중앙화 앱 플랫폼으로 제안"
+    },
+    "geoffrey_hinton__alexnet": {
+        "story": "합성곱 신경망에 대한 획기적인 논문 공저"
+    },
+    "yann_lecun__alexnet": {
+        "story": "알렉스넷으로 이어진 LeNet 아키텍처 개척"
+    },
+    "ilya_sutskever__transformer": {
+        "story": "\"주의력이 전부다\"(트랜스포머) 논문 공저"
+    },
+    "google__word2vec": {
+        "story": "단어의 벡터 표현을 위해 Word2Vec 개발"
+    },
+    "marc_andreessen__mosaic": {
+        "story": "최초의 대중적 그래픽 브라우저 모자이크 개발"
+    },
+    "anthropic__claude": {
+        "story": "AI 비서 클로드 출시"
+    },
+    "openai__sora": {
+        "story": "텍스트-비디오 생성 모델 소라 공개"
+    },
+    "bell_labs__transistor": {
+        "story": "최초의 점접촉 트랜지스터 발명"
+    },
+    "bell_labs__unix": {
+        "story": "유닉스 운영체제 개발"
+    },
+    "bell_labs__c_lang": {
+        "story": "C 프로그래밍 언어 개발"
+    },
+    "fairchild__ic": {
+        "story": "상업적으로 성공한 최초의 집적회로 개발"
+    },
+    "intel__x86": {
+        "story": "8086 프로세서로 x86 아키텍처 도입"
+    },
+    "intel__microprocessor": {
+        "story": "최초의 상용 마이크로프로세서 4004 출시"
+    },
+    "nvidia__gpu_geforce": {
+        "story": "지포스 256 출시하며 GPU 용어 도입"
+    },
+    "nvidia__nvidia_h100": {
+        "story": "대규모 AI 작업을 위한 H100 GPU 출시"
+    },
+    "nvidia__cuda": {
+        "story": "쿠다 병렬 컴퓨팅 플랫폼 출시"
+    },
+    "arm_ltd__arm_arch": {
+        "story": "전력 효율 높은 RISC 아키텍처 설계"
+    },
+    "arm_ltd__arm_cortex": {
+        "story": "코어텍스 프로세서 제품군 출시"
+    },
+    "asml__euv": {
+        "story": "최초의 EUV 노광 프로토타입 출하"
+    },
+    "tsmc__foundry_model": {
+        "story": "반도체 위탁 생산 파운드리 모델 개척"
+    },
+    "ibm__ibm_360": {
+        "story": "시스템/360 메인프레임 제품군 발표"
+    },
+    "sony__walkman": {
+        "story": "TPS-L2 워크맨 출시"
+    },
+    "sony__optical_disc": {
+        "story": "필립스와 콤팩트 디스크(CD) 공동 개발"
+    },
+    "apple__macintosh": {
+        "story": "\"1984\" 광고와 함께 매킨토시 출시"
+    },
+    "apple__iphone": {
+        "story": "아이폰 출시로 휴대전화 재발명"
+    },
+    "apple__ios": {
+        "story": "아이폰 OS(후일 iOS) 출시"
+    },
+    "apple__app_store": {
+        "story": "서드파티 개발자에게 앱 스토어 개방"
+    },
+    "apple__vision_pro": {
+        "story": "공간 컴퓨터 비전 프로 공개"
+    },
+    "tesla__model_s": {
+        "story": "프리미엄 전기 세단 모델 S 출시"
+    },
+    "tesla__tesla_autopilot": {
+        "story": "운전자 보조 기능 오토파일럿 도입"
+    },
+    "spacex__spacex_falcon9": {
+        "story": "팰컨 9 발사 첫 성공"
+    },
+    "spacex__starlink": {
+        "story": "스타링크 위성 발사 시작"
+    },
+    "spacex__starship": {
+        "story": "스타십 최초 통합 비행 테스트 수행"
+    },
+    "dji__dji_phantom": {
+        "story": "팬텀 시리즈로 소비자 드론 대중화"
+    },
+    "xerox_parc__ethernet": {
+        "story": "근거리 통신망을 위한 이더넷 발명"
+    },
+    "att__bell_labs": {
+        "story": "벨 연구소의 모회사 역할 수행"
+    },
+    "microsoft__windows_95": {
+        "story": "시작 메뉴가 있는 윈도우 95 출시"
+    },
+    "microsoft__excel": {
+        "story": "최초의 그래픽 버전 엑셀 출시"
+    },
+    "microsoft__copilot": {
+        "story": "오피스 365에 AI 코파일럿 통합"
+    },
+    "oracle__oracle_db": {
+        "story": "최초의 상용 SQL 관계형 데이터베이스 출시"
+    },
+    "adobe__photoshop": {
+        "story": "포토샵 1.0 버전 출시"
+    },
+    "salesforce_co__salesforce_crm": {
+        "story": "최초의 SaaS CRM 플랫폼 런칭"
+    },
+    "netscape_co__netscape": {
+        "story": "내비게이터 웹 브라우저 출시"
+    },
+    "netscape_co__javascript": {
+        "story": "브렌던 아이크가 개발한 자바스크립트 생성"
+    },
+    "netscape_co__ssl_tls": {
+        "story": "SSL 2.0 프로토콜 도입"
+    },
+    "google__google_search": {
+        "story": "자체 검색 엔진 출시"
+    },
+    "google__android": {
+        "story": "안드로이드 1.0 출시"
+    },
+    "google__google_chrome": {
+        "story": "크롬 웹 브라우저 출시"
+    },
+    "google__mapreduce": {
+        "story": "맵리듀스 연구 논문 발표"
+    },
+    "google__transformer": {
+        "story": "\"주의력이 전부다\" 논문 발표"
+    },
+    "google__tpu": {
+        "story": "데이터 센터에 TPU 배치"
+    },
+    "google__gemini": {
+        "story": "멀티모달 AI 모델 제미나이 출시"
+    },
+    "deepmind__alphago": {
+        "story": "알파고가 이세돌 9단을 꺾음"
+    },
+    "deepmind__alphago_zero": {
+        "story": "데이터 없이 바둑 마스터한 알파고 제로 개발"
+    },
+    "meta__facebook": {
+        "story": "하버드에서 더페이스북 시작"
+    },
+    "meta__pytorch": {
+        "story": "딥러닝 프레임워크 파이토치 공개"
+    },
+    "openai__chatgpt": {
+        "story": "연구 프리뷰로 챗GPT 공개"
+    },
+    "netflix_co__netflix": {
+        "story": "스트리밍 비디오 서비스 런칭"
+    },
+    "spotify_co__spotify": {
+        "story": "음악 스트리밍 서비스 런칭"
+    },
+    "uber_co__uber_app": {
+        "story": "샌프란시스코에서 차량 호출 앱 출시"
+    },
+    "paypal_co__paypal": {
+        "story": "송금 서비스 런칭"
+    },
+    "stripe_co__stripe": {
+        "story": "개발자용 결제 API 출시"
+    },
+    "bytedance__tiktok": {
+        "story": "더우인의 글로벌 버전 틱톡 출시"
+    },
+    "tencent__wechat": {
+        "story": "모바일 메신저 위챗 출시"
+    },
+    "amazon__amazon_com": {
+        "story": "온라인 서점 런칭"
+    },
+    "broadcom__wifi": {
+        "story": "와이파이 칩의 주요 공급사로 부상"
+    },
+    "sun_micro__java": {
+        "story": "어디서나 실행되는 자바 플랫폼 개발"
+    },
+    "darpa__arpanet": {
+        "story": "아파넷 개발 자금 지원"
+    },
+    "darpa__gps": {
+        "story": "군사용 GPS 프로그램 개시"
+    },
+    "marvin_minsky__mit_csail": {
+        "story": "CSAIL의 전신인 MIT AI 연구소 공동 설립"
+    },
+    "john_mccarthy__stanford_ai_lab": {
+        "story": "AI 용어 창안 및 스탠퍼드 AI 연구소 설립"
+    },
+    "stanford_ai_lab__cisco": {
+        "story": "스탠퍼드 커플이 시스코 설립"
+    },
+    "cern__www": {
+        "story": "팀 버너스 리가 월드 와이드 웹 발명"
+    },
+    "ibm__dram": {
+        "story": "로버트 데나드가 DRAM 발명"
+    },
+    "ibm__floppy": {
+        "story": "휴대용 저장을 위한 플로피 디스크 발명"
+    },
+    "ibm__sql": {
+        "story": "관계형 데이터베이스 관리를 위한 SQL 개발"
+    },
+    "adobe__postscript": {
+        "story": "포스트스크립트 개발 위해 어도비 설립"
+    },
+    "adobe__illustrator": {
+        "story": "매킨토시용 일러스트레이터 출시"
+    },
+    "adobe__premiere_pro": {
+        "story": "PC용 영상 편집 툴 프리미어 출시"
+    },
+    "adobe__pdf": {
+        "story": "PDF 포맷 발명"
+    },
+    "deepmind__nano_banana": {
+        "story": "코드명 나노 바나나로 제미나이 2.5 공개"
+    },
+    "lithography__ic": {
+        "story": "집적회로의 미세 회로 인쇄 가능"
+    },
+    "lithography__euv": {
+        "story": "초미세 공정 위해 EUV로 진화"
+    },
+    "lithography__lidar": {
+        "story": "라이다 센서 미세 공정 가능"
+    },
+    "lithography__cmos": {
+        "story": "CMOS 센서의 필수 제조 공정"
+    },
+    "euv__nvidia_h100": {
+        "story": "엔비디아 H100 4나노 공정 가능"
+    },
+    "euv__arm_cortex": {
+        "story": "첨단 Arm 코어텍스 생산 가능"
+    },
+    "ic__microprocessor": {
+        "story": "CPU 기능을 하는 집적회로인 마이크로프로세서"
+    },
+    "ic__dram": {
+        "story": "집적회로를 이용해 DRAM 구현"
+    },
+    "ic__nand": {
+        "story": "집적회로를 이용해 낸드 플래시 구현"
+    },
+    "hbm__nvidia_h100": {
+        "story": "H100 학습에 필요한 메모리 대역폭 제공"
+    },
+    "hbm__tpu": {
+        "story": "TPU를 위한 고속 메모리 접근 제공"
+    },
+    "optical_fiber__tcp_ip": {
+        "story": "TCP/IP 트래픽의 물리적 전송 계층"
+    },
+    "optical_fiber__5g_nr": {
+        "story": "5G 기지국 백홀 연결 필수 요소"
+    },
+    "blue_led__optical_disc": {
+        "story": "고밀도 광 디스크 위한 짧은 파장 가능"
+    },
+    "cmos__lidar": {
+        "story": "라이다 시스템의 센서 기반 제공"
+    },
+    "microprocessor__unix": {
+        "story": "유닉스 실행을 위한 하드웨어 플랫폼 제공"
+    },
+    "x86__linux": {
+        "story": "리눅스의 초기 개발 플랫폼 역할"
+    },
+    "x86__windows_95": {
+        "story": "윈도우 95의 지배적인 플랫폼"
+    },
+    "x86__toshiba_t1100": {
+        "story": "인텔 80C88 x86 프로세서 탑재"
+    },
+    "arm_arch__ios": {
+        "story": "iOS 기기용 애플 실리콘의 기반"
+    },
+    "arm_arch__android": {
+        "story": "안드로이드 기기의 지배적인 아키텍처"
+    },
+    "arm_arch__vision_pro": {
+        "story": "비전 프로의 M2와 R1 칩 구동"
+    },
+    "arm_arch__fugaku": {
+        "story": "후가쿠 슈퍼컴퓨터의 A64FX 칩 구동"
+    },
+    "gpu_geforce__cuda": {
+        "story": "쿠다 병렬 컴퓨팅을 위한 하드웨어 제공"
+    },
+    "gpu_geforce__ethereum": {
+        "story": "이더리움 작업 증명 채굴에 사용됨"
+    },
+    "nvidia_h100__cuda": {
+        "story": "최신 쿠다 아키텍처에 최적화"
+    },
+    "nvidia_h100__pytorch": {
+        "story": "파이토치 가속 백엔드 역할"
+    },
+    "nvidia_h100__chatgpt": {
+        "story": "챗GPT 학습 및 추론 하드웨어 제공"
+    },
+    "nvidia_h100__bytedance": {
+        "story": "바이트댄스 AI 인프라 구동"
+    },
+    "nvidia_h100__tencent": {
+        "story": "텐센트 클라우드 AI 인프라 구동"
+    },
+    "nvidia_h100__starship": {
+        "story": "스타십 CFD 시뮬레이션 구동"
+    },
+    "nvidia_h100__sora": {
+        "story": "소라 영상 생성 학습 연산 제공"
+    },
+    "tpu__tensorflow": {
+        "story": "텐서플로를 위한 맞춤형 하드웨어 가속"
+    },
+    "tcp_ip__www": {
+        "story": "웹의 기반 전송 프로토콜"
+    },
+    "tcp_ip__aws_cloud": {
+        "story": "AWS 클라우드의 네트워크 기반"
+    },
+    "tcp_ip__skype": {
+        "story": "스카이프 VoIP 전송 계층 제공"
+    },
+    "ssl_tls__aws_cloud": {
+        "story": "AWS 클라우드 안전 통신 보장"
+    },
+    "ssl_tls__paypal_co": {
+        "story": "페이팔 금융 거래 보호"
+    },
+    "ssl_tls__amazon_com": {
+        "story": "아마존의 안전한 전자상거래 가능"
+    },
+    "ssl_tls__zero_trust": {
+        "story": "제로 트러스트 아키텍처 필수 요소"
+    },
+    "rsa__ssl_tls": {
+        "story": "SSL/TLS용 키 교환 알고리즘 제공"
+    },
+    "rsa__bitcoin": {
+        "story": "비트코인 공개키 암호학에 영향"
+    },
+    "rsa__git": {
+        "story": "깃 SSH 인증에 사용"
+    },
+    "rsa__amazon_com": {
+        "story": "아마존 안전 결제 가능"
+    },
+    "cisco_router__aws_cloud": {
+        "story": "데이터 센터 네트워킹 관리"
+    },
+    "cisco_router__att": {
+        "story": "AT&T 네트워크의 중추 역할"
+    },
+    "cisco_router__google": {
+        "story": "구글 초기 네트워크 인프라 지원"
+    },
+    "optical_fiber__att": {
+        "story": "AT&T 기간 전송 매체 역할"
+    },
+    "optical_fiber__starlink": {
+        "story": "스타링크 지상국과 인터넷 백본망 연결"
+    },
+    "linux__android": {
+        "story": "안드로이드 OS의 핵심 커널"
+    },
+    "linux__aws_cloud": {
+        "story": "AWS 클라우드의 주 서버 운영체제"
+    },
+    "linux__docker": {
+        "story": "리눅스 기능이 도커 컨테이너 가능케 함"
+    },
+    "linux__git": {
+        "story": "깃의 초기 개발 플랫폼"
+    },
+    "linux__sap": {
+        "story": "SAP HANA 플랫폼 운영체제"
+    },
+    "linux__fugaku": {
+        "story": "레드햇 엔터프라이즈 리눅스 구동"
+    },
+    "linux__starship": {
+        "story": "스타십 비행 소프트웨어 구동"
+    },
+    "linux__raspberry_pi": {
+        "story": "라즈비안(리눅스) 기본 탑재"
+    },
+    "aws_cloud__docker": {
+        "story": "도커 컨테이너 호스팅 제공"
+    },
+    "aws_cloud__netflix": {
+        "story": "넷플릭스의 데이터 센터 이전 지원"
+    },
+    "aws_cloud__zoom": {
+        "story": "줌 비디오 인프라 제공"
+    },
+    "aws_cloud__slack": {
+        "story": "슬랙 메시징 인프라 제공"
+    },
+    "aws_cloud__uber_app": {
+        "story": "우버 컴퓨팅 인프라 제공"
+    },
+    "aws_cloud__stripe": {
+        "story": "스트라이프 결제 처리 인프라 호스팅"
+    },
+    "aws_cloud__copilot": {
+        "story": "코파일럿용 모델 서빙"
+    },
+    "aws_cloud__netflix_co": {
+        "story": "넷플릭스 핵심 인프라 제공"
+    },
+    "aws_cloud__uber_co": {
+        "story": "우버의 글로벌 확장 지원"
+    },
+    "aws_cloud__stripe_co": {
+        "story": "스트라이프의 안정적 가동 시간 보장"
+    },
+    "aws_cloud__huggingface": {
+        "story": "허깅페이스 모델 허브 호스팅"
+    },
+    "aws_cloud__anthropic": {
+        "story": "앤스로픽 학습 인프라 제공"
+    },
+    "aws_cloud__twitter": {
+        "story": "트위터 부분적 클라우드 이전 지원"
+    },
+    "aws_cloud__claude": {
+        "story": "클로드 모델 추론 호스팅"
+    },
+    "java__android": {
+        "story": "안드로이드 앱 개발 주 언어"
+    },
+    "cuda__pytorch": {
+        "story": "파이토치 GPU 가속 지원"
+    },
+    "cuda__tensorflow": {
+        "story": "텐서플로 GPU 가속 지원"
+    },
+    "mapreduce__tensorflow": {
+        "story": "텐서플로 분산 컴퓨팅에 영향"
+    },
+    "sql__sap": {
+        "story": "SAP 데이터베이스 쿼리 언어"
+    },
+    "oracle_db__salesforce_crm": {
+        "story": "세일즈포스 CRM 백엔드 구동"
+    },
+    "oracle_db__sap": {
+        "story": "SAP ERP 시스템 지원"
+    },
+    "oracle_db__amazon_com": {
+        "story": "아마존 초기 시스템 필수 요소"
+    },
+    "pytorch__chatgpt": {
+        "story": "챗GPT 학습에 사용된 프레임워크"
+    },
+    "pytorch__stable_diffusion": {
+        "story": "스테이블 디퓨전 모델에 사용됨"
+    },
+    "pytorch__tesla_autopilot": {
+        "story": "테슬라 컴퓨터 비전 학습 구동"
+    },
+    "pytorch__huggingface": {
+        "story": "허깅페이스 지원 주요 프레임워크"
+    },
+    "tensorflow__alphago": {
+        "story": "알파고 딥러닝 모델 구동"
+    },
+    "tensorflow__google_search": {
+        "story": "구글 랭크브레인 알고리즘 구동"
+    },
+    "tensorflow__tiktok": {
+        "story": "틱톡 추천 알고리즘 구동"
+    },
+    "google_chrome__google_search": {
+        "story": "구글 검색으로 트래픽 유도"
+    },
+    "app_store__uber_app": {
+        "story": "우버 앱 주요 배포 채널"
+    },
+    "app_store__spotify": {
+        "story": "스포티파이 모바일 배포 가능케 함"
+    },
+    "app_store__tiktok": {
+        "story": "틱톡 글로벌 배포 가능케 함"
+    },
+    "app_store__twitter": {
+        "story": "트위터 모바일 접속 가능케 함"
+    },
+    "www__amazon_com": {
+        "story": "아마존 이커머스 플랫폼의 기반"
+    },
+    "www__mosaic": {
+        "story": "페이지 렌더링 위해 모자이크 의존"
+    },
+    "zero_trust__aws_cloud": {
+        "story": "AWS 접속 위한 보안 아키텍처"
+    },
+    "zero_trust__salesforce_co": {
+        "story": "세일즈포스 기업 데이터 보호"
+    },
+    "zero_trust__slack": {
+        "story": "슬랙 보안 접속 보장"
+    },
+    "transformer__huggingface": {
+        "story": "허깅페이스 라이브러리의 기반"
+    },
+    "transformer__claude": {
+        "story": "클로드의 기반 아키텍처"
+    },
+    "openai__perplexity": {
+        "story": "퍼플렉시티 초기 추론 구동"
+    },
+    "openai__cursor": {
+        "story": "GPT-4로 커서 코드 생성 구동"
+    },
+    "claude__perplexity": {
+        "story": "퍼플렉시티에 클로드 3 통합"
+    },
+    "claude__cursor": {
+        "story": "커서에 클로드 3 통합"
+    },
+    "ios__iphone": {
+        "story": "아이폰 운영체제"
+    },
+    "ios__app_store": {
+        "story": "앱 스토어 플랫폼 제공"
+    },
+    "ios__vision_pro": {
+        "story": "visionOS의 커널 기반"
+    },
+    "android__model_s": {
+        "story": "테슬라 인포테인먼트의 기반"
+    },
+    "li_ion__iphone": {
+        "story": "배터리 에너지 밀도가 아이폰 디자인 가능케 함"
+    },
+    "li_ion__model_s": {
+        "story": "18650 셀로 모델 S 배터리 팩 구성"
+    },
+    "li_ion__dji_phantom": {
+        "story": "팬텀 드론의 비행 시간 확보"
+    },
+    "gps__uber_app": {
+        "story": "우버 실시간 위치 추적 제공"
+    },
+    "gps__dji_phantom": {
+        "story": "드론 안정화 및 자동 복귀 지원"
+    },
+    "gps__tesla_autopilot": {
+        "story": "오토파일럿에 내비게이션 데이터 제공"
+    },
+    "bluetooth__iphone": {
+        "story": "아이폰 무선 주변기기 연결"
+    },
+    "bluetooth__model_s": {
+        "story": "모델 S 폰 키 및 오디오 연결"
+    },
+    "mp3__walkman": {
+        "story": "워크맨을 디지털 플레이어로 변모시킴"
+    },
+    "floppy__windows_95": {
+        "story": "윈도우 95 설치 미디어"
+    },
+    "floppy__macintosh": {
+        "story": "오리지널 맥의 주요 저장 장치"
+    },
+    "floppy__excel": {
+        "story": "엑셀 배포 미디어"
+    },
+    "lidar__boston_dynamics": {
+        "story": "로봇 공간 인식 제공"
+    },
+    "lidar__uber_co": {
+        "story": "우버 자율주행 차량 테스트 지원"
+    },
+    "cmos__iphone": {
+        "story": "아이폰 카메라 센서"
+    },
+    "cmos__tesla_autopilot": {
+        "story": "오토파일럿 시각 데이터 제공"
+    },
+    "cmos__dji_phantom": {
+        "story": "드론 항공 촬영 지원"
+    },
+    "cmos__vision_pro": {
+        "story": "비전 프로 패스스루 비디오 지원"
+    },
+    "arm_cortex__raspberry_pi": {
+        "story": "라즈베리 파이 CPU 코어"
+    },
+    "python__raspberry_pi": {
+        "story": "라즈베리 파이 주 교육 언어"
+    },
+    "5g_nr__vision_pro": {
+        "story": "저지연 스트리밍 제공"
+    },
+    "5g_nr__dji_phantom": {
+        "story": "영상 전송 기술에 영향"
+    },
+    "5g_nr__tesla_autopilot": {
+        "story": "빠른 OTA 및 텔레메트리 지원"
+    },
+    "euv__tsmc": {
+        "story": "TSMC 7나노 이하 공정 지원"
+    },
+    "euv__samsung": {
+        "story": "삼성 첨단 파운드리 공정 지원"
+    },
+    "euv__intel": {
+        "story": "인텔 4 공정 지원"
+    },
+    "foundry_model__nvidia": {
+        "story": "엔비디아가 팹리스로 운영되게 함"
+    },
+    "foundry_model__apple": {
+        "story": "애플 자체 실리콘 생산 지원"
+    },
+    "foundry_model__amd": {
+        "story": "AMD가 칩 설계 집중하도록 지원"
+    },
+    "foundry_model__qualcomm": {
+        "story": "모바일 칩 대량 생산 지원"
+    },
+    "arm_arch__apple": {
+        "story": "애플 A시리즈/M시리즈 칩의 기반"
+    },
+    "arm_arch__qualcomm": {
+        "story": "스냅드래곤 프로세서 기반"
+    },
+    "arm_arch__samsung": {
+        "story": "엑시노스 프로세서 기반"
+    },
+    "nvidia_h100__openai": {
+        "story": "오픈AI 모델 학습 가속"
+    },
+    "nvidia_h100__meta": {
+        "story": "메타 라마(LLaMA) 학습 구동"
+    },
+    "nvidia_h100__tesla": {
+        "story": "테슬라 FSD 슈퍼컴퓨터 구동"
+    },
+    "nvidia_h100__microsoft": {
+        "story": "애저 AI 인프라 구동"
+    },
+    "broadcom__cisco": {
+        "story": "시스코 장비용 칩 공급"
+    },
+    "broadcom__apple": {
+        "story": "아이폰용 와이파이/블루투스 칩 공급"
+    },
+    "arpanet__cisco_router": {
+        "story": "라우팅 기술 필요성 증대"
+    },
+    "transistor__ibm": {
+        "story": "IBM 상용 컴퓨터 제조 가능케 함"
+    },
+    "ic__ibm": {
+        "story": "IBM 메인프레임 소형화"
+    },
+    "ic__ibm_360": {
+        "story": "시스템/360 실용화 및 저가화"
+    },
+    "transistor__ibm_360": {
+        "story": "시스템/360에서 진공관 대체"
+    },
+    "c_lang__unity": {
+        "story": "C++ 코어와 C# 스크립팅 사용"
+    },
+    "gpu_geforce__unity": {
+        "story": "유니티 게임 실시간 렌더링"
+    },
+    "arm_cortex__unity": {
+        "story": "모바일 유니티 게임 구동"
+    },
+    "c_lang__unreal": {
+        "story": "C++ 언어로 엔진 제작"
+    },
+    "gpu_geforce__unreal": {
+        "story": "언리얼 엔진 렌더링 구동"
+    },
+    "nvidia_h100__unreal": {
+        "story": "언리얼 5 나나이트 가상 기하학 처리"
+    },
+    "turing_machine__microprocessor": {
+        "story": "마이크로프로세서 연산의 이론적 한계 제공"
+    },
+    "info_theory__tcp_ip": {
+        "story": "무결점 데이터 전송의 수학적 기초 제공"
+    },
+    "info_theory__cdma": {
+        "story": "CDMA 대역 확산 통신 가능케 함"
+    },
+    "info_theory__5g_nr": {
+        "story": "5G 채널 코딩의 기초 제공"
+    },
+    "info_theory__mp3": {
+        "story": "MP3 데이터 압축의 기초 제공"
+    },
+    "transistor__ic": {
+        "story": "수십억 개 트랜지스터를 칩 하나에 통합"
+    },
+    "transistor__blue_led": {
+        "story": "LED를 위한 반도체 물리학적 기초 확립"
+    },
+    "microprocessor__x86": {
+        "story": "PC용 x86 아키텍처로 진화"
+    },
+    "microprocessor__arm_arch": {
+        "story": "고효율 ARM 아키텍처로 개념 확장"
+    },
+    "dram__hbm": {
+        "story": "칩 적층으로 고대역폭 메모리(HBM) 진화"
+    },
+    "tcp_ip__ethernet": {
+        "story": "이더넷 스택 위에서 프로토콜 작동"
+    },
+    "ethernet__wifi": {
+        "story": "무선 랜 환경에 맞춰 이더넷 적용"
+    },
+    "cdma__gsm": {
+        "story": "디지털 이동통신 표준 진화에 영향"
+    },
+    "gsm__lte": {
+        "story": "속도 향상 위해 LTE로 진화"
+    },
+    "lte__5g_nr": {
+        "story": "고대역폭 5G NR 표준으로 진화"
+    },
+    "gps__5g_nr": {
+        "story": "5G 네트워크 타이밍 동기화 제공"
+    },
+    "unix__c_lang": {
+        "story": "유닉스 커널 재작성 위해 C언어 개발"
+    },
+    "unix__linux": {
+        "story": "유닉스 철학이 리눅스 커널에 영향"
+    },
+    "c_lang__python": {
+        "story": "C언어로 파이썬 인터프리터 구현"
+    },
+    "c_lang__java": {
+        "story": "C/C++에서 자바 문법 파생"
+    },
+    "c_lang__sql": {
+        "story": "DB 엔진은 주로 C/C++로 작성"
+    },
+    "sql__oracle_db": {
+        "story": "오라클이 SQL 표준 상용화"
+    },
+    "bittorrent__bitcoin": {
+        "story": "비트토렌트 P2P 개념이 비트코인에 영향"
+    },
+    "bitcoin__ethereum": {
+        "story": "비트코인 개념 확장해 스마트 계약 지원"
+    },
+    "alexnet__transformer": {
+        "story": "알렉스넷이 딥러닝 붐 점화"
+    },
+    "word2vec__transformer": {
+        "story": "Word2Vec 임베딩을 입력으로 사용"
+    },
+    "word2vec__chatgpt": {
+        "story": "언어 이해를 위한 기초 제공"
+    },
+    "gan__stable_diffusion": {
+        "story": "GAN 개념이 확산(Diffusion) 모델로 진화"
+    },
+    "gan__sora": {
+        "story": "GAN 생성 개념이 비디오 모델로 발전"
+    },
+    "gan__midjourney": {
+        "story": "생성형 아트 도구의 길 개척"
+    },
+    "transformer__sora": {
+        "story": "소라는 트랜스포머 아키텍처 사용"
+    },
+    "floppy__optical_disc": {
+        "story": "휴대용 저장 위해 광 디스크로 진화"
+    },
+    "william_shockley__robert_noyce": {
+        "story": "쇼클리가 노이스를 쇼클리 반도체에 채용"
+    },
+    "robert_noyce__steve_jobs": {
+        "story": "애플 초기 노이스가 잡스 멘토링"
+    },
+    "steve_jobs__mark_zuckerberg": {
+        "story": "잡스가 저커버그에게 회사 구축 조언"
+    },
+    "steve_jobs__tim_cook": {
+        "story": "잡스가 팀 쿡을 COO로 영입"
+    },
+    "don_valentine__steve_jobs": {
+        "story": "발렌타인이 잡스의 초기 투자 및 자문"
+    },
+    "larry_ellison__marc_benioff": {
+        "story": "엘리슨과 베니오프 클라우드 비전 충돌"
+    },
+    "paul_graham__sam_altman": {
+        "story": "샘 알트만을 와이콤비네이터 사장 임명"
+    },
+    "paul_graham__patrick_collison": {
+        "story": "스트라이프에 와이콤비네이터 자금 지원"
+    },
+    "peter_thiel__vitalik_buterin": {
+        "story": "부테린에게 틸 펠로우십 수여"
+    },
+    "satoshi_nakamoto__vitalik_buterin": {
+        "story": "비트코인이 이더리움 탄생에 영감"
+    },
+    "xerox_parc__macintosh": {
+        "story": "제록스 GUI가 맥 인터페이스에 영감"
+    },
+    "xerox_parc__windows_95": {
+        "story": "제록스 GUI가 윈도우에 영향"
+    },
+    "xerox_parc__adobe": {
+        "story": "존 워녹이 제록스 떠나 어도비 설립"
+    },
+    "xerox_parc__microsoft": {
+        "story": "찰스 시모니가 제록스에서 MS로 합류"
+    },
+    "mosaic__netscape_co": {
+        "story": "앤드리슨이 모자이크와 넷스케이프 주도"
+    },
+    "mosaic__google_chrome": {
+        "story": "모자이크는 현대 그래픽 브라우저의 조상"
+    },
+    "toshiba_t1100__macintosh": {
+        "story": "도시바 노트북 폼팩터가 맥북에 영향"
+    },
+    "spacex_falcon9__starship": {
+        "story": "재사용 착륙 기술이 스타십으로 진화"
+    },
+    "tim_cook__apple": {
+        "story": "팀 쿡이 애플 공급망 확장 주도"
+    },
+    "satya_nadella__microsoft": {
+        "story": "나델라가 MS 초점을 클라우드/AI로 전환"
+    },
+    "satya_nadella__openai": {
+        "story": "나델라가 오픈AI 전략적 파트너십 주도"
+    },
+    "sundar_pichai__google": {
+        "story": "피차이가 크롬 및 안드로이드 개발 주도"
+    },
+    "lisa_su__amd": {
+        "story": "리사 수가 라이젠으로 AMD 부활 견인"
+    },
+    "roelof_botha__sequoia": {
+        "story": "롤로프 보타가 세콰이어 대표 파트너 취임"
+    },
+    "elon_musk__twitter": {
+        "story": "머스크가 트위터 인수 및 X로 변경"
+    },
+    "microsoft__skype": {
+        "story": "MS가 스카이프를 85억 달러에 인수"
+    },
+    "microsoft__cursor": {
+        "story": "VS 코드 오픈소스 기반으로 커서 구축"
+    },
+    "google__deepmind": {
+        "story": "구글이 딥마인드 5억 달러 인수"
+    },
+    "google__uber_co": {
+        "story": "구글 벤처스가 우버에 2.5억 달러 투자"
+    },
+    "google__boston_dynamics": {
+        "story": "구글이 보스턴 다이내믹스 인수"
+    },
+    "google__zero_trust": {
+        "story": "구글이 비욘드코프 제로 트러스트 개척"
+    },
+    "yann_lecun__meta": {
+        "story": "얀 르쿤 메타 수석 AI 과학자 취임"
+    },
+    "yann_lecun__pytorch": {
+        "story": "얀 르쿤이 파이토치 개발팀 리드"
+    },
+    "reid_hoffman__facebook": {
+        "story": "리드 호프만이 페이스북 초기 투자"
+    },
+    "reid_hoffman__airbnb": {
+        "story": "에어비앤비 시리즈 A 투자 주도"
+    },
+    "reid_hoffman__microsoft": {
+        "story": "링크드인 인수 후 MS 이사 합류"
+    },
+    "reid_hoffman__openai": {
+        "story": "오픈AI 초기 이사 역임"
+    },
+    "sony__cmos": {
+        "story": "소니가 CMOS 센서 시장 리더 부상"
+    },
+    "sequoia__apple": {
+        "story": "애플에 초기 자금 15만 달러 투자"
+    },
+    "sequoia__google": {
+        "story": "구글에 1,250만 달러 투자"
+    },
+    "sequoia__nvidia": {
+        "story": "엔비디아에 초기 단계 투자"
+    },
+    "sequoia__paypal_co": {
+        "story": "페이팔에 초기 단계 투자"
+    },
+    "sequoia__youtube": {
+        "story": "유튜브에 1,150만 달러 투자"
+    },
+    "sequoia__stripe_co": {
+        "story": "스트라이프 시리즈 A 투자 주도"
+    },
+    "ycombinator__airbnb": {
+        "story": "에어비앤비 시드 자금 지원"
+    },
+    "ycombinator__stripe_co": {
+        "story": "스트라이프 시드 자금 지원"
+    },
+    "ycombinator__openai": {
+        "story": "오픈AI 설립 당시 샘 알트만이 YC 주도"
+    },
+    "a16z__meta": {
+        "story": "a16z가 메타 구주(secondary) 투자"
+    },
+    "a16z__airbnb": {
+        "story": "공유 경제 활성화하며 에어비앤비 투자"
+    },
+    "a16z__stripe_co": {
+        "story": "스트라이프 성장에 힘을 실어줌"
+    },
+    "a16z__ethereum": {
+        "story": "이더리움 생태계 투자"
+    },
+    "a16z__openai": {
+        "story": "공개 매수로 오픈AI 투자 참여"
+    },
+    "arthur_rock__intel": {
+        "story": "인텔 첫 투자자 및 의장 역임"
+    },
+    "arthur_rock__apple": {
+        "story": "애플 초기 투자자 (5.7만 달러)"
+    },
+    "peter_thiel__meta": {
+        "story": "페이스북 첫 외부 투자자 (50만 달러)"
+    },
+    "masayoshi_son__alibaba": {
+        "story": "알리바바에 2천만 달러 투자"
+    },
+    "softbank__alibaba": {
+        "story": "소프트뱅크가 알리바바 대주주 등극"
+    },
+    "softbank__arm_ltd": {
+        "story": "소프트뱅크가 Arm 320억 달러 인수"
+    },
+    "softbank__uber_co": {
+        "story": "비전 펀드로 우버 주요 투자"
+    },
+    "softbank__boston_dynamics": {
+        "story": "구글로부터 보스턴 다이내믹스 인수"
+    },
+    "amazon__anthropic": {
+        "story": "앤스로픽에 40억 달러 투자"
+    },
+    "google__anthropic": {
+        "story": "앤스로픽에 20억 달러 투자"
+    },
+    "jeff_bezos__perplexity": {
+        "story": "퍼플렉시티 시리즈 B 투자 참여"
+    },
+    "nvidia__perplexity": {
+        "story": "퍼플렉시티 시리즈 B 투자 참여"
+    },
+    "fairchild__intel": {
+        "story": "노이스와 무어가 페어차일드 떠나 인텔 설립"
+    },
+    "fairchild__amd": {
+        "story": "샌더스가 페어차일드 떠나 AMD 설립"
+    },
+    "fairchild__sequoia": {
+        "story": "발렌타인 세콰이어 설립 전 페어차일드 근무"
+    },
+    "paypal_co__spacex": {
+        "story": "머스크가 페이팔 매각 자금으로 스페이스X 설립"
+    },
+    "paypal_co__tesla": {
+        "story": "머스크가 페이팔 매각 자금으로 테슬라 투자"
+    },
+    "paypal_co__linkedin": {
+        "story": "호프만이 페이팔 이후 링크드인 창업"
+    },
+    "paypal_co__youtube": {
+        "story": "헐리가 페이팔 이후 유튜브 창업"
+    },
+    "paypal_co__reid_hoffman": {
+        "story": "호프만이 페이팔 부사장 역임"
+    },
+    "oracle__salesforce_co": {
+        "story": "DB 대 클라우드 CRM 시장 경쟁"
+    },
+    "hp__apple": {
+        "story": "잡스가 HP 엔지니어링 문화에서 영감 받음"
+    },
+    "hp__xerox_parc": {
+        "story": "HP 문화가 제록스 연구 방식에 영향"
+    },
+    "hp__fairchild": {
+        "story": "HP가 페어차일드가 따른 차고 창업 문화 확립"
+    },
+    "hp__stanford_ai_lab": {
+        "story": "HP와 스탠퍼드 연구 협력 파트너십"
+    },
+    "sun_micro__unix": {
+        "story": "상용 유닉스 솔라리스 개발"
+    },
+    "bell_labs__sun_micro": {
+        "story": "썬이 유닉스 라이선스 도입"
+    },
+    "sun_micro__oracle": {
+        "story": "오라클이 썬을 74억 달러에 인수"
+    },
+    "stanford_ai_lab__sun_micro": {
+        "story": "스탠퍼드 졸업생들이 썬 설립"
+    },
+    "darpa__tcp_ip": {
+        "story": "아파넷용 TCP/IP 개발 자금 지원"
+    },
+    "darpa__mit_csail": {
+        "story": "MIT 초기 AI 연구 자금 지원"
+    },
+    "darpa__stanford_ai_lab": {
+        "story": "스탠퍼드 AI 연구소 주요 자금 지원"
+    },
+    "darpa__www": {
+        "story": "아파넷이 웹의 토대 마련"
+    },
+    "tim_berners_lee__mit_csail": {
+        "story": "웹 표준 장려 위해 MIT 근무"
+    },
+    "mit_csail__www": {
+        "story": "웹 표준 W3C 주최"
+    },
+    "geoffrey_hinton__mit_csail": {
+        "story": "민스키 아래에서 MIT 수학"
+    },
+    "mit_csail__linux": {
+        "story": "자유 소프트웨어 운동이 리눅스에 영향"
+    },
+    "stanford_ai_lab__google": {
+        "story": "페이지와 브린이 스탠퍼드에서 페이지랭크 개발"
+    },
+    "cern__linux": {
+        "story": "CERN 과학 인프라로 리눅스 채택"
+    },
+    "cern__mit_csail": {
+        "story": "CERN과 MIT가 웹 표준 협력"
+    },
+    "arpanet__tcp_ip": {
+        "story": "TCP/IP 기반 인터넷으로 진화"
+    },
+    "arpanet__www": {
+        "story": "아파넷 인프라 위에 웹 구축"
+    },
+    "john_mccarthy__mit_csail": {
+        "story": "AI 창설 다트머스 회의 공동 주최"
+    },
+    "john_mccarthy__deepmind": {
+        "story": "매카시의 비전이 딥마인드 연구에 영향"
+    },
+    "john_mccarthy__unix": {
+        "story": "시분할 개념이 유닉스 설계에 영향"
+    },
+    "marvin_minsky__geoffrey_hinton": {
+        "story": "민스키가 MIT에서 힌튼 멘토링"
+    },
+    "marvin_minsky__deepmind": {
+        "story": "민스키 신경망 작업이 딥마인드에 영감"
+    },
+    "ibm__microsoft": {
+        "story": "DOS 성공 이후 MS와 경쟁"
+    },
+    "ibm__intel": {
+        "story": "IBM PC가 x86 지배력 확립"
+    },
+    "ibm__oracle_db": {
+        "story": "SQL 연구가 오라클 DB에 영감"
+    },
+    "ibm_360__oracle_db": {
+        "story": "360 DB 개념이 오라클에 영향"
+    },
+    "ibm_360__unix": {
+        "story": "360 아키텍처가 유닉스 설계에 영향"
+    },
+    "ibm_360__microsoft": {
+        "story": "엔터프라이즈 소프트웨어 시장 창출"
+    },
+    "unity__ios": {
+        "story": "iOS 인디 게임 활성화 지원"
+    },
+    "unity__android": {
+        "story": "안드로이드 모바일 게임 엔진 장악"
+    },
+    "unity__oculus_rift": {
+        "story": "초기 VR 콘텐츠 구동"
+    },
+    "unity__vision_pro": {
+        "story": "애플 비전 프로 공간 컴퓨팅 지원"
+    },
+    "unreal__meta": {
+        "story": "메타버스 비전 구동"
+    },
+    "unreal__vision_pro": {
+        "story": "비전 프로 개발 지원"
+    },
+    "unreal__nvidia": {
+        "story": "GPU 가속 렌더링 협력"
+    },
+    "gemini__nano_banana": {
+        "story": "제미나이 기반 나노 바나나 구축"
+    },
+    "microsoft__intel": {
+        "story": "윈텔(Wintel) 동맹 결성"
+    },
+    "microsoft__openai": {
+        "story": "오픈AI와 수십억 달러 파트너십"
+    },
+    "apple__tsmc": {
+        "story": "애플 실리콘 독점 위탁 생산 협력"
+    },
+    "apple__arm_ltd": {
+        "story": "애플이 Arm 창립 파트너"
+    },
+    "salesforce_co__slack": {
+        "story": "전략적 슬랙 인수 (277억 달러)"
+    },
+    "wikipedia__google_search": {
+        "story": "구글 지식 그래프에 위키백과 통합"
+    },
+    "att__cisco": {
+        "story": "주요 인프라 구축 파트너십"
+    },
+    "yann_lecun__geoffrey_hinton": {
+        "story": "딥러닝 협력 및 튜링상 공동 수상"
+    },
+    "steve_jobs__steve_wozniak": {
+        "story": "애플 공동 창업"
+    },
+    "larry_page__sergey_brin": {
+        "story": "구글 공동 창업"
+    },
+    "peter_thiel__max_levchin": {
+        "story": "페이팔 핵심 공동 창업"
+    },
+    "marvin_minsky__john_mccarthy": {
+        "story": "AI 분야 공동 창설"
+    },
+    "unity__meta": {
+        "story": "퀘스트 VR 개발 협력"
+    },
+    "unity__google": {
+        "story": "구글 ARCore 통합 지원"
+    },
+    "unreal__sony": {
+        "story": "소니 투자 유치 및 PS5 개발 지원"
+    },
+    "apple__google": {
+        "story": "iOS 대 안드로이드 OS 경쟁"
+    },
+    "apple__microsoft": {
+        "story": "PC 및 OS 시장 경쟁"
+    },
+    "apple__samsung": {
+        "story": "스마트폰 디자인 특허 경쟁"
+    },
+    "apple__meta": {
+        "story": "개인정보 정책 및 광고 수익 갈등"
+    },
+    "amazon__microsoft": {
+        "story": "클라우드(AWS vs Azure) 지배권 경쟁"
+    },
+    "amazon__google": {
+        "story": "클라우드 및 음성 AI 경쟁"
+    },
+    "google__microsoft": {
+        "story": "검색, 브라우저, AI 경쟁"
+    },
+    "intel__amd": {
+        "story": "x86 CPU 시장 점유율 경쟁"
+    },
+    "nvidia__amd": {
+        "story": "GPU 시장 점유율 경쟁"
+    },
+    "nvidia__intel": {
+        "story": "AI 가속 및 CPU 경쟁"
+    },
+    "intel__tsmc": {
+        "story": "파운드리 공정 경쟁"
+    },
+    "samsung__tsmc": {
+        "story": "첨단 파운드리 노드 경쟁"
+    },
+    "qualcomm__apple": {
+        "story": "모뎀 칩 라이선스 분쟁 및 경쟁"
+    },
+    "meta__bytedance": {
+        "story": "릴스 대 틱톡 숏폼 비디오 경쟁"
+    },
+    "twitter__meta": {
+        "story": "X 대 스레드 마이크로블로깅 경쟁"
+    },
+    "twitter__tiktok": {
+        "story": "사용자 주목도 경쟁"
+    },
+    "ios__android": {
+        "story": "모바일 생태계 양강 경쟁"
+    },
+    "netflix_co__youtube": {
+        "story": "비디오 엔터테인먼트 점유율 경쟁"
+    },
+    "amazon_com__alibaba": {
+        "story": "글로벌 전자상거래 패권 경쟁"
+    },
+    "amazon_com__google_search": {
+        "story": "상품 검색 진입점 경쟁"
+    },
+    "huggingface__github": {
+        "story": "모델 호스팅 대 코드 호스팅 경쟁"
+    },
+    "sap__oracle": {
+        "story": "ERP 소프트웨어 시장 경쟁"
+    },
+    "sap__salesforce_co": {
+        "story": "엔터프라이즈 소프트웨어 경쟁"
+    },
+    "unreal__unity": {
+        "story": "게임 엔진 시장 점유율 경쟁"
+    },
+    "skype__zoom": {
+        "story": "화상 회의 지배권 경쟁"
+    },
+    "google__openai": {
+        "story": "생성형 AI 리더십 경쟁"
+    },
+    "openai__anthropic": {
+        "story": "AI 안전 및 성능 경쟁"
+    },
+    "huggingface__openai": {
+        "story": "오픈 모델 대 폐쇄 모델 경쟁"
+    },
+    "tensorflow__pytorch": {
+        "story": "딥러닝 프레임워크 점유율 경쟁"
+    },
+    "perplexity__google_search": {
+        "story": "AI 답변 엔진 대 검색 엔진 경쟁"
+    },
+    "cursor__copilot": {
+        "story": "AI 코드 에디터 점유율 경쟁"
+    },
+    "claude__chatgpt": {
+        "story": "LLM 성능 경쟁 (클로드 vs GPT)"
+    },
+    "claude__gemini": {
+        "story": "LLM 성능 경쟁 (클로드 vs 제미나이)"
+    },
+    "sora__midjourney": {
+        "story": "생성형 미디어 분야 경쟁"
+    },
+    "uber_co__tesla": {
+        "story": "로보택시 시장 미래 경쟁"
+    },
+    "boston_dynamics__tesla": {
+        "story": "휴머노이드 로봇 기술 경쟁"
+    },
+    "lidar__tesla_autopilot": {
+        "story": "라이다 기술 대 비전 중심 전략 경쟁"
+    },
+    "vision_pro__oculus_rift": {
+        "story": "공간 컴퓨팅 헤드셋 시장 경쟁"
+    },
+    "5g_nr__starlink": {
+        "story": "지상망 5G 대 위성 인터넷 경쟁"
+    },
+    "fugaku__nvidia_h100": {
+        "story": "슈퍼컴퓨팅 성능 경쟁"
+    },
+    "steve_jobs__bill_gates": {
+        "story": "PC 대 맥 철학 충돌"
+    },
+    "elon_musk__jeff_bezos": {
+        "story": "우주 레이스 경쟁"
+    },
+    "elon_musk__mark_zuckerberg": {
+        "story": "소셜 미디어 및 AI 경쟁"
+    },
+    "elon_musk__sam_altman": {
+        "story": "오픈AI 방향성 관련 갈등"
+    },
+    "yann_lecun__elon_musk": {
+        "story": "AI 안전과 능력에 대한 논쟁"
+    },
+    "ethereum__bitcoin": {
+        "story": "플랫폼 대 가치 저장 수단 경쟁"
+    },
+    "ethereum__paypal_co": {
+        "story": "디파이 대 전통 금융 경쟁"
+    },
+    "vitalik_buterin__jack_ma": {
+        "story": "탈중앙화 대 중앙 집중화 철학 대립"
+    },
+    "qualcomm__broadcom": {
+        "story": "무선 연결 칩 경쟁"
+    },
+    "sun_micro__microsoft": {
+        "story": "서버 및 자바 분야 경쟁"
+    },
+    "sun_micro__hp": {
+        "story": "유닉스 워크스테이션 시장 경쟁"
+    },
+    "ibm__apple": {
+        "story": "PC 대 애플 II/맥 경쟁"
+    },
+    "photoshop__midjourney": {
+        "story": "기업용 안전 이미지 생성 경쟁"
+    },
+    "nano_banana__midjourney": {
+        "story": "일관성 유지 능력으로 미드저니에 도전"
+    }
+}

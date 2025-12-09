@@ -1,0 +1,1496 @@
+{
+  "william_shockley__fairchild": {
+    "story": "William Shockley's management style led the \"Traitorous Eight\" to leave and found Fairchild Semiconductor"
+  },
+  "robert_noyce__intel": {
+    "story": "Robert Noyce founded NM Electronics, which soon became Intel"
+  },
+  "gordon_moore__intel": {
+    "story": "Gordon Moore co-founded Intel to focus on semiconductor memory technologies"
+  },
+  "morris_chang__tsmc": {
+    "story": "Morris Chang founded TSMC with support from the Taiwan government"
+  },
+  "jensen_huang__nvidia": {
+    "story": "Jensen Huang co-founded NVIDIA to accelerate 3D graphics computing"
+  },
+  "steve_jobs__apple": {
+    "story": "Steve Jobs founded Apple in a garage to sell the Apple I computer"
+  },
+  "steve_wozniak__apple": {
+    "story": "Steve Wozniak engineered the Apple I and II computers for Apple"
+  },
+  "bill_gates__microsoft": {
+    "story": "Bill Gates founded Microsoft to develop BASIC interpreters for the Altair 8800"
+  },
+  "larry_ellison__oracle": {
+    "story": "Larry Ellison founded Software Development Laboratories, which became Oracle"
+  },
+  "jeff_bezos__amazon": {
+    "story": "Jeff Bezos started Amazon as an online bookstore"
+  },
+  "larry_page__google": {
+    "story": "Larry Page founded Google based on his PageRank algorithm"
+  },
+  "sergey_brin__google": {
+    "story": "Sergey Brin co-founded Google while researching at Stanford"
+  },
+  "marc_andreessen__netscape_co": {
+    "story": "Marc Andreessen co-founded Netscape to commercialize the Mosaic browser"
+  },
+  "reed_hastings__netflix_co": {
+    "story": "Reed Hastings co-founded Netflix as a DVD-by-mail service"
+  },
+  "mark_zuckerberg__meta": {
+    "story": "Mark Zuckerberg launched Facebook from his Harvard dorm room"
+  },
+  "peter_thiel__paypal_co": {
+    "story": "Peter Thiel co-founded Confinity, which later merged into PayPal"
+  },
+  "max_levchin__paypal_co": {
+    "story": "Max Levchin developed the fraud prevention systems for PayPal"
+  },
+  "elon_musk__paypal_co": {
+    "story": "Elon Musk merged his company X.com with Confinity to form PayPal"
+  },
+  "elon_musk__spacex": {
+    "story": "Elon Musk founded SpaceX to reduce space transportation costs"
+  },
+  "elon_musk__tesla": {
+    "story": "Elon Musk joined Tesla as a Series A investor and became Chairman"
+  },
+  "elon_musk__openai": {
+    "story": "Elon Musk co-founded OpenAI as a non-profit AI research organization"
+  },
+  "sam_altman__openai": {
+    "story": "Sam Altman co-founded OpenAI and later became its CEO"
+  },
+  "demis_hassabis__deepmind": {
+    "story": "Demis Hassabis founded DeepMind to solve general intelligence"
+  },
+  "jack_ma__alibaba": {
+    "story": "Jack Ma founded Alibaba in his apartment with 17 friends"
+  },
+  "pony_ma__tencent": {
+    "story": "Pony Ma founded Tencent to launch the OICQ messaging service"
+  },
+  "chad_hurley__youtube": {
+    "story": "Chad Hurley co-founded the YouTube video sharing platform"
+  },
+  "travis_kalanick__uber_co": {
+    "story": "Travis Kalanick co-founded Uber as UberCab"
+  },
+  "patrick_collison__stripe_co": {
+    "story": "Patrick Collison founded Stripe to simplify online payments"
+  },
+  "marc_benioff__salesforce_co": {
+    "story": "Marc Benioff founded Salesforce to deliver software via the cloud"
+  },
+  "don_valentine__sequoia": {
+    "story": "Don Valentine founded the venture capital firm Sequoia Capital"
+  },
+  "paul_graham__ycombinator": {
+    "story": "Paul Graham co-founded the startup accelerator Y Combinator"
+  },
+  "marc_andreessen__a16z": {
+    "story": "Marc Andreessen co-founded the VC firm Andreessen Horowitz"
+  },
+  "masayoshi_son__softbank": {
+    "story": "Masayoshi Son founded SoftBank as a software distributor"
+  },
+  "cisco__cisco_router": {
+    "story": "Cisco developed the first commercially successful multi-protocol router"
+  },
+  "qualcomm__5g_nr": {
+    "story": "Qualcomm led the development of global 5G standards"
+  },
+  "samsung__5g_nr": {
+    "story": "Samsung led the early commercialization of 5G network equipment"
+  },
+  "alan_turing__turing_machine": {
+    "story": "Alan Turing proposed the mathematical model of computation"
+  },
+  "claude_shannon__info_theory": {
+    "story": "Claude Shannon published \"A Mathematical Theory of Communication\""
+  },
+  "william_shockley__transistor": {
+    "story": "William Shockley co-invented the point-contact transistor"
+  },
+  "robert_noyce__ic": {
+    "story": "Robert Noyce invented the monolithic integrated circuit"
+  },
+  "tim_berners_lee__www": {
+    "story": "Tim Berners-Lee created HTML, HTTP, and the first web browser at CERN"
+  },
+  "dennis_ritchie__unix": {
+    "story": "Dennis Ritchie co-created the Unix operating system at Bell Labs"
+  },
+  "dennis_ritchie__c_lang": {
+    "story": "Dennis Ritchie developed C language for Unix system programming"
+  },
+  "linus_torvalds__linux": {
+    "story": "Linus Torvalds released the Linux kernel as free software"
+  },
+  "linus_torvalds__git": {
+    "story": "Linus Torvalds created Git for Linux kernel development"
+  },
+  "satoshi_nakamoto__bitcoin": {
+    "story": "Satoshi Nakamoto published the whitepaper and mined the genesis block"
+  },
+  "vitalik_buterin__ethereum": {
+    "story": "Vitalik Buterin proposed Ethereum as a decentralized application platform"
+  },
+  "geoffrey_hinton__alexnet": {
+    "story": "Geoffrey Hinton co-authored the breakthrough paper on Convolutional Neural Networks"
+  },
+  "yann_lecun__alexnet": {
+    "story": "Yann LeCun pioneered CNN architectures (LeNet) that led to AlexNet"
+  },
+  "ilya_sutskever__transformer": {
+    "story": "Ilya Sutskever co-authored the \"Attention Is All You Need\" paper"
+  },
+  "google__word2vec": {
+    "story": "Google created Word2Vec to efficiently represent words as vectors"
+  },
+  "marc_andreessen__mosaic": {
+    "story": "Marc Andreessen co-authored Mosaic, the first popular graphical browser"
+  },
+  "anthropic__claude": {
+    "story": "Anthropic released the Claude AI assistant"
+  },
+  "openai__sora": {
+    "story": "OpenAI introduced Sora, a text-to-video generative model"
+  },
+  "bell_labs__transistor": {
+    "story": "Bell Labs researchers invented the first point-contact transistor"
+  },
+  "bell_labs__unix": {
+    "story": "Bell Labs developed the Unix operating system"
+  },
+  "bell_labs__c_lang": {
+    "story": "Bell Labs developed the C programming language"
+  },
+  "fairchild__ic": {
+    "story": "Fairchild created the first commercially viable Integrated Circuit"
+  },
+  "intel__x86": {
+    "story": "Intel introduced the x86 architecture with the 8086 processor"
+  },
+  "intel__microprocessor": {
+    "story": "Intel released the 4004, the first commercial microprocessor"
+  },
+  "nvidia__gpu_geforce": {
+    "story": "NVIDIA coined the term GPU with the release of GeForce 256"
+  },
+  "nvidia__nvidia_h100": {
+    "story": "NVIDIA released the H100 GPU for massive AI workloads"
+  },
+  "nvidia__cuda": {
+    "story": "NVIDIA released the CUDA parallel computing platform"
+  },
+  "arm_ltd__arm_arch": {
+    "story": "Arm Holdings designed the power-efficient RISC architecture"
+  },
+  "arm_ltd__arm_cortex": {
+    "story": "Arm Holdings released the Cortex processor family"
+  },
+  "asml__euv": {
+    "story": "ASML shipped the first EUV lithography prototype"
+  },
+  "tsmc__foundry_model": {
+    "story": "TSMC pioneered the dedicated semiconductor foundry business model"
+  },
+  "ibm__ibm_360": {
+    "story": "IBM announced the System/360 mainframe family"
+  },
+  "sony__walkman": {
+    "story": "Sony released the TPS-L2 Walkman"
+  },
+  "sony__optical_disc": {
+    "story": "Sony co-developed the Compact Disc (CD) with Philips"
+  },
+  "apple__macintosh": {
+    "story": "Apple launched the Macintosh with the \"1984\" Super Bowl ad"
+  },
+  "apple__iphone": {
+    "story": "Apple reinvented the phone with the launch of the iPhone"
+  },
+  "apple__ios": {
+    "story": "Apple released iPhone OS, which later became iOS"
+  },
+  "apple__app_store": {
+    "story": "Apple opened the App Store to third-party developers"
+  },
+  "apple__vision_pro": {
+    "story": "Apple unveiled the Vision Pro spatial computer"
+  },
+  "tesla__model_s": {
+    "story": "Tesla launched the Model S premium electric sedan"
+  },
+  "tesla__tesla_autopilot": {
+    "story": "Tesla introduced Autopilot driver assistance features"
+  },
+  "spacex__spacex_falcon9": {
+    "story": "SpaceX achieved the first successful launch of Falcon 9"
+  },
+  "spacex__starlink": {
+    "story": "SpaceX began launching Starlink satellites"
+  },
+  "spacex__starship": {
+    "story": "SpaceX conducted the first integrated flight test of Starship"
+  },
+  "dji__dji_phantom": {
+    "story": "DJI popularized consumer drones with the Phantom series"
+  },
+  "xerox_parc__ethernet": {
+    "story": "Xerox PARC invented Ethernet for local area networking"
+  },
+  "att__bell_labs": {
+    "story": "AT&T was the parent company of the Bell Labs research center"
+  },
+  "microsoft__windows_95": {
+    "story": "Microsoft released Windows 95 with the Start menu"
+  },
+  "microsoft__excel": {
+    "story": "Microsoft released the first graphical version of Excel"
+  },
+  "microsoft__copilot": {
+    "story": "Microsoft integrated AI Copilot into Office 365"
+  },
+  "oracle__oracle_db": {
+    "story": "Oracle released the first commercial SQL RDBMS"
+  },
+  "adobe__photoshop": {
+    "story": "Adobe released Photoshop version 1.0"
+  },
+  "salesforce_co__salesforce_crm": {
+    "story": "Salesforce launched the first SaaS CRM platform"
+  },
+  "netscape_co__netscape": {
+    "story": "Netscape released the Navigator web browser"
+  },
+  "netscape_co__javascript": {
+    "story": "Netscape created JavaScript, developed by Brendan Eich"
+  },
+  "netscape_co__ssl_tls": {
+    "story": "Netscape introduced the SSL 2.0 protocol"
+  },
+  "google__google_search": {
+    "story": "Google launched its search engine"
+  },
+  "google__android": {
+    "story": "Google released Android 1.0"
+  },
+  "google__google_chrome": {
+    "story": "Google released the Chrome web browser"
+  },
+  "google__mapreduce": {
+    "story": "Google published the MapReduce research paper"
+  },
+  "google__transformer": {
+    "story": "Google published \"Attention Is All You Need\""
+  },
+  "google__tpu": {
+    "story": "Google deployed TPUs in its data centers"
+  },
+  "google__gemini": {
+    "story": "Google released the Gemini multimodal AI model"
+  },
+  "deepmind__alphago": {
+    "story": "DeepMind's AlphaGo defeated Lee Sedol"
+  },
+  "deepmind__alphago_zero": {
+    "story": "DeepMind created AlphaGo Zero which mastered Go without human data"
+  },
+  "meta__facebook": {
+    "story": "Meta launched \"TheFacebook\" from Harvard"
+  },
+  "meta__pytorch": {
+    "story": "Meta released the PyTorch deep learning framework"
+  },
+  "openai__chatgpt": {
+    "story": "OpenAI released ChatGPT as a research preview"
+  },
+  "netflix_co__netflix": {
+    "story": "Netflix launched its streaming video service"
+  },
+  "spotify_co__spotify": {
+    "story": "Spotify launched its music streaming service"
+  },
+  "uber_co__uber_app": {
+    "story": "Uber launched its ride-hailing app in San Francisco"
+  },
+  "paypal_co__paypal": {
+    "story": "PayPal launched its money transfer service"
+  },
+  "stripe_co__stripe": {
+    "story": "Stripe launched its payments API for developers"
+  },
+  "bytedance__tiktok": {
+    "story": "ByteDance launched TikTok as the international version of Douyin"
+  },
+  "tencent__wechat": {
+    "story": "Tencent released the WeChat mobile messaging app"
+  },
+  "amazon__amazon_com": {
+    "story": "Amazon launched its online bookstore"
+  },
+  "broadcom__wifi": {
+    "story": "Broadcom became the dominant supplier of WiFi chips for smartphones and routers"
+  },
+  "sun_micro__java": {
+    "story": "Sun Microsystems developed Java as a \"write once, run anywhere\" platform"
+  },
+  "darpa__arpanet": {
+    "story": "DARPA funded the development of ARPANET, the internet's ancestor"
+  },
+  "darpa__gps": {
+    "story": "DARPA initiated the GPS satellite program for military navigation"
+  },
+  "marvin_minsky__mit_csail": {
+    "story": "Marvin Minsky co-founded the MIT AI Lab, which became CSAIL"
+  },
+  "john_mccarthy__stanford_ai_lab": {
+    "story": "John McCarthy founded Stanford AI Lab after coining the term AI"
+  },
+  "stanford_ai_lab__cisco": {
+    "story": "Stanford couple founded Cisco to network the campus"
+  },
+  "cern__www": {
+    "story": "CERN is where Tim Berners-Lee invented the World Wide Web"
+  },
+  "ibm__dram": {
+    "story": "IBM researcher Robert Dennard invented DRAM"
+  },
+  "ibm__floppy": {
+    "story": "IBM invented the floppy disk for portable storage"
+  },
+  "ibm__sql": {
+    "story": "IBM developed SQL for relational database management"
+  },
+  "adobe__postscript": {
+    "story": "Adobe was founded to develop PostScript, making laser printing possible."
+  },
+  "adobe__illustrator": {
+    "story": "Adobe released Illustrator originally for the Apple Macintosh."
+  },
+  "adobe__premiere_pro": {
+    "story": "Adobe launched Premiere, bringing professional video editing to PCs."
+  },
+  "adobe__pdf": {
+    "story": "Adobe invented PDF to allow documents to be viewed on any system."
+  },
+  "deepmind__nano_banana": {
+    "story": "Google DeepMind released the Gemini 2.5 Flash Image model under the codename Nano Banana"
+  },
+  "lithography__ic": {
+    "story": "Lithography enables the printing of microscopic circuits on Integrated Circuits"
+  },
+  "lithography__euv": {
+    "story": "Lithography evolved to use Extreme Ultraviolet light for finer precision"
+  },
+  "lithography__lidar": {
+    "story": "Lithography enables the micro-fabrication of LiDAR sensors"
+  },
+  "lithography__cmos": {
+    "story": "Lithography is the essential manufacturing process for CMOS sensors"
+  },
+  "euv__nvidia_h100": {
+    "story": "EUV Lithography enables the 4nm process node used for the NVIDIA H100"
+  },
+  "euv__arm_cortex": {
+    "story": "EUV Lithography enables the manufacturing of advanced ARM Cortex cores"
+  },
+  "ic__microprocessor": {
+    "story": "Microprocessors are complex Integrated Circuits that function as a CPU"
+  },
+  "ic__dram": {
+    "story": "DRAM memory is implemented using Integrated Circuits"
+  },
+  "ic__nand": {
+    "story": "NAND Flash storage is implemented using Integrated Circuits"
+  },
+  "hbm__nvidia_h100": {
+    "story": "HBM provides the necessary memory bandwidth for NVIDIA H100 training"
+  },
+  "hbm__tpu": {
+    "story": "HBM provides high-speed memory access for Google TPUs"
+  },
+  "optical_fiber__tcp_ip": {
+    "story": "Optical Fiber serves as the physical layer for global TCP/IP traffic"
+  },
+  "optical_fiber__5g_nr": {
+    "story": "Optical Fiber is required for 5G base station backhaul connections"
+  },
+  "blue_led__optical_disc": {
+    "story": "Blue LEDs enable the short wavelength required for high-density Optical Discs"
+  },
+  "cmos__lidar": {
+    "story": "CMOS technology provides the sensor foundation for LiDAR systems"
+  },
+  "microprocessor__unix": {
+    "story": "The Microprocessor provided the hardware platform for Unix to run"
+  },
+  "x86__linux": {
+    "story": "The x86 architecture was the initial development platform for Linux"
+  },
+  "x86__windows_95": {
+    "story": "The x86 architecture was the dominant platform for Windows 95"
+  },
+  "x86__toshiba_t1100": {
+    "story": "The Intel 80C88 x86 processor powered the Toshiba T1100"
+  },
+  "arm_arch__ios": {
+    "story": "ARM Architecture forms the basis for Apple Silicon in iOS devices"
+  },
+  "arm_arch__android": {
+    "story": "ARM Architecture is the dominant platform for Android devices"
+  },
+  "arm_arch__vision_pro": {
+    "story": "ARM Architecture powers the M2 and R1 chips in Vision Pro"
+  },
+  "arm_arch__fugaku": {
+    "story": "ARM Architecture powers the A64FX chips in Fugaku"
+  },
+  "gpu_geforce__cuda": {
+    "story": "GeForce GPUs provided the hardware for CUDA parallel computing"
+  },
+  "gpu_geforce__ethereum": {
+    "story": "GPUs were used for Ethereum Proof-of-Work mining"
+  },
+  "nvidia_h100__cuda": {
+    "story": "NVIDIA H100 is optimized for the latest CUDA architecture"
+  },
+  "nvidia_h100__pytorch": {
+    "story": "NVIDIA H100 acts as the acceleration backend for PyTorch"
+  },
+  "nvidia_h100__chatgpt": {
+    "story": "NVIDIA H100 provides the hardware for ChatGPT training and inference"
+  },
+  "nvidia_h100__bytedance": {
+    "story": "NVIDIA H100 powers ByteDance's AI infrastructure"
+  },
+  "nvidia_h100__tencent": {
+    "story": "NVIDIA H100 powers Tencent's Cloud AI infrastructure"
+  },
+  "nvidia_h100__starship": {
+    "story": "NVIDIA H100 powers SpaceX's CFD simulations for Starship"
+  },
+  "nvidia_h100__sora": {
+    "story": "NVIDIA H100 provides the compute for Sora video generation training"
+  },
+  "tpu__tensorflow": {
+    "story": "Google TPU provides custom hardware acceleration for TensorFlow"
+  },
+  "tcp_ip__www": {
+    "story": "TCP/IP serves as the underlying transport protocol for the World Wide Web"
+  },
+  "tcp_ip__aws_cloud": {
+    "story": "TCP/IP is the networking foundation for AWS Cloud services"
+  },
+  "tcp_ip__skype": {
+    "story": "TCP/IP provided the transport layer for Skype VoIP"
+  },
+  "ssl_tls__aws_cloud": {
+    "story": "SSL/TLS ensures secure communication for AWS Cloud"
+  },
+  "ssl_tls__paypal_co": {
+    "story": "SSL/TLS secures financial transactions on PayPal"
+  },
+  "ssl_tls__amazon_com": {
+    "story": "SSL/TLS enables secure e-commerce on Amazon.com"
+  },
+  "ssl_tls__zero_trust": {
+    "story": "SSL/TLS encryption is a requirement for Zero Trust architecture"
+  },
+  "rsa__ssl_tls": {
+    "story": "RSA provides the key exchange algorithm for SSL/TLS"
+  },
+  "rsa__bitcoin": {
+    "story": "RSA principles influenced Bitcoin's public key cryptography"
+  },
+  "rsa__git": {
+    "story": "RSA is used for SSH authentication in Git"
+  },
+  "rsa__amazon_com": {
+    "story": "RSA enables secure checkout on Amazon.com"
+  },
+  "cisco_router__aws_cloud": {
+    "story": "Cisco Routers manage data center networking for cloud providers"
+  },
+  "cisco_router__att": {
+    "story": "Cisco Routers form the backbone of AT&T's network"
+  },
+  "cisco_router__google": {
+    "story": "Cisco Routers supported Google's early network infrastructure"
+  },
+  "optical_fiber__att": {
+    "story": "Optical Fiber serves as the backbone transmission medium for AT&T"
+  },
+  "optical_fiber__starlink": {
+    "story": "Optical Fiber connects Starlink ground stations to the internet backbone"
+  },
+  "linux__android": {
+    "story": "The Linux Kernel serves as the core for the Android OS"
+  },
+  "linux__aws_cloud": {
+    "story": "Linux is the primary server operating system for AWS Cloud"
+  },
+  "linux__docker": {
+    "story": "Linux kernel features like cgroups enabled Docker containers"
+  },
+  "linux__git": {
+    "story": "Linux provided the initial development platform for Git"
+  },
+  "linux__sap": {
+    "story": "Linux is the operating system for the SAP HANA platform"
+  },
+  "linux__fugaku": {
+    "story": "Red Hat Enterprise Linux runs on the Fugaku supercomputer"
+  },
+  "linux__starship": {
+    "story": "Linux powers the flight software of SpaceX Starship"
+  },
+  "linux__raspberry_pi": {
+    "story": "Raspbian (Linux) is the default OS for Raspberry Pi"
+  },
+  "aws_cloud__docker": {
+    "story": "AWS Cloud provides hosting for Docker containers"
+  },
+  "aws_cloud__netflix": {
+    "story": "AWS Cloud enabled Netflix to migrate from datacenters"
+  },
+  "aws_cloud__zoom": {
+    "story": "AWS Cloud provides video infrastructure for Zoom"
+  },
+  "aws_cloud__slack": {
+    "story": "AWS Cloud provides messaging infrastructure for Slack"
+  },
+  "aws_cloud__uber_app": {
+    "story": "AWS Cloud provides compute infrastructure for Uber"
+  },
+  "aws_cloud__stripe": {
+    "story": "AWS Cloud hosts Stripe's payment processing infrastructure"
+  },
+  "aws_cloud__copilot": {
+    "story": "AWS Cloud serves the models for GitHub Copilot"
+  },
+  "aws_cloud__netflix_co": {
+    "story": "AWS Cloud is the core infrastructure provider for Netflix"
+  },
+  "aws_cloud__uber_co": {
+    "story": "AWS Cloud allows Uber to scale globally"
+  },
+  "aws_cloud__stripe_co": {
+    "story": "AWS Cloud ensures reliable uptime for Stripe"
+  },
+  "aws_cloud__huggingface": {
+    "story": "AWS Cloud hosts the Hugging Face model hub"
+  },
+  "aws_cloud__anthropic": {
+    "story": "AWS Cloud provides training infrastructure for Anthropic"
+  },
+  "aws_cloud__twitter": {
+    "story": "AWS Cloud supported Twitter's partial cloud migration"
+  },
+  "aws_cloud__claude": {
+    "story": "AWS Cloud hosts inference for Claude models"
+  },
+  "java__android": {
+    "story": "Java is the primary language for Android app development"
+  },
+  "cuda__pytorch": {
+    "story": "CUDA enables GPU acceleration for PyTorch"
+  },
+  "cuda__tensorflow": {
+    "story": "CUDA enables GPU acceleration for TensorFlow"
+  },
+  "mapreduce__tensorflow": {
+    "story": "MapReduce concepts influenced TensorFlow's distributed computing"
+  },
+  "sql__sap": {
+    "story": "SQL is the query language for SAP databases"
+  },
+  "oracle_db__salesforce_crm": {
+    "story": "Oracle Database powers the Salesforce CRM backend"
+  },
+  "oracle_db__sap": {
+    "story": "Oracle Database supported SAP ERP systems"
+  },
+  "oracle_db__amazon_com": {
+    "story": "Oracle Database was an early dependency for Amazon.com"
+  },
+  "pytorch__chatgpt": {
+    "story": "PyTorch is the framework used to train ChatGPT"
+  },
+  "pytorch__stable_diffusion": {
+    "story": "PyTorch is the framework used for Stable Diffusion models"
+  },
+  "pytorch__tesla_autopilot": {
+    "story": "PyTorch powers Tesla's computer vision training"
+  },
+  "pytorch__huggingface": {
+    "story": "PyTorch is the primary framework supported by Hugging Face"
+  },
+  "tensorflow__alphago": {
+    "story": "TensorFlow powered the deep learning models for AlphaGo"
+  },
+  "tensorflow__google_search": {
+    "story": "TensorFlow powers Google's RankBrain search algorithm"
+  },
+  "tensorflow__tiktok": {
+    "story": "TensorFlow powers TikTok's recommendation algorithm"
+  },
+  "google_chrome__google_search": {
+    "story": "Google Chrome drives traffic to Google Search"
+  },
+  "app_store__uber_app": {
+    "story": "The App Store is the primary distribution channel for the Uber App"
+  },
+  "app_store__spotify": {
+    "story": "The App Store enabled mobile distribution for Spotify"
+  },
+  "app_store__tiktok": {
+    "story": "The App Store enabled global distribution for TikTok"
+  },
+  "app_store__twitter": {
+    "story": "The App Store enabled mobile access for Twitter"
+  },
+  "www__amazon_com": {
+    "story": "The World Wide Web enables Amazon's e-commerce platform"
+  },
+  "www__mosaic": {
+    "story": "The World Wide Web relied on Mosaic for rendering pages"
+  },
+  "zero_trust__aws_cloud": {
+    "story": "Zero Trust is the security architecture for AWS access"
+  },
+  "zero_trust__salesforce_co": {
+    "story": "Zero Trust protects Salesforce enterprise data"
+  },
+  "zero_trust__slack": {
+    "story": "Zero Trust ensures secure access to Slack"
+  },
+  "transformer__huggingface": {
+    "story": "Transformers are the foundation of the Hugging Face library"
+  },
+  "transformer__claude": {
+    "story": "Transformers are the underlying architecture of Claude"
+  },
+  "openai__perplexity": {
+    "story": "OpenAI APIs power Perplexity's initial reasoning"
+  },
+  "openai__cursor": {
+    "story": "OpenAI GPT-4 powers Cursor's code generation"
+  },
+  "claude__perplexity": {
+    "story": "Claude 3 models are integrated into Perplexity"
+  },
+  "claude__cursor": {
+    "story": "Claude 3 models are integrated into Cursor"
+  },
+  "ios__iphone": {
+    "story": "iOS is the Operating System that runs the iPhone"
+  },
+  "ios__app_store": {
+    "story": "iOS provides the platform for the App Store"
+  },
+  "ios__vision_pro": {
+    "story": "iOS kernel provides the foundation for visionOS"
+  },
+  "android__model_s": {
+    "story": "Android/Linux serves as the base for Tesla infotainment"
+  },
+  "li_ion__iphone": {
+    "story": "Li-ion Battery energy density enabled the iPhone design"
+  },
+  "li_ion__model_s": {
+    "story": "Li-ion 18650 cells power the Tesla Model S battery pack"
+  },
+  "li_ion__dji_phantom": {
+    "story": "Li-ion batteries enable flight time for DJI Phantom"
+  },
+  "gps__uber_app": {
+    "story": "GPS provides real-time location tracking for Uber"
+  },
+  "gps__dji_phantom": {
+    "story": "GPS enables stabilization and Return-to-Home for drones"
+  },
+  "gps__tesla_autopilot": {
+    "story": "GPS provides navigation data for Tesla Autopilot"
+  },
+  "bluetooth__iphone": {
+    "story": "Bluetooth connects wireless peripherals to the iPhone"
+  },
+  "bluetooth__model_s": {
+    "story": "Bluetooth enables phone key and audio in Model S"
+  },
+  "mp3__walkman": {
+    "story": "MP3 format support transformed the Walkman into a digital player"
+  },
+  "floppy__windows_95": {
+    "story": "Floppy Disks were the installation media for Windows 95"
+  },
+  "floppy__macintosh": {
+    "story": "Floppy Disks were the primary storage for the original Macintosh"
+  },
+  "floppy__excel": {
+    "story": "Floppy Disks were the distribution media for Excel"
+  },
+  "lidar__boston_dynamics": {
+    "story": "LiDAR provides spatial perception for Boston Dynamics robots"
+  },
+  "lidar__uber_co": {
+    "story": "LiDAR enabled autonomous vehicle testing for Uber"
+  },
+  "cmos__iphone": {
+    "story": "CMOS Sensors enable the iPhone camera"
+  },
+  "cmos__tesla_autopilot": {
+    "story": "CMOS Sensors provide vision data for Tesla Autopilot"
+  },
+  "cmos__dji_phantom": {
+    "story": "CMOS Sensors enable aerial photography for drones"
+  },
+  "cmos__vision_pro": {
+    "story": "CMOS Sensors enable passthrough video for Vision Pro"
+  },
+  "arm_cortex__raspberry_pi": {
+    "story": "ARM Cortex serves as the CPU core for Raspberry Pi"
+  },
+  "python__raspberry_pi": {
+    "story": "Python is the primary educational language for Raspberry Pi"
+  },
+  "5g_nr__vision_pro": {
+    "story": "5G provides low latency streaming for Vision Pro"
+  },
+  "5g_nr__dji_phantom": {
+    "story": "5G tech influences OcuSync video transmission"
+  },
+  "5g_nr__tesla_autopilot": {
+    "story": "5G enables fast OTA updates and telemetry for Tesla"
+  },
+  "euv__tsmc": {
+    "story": "EUV Lithography enables TSMC's sub-7nm manufacturing"
+  },
+  "euv__samsung": {
+    "story": "EUV Lithography enables Samsung's advanced foundry nodes"
+  },
+  "euv__intel": {
+    "story": "EUV Lithography enables the Intel 4 process node"
+  },
+  "foundry_model__nvidia": {
+    "story": "The Foundry Model enables NVIDIA to operate as a fabless company"
+  },
+  "foundry_model__apple": {
+    "story": "The Foundry Model enables Apple to produce custom silicon"
+  },
+  "foundry_model__amd": {
+    "story": "The Foundry Model enables AMD to focus on chip design"
+  },
+  "foundry_model__qualcomm": {
+    "story": "The Foundry Model enables Qualcomm to scale mobile chips"
+  },
+  "arm_arch__apple": {
+    "story": "ARM Architecture serves as the basis for Apple A-series and M-series chips"
+  },
+  "arm_arch__qualcomm": {
+    "story": "ARM Architecture serves as the basis for Snapdragon processors"
+  },
+  "arm_arch__samsung": {
+    "story": "ARM Architecture serves as the basis for Exynos processors"
+  },
+  "nvidia_h100__openai": {
+    "story": "NVIDIA H100 accelerates model training at OpenAI"
+  },
+  "nvidia_h100__meta": {
+    "story": "NVIDIA H100 powers LLaMA training at Meta"
+  },
+  "nvidia_h100__tesla": {
+    "story": "NVIDIA H100 powers Tesla's FSD supercomputer cluster"
+  },
+  "nvidia_h100__microsoft": {
+    "story": "NVIDIA H100 powers Azure AI infrastructure"
+  },
+  "broadcom__cisco": {
+    "story": "Broadcom supplies networking chips for Cisco equipment"
+  },
+  "broadcom__apple": {
+    "story": "Broadcom provides WiFi and Bluetooth chips for iPhones"
+  },
+  "arpanet__cisco_router": {
+    "story": "ARPANET's growth created the need for routing technology"
+  },
+  "transistor__ibm": {
+    "story": "Transistors enabled IBM to build commercial computers"
+  },
+  "ic__ibm": {
+    "story": "Integrated circuits allowed IBM to miniaturize mainframes"
+  },
+  "ic__ibm_360": {
+    "story": "Integrated circuits made System/360 practical and affordable"
+  },
+  "transistor__ibm_360": {
+    "story": "Transistors replaced vacuum tubes in System/360"
+  },
+  "c_lang__unity": {
+    "story": "Unity engine uses C++ core and C# scripting"
+  },
+  "gpu_geforce__unity": {
+    "story": "NVIDIA GPUs render Unity games in real-time"
+  },
+  "arm_cortex__unity": {
+    "story": "Unity games run on ARM-powered mobile devices"
+  },
+  "c_lang__unreal": {
+    "story": "Unreal Engine is written entirely in C++"
+  },
+  "gpu_geforce__unreal": {
+    "story": "NVIDIA GPUs power Unreal's photorealistic rendering"
+  },
+  "nvidia_h100__unreal": {
+    "story": "Unreal Engine 5 Nanite uses GPU compute for virtual geometry"
+  },
+  "turing_machine__microprocessor": {
+    "story": "The Turing Machine provided the theoretical limit of computation for the Microprocessor"
+  },
+  "info_theory__tcp_ip": {
+    "story": "Information Theory laid the mathematical foundation for error-free data transmission in TCP/IP"
+  },
+  "info_theory__cdma": {
+    "story": "Information Theory enabled spread spectrum communications used in CDMA"
+  },
+  "info_theory__5g_nr": {
+    "story": "Information Theory forms the basis for advanced channel coding in 5G"
+  },
+  "info_theory__mp3": {
+    "story": "Information Theory provided the foundation for MP3 data compression"
+  },
+  "transistor__ic": {
+    "story": "Integrated Circuits combined billions of Transistors onto a single chip"
+  },
+  "transistor__blue_led": {
+    "story": "The Transistor established the semiconductor physics foundation for LEDs"
+  },
+  "microprocessor__x86": {
+    "story": "The Microprocessor evolved into the x86 architecture dominant in PCs"
+  },
+  "microprocessor__arm_arch": {
+    "story": "The Microprocessor concept led to the power-efficient ARM architecture"
+  },
+  "dram__hbm": {
+    "story": "DRAM evolved into High Bandwidth Memory (HBM) by stacking chips"
+  },
+  "tcp_ip__ethernet": {
+    "story": "TCP/IP protocols operate on top of the Ethernet networking stack"
+  },
+  "ethernet__wifi": {
+    "story": "WiFi adapted Ethernet standards for wireless local area networking"
+  },
+  "cdma__gsm": {
+    "story": "CDMA technologies influenced the evolution of digital cellular standards like GSM"
+  },
+  "gsm__lte": {
+    "story": "GSM networks evolved into LTE (4G) for higher data speeds"
+  },
+  "lte__5g_nr": {
+    "story": "LTE infrastructure evolved into the high-bandwidth 5G NR standard"
+  },
+  "gps__5g_nr": {
+    "story": "GPS provides critical timing synchronization for 5G networks"
+  },
+  "unix__c_lang": {
+    "story": "C Language was created specifically to rewrite the Unix kernel"
+  },
+  "unix__linux": {
+    "story": "Unix design principles directly inspired the Linux Kernel"
+  },
+  "c_lang__python": {
+    "story": "The Python interpreter (CPython) is implemented in C Language"
+  },
+  "c_lang__java": {
+    "story": "Java syntax is derived from C and C++ languages"
+  },
+  "c_lang__sql": {
+    "story": "Database engines for SQL are primarily written in C/C++"
+  },
+  "sql__oracle_db": {
+    "story": "Oracle Database commercialized the SQL language standard"
+  },
+  "bittorrent__bitcoin": {
+    "story": "BitTorrent's P2P network concepts influenced Bitcoin's design"
+  },
+  "bitcoin__ethereum": {
+    "story": "Ethereum extended Bitcoin's blockchain concept to support smart contracts"
+  },
+  "alexnet__transformer": {
+    "story": "AlexNet ignited the Deep Learning boom that led to Transformers"
+  },
+  "word2vec__transformer": {
+    "story": "Word2Vec vector embeddings serve as inputs to Transformer models"
+  },
+  "word2vec__chatgpt": {
+    "story": "Word2Vec laid the foundation for language understanding in ChatGPT"
+  },
+  "gan__stable_diffusion": {
+    "story": "GAN concepts evolved into diffusion models for Stable Diffusion"
+  },
+  "gan__sora": {
+    "story": "GAN generative concepts paved the way for video models like Sora"
+  },
+  "gan__midjourney": {
+    "story": "GAN concepts paved the way for generative art tools like Midjourney"
+  },
+  "transformer__sora": {
+    "story": "Sora uses spacetime patches within a Transformer architecture"
+  },
+  "floppy__optical_disc": {
+    "story": "Floppy Disks evolved into Optical Discs for portable data storage"
+  },
+  "william_shockley__robert_noyce": {
+    "story": "William Shockley hired Robert Noyce at Shockley Semiconductor"
+  },
+  "robert_noyce__steve_jobs": {
+    "story": "Robert Noyce mentored Steve Jobs during Apple's early days"
+  },
+  "steve_jobs__mark_zuckerberg": {
+    "story": "Steve Jobs advised Mark Zuckerberg on company building"
+  },
+  "steve_jobs__tim_cook": {
+    "story": "Steve Jobs recruited Tim Cook as COO"
+  },
+  "don_valentine__steve_jobs": {
+    "story": "Don Valentine was an early investor and advisor to Steve Jobs"
+  },
+  "larry_ellison__marc_benioff": {
+    "story": "Larry Ellison clashed with Marc Benioff over the vision of cloud computing"
+  },
+  "paul_graham__sam_altman": {
+    "story": "Paul Graham appointed Sam Altman as Y Combinator President"
+  },
+  "paul_graham__patrick_collison": {
+    "story": "Paul Graham funded Patrick Collison's Stripe via Y Combinator"
+  },
+  "peter_thiel__vitalik_buterin": {
+    "story": "Peter Thiel awarded a Thiel Fellowship to Vitalik Buterin"
+  },
+  "satoshi_nakamoto__vitalik_buterin": {
+    "story": "Satoshi Nakamoto's Bitcoin inspired Vitalik Buterin to create Ethereum"
+  },
+  "xerox_parc__macintosh": {
+    "story": "Xerox PARC's GUI inspired the Macintosh interface"
+  },
+  "xerox_parc__windows_95": {
+    "story": "Xerox PARC's GUI concepts influenced Windows"
+  },
+  "xerox_parc__adobe": {
+    "story": "John Warnock left Xerox PARC to found Adobe"
+  },
+  "xerox_parc__microsoft": {
+    "story": "Charles Simonyi brought Word and Excel concepts from Xerox PARC"
+  },
+  "mosaic__netscape_co": {
+    "story": "Marc Andreessen led both the Mosaic and Netscape projects"
+  },
+  "mosaic__google_chrome": {
+    "story": "Mosaic is the ancestor of all modern graphical browsers including Chrome"
+  },
+  "toshiba_t1100__macintosh": {
+    "story": "The Toshiba T1100 defined the laptop form factor for the Macintosh PowerBook"
+  },
+  "spacex_falcon9__starship": {
+    "story": "Falcon 9's reusable landing tech evolved into Starship"
+  },
+  "tim_cook__apple": {
+    "story": "Tim Cook scaled Apple's operations and global supply chain"
+  },
+  "satya_nadella__microsoft": {
+    "story": "Satya Nadella shifted Microsoft's focus to Cloud and AI"
+  },
+  "satya_nadella__openai": {
+    "story": "Satya Nadella orchestrated the strategic partnership with OpenAI"
+  },
+  "sundar_pichai__google": {
+    "story": "Sundar Pichai led the development of Chrome and Android"
+  },
+  "lisa_su__amd": {
+    "story": "Lisa Su led AMD's turnaround with the Ryzen processor"
+  },
+  "roelof_botha__sequoia": {
+    "story": "Roelof Botha became the Senior Steward of Sequoia"
+  },
+  "elon_musk__twitter": {
+    "story": "Elon Musk acquired Twitter and rebranded it to X"
+  },
+  "microsoft__skype": {
+    "story": "Microsoft acquired Skype for $8.5B"
+  },
+  "microsoft__cursor": {
+    "story": "Cursor is built on Microsoft's VS Code open source project"
+  },
+  "google__deepmind": {
+    "story": "Google acquired DeepMind for $500M"
+  },
+  "google__uber_co": {
+    "story": "Google Ventures invested $258M in Uber"
+  },
+  "google__boston_dynamics": {
+    "story": "Google acquired the robotics firm Boston Dynamics"
+  },
+  "google__zero_trust": {
+    "story": "Google pioneered the BeyondCorp Zero Trust model"
+  },
+  "yann_lecun__meta": {
+    "story": "Yann LeCun became the Chief AI Scientist at Meta"
+  },
+  "yann_lecun__pytorch": {
+    "story": "Yann LeCun led the FAIR team that developed PyTorch"
+  },
+  "reid_hoffman__facebook": {
+    "story": "Reid Hoffman was an early angel investor in Facebook"
+  },
+  "reid_hoffman__airbnb": {
+    "story": "Reid Hoffman led Greylock's Series A investment in Airbnb"
+  },
+  "reid_hoffman__microsoft": {
+    "story": "Reid Hoffman became a board member after the LinkedIn acquisition"
+  },
+  "reid_hoffman__openai": {
+    "story": "Reid Hoffman was an early board member of OpenAI"
+  },
+  "sony__cmos": {
+    "story": "Sony became the global market leader in CMOS image sensors"
+  },
+  "sequoia__apple": {
+    "story": "Sequoia Capital invested $150k in Apple"
+  },
+  "sequoia__google": {
+    "story": "Sequoia Capital invested $12.5M in Google"
+  },
+  "sequoia__nvidia": {
+    "story": "Sequoia Capital made an early stage investment in NVIDIA"
+  },
+  "sequoia__paypal_co": {
+    "story": "Sequoia Capital made an early stage investment in PayPal"
+  },
+  "sequoia__youtube": {
+    "story": "Sequoia Capital invested $11.5M in YouTube"
+  },
+  "sequoia__stripe_co": {
+    "story": "Sequoia Capital led Stripe's Series A round"
+  },
+  "ycombinator__airbnb": {
+    "story": "Y Combinator provided seed funding to Airbnb"
+  },
+  "ycombinator__stripe_co": {
+    "story": "Y Combinator provided seed funding to Stripe"
+  },
+  "ycombinator__openai": {
+    "story": "Sam Altman led Y Combinator during the founding of OpenAI"
+  },
+  "a16z__meta": {
+    "story": "a16z invested in Meta secondary shares"
+  },
+  "a16z__airbnb": {
+    "story": "a16z invested in Airbnb, fueling the sharing economy"
+  },
+  "a16z__stripe_co": {
+    "story": "a16z fueled Stripes rise as a payment giant"
+  },
+  "a16z__ethereum": {
+    "story": "a16z invested in the Ethereum ecosystem"
+  },
+  "a16z__openai": {
+    "story": "a16z invested in OpenAI via tender offer"
+  },
+  "arthur_rock__intel": {
+    "story": "Arthur Rock was the first investor and Chairman of Intel"
+  },
+  "arthur_rock__apple": {
+    "story": "Arthur Rock was an early investor ($57k) in Apple"
+  },
+  "peter_thiel__meta": {
+    "story": "Peter Thiel was the first outside investor ($500k) in Facebook"
+  },
+  "masayoshi_son__alibaba": {
+    "story": "Masayoshi Son invested $20M in Alibaba"
+  },
+  "softbank__alibaba": {
+    "story": "SoftBank became a major shareholder in Alibaba"
+  },
+  "softbank__arm_ltd": {
+    "story": "SoftBank acquired Arm Holdings for $32B"
+  },
+  "softbank__uber_co": {
+    "story": "SoftBank became a major investor in Uber via the Vision Fund"
+  },
+  "softbank__boston_dynamics": {
+    "story": "SoftBank acquired Boston Dynamics from Google"
+  },
+  "amazon__anthropic": {
+    "story": "Amazon invested $4B in Anthropic"
+  },
+  "google__anthropic": {
+    "story": "Google invested $2B in Anthropic"
+  },
+  "jeff_bezos__perplexity": {
+    "story": "Jeff Bezos participated in Perplexity's Series B"
+  },
+  "nvidia__perplexity": {
+    "story": "NVIDIA participated in Perplexity's Series B"
+  },
+  "fairchild__intel": {
+    "story": "Robert Noyce and Gordon Moore left Fairchild to found Intel"
+  },
+  "fairchild__amd": {
+    "story": "Jerry Sanders left Fairchild to found AMD"
+  },
+  "fairchild__sequoia": {
+    "story": "Don Valentine was the sales/marketing lead at Fairchild before Sequoia"
+  },
+  "paypal_co__spacex": {
+    "story": "Elon Musk used PayPal proceeds to found SpaceX"
+  },
+  "paypal_co__tesla": {
+    "story": "Elon Musk used PayPal proceeds to invest in Tesla"
+  },
+  "paypal_co__linkedin": {
+    "story": "Reid Hoffman co-founded LinkedIn after PayPal"
+  },
+  "paypal_co__youtube": {
+    "story": "Chad Hurley co-founded YouTube after working at PayPal"
+  },
+  "paypal_co__reid_hoffman": {
+    "story": "Reid Hoffman served as Executive VP at PayPal"
+  },
+  "oracle__salesforce_co": {
+    "story": "Oracle competes with Salesforce in the Database vs Cloud CRM market"
+  },
+  "hp__apple": {
+    "story": "Steve Jobs worked at HP and was inspired by their engineering culture"
+  },
+  "hp__xerox_parc": {
+    "story": "HP engineering culture influenced Xerox PARC research approach"
+  },
+  "hp__fairchild": {
+    "story": "HP established the garage startup culture that Fairchild followed"
+  },
+  "hp__stanford_ai_lab": {
+    "story": "HP partnered with Stanford for research collaborations"
+  },
+  "sun_micro__unix": {
+    "story": "Sun created Solaris, a commercial Unix variant"
+  },
+  "bell_labs__sun_micro": {
+    "story": "Sun licensed Unix from AT&T Bell Labs"
+  },
+  "sun_micro__oracle": {
+    "story": "Oracle acquired Sun Microsystems for $7.4B"
+  },
+  "stanford_ai_lab__sun_micro": {
+    "story": "Stanford graduates founded Sun Microsystems"
+  },
+  "darpa__tcp_ip": {
+    "story": "DARPA funded the development of TCP/IP for ARPANET"
+  },
+  "darpa__mit_csail": {
+    "story": "DARPA funded early AI research at MIT"
+  },
+  "darpa__stanford_ai_lab": {
+    "story": "DARPA provided major funding for Stanford AI Lab"
+  },
+  "darpa__www": {
+    "story": "DARPA's ARPANET laid the foundation for the World Wide Web"
+  },
+  "tim_berners_lee__mit_csail": {
+    "story": "Tim Berners-Lee worked at MIT to promote the World Wide Web"
+  },
+  "mit_csail__www": {
+    "story": "MIT CSAIL hosted W3C to develop web standards"
+  },
+  "geoffrey_hinton__mit_csail": {
+    "story": "Geoffrey Hinton studied under Marvin Minsky at MIT"
+  },
+  "mit_csail__linux": {
+    "story": "MIT's free software movement influenced Linux development"
+  },
+  "stanford_ai_lab__google": {
+    "story": "Larry Page and Sergey Brin developed PageRank at Stanford"
+  },
+  "cern__linux": {
+    "story": "CERN adopted Linux for scientific computing infrastructure"
+  },
+  "cern__mit_csail": {
+    "story": "CERN and MIT collaborated on open web standards through W3C"
+  },
+  "arpanet__tcp_ip": {
+    "story": "ARPANET evolved into the TCP/IP-based internet"
+  },
+  "arpanet__www": {
+    "story": "The World Wide Web was built on top of the internet infrastructure from ARPANET"
+  },
+  "john_mccarthy__mit_csail": {
+    "story": "John McCarthy co-organized the Dartmouth Conference that founded AI"
+  },
+  "john_mccarthy__deepmind": {
+    "story": "John McCarthy's AI vision influenced modern AI research at DeepMind"
+  },
+  "john_mccarthy__unix": {
+    "story": "John McCarthy's time-sharing concept influenced Unix design"
+  },
+  "marvin_minsky__geoffrey_hinton": {
+    "story": "Marvin Minsky mentored Geoffrey Hinton at MIT"
+  },
+  "marvin_minsky__deepmind": {
+    "story": "Marvin Minsky's work on neural networks inspired DeepMind's research"
+  },
+  "ibm__microsoft": {
+    "story": "IBM competed with Microsoft after DOS made them a giant"
+  },
+  "ibm__intel": {
+    "story": "IBM PC used Intel processors, establishing x86 dominance"
+  },
+  "ibm__oracle_db": {
+    "story": "IBM's SQL research inspired Oracle's commercial database"
+  },
+  "ibm_360__oracle_db": {
+    "story": "System/360's database concepts influenced Oracle"
+  },
+  "ibm_360__unix": {
+    "story": "System/360's architecture influenced Unix design philosophy"
+  },
+  "ibm_360__microsoft": {
+    "story": "IBM mainframe dominance created the enterprise software market"
+  },
+  "unity__ios": {
+    "story": "Unity enabled thousands of indie games on iOS"
+  },
+  "unity__android": {
+    "story": "Unity became the dominant mobile game engine for Android"
+  },
+  "unity__oculus_rift": {
+    "story": "Unity powered most early VR experiences"
+  },
+  "unity__vision_pro": {
+    "story": "Unity supports Apple Vision Pro spatial computing"
+  },
+  "unreal__meta": {
+    "story": "Unreal Engine powers Meta's Metaverse vision"
+  },
+  "unreal__vision_pro": {
+    "story": "Unreal Engine supports Apple Vision Pro development"
+  },
+  "unreal__nvidia": {
+    "story": "NVIDIA and Epic collaborate on GPU-accelerated rendering"
+  },
+  "gemini__nano_banana": {
+    "story": "Nano Banana is built on the multimodal architecture of the Gemini family"
+  },
+  "microsoft__intel": {
+    "story": "Microsoft and Intel formed the \"Wintel\" alliance that dominated the PC era"
+  },
+  "microsoft__openai": {
+    "story": "Microsoft formed a strategic multi-billion dollar partnership with OpenAI"
+  },
+  "apple__tsmc": {
+    "story": "Apple partnered with TSMC as the exclusive manufacturer for Apple Silicon"
+  },
+  "apple__arm_ltd": {
+    "story": "Apple was a founding partner of ARM"
+  },
+  "salesforce_co__slack": {
+    "story": "Salesforce acquired Slack for $27.7B in a strategic move"
+  },
+  "wikipedia__google_search": {
+    "story": "Google integrated Wikipedia data into its Knowledge Graph"
+  },
+  "att__cisco": {
+    "story": "AT&T partnered with Cisco for major infrastructure deployments"
+  },
+  "yann_lecun__geoffrey_hinton": {
+    "story": "Yann LeCun and Geoffrey Hinton collaborated on deep learning and shared the Turing Award"
+  },
+  "steve_jobs__steve_wozniak": {
+    "story": "Steve Jobs and Steve Wozniak co-founded Apple"
+  },
+  "larry_page__sergey_brin": {
+    "story": "Larry Page and Sergey Brin co-founded Google"
+  },
+  "peter_thiel__max_levchin": {
+    "story": "Peter Thiel and Max Levchin were key co-founders of PayPal"
+  },
+  "marvin_minsky__john_mccarthy": {
+    "story": "Marvin Minsky and John McCarthy co-founded AI as a field"
+  },
+  "unity__meta": {
+    "story": "Unity partners with Meta for Quest VR development"
+  },
+  "unity__google": {
+    "story": "Unity integrated with Google ARCore for mobile AR"
+  },
+  "unreal__sony": {
+    "story": "Sony invested in Epic, using Unreal for PS5 games"
+  },
+  "apple__google": {
+    "story": "Apple and Google compete in the mobile OS war (iOS vs Android)"
+  },
+  "apple__microsoft": {
+    "story": "Apple and Microsoft competed for PC and OS dominance"
+  },
+  "apple__samsung": {
+    "story": "Apple and Samsung engaged in patent wars over smartphone designs"
+  },
+  "apple__meta": {
+    "story": "Apple and Meta clashed over privacy policies affecting ad revenue"
+  },
+  "amazon__microsoft": {
+    "story": "Amazon (AWS) and Microsoft (Azure) compete for cloud dominance"
+  },
+  "amazon__google": {
+    "story": "Amazon and Google compete in Cloud and Voice AI"
+  },
+  "google__microsoft": {
+    "story": "Google and Microsoft compete in Search, Browser, and AI"
+  },
+  "intel__amd": {
+    "story": "Intel and AMD have a long-standing war for x86 CPU market share"
+  },
+  "nvidia__amd": {
+    "story": "NVIDIA and AMD compete in the GPU market"
+  },
+  "nvidia__intel": {
+    "story": "NVIDIA and Intel compete in AI acceleration and CPU dominance"
+  },
+  "intel__tsmc": {
+    "story": "Intel competes with TSMC in the foundry process race"
+  },
+  "samsung__tsmc": {
+    "story": "Samsung competes with TSMC for advanced foundry nodes"
+  },
+  "qualcomm__apple": {
+    "story": "Qualcomm and Apple engaged in licensing disputes over modem chips"
+  },
+  "meta__bytedance": {
+    "story": "Meta (Reels) competes with ByteDance (TikTok) for short-form video"
+  },
+  "twitter__meta": {
+    "story": "Twitter (X) competes with Meta (Threads) in microblogging"
+  },
+  "twitter__tiktok": {
+    "story": "Twitter competes with TikTok for user attention"
+  },
+  "ios__android": {
+    "story": "iOS and Android form the mobile ecosystem duopoly"
+  },
+  "netflix_co__youtube": {
+    "story": "Netflix and YouTube compete for video entertainment time"
+  },
+  "amazon_com__alibaba": {
+    "story": "Amazon and Alibaba compete for global e-commerce dominance"
+  },
+  "amazon_com__google_search": {
+    "story": "Amazon competes with Google as the entry point for product search"
+  },
+  "huggingface__github": {
+    "story": "Hugging Face competes with GitHub for model hosting vs code hosting"
+  },
+  "sap__oracle": {
+    "story": "SAP and Oracle compete in the ERP software market"
+  },
+  "sap__salesforce_co": {
+    "story": "SAP competes with Salesforce in enterprise software"
+  },
+  "unreal__unity": {
+    "story": "Unreal Engine and Unity compete for game engine market share"
+  },
+  "skype__zoom": {
+    "story": "Skype competes with Zoom for video conferencing dominance"
+  },
+  "google__openai": {
+    "story": "Google competes with OpenAI for Generative AI leadership"
+  },
+  "openai__anthropic": {
+    "story": "OpenAI competes with Anthropic on AI safety and capabilities"
+  },
+  "huggingface__openai": {
+    "story": "Hugging Face promotes Open models while OpenAI promotes Closed models"
+  },
+  "tensorflow__pytorch": {
+    "story": "TensorFlow and PyTorch competed for deep learning framework dominance"
+  },
+  "perplexity__google_search": {
+    "story": "Perplexity competes with Google Search as an AI answer engine"
+  },
+  "cursor__copilot": {
+    "story": "Cursor competes with GitHub Copilot for AI code editor dominance"
+  },
+  "claude__chatgpt": {
+    "story": "Claude competes with ChatGPT in LLM performance"
+  },
+  "claude__gemini": {
+    "story": "Claude competes with Gemini in LLM performance"
+  },
+  "sora__midjourney": {
+    "story": "Sora competes with Midjourney in generative media"
+  },
+  "uber_co__tesla": {
+    "story": "Uber competes with Tesla for the future Robotaxi market"
+  },
+  "boston_dynamics__tesla": {
+    "story": "Boston Dynamics competes with Tesla (Optimus) in humanoid robotics"
+  },
+  "lidar__tesla_autopilot": {
+    "story": "LiDAR tech competes with Tesla's vision-only strategy"
+  },
+  "vision_pro__oculus_rift": {
+    "story": "Apple Vision Pro competes with Meta Quest (Oculus) in spatial computing"
+  },
+  "5g_nr__starlink": {
+    "story": "5G terrestrial networks compete with Starlink satellite internet"
+  },
+  "fugaku__nvidia_h100": {
+    "story": "Fugaku competes with NVIDIA H100 clusters in supercomputing"
+  },
+  "steve_jobs__bill_gates": {
+    "story": "Steve Jobs clashed with Bill Gates over PC versus Mac philosophy"
+  },
+  "elon_musk__jeff_bezos": {
+    "story": "Elon Musk and Jeff Bezos compete in the space race"
+  },
+  "elon_musk__mark_zuckerberg": {
+    "story": "Elon Musk and Mark Zuckerberg compete in social media and AI"
+  },
+  "elon_musk__sam_altman": {
+    "story": "Elon Musk clashed with Sam Altman over the direction of OpenAI"
+  },
+  "yann_lecun__elon_musk": {
+    "story": "Yann LeCun debates Elon Musk on AI safety and capabilities"
+  },
+  "ethereum__bitcoin": {
+    "story": "Ethereum competes with Bitcoin as a platform vs store of value"
+  },
+  "ethereum__paypal_co": {
+    "story": "Ethereum DeFi competes with PayPal's traditional finance payments"
+  },
+  "vitalik_buterin__jack_ma": {
+    "story": "Vitalik Buterin represents decentralization versus Jack Ma's centralization"
+  },
+  "qualcomm__broadcom": {
+    "story": "Qualcomm and Broadcom compete in wireless connectivity chips"
+  },
+  "sun_micro__microsoft": {
+    "story": "Sun and Microsoft competed in enterprise servers and Java"
+  },
+  "sun_micro__hp": {
+    "story": "Sun and HP competed in the Unix workstation market"
+  },
+  "ibm__apple": {
+    "story": "IBM PC competed with Apple II and Macintosh"
+  },
+  "photoshop__midjourney": {
+    "story": "Photoshop competes with Midjourney by offering enterprise-safe image generation."
+  },
+  "nano_banana__midjourney": {
+    "story": "Nano Banana challenged Midjourney with superior consistency and character retention"
+  }
+}
