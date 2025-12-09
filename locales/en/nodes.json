@@ -1,591 +1,631 @@
 {
   "fairchild": {
     "label": "Fairchild Semi",
-    "description": "The startup that started it all. Its alumni founded Intel, AMD, and Silicon Valley itself."
+    "description": "The "
   },
   "intel": {
     "label": "Intel",
-    "description": "Put the "
+    "description": "Founded by Fairchild refugees Gordon Moore and Robert Noyce. Invented the microprocessor (4004) in 1971, enabling personal computers. Their x86 architecture dominated PCs for decades. "
   },
   "amd": {
     "label": "AMD",
-    "description": "The persistent rival. They innovated in high-performance CPUs and challenged Intel\\"
+    "description": "Advanced Micro Devices, founded by Jerry Sanders from Fairchild. Survived as Intel\\"
   },
   "nvidia": {
     "label": "NVIDIA",
-    "description": "Started with gaming graphics, now the engine of AI. Their chips train the world\\"
+    "description": "Founded by Jensen Huang to revolutionize graphics. The GeForce GPU conquered gaming, then CUDA unlocked parallel computing. Now the world\\"
   },
   "arm_ltd": {
     "label": "Arm Holdings",
-    "description": "They design the energy-efficient chip architecture found in almost every smartphone."
+    "description": "Spun out from Acorn Computers in Cambridge, UK. Their RISC architecture prioritizes power efficiency over raw speed. Licensed by Apple, Qualcomm, and Samsung, Arm powers 99% of smartphones. Now expanding into servers and AI Edge devices."
   },
   "samsung": {
     "label": "Samsung",
-    "description": "A global electronics titan. They lead the world in memory chips, phones, and displays."
+    "description": "South Korean conglomerate that evolved from trading to electronics. World leader in DRAM memory, NAND flash, and smartphone displays. Their foundry competes with TSMC. From semiconductors to smartphones, Samsung shapes the digital world."
   },
   "qualcomm": {
     "label": "Qualcomm",
-    "description": "The leader in mobile connectivity. Their tech connects your phone to 4G and 5G networks."
+    "description": "San Diego company that pioneered CDMA mobile technology. Their Snapdragon chips power most Android phones, integrating CPU, GPU, and 5G modem. Collects royalties on nearly every smartphone sold through their essential wireless patents."
+  },
+  "broadcom": {
+    "label": "Broadcom",
+    "description": "Started as a fabless semiconductor company, now a $500B giant. Dominates networking chips, Wi-Fi, and enterprise storage. Acquired VMware, Symantec, and CA Technologies. Their chips connect virtually every device to the internet."
+  },
+  "hp": {
+    "label": "Hewlett-Packard",
+    "description": "The founding company of Silicon Valley, started in a Palo Alto garage by Stanford engineers Bill Hewlett and Dave Packard. Pioneered test equipment, calculators, and printers. HP Labs invented technologies from HP-UX to the inkjet. Split into HP Inc. and HPE in 2015."
+  },
+  "sun_micro": {
+    "label": "Sun Microsystems",
+    "description": "Stanford University Network graduates built powerful UNIX workstations. Created Java ("
   },
   "att": {
     "label": "AT&T",
-    "description": "The telecom monopoly (Ma Bell) that built the physical network infrastructure of the US."
+    "description": "American Telephone & Telegraph, the original "
   },
   "cisco": {
     "label": "Cisco",
-    "description": "The internet\\"
+    "description": "Founded by Stanford couple who wanted their campus networks to talk to each other. Their routers and switches became the internet\\"
   },
   "spacex": {
     "label": "SpaceX",
-    "description": "Revolutionizing spaceflight with reusable rockets. Their goal is to make life multi-planetary."
+    "description": "Elon Musk\\"
   },
   "ibm": {
     "label": "IBM",
-    "description": "Big Blue. They defined the mainframe era and helped launch the personal computer market."
+    "description": "International Business Machines, "
   },
   "tesla": {
     "label": "Tesla",
-    "description": "More than a car company. They made EVs desirable and are pushing robotics and autonomy."
+    "description": "Elon Musk\\"
   },
   "dji": {
     "label": "DJI",
-    "description": "The absolute leader in consumer drones. They made aerial photography accessible to all."
+    "description": "Da-Jiang Innovations, the Shenzhen company that created the consumer drone industry. Their Phantom and Mavic drones dominate 70% of the market. Made aerial photography accessible to everyone from filmmakers to farmers."
   },
   "boston_dynamics": {
     "label": "Boston Dynamics",
-    "description": "Engineering dynamic robots that move with uncanny agility, mimicking humans and animals."
+    "description": "MIT spinoff famous for mesmerizing robot videos. Spot the robot dog patrols factories, while Atlas performs parkour. Owned by Hyundai after stints with Google and SoftBank. Pushing the physical limits of robotics."
   },
   "microsoft": {
     "label": "Microsoft",
-    "description": "Software for the world. From Windows to Azure and OpenAI, they are a productivity giant."
+    "description": "Bill Gates and Paul Allen\\"
   },
   "oracle": {
     "label": "Oracle",
-    "description": "The database giant. Their software manages the critical data for the world\\"
+    "description": "Larry Ellison\\"
   },
   "adobe": {
     "label": "Adobe",
-    "description": "The creator\\"
+    "description": "PostScript founders John Warnock and Charles Geschke built the digital creative suite. Photoshop, Illustrator, and Premiere Pro are industry standards. Invented PDF. Pioneered SaaS with Creative Cloud subscription model."
   },
   "salesforce_co": {
     "label": "Salesforce",
-    "description": "The cloud pioneer. They replaced installed software with web-based business tools."
+    "description": "Marc Benioff\\"
   },
   "sap": {
     "label": "SAP",
-    "description": "The backbone of global business. Their software manages operations for huge corporations."
+    "description": "German enterprise software giant that runs the world\\"
   },
   "google": {
     "label": "Google",
-    "description": "Organized the world\\"
+    "description": "Larry Page and Sergey Brin\\"
   },
   "amazon": {
     "label": "Amazon",
-    "description": "The "
+    "description": "Jeff Bezos\\"
   },
   "meta": {
     "label": "Meta",
-    "description": "Connecting people. They own Facebook, Instagram, and WhatsApp, and are betting on VR."
+    "description": "Mark Zuckerberg\\"
   },
   "tencent": {
     "label": "Tencent",
-    "description": "The giant behind WeChat. They dominate social media, gaming, and payments in China."
+    "description": "China\\"
   },
   "alibaba": {
     "label": "Alibaba",
-    "description": "The e-commerce titan of China. They revolutionized digital retail and fintech."
+    "description": "Jack Ma\\"
   },
   "bytedance": {
     "label": "ByteDance",
-    "description": "The algorithm company. They built TikTok, the world\\"
+    "description": "Chinese startup that mastered algorithmic content recommendation. TikTok became the fastest-growing app ever, addicting billions with short videos. Their "
   },
   "uber_co": {
     "label": "Uber",
-    "description": "Transportation on demand. They connected riders and drivers, creating the gig economy."
+    "description": "Travis Kalanick\\"
   },
   "airbnb": {
     "label": "Airbnb",
-    "description": "Hospitality by the people. They turned spare rooms into a global network of accommodations."
+    "description": "Air mattresses in a San Francisco apartment became a $100B hospitality network. Brian Chesky\\"
   },
   "paypal_co": {
     "label": "PayPal",
-    "description": "The payments pioneer. Its "
+    "description": "The original fintech merger of Confinity and X.com. The "
   },
   "stripe_co": {
     "label": "Stripe",
-    "description": "Payment infrastructure for the internet. They handle the complexity of money for startups."
+    "description": "Irish brothers Patrick and John Collison built payment infrastructure for developers. "
   },
   "netscape_co": {
     "label": "Netscape",
-    "description": "The browser that mattered. They commercialized the web and sparked the dot-com boom."
+    "description": "Jim Clark and Marc Andreessen\\"
   },
   "spotify_co": {
     "label": "Spotify",
-    "description": "Streaming savior. They convinced the world to pay for music access instead of ownership."
+    "description": "Swedish startup that saved the music industry by making piracy inconvenient. Daniel Ek convinced labels to stream. 500M+ users now pay for access over ownership. Pioneered podcast acquisitions and personalized playlists."
   },
   "netflix_co": {
     "label": "Netflix",
-    "description": "Changed TV. They moved from mailing DVDs to streaming, pioneering the binge-watching era."
+    "description": "Reed Hastings\\"
   },
   "deepmind": {
     "label": "Google DeepMind",
-    "description": "Solved intelligence. Famous for AlphaGo, they use AI to solve fundamental scientific problems."
+    "description": "London-based AI lab founded by Demis Hassabis. AlphaGo defeated the world Go champion in 2016, a decade ahead of predictions. AlphaFold solved protein folding, revolutionizing biology. Acquired by Google for $500M, now merged with Google Brain."
   },
   "openai": {
     "label": "OpenAI",
-    "description": "The lab behind ChatGPT. They pushed AI from research into a product used by millions."
+    "description": "AI research lab founded by Musk, Altman, and others to ensure AGI benefits humanity. GPT-3 and ChatGPT brought AI to mainstream consumers. DALL-E generates images, Whisper transcribes speech. The company that made AI a verb."
   },
   "anthropic": {
     "label": "Anthropic",
-    "description": "AI safety first. Founded by former OpenAI members to build reliable, steerable AI."
+    "description": "Founded by ex-OpenAI researchers Dario and Daniela Amodei, focused on AI safety. Claude assistant emphasizes being helpful, harmless, and honest. Constitutional AI methodology tries to make models self-correcting. The cautious alternative to OpenAI."
   },
   "huggingface": {
     "label": "Hugging Face",
-    "description": "The GitHub of AI. An open community hub for sharing models, datasets, and demos."
+    "description": "The GitHub of machine learning. French-American startup that democratized AI with open-source Transformers library. Hosts 500K+ models and datasets. Any researcher can share, any company can deploy. Community-driven AI development."
   },
   "sequoia": {
-    "label": "Sequoia",
-    "description": "The Midas touch. This VC firm backed Apple, Google, and NVIDIA when they were just ideas."
+    "label": "Sequoia Capital",
+    "description": "The legendary VC firm that backed Apple, Google, Oracle, PayPal, YouTube, Instagram, and NVIDIA. Don Valentine\\"
   },
   "ycombinator": {
     "label": "Y Combinator",
-    "description": "The startup factory. Their accelerator launched Airbnb, Stripe, and Dropbox."
+    "description": "Paul Graham\\"
   },
   "a16z": {
     "label": "a16z",
-    "description": "Software is eating the world. A modern VC firm that provides massive operational support."
+    "description": "Andreessen Horowitz, founded by Marc Andreessen (Netscape) and Ben Horowitz. "
   },
   "softbank": {
     "label": "SoftBank Vision Fund",
-    "description": "The world\\"
+    "description": "Masayoshi Son\\"
   },
   "xerox_parc": {
     "label": "Xerox PARC",
-    "description": "The research lab that invented the mouse, windows, and ethernet, inspiring the modern PC."
+    "description": "The legendary Palo Alto Research Center invented the graphical user interface, mouse, ethernet, and laser printing. Steve Jobs famously visited in 1979, inspiring the Macintosh. Despite creating revolutionary tech, Xerox failed to commercialize it."
   },
   "bell_labs": {
     "label": "Bell Labs",
     "description": "The "
   },
+  "darpa": {
+    "label": "DARPA",
+    "description": "The Defense Advanced Research Projects Agency, created after Sputnik shocked America. Funded ARPANET (the internet\\"
+  },
+  "mit_csail": {
+    "label": "MIT CSAIL",
+    "description": "The MIT Computer Science and Artificial Intelligence Laboratory, founded by Minsky and McCarthy. Birthplace of AI as an academic field, hacker culture, and the Free Software movement. Tim Berners-Lee and many AI pioneers worked here."
+  },
+  "stanford_ai_lab": {
+    "label": "Stanford AI Lab",
+    "description": "Stanford Artificial Intelligence Laboratory, founded by John McCarthy (who coined "
+  },
+  "cern": {
+    "label": "CERN",
+    "description": "The European Organization for Nuclear Research, home of the Large Hadron Collider. Tim Berners-Lee invented the World Wide Web here in 1989 to share research data. Particle physics meets information technology."
+  },
   "tsmc": {
     "label": "TSMC",
-    "description": "The world\\"
+    "description": "Taiwan Semiconductor Manufacturing Company, founded by Morris Chang through government initiative. Invented the "
   },
   "asml": {
     "label": "ASML",
-    "description": "The only company that makes the EUV machines needed to print the most advanced chips."
+    "description": "Dutch company with a global monopoly on EUV lithography machines. Each machine costs $200M and uses plasma to print transistors smaller than a virus. Without ASML, no advanced chips exist. The most important company most people never heard of."
   },
   "apple": {
     "label": "Apple",
-    "description": "Design meets technology. They revolutionized computing with the Mac, iPod, and iPhone."
+    "description": "Steve Jobs and Steve Wozniak\\"
   },
   "sony": {
     "label": "Sony",
-    "description": "Changed entertainment with the Walkman. Now a leader in image sensors and gaming."
+    "description": "Post-war Japanese company that exported "
   },
   "alan_turing": {
     "label": "Alan Turing",
-    "description": "The genius who cracked the Enigma code and conceived the theoretical basis of computers."
+    "description": "British mathematician who defined computation with the Turing Machine and cracked Nazi Enigma codes at Bletchley Park. His 1950 paper \\"
   },
   "claude_shannon": {
     "label": "Claude Shannon",
-    "description": "Father of Information Theory. He proved that all communication could be reduced to bits."
+    "description": "Bell Labs mathematician who invented information theory in 1948. Proved all communication could be digitized into bits, defined channel capacity, and invented error-correcting codes. Also built juggling robots and rode unicycles through MIT halls. The Einstein of the information age."
   },
   "william_shockley": {
     "label": "William Shockley",
-    "description": "Co-inventor of the transistor. A brilliant physicist whose difficult management sparked the Valley."
+    "description": "Nobel laureate who co-invented the transistor at Bell Labs with Bardeen and Brattain. His toxic management of Shockley Semiconductor drove the \\"
+  },
+  "john_mccarthy": {
+    "label": "John McCarthy",
+    "description": "The mathematician who coined the term \\"
+  },
+  "marvin_minsky": {
+    "label": "Marvin Minsky",
+    "description": "MIT pioneer who co-founded the AI Lab and wrote \\"
   },
   "dennis_ritchie": {
     "label": "Dennis Ritchie",
-    "description": "The architect. He created the C language and Unix, the foundation of modern software."
+    "description": "Bell Labs computer scientist who created the C programming language and co-created Unix with Ken Thompson. C became the mother tongue of systems programming. Unix philosophy shaped all modern operating systems. Died the same week as Steve Jobs but received far less recognition."
   },
   "tim_berners_lee": {
     "label": "Tim Berners-Lee",
-    "description": "He gave the internet a face. He invented the World Wide Web, the browser, and HTML."
+    "description": "British scientist at CERN who invented the World Wide Web in 1989—HTML, HTTP, and URLs. Crucially, he gave it away free instead of patenting it. Knighted by the Queen, W3C founder. Now advocates for data privacy and fights the web\\"
   },
   "geoffrey_hinton": {
     "label": "Geoffrey Hinton",
-    "description": "The Godfather of AI. He believed in neural networks for decades until the world caught up."
+    "description": "The \\"
   },
   "yann_lecun": {
     "label": "Yann LeCun",
-    "description": "The AI Scientist. He invented the convolutional networks that let computers "
+    "description": "French AI scientist who invented convolutional neural networks that let computers \\"
   },
   "robert_noyce": {
     "label": "Robert Noyce",
-    "description": "The "
+    "description": "The \\"
   },
   "gordon_moore": {
     "label": "Gordon Moore",
-    "description": "Predicted computing power would double every two years. His "
+    "description": "Intel co-founder who in 1965 predicted transistor density would double roughly every two years—Moore\\"
   },
   "steve_jobs": {
     "label": "Steve Jobs",
-    "description": "The visionary who stood at the intersection of art and technology. He made gadgets personal."
+    "description": "Apple co-founder who stood at the intersection of technology and liberal arts. Created Macintosh, was fired, bought Pixar, returned, then delivered iMac, iPod, iPhone, and iPad. His obsession with design and user experience redefined consumer electronics. \\"
   },
   "steve_wozniak": {
     "label": "Steve Wozniak",
-    "description": "The engineer\\"
+    "description": "The engineering genius who single-handedly designed the Apple I and II. Woz built the first personal computers that actually worked and that people wanted. Later focused on education and philanthropy. The anti-Jobs—humble, generous, and beloved by engineers. \\"
   },
   "bill_gates": {
     "label": "Bill Gates",
-    "description": "The coder who meant business. He realized software was the key and put Windows everywhere."
+    "description": "Microsoft co-founder who saw that software, not hardware, would define computing. MS-DOS then Windows dominated PCs for decades. Ruthless competitor, antitrust target, then world\\"
   },
   "larry_ellison": {
     "label": "Larry Ellison",
-    "description": "The samurai of software. He built an empire on enterprise databases and ruthless tactics."
+    "description": "Oracle founder who built a database empire through relentless salesmanship and ruthless acquisition. Yachts, fighter jets, and Japanese samurai culture define his style. Became world\\"
   },
   "morris_chang": {
     "label": "Morris Chang",
-    "description": "He revolutionized chips by creating the foundry model, building chips designed by others."
+    "description": "Texas Instruments veteran who returned to Taiwan and founded TSMC in 1987. His \\"
   },
   "linus_torvalds": {
     "label": "Linus Torvalds",
-    "description": "He wrote Linux for fun. It now runs the cloud. He also gave us Git to manage code."
+    "description": "Finnish programmer who wrote Linux as a hobby while a university student. It now runs the internet, Android, and the cloud. Also created Git for version control. Famous for blunt code reviews and profane mailing list posts. Gave software freedom to the world by accident."
   },
   "jeff_bezos": {
     "label": "Jeff Bezos",
-    "description": "He started selling books and ended up selling everything. He built the cloud (AWS) too."
+    "description": "Amazon founder who started with books and built the \\"
   },
   "jensen_huang": {
     "label": "Jensen Huang",
-    "description": "The visionary who bet on GPUs. He turned a graphics company into the engine of AI."
+    "description": "NVIDIA co-founder who bet the company on GPUs for gaming, then AI. The leather jacket, the keynotes, and the kitchen-table founding story are iconic. NVIDIA is now worth $3T+ as the AI revolution\\"
   },
   "marc_benioff": {
     "label": "Marc Benioff",
-    "description": "He declared "
+    "description": "Salesforce founder who declared \\"
   },
   "larry_page": {
     "label": "Larry Page",
-    "description": "He wanted to download the entire internet. He invented PageRank and co-founded Google."
+    "description": "Google co-founder who invented PageRank by treating web links like academic citations. His vision to \\"
   },
   "sergey_brin": {
     "label": "Sergey Brin",
-    "description": "The data scientist who co-founded Google. He helped organize the world\\"
+    "description": "Google co-founder who emigrated from Russia age 6. His mathematical skills and Page\\"
   },
   "reed_hastings": {
     "label": "Reed Hastings",
-    "description": "He realized DVDs would die. He pivoted Netflix to streaming and changed TV forever."
+    "description": "Netflix co-founder who pivoted from DVD-by-mail to streaming before anyone else saw it coming. Built a content empire with \\"
   },
   "elon_musk": {
     "label": "Elon Musk",
-    "description": "The real-life Tony Stark. He is electrifying transport and building rockets to Mars."
+    "description": "Serial founder of PayPal, Tesla, SpaceX, Neuralink, Boring Company, and xAI. Made EVs desirable, landed rockets, and deploys Starlink globally. Bought Twitter/X. World\\"
   },
   "mark_zuckerberg": {
     "label": "Mark Zuckerberg",
-    "description": "He connected the world. He moved fast, broke things, and built a social empire."
+    "description": "Facebook founder who connected 3 billion people from a Harvard dorm room. Acquired Instagram and WhatsApp. \\"
   },
   "chad_hurley": {
     "label": "Chad Hurley",
-    "description": "He made video easy. Co-founded YouTube so anyone could broadcast themselves."
+    "description": "YouTube co-founder who designed PayPal\\"
   },
   "jack_ma": {
     "label": "Jack Ma",
-    "description": "The teacher who connected China to the world. He built an e-commerce giant from an apartment."
+    "description": "Former English teacher who founded Alibaba in his Hangzhou apartment. Built China\\"
   },
   "pony_ma": {
     "label": "Pony Ma",
-    "description": "The quiet architect of WeChat. He built a digital ecosystem that powers modern China."
+    "description": "Tencent founder who built WeChat, the super-app that is China\\"
   },
   "travis_kalanick": {
     "label": "Travis Kalanick",
-    "description": "He hustled to build Uber. He changed urban transport with the push of a button."
+    "description": "Uber co-founder whose \\"
   },
   "patrick_collison": {
     "label": "Patrick Collison",
-    "description": "He fixed payments. With Stripe, he made it simple for startups to accept money online."
+    "description": "Irish prodigy who built Stripe with brother John from their MIT dorm. Seven lines of code to accept payments. Built developer-first infrastructure for internet commerce worth $65B+. Also runs research labs in science funding and progress studies. The builder\\"
   },
   "satoshi_nakamoto": {
     "label": "Satoshi Nakamoto",
-    "description": "The mysterious creator of Bitcoin. They solved the problem of digital trust without banks."
+    "description": "Pseudonymous creator of Bitcoin who solved the double-spend problem for digital currency using blockchain. Published the whitepaper October 2008, launched Bitcoin January 2009, disappeared 2011. Identity unknown—individual or group? Owns 1M inactive BTC. The most influential ghost ever."
   },
   "vitalik_buterin": {
     "label": "Vitalik Buterin",
-    "description": "The boy genius behind Ethereum. He envisioned a blockchain that could run any program."
+    "description": "Russian-Canadian programmer who conceived Ethereum at age 19. Built a \\"
   },
   "tim_cook": {
     "label": "Tim Cook",
-    "description": "The operations genius. He took Apple to a $3 trillion valuation by perfecting the supply chain."
+    "description": "Apple CEO who succeeded Steve Jobs and proved the doubters wrong. Tripled revenue, reached $3T valuation. Operations genius who mastered supply chains. Quietly gay CEO of world\\"
   },
   "satya_nadella": {
     "label": "Satya Nadella",
-    "description": "The diplomat. He refreshed Microsoft\\"
+    "description": "Microsoft CEO who transformed the company from Windows-centric to cloud-first. Azure rivals AWS, GitHub powers developers, OpenAI partnership puts AI in everything. \\"
   },
   "sundar_pichai": {
     "label": "Sundar Pichai",
-    "description": "The product leader. He oversaw Chrome and Android before taking the helm at Google."
+    "description": "Indian-born CEO of Alphabet and Google. Rose through Chrome and Android leadership. Calm, diplomatic, navigating antitrust suits and AI competition. Pushed Bard/Gemini to compete with ChatGPT. Low-key style contrasts with predecessors. Steering the world\\"
   },
   "lisa_su": {
     "label": "Lisa Su",
-    "description": "The engineer who saved AMD. She executed one of the greatest turnarounds in tech history."
+    "description": "AMD CEO who orchestrated one of tech\\"
   },
   "demis_hassabis": {
     "label": "Demis Hassabis",
-    "description": "The gamer neuroscientist. He founded DeepMind to solve intelligence and cure diseases."
+    "description": "DeepMind co-founder, child chess prodigy, and game designer who now leads Google\\"
   },
   "sam_altman": {
     "label": "Sam Altman",
-    "description": "The operator. He scaled Y Combinator and then led OpenAI to release ChatGPT."
+    "description": "OpenAI CEO who shipped ChatGPT and triggered the AI race. Previously ran Y Combinator age 28. Briefly fired then rehired in dramatic 2023 board chaos. Fundraising genius courting Microsoft and sovereign wealth. The CEO at the center of AI\\"
   },
   "ilya_sutskever": {
     "label": "Ilya Sutskever",
-    "description": "The brain behind GPT. He led the technical breakthroughs that made AI talk."
+    "description": "OpenAI co-founder and chief scientist behind GPT models. Student of Hinton who co-created AlexNet. Key figure in the dramatic 2023 board attempt to oust Sam Altman. Left to start Safe Superintelligence Inc. The scientist searching for both capability and alignment in AI."
   },
   "arthur_rock": {
     "label": "Arthur Rock",
-    "description": "The financier. He helped start Intel and Apple, coining the term "
+    "description": "Coined the term \\"
   },
   "don_valentine": {
     "label": "Don Valentine",
-    "description": "The grandfather of VC. His firm Sequoia backed the companies that defined the future."
+    "description": "Founded Sequoia Capital in 1972, backing Apple, Cisco, Google, and YouTube. \\"
   },
   "masayoshi_son": {
     "label": "Masayoshi Son",
-    "description": "The risk-taker. His Vision Fund poured billions into the future of AI and connectivity."
+    "description": "SoftBank founder who rewrote venture rules with the $100B Vision Fund. Early bet on Alibaba returned $80B+. WeWork and other failures taught that not every bet pays. Believes in the \\"
   },
   "marc_andreessen": {
     "label": "Marc Andreessen",
-    "description": "He built the first graphical browser. Now he funds the software eating the world."
+    "description": "Netscape co-founder who made the web visual with Mosaic browser. \\"
   },
   "peter_thiel": {
     "label": "Peter Thiel",
-    "description": "The contrarian. He co-founded PayPal, backed Facebook first, and funds big ideas."
+    "description": "PayPal co-founder, Facebook\\"
   },
   "reid_hoffman": {
     "label": "Reid Hoffman",
-    "description": "The networker. He founded LinkedIn and is the "
+    "description": "LinkedIn co-founder who built the professional social network. PayPal Mafia member, Greylock partner, AI early-adopter. Hosts podcasts, invests in AI startups, wrote \\"
   },
   "paul_graham": {
     "label": "Paul Graham",
-    "description": "The hacker philosopher. He created Y Combinator and wrote the playbook for startups."
+    "description": "Y Combinator co-founder who industrialized startup creation. Lisp hacker, essayist, painter. Funded Airbnb, Dropbox, Stripe, Reddit. Essays like \\"
   },
   "max_levchin": {
     "label": "Max Levchin",
-    "description": "The coder behind PayPal. His work on fraud prevention proved humans are still useful."
+    "description": "PayPal co-founder who built the fraud-detection systems that saved the company. Ukrainian immigrant, cryptography expert, serial founder. Now CEO of Affirm (buy-now-pay-later). The PayPal Mafia technologist who keeps building instead of just investing. Still coding in his 40s."
   },
   "roelof_botha": {
     "label": "Roelof Botha",
-    "description": "The PayPal Mafia member who leads Sequoia. He spots the next big thing before anyone else."
+    "description": "South African-born Sequoia partner who went from PayPal CFO to the Valley\\"
   },
   "turing_machine": {
     "label": "Turing Machine",
-    "description": "The theoretical blueprint for all computers. It defines the limits of what machines can calculate."
+    "description": "Alan Turing\\"
   },
   "transistor": {
     "label": "The Transistor",
-    "description": "A tiny electronic switch. Billions of them pack onto chips to control the flow of electricity."
+    "description": "The tiny electronic switch that replaced vacuum tubes. Invented at Bell Labs by Shockley, Bardeen, and Brattain. Billions of transistors now pack onto fingernail-sized chips, controlling electrical flow to perform calculations at incredible speeds."
   },
   "info_theory": {
     "label": "Information Theory",
-    "description": "The math of the digital age. It defined "
+    "description": "Claude Shannon\\"
   },
   "rsa": {
     "label": "RSA Encryption",
-    "description": "The digital lock and key system that keeps passwords and credit cards safe on the internet."
+    "description": "The asymmetric encryption algorithm that secures the internet. Named after creators Rivest, Shamir, and Adleman, it uses the mathematical difficulty of factoring large prime numbers to protect passwords, credit cards, and private communications online."
   },
   "lithography": {
     "label": "Lithography",
-    "description": "A process using light to print incredibly tiny, complex circuit patterns onto silicon chips."
+    "description": "A photographic process using light to print incredibly tiny circuit patterns onto silicon wafers. Each generation shrinks transistors further, following Moore\\"
   },
   "ic": {
     "label": "Integrated Circuit",
-    "description": "Putting many transistors on a single chip. It solved the "
+    "description": "Jack Kilby and Robert Noyce independently invented ways to put many transistors on a single chip. It solved the \\"
   },
   "ibm_360": {
     "label": "IBM System/360",
-    "description": "The mainframe that standardized software, allowing companies to upgrade hardware without rewriting code."
+    "description": "IBM\\"
   },
   "dram": {
     "label": "DRAM",
-    "description": "The computer\\"
+    "description": "Dynamic Random Access Memory invented by Robert Dennard at IBM. The computer\\"
   },
   "optical_fiber": {
     "label": "Optical Fiber",
-    "description": "Glass strands that send data as pulses of light, forming the high-speed backbone of the internet."
+    "description": "Ultra-pure glass strands that transmit data as pulses of light over vast distances with minimal loss. Developed by Corning, they form the high-speed backbone of global internet and telecommunications, carrying 99% of international data traffic."
   },
   "microprocessor": {
     "label": "Microprocessor",
-    "description": "The entire brain of a computer compressed onto a single chip. It sparked the PC revolution."
+    "description": "Intel\\"
   },
   "floppy": {
     "label": "Floppy Disk",
-    "description": "The save icon in real life. Portable disks that moved software and files before the internet."
+    "description": "IBM\\"
   },
   "ethernet": {
     "label": "Ethernet",
-    "description": "The standard cable system for connecting computers together in a local network (LAN)."
+    "description": "Invented by Bob Metcalfe at Xerox PARC, this protocol became the standard for connecting computers in local area networks. Its simple, robust design beat competitors like Token Ring. Still the foundation of wired networking, now reaching 400 Gbps speeds."
+  },
+  "arpanet": {
+    "label": "ARPANET",
+    "description": "The Advanced Research Projects Agency Network, the direct ancestor of the modern internet. Funded by DARPA, it connected universities and research labs using packet switching. The first message sent in 1969 crashed after two letters. This experimental network proved that distributed communication could work and laid the groundwork for TCP/IP and the World Wide Web."
   },
   "x86": {
     "label": "x86 Architecture",
-    "description": "The dominant language of PC processors. It has defined desktop computing for decades."
+    "description": "Intel\\"
   },
   "gps": {
     "label": "GPS",
-    "description": "A satellite network that provides precise location and timing anywhere on Earth."
+    "description": "The Global Positioning System, a U.S. military satellite constellation providing precise location and timing anywhere on Earth. Made available for civilian use in 2000. Enables navigation apps, ride-sharing, precision agriculture, and synchronized financial trading."
   },
   "optical_disc": {
     "label": "Optical Disc",
-    "description": "A digital storage format using lasers (CD/DVD), revolutionizing music and software distribution."
+    "description": "A digital storage format using lasers to read microscopic pits on a spinning disc. The Compact Disc revolutionized music distribution, followed by DVDs for video and Blu-ray for HD content. Peak technology before streaming took over in the 2010s."
   },
   "tcp_ip": {
     "label": "TCP/IP",
-    "description": "The common language of the internet that allows different networks to connect and talk."
+    "description": "The Transmission Control Protocol and Internet Protocol stack that became the common language of the internet. Developed by Vint Cerf and Bob Kahn, it allows different networks to interconnect and ensures data packets reach their destination reliably."
   },
   "arm_arch": {
     "label": "ARM Architecture",
-    "description": "A power-efficient chip design. It is the reason your smartphone battery lasts all day."
+    "description": "A power-efficient RISC processor design from Cambridge that prioritizes energy efficiency over raw speed. Licensed to chip makers worldwide, ARM powers 99% of smartphones. Apple Silicon brought ARM to laptops and desktops with impressive performance."
   },
   "cisco_router": {
     "label": "Cisco Router",
-    "description": "The traffic cop of the internet. It directs data packets to ensure they reach the right destination."
+    "description": "The traffic cop of the internet. Founded by Stanford couple Len Bosack and Sandy Lerner, Cisco routers direct data packets across networks to their destinations. Their equipment became the essential plumbing infrastructure of the global internet."
   },
   "foundry_model": {
     "label": "Foundry Model",
-    "description": "A business model separating chip design from manufacturing. It enabled the rise of NVIDIA and AMD."
+    "description": "Morris Chang\\"
   },
   "nand": {
     "label": "NAND Flash",
-    "description": "Storage that remembers data without power. It lives inside your USB drives, SSDs, and phone."
+    "description": "Non-volatile memory invented by Toshiba\\"
   },
   "cdma": {
     "label": "CDMA",
-    "description": "A wireless technology that optimized radio signals, laying the groundwork for 3G networks."
+    "description": "Code Division Multiple Access, Qualcomm\\"
   },
   "gsm": {
     "label": "GSM",
-    "description": "The first global standard for digital mobile phones, enabling SMS and international roaming."
+    "description": "Global System for Mobile Communications, Europe\\"
   },
   "li_ion": {
     "label": "Li-ion Battery",
-    "description": "High-energy rechargeable batteries. They make smartphones, laptops, and electric cars possible."
+    "description": "Sony commercialized John Goodenough\\"
   },
   "mp3": {
     "label": "MP3",
-    "description": "A way to compress audio files. It put a thousand songs in your pocket and disrupted music."
+    "description": "The audio compression format developed by Fraunhofer Institute that shrinks music files to 1/10th their original size. It enabled Napster, iPod, and Spotify by making music portable and shareable. Disrupted the entire recording industry in the 2000s."
   },
   "cmos": {
     "label": "CMOS Sensor",
-    "description": "The electronic eye. An affordable image sensor that turned every phone into a digital camera."
+    "description": "Complementary Metal-Oxide-Semiconductor image sensors that convert light into digital signals. Invented by Eric Fossum, they replaced CCDs by offering lower power and on-chip processing. CMOS sensors turned every smartphone into a capable camera for billions."
   },
   "blue_led": {
     "label": "Blue LED",
-    "description": "The breakthrough needed to create white LED light. It made energy-efficient screens possible."
+    "description": "The missing piece for full-color and white LED lighting, invented by Nakamura, Akasaki, and Amano (Nobel Prize 2014). Blue LEDs combine with red and green to create displays, and with phosphors for energy-efficient lighting that now saves billions in electricity."
   },
   "bluetooth": {
     "label": "Bluetooth",
-    "description": "A wireless cord. It connects headphones, keyboards, and mice to devices over short distances."
+    "description": "Named after Viking king Harald Bluetooth who united Denmark, this wireless standard unites devices. Developed by Ericsson, it connects headphones, keyboards, mice, and wearables over short distances. Now in billions of devices with Low Energy versions for IoT."
   },
   "ssl_tls": {
     "label": "SSL/TLS",
-    "description": "The security protocol that puts the "
+    "description": "Secure Sockets Layer and Transport Layer Security protocols that encrypt internet communications. Developed at Netscape, they put the \\"
   },
   "wifi": {
     "label": "WiFi",
-    "description": "Wireless internet. It cut the ethernet cables and let us get online from the couch."
+    "description": "Wireless Local Area Networking based on IEEE 802.11 standards. Freed computers from ethernet cables and enabled laptops, smartphones, and IoT devices to connect anywhere. Now essential infrastructure in homes, offices, and public spaces worldwide."
   },
   "gpu_geforce": {
     "label": "GPU (GeForce)",
-    "description": "Originally for gaming graphics, now the heavy lifter for AI training and deep learning."
+    "description": "NVIDIA\\"
   },
   "arm_cortex": {
     "label": "ARM Cortex",
-    "description": "The specific processor cores found inside nearly every modern Android and iPhone."
+    "description": "ARM\\"
   },
   "lidar": {
     "label": "LiDAR",
-    "description": "Laser radar. It uses light pulses to create 3D maps, acting as the eyes for self-driving cars."
+    "description": "Light Detection and Ranging uses laser pulses to create precise 3D maps of surroundings. Essential for autonomous vehicles to \\"
   },
   "lte": {
     "label": "LTE (4G)",
-    "description": "The 4th gen mobile network that brought true broadband speeds to phones, enabling video streaming."
+    "description": "Long Term Evolution, the 4th generation mobile network bringing true broadband speeds to smartphones. Enabled HD video streaming, video calls, and the app economy explosion. Global deployment made mobile internet a daily necessity for billions of users."
   },
   "alexnet": {
     "label": "AlexNet",
-    "description": "The AI model that proved deep learning works, winning an image contest and starting the AI boom."
+    "description": "The deep neural network by Alex Krizhevsky, Ilya Sutskever, and Geoffrey Hinton that won ImageNet 2012 by a massive margin. Proved GPUs plus deep learning works for image recognition. Widely considered the \\"
   },
   "hbm": {
     "label": "HBM",
-    "description": "Stacked, ultra-fast memory. It feeds data to AI chips quickly enough to train massive models."
+    "description": "High Bandwidth Memory stacks DRAM chips vertically with thousands of connections. Co-developed by AMD and SK Hynix, it feeds data to AI accelerators fast enough to keep GPUs busy. Essential for training large language models where memory bandwidth is the bottleneck."
   },
   "word2vec": {
     "label": "Word2Vec",
-    "description": "A technique that teaches computers the meaning of words by analyzing their context."
+    "description": "Google\\"
   },
   "gan": {
     "label": "GAN",
-    "description": "Two AI networks competing against each other to generate realistic fake images."
+    "description": "Generative Adversarial Networks by Ian Goodfellow pit two neural networks against each other. One generates, one judges, both improve. Enabled photorealistic face generation, deepfakes, and inspired the creative AI revolution including Stable Diffusion."
   },
   "tpu": {
     "label": "Google TPU",
-    "description": "A custom chip built by Google specifically to accelerate machine learning workloads."
+    "description": "Google\\"
   },
   "transformer": {
     "label": "Transformer",
-    "description": "The architecture that pays attention to context. It is the secret sauce behind ChatGPT."
+    "description": "The \\"
   },
   "5g_nr": {
     "label": "5G (New Radio)",
-    "description": "The latest mobile network offering massive speed and capacity for a hyper-connected world."
+    "description": "Fifth generation mobile networks offering up to 20 Gbps speeds and millisecond latency. Enables real-time remote surgery, autonomous vehicles, and massive IoT deployments. Uses mmWave and sub-6GHz bands. Still rolling out globally with mixed coverage."
   },
   "euv": {
     "label": "EUV Lithography",
-    "description": "A manufacturing miracle using extreme UV light to print the world\\"
+    "description": "Extreme Ultraviolet Lithography uses 13.5nm wavelength light to print sub-7nm chip features. ASML\\"
   },
   "stable_diffusion": {
     "label": "Stable Diffusion",
-    "description": "An open AI that turns text into images, bringing art generation to personal computers."
+    "description": "Open-source text-to-image AI model by Stability AI that runs on consumer GPUs. Democratized AI art creation by making it free and local. Sparked debates about artist rights and job displacement while enabling unprecedented creative tools for millions."
   },
   "nvidia_h100": {
     "label": "NVIDIA H100",
-    "description": "The engine of the AI revolution. A massive GPU designed specifically to train smart models."
+    "description": "NVIDIA\\"
   },
   "unix": {
     "label": "Unix",
-    "description": "An operating system philosophy of simplicity. It is the grandfather of Linux and macOS."
+    "description": "The operating system created at Bell Labs by Ken Thompson and Dennis Ritchie. Its philosophy of simple, modular tools connected by pipes influenced all modern OSes. Unix spawned BSD, Solaris, macOS, and inspired Linux. Powers most internet servers today."
   },
   "c_lang": {
     "label": "C Language",
-    "description": "The building block of software. It allows code to run fast and close to the hardware."
+    "description": "Created by Dennis Ritchie at Bell Labs to rewrite Unix portably. C gives low-level hardware access with high-level abstraction. It became the foundation of operating systems, databases, and embedded systems. C++ and many languages descended from it."
   },
   "sql": {
     "label": "SQL",
-    "description": "The standard language for asking questions to databases and managing organized information."
+    "description": "Structured Query Language developed at IBM for relational databases. Its English-like syntax democratized data access. SELECT, INSERT, UPDATE became universal commands. Powers Oracle, MySQL, PostgreSQL, and every major database system worldwide."
   },
   "oracle_db": {
     "label": "Oracle Database",
-    "description": "The gold standard for enterprise databases, powering the back-end of global business."
+    "description": "Larry Ellison\\"
   },
   "www": {
     "label": "World Wide Web",
-    "description": "The system of interlinked pages accessed via the internet. It made the net usable for everyone."
+    "description": "Tim Berners-Lee\\"
   },
   "linux": {
     "label": "Linux Kernel",
-    "description": "A free, open-source OS kernel that runs the internet, the cloud, and all Android phones."
+    "description": "Linus Torvalds\\"
   },
   "python": {
     "label": "Python",
-    "description": "A readable programming language that became the primary tool for AI and data science."
+    "description": "Guido van Rossum\\"
   },
   "windows_95": {
     "label": "Windows 95",
-    "description": "The OS that introduced the Start menu and brought easy computing to the masses."
+    "description": "Microsoft\\"
   },
   "java": {
     "label": "Java",
-    "description": "A language designed to "
+    "description": "Sun Microsystems\\"
   },
   "javascript": {
     "label": "JavaScript",
-    "description": "The language of the web browser. It makes websites interactive instead of just static text."
+    "description": "Brendan Eich created it in 10 days at Netscape to make web pages interactive. Despite its quirks, it became the only language running in all browsers. Node.js brought it server-side. Now one of the world\\"
   },
   "unreal": {
     "label": "Unreal Engine",
-    "description": "A powerful engine for high-fidelity 3D graphics, used in games and movie production."
+    "description": "Epic Games\\"
   },
   "bittorrent": {
     "label": "BitTorrent",
-    "description": "A decentralized way to share large files. It proved the power of peer-to-peer networks."
+    "description": "Bram Cohen\\"
   },
   "mapreduce": {
     "label": "MapReduce",
@@ -593,15 +633,15 @@
   },
   "git": {
     "label": "Git",
-    "description": "A time machine for code. It helps developers track changes and collaborate on software."
+    "description": "Linus Torvalds created this distributed version control system in 2 weeks when Linux\\"
   },
   "unity": {
     "label": "Unity",
-    "description": "A versatile platform for building games and 3D apps, democratizing game development."
+    "description": "The game engine that democratized game development. Its accessible tools let indie developers create without large teams. Powers most mobile games and VR experiences. The \\"
   },
   "aws_cloud": {
     "label": "AWS Cloud",
-    "description": "Infrastructure as a Service. It lets anyone rent massive computing power over the internet."
+    "description": "Amazon\\"
   },
   "cuda": {
     "label": "CUDA",
@@ -609,19 +649,19 @@
   },
   "ios": {
     "label": "iOS",
-    "description": "The operating system that powers the iPhone, defining the modern mobile user experience."
+    "description": "Apple\\"
   },
   "android": {
     "label": "Android",
-    "description": "The open mobile OS that powers the vast majority of the world\\"
+    "description": "Google\\"
   },
   "zero_trust": {
     "label": "Zero Trust",
-    "description": "A security model that assumes no user or device is safe, verifying every single request."
+    "description": "The security philosophy that \\"
   },
   "docker": {
     "label": "Docker",
-    "description": "Packages software into shipping containers, so it runs the same on any machine."
+    "description": "Solomon Hykes\\"
   },
   "tensorflow": {
     "label": "TensorFlow",
@@ -633,131 +673,131 @@
   },
   "walkman": {
     "label": "Sony Walkman",
-    "description": "It allowed people to carry their music with them, changing audio consumption forever."
+    "description": "Sony\\"
   },
   "macintosh": {
     "label": "Macintosh",
-    "description": "The first mass-market computer with a mouse and graphical screen. It made computing friendly."
+    "description": "Apple\\"
   },
   "toshiba_t1100": {
     "label": "Toshiba T1100",
-    "description": "The first commercially successful laptop. It established the clamshell shape we use today."
+    "description": "The first mass-market IBM PC-compatible laptop with clamshell design. Weighed 4kg and ran on batteries. Established the laptop form factor that billons use today. Proved portable computing could be practical for mobile professionals."
   },
   "excel": {
     "label": "Microsoft Excel",
-    "description": "The definitive spreadsheet. It replaced paper ledgers and became the language of business."
+    "description": "The spreadsheet that conquered the business world. Originally for Mac, then dominated on Windows. VisiCalc invented the category, Lotus 1-2-3 popularized it, but Excel won with superior features. Still the language of finance and business analytics."
   },
   "photoshop": {
     "label": "Adobe Photoshop",
-    "description": "The verb for editing images. It set the standard for digital creativity."
+    "description": "Created by Thomas and John Knoll, acquired by Adobe. \\"
   },
   "mosaic": {
     "label": "Mosaic Browser",
-    "description": "The first web browser to display images inline with text, sparking the internet boom."
+    "description": "The first web browser to display images inline with text, developed at NCSA by Marc Andreessen and Eric Bina. Made the web visual and accessible. Its graphical interface sparked the internet boom. Andreessen later co-founded Netscape based on Mosaic."
   },
   "netscape": {
     "label": "Netscape Navigator",
-    "description": "The browser that commercialized the web and fought Microsoft in the first browser war."
+    "description": "The browser that commercialized the World Wide Web. Its 1995 IPO sparked the dot-com boom. Fought and lost the browser war to Microsoft\\"
   },
   "amazon_com": {
     "label": "Amazon.com",
-    "description": "Started as a bookstore, became the "
+    "description": "Jeff Bezos started selling books from his Seattle garage, then became the \\"
   },
   "netflix": {
     "label": "Netflix",
-    "description": "Shifted from DVD rentals to streaming, changing how the world watches TV."
+    "description": "Reed Hastings\\"
   },
   "google_search": {
     "label": "Google Search",
-    "description": "The engine that organized the world\\"
+    "description": "Larry Page and Sergey Brin\\"
   },
   "paypal": {
     "label": "PayPal",
-    "description": "A safe way to send money online. It spawned the "
+    "description": "The merger of Confinity and Elon Musk\\"
   },
   "salesforce_crm": {
     "label": "Salesforce CRM",
-    "description": "Pioneered "
+    "description": "Marc Benioff\\"
   },
   "wikipedia": {
     "label": "Wikipedia",
-    "description": "A free encyclopedia written by volunteers. It democratized the world\\"
+    "description": "Jimmy Wales and Larry Sanger\\"
   },
   "skype": {
     "label": "Skype",
-    "description": "Popularized free video calls over the internet, making the world feel smaller."
+    "description": "The Estonian startup that made free video calls possible between computers. \\"
   },
   "linkedin": {
     "label": "LinkedIn",
-    "description": "The social network for work. It moved the rolodex and resume online."
+    "description": "Reid Hoffman\\"
   },
   "facebook": {
     "label": "Facebook",
-    "description": "Connected billions of people. It defined the social media era and the news feed."
+    "description": "Mark Zuckerberg\\"
   },
   "youtube": {
     "label": "YouTube",
-    "description": "Broadcast Yourself. It democratized video creation and entertainment."
+    "description": "\\"
   },
   "twitter": {
     "label": "Twitter",
-    "description": "The town square of the internet. A real-time feed of news and conversation."
+    "description": "Jack Dorsey\\"
   },
   "iphone": {
     "label": "iPhone",
-    "description": "Combined a phone, iPod, and internet communicator. It put the internet in our pockets."
+    "description": "Steve Jobs combined \\"
   },
   "spotify": {
     "label": "Spotify",
-    "description": "Saved the music industry from piracy by offering legal, instant streaming access."
+    "description": "Daniel Ek\\"
   },
   "app_store": {
     "label": "App Store",
-    "description": "A centralized marketplace that made it safe and easy to install software on phones."
+    "description": "Apple\\"
   },
   "google_chrome": {
     "label": "Google Chrome",
-    "description": "A fast, minimalist browser that became the operating system for the modern web."
+    "description": "Google\\"
   },
   "github": {
     "label": "GitHub",
-    "description": "Social coding. The home for open-source software and developer collaboration."
+    "description": "The social network for code built around Git. Chris Wanstrath and Tom Preston-Werner made open source collaboration social. 100+ million developers. Microsoft acquired it for $7.5B. Now hosts most of the world\\"
   },
   "bitcoin": {
     "label": "Bitcoin",
-    "description": "Digital gold. The first decentralized currency based on blockchain technology."
+    "description": "Satoshi Nakamoto\\"
   },
   "uber_app": {
     "label": "Uber App",
-    "description": "Push a button, get a ride. It pioneered the gig economy and on-demand transport."
+    "description": "Travis Kalanick\\"
   },
   "stripe": {
     "label": "Stripe",
-    "description": "Seven lines of code that let any website accept payments. Infrastructure for the internet."
+    "description": "Irish brothers Patrick and John Collison built payment infrastructure that developers love. Seven lines of code to accept payments. Powers Amazon, Google, and most internet commerce. Valued at $65B+. The invisible plumbing making internet transactions just work."
   },
   "wechat": {
     "label": "WeChat",
-    "description": "The Chinese super-app. It combines messaging, social media, and payments in one."
+    "description": "Tencent\\"
   },
   "zoom": {
     "label": "Zoom",
-    "description": "The video tool that just worked. It became the default for remote work and connection."
+    "description": "Eric Yuan left Cisco WebEx frustrated by poor quality. Built Zoom to \\"
   },
   "model_s": {
     "label": "Tesla Model S",
-    "description": "The car that proved EVs could be fast, beautiful, and have long range."
+    "description": "Tesla\\"
   },
   "raspberry_pi": {
     "label": "Raspberry Pi",
-    "description": "A tiny, cheap computer designed to teach coding and power DIY electronics projects."
+    "description": "British charity Raspberry Pi Foundation\\"
   },
   "dji_phantom": {
     "label": "DJI Phantom",
-    "description": "The ready-to-fly drone that popularized aerial photography for everyone."
+    "description": "Shenzhen-based DJI\\"
   },
   "slack": {
     "label": "Slack",
-    "description": "Chat for work. It replaced internal email with channels and instant messaging."
+    "description": "Stewart Butterfield\\"
   },
   "tesla_autopilot": {
     "label": "Tesla Autopilot",
@@ -765,71 +805,71 @@
   },
   "ethereum": {
     "label": "Ethereum",
-    "description": "A blockchain that runs code. It enabled smart contracts, DeFi, and NFTs."
+    "description": "Vitalik Buterin\\"
   },
   "alphago": {
     "label": "AlphaGo",
-    "description": "The AI that shocked the world by beating a human champion at the complex game of Go."
+    "description": "DeepMind\\"
   },
   "tiktok": {
     "label": "TikTok",
-    "description": "Short-form video fed by an uncanny algorithm. It changed how we consume media."
+    "description": "ByteDance\\"
   },
   "oculus_rift": {
     "label": "Oculus Rift",
-    "description": "The headset that kickstarted the modern consumer Virtual Reality market."
+    "description": "Palmer Luckey\\"
   },
   "alphago_zero": {
     "label": "AlphaGo Zero",
-    "description": "An AI that learned Go by playing against itself, without learning from human games."
+    "description": "DeepMind\\"
   },
   "starlink": {
     "label": "Starlink",
-    "description": "A constellation of satellites providing high-speed internet to remote corners of Earth."
+    "description": "SpaceX\\"
   },
   "fugaku": {
     "label": "Fujitsu Fugaku",
-    "description": "The supercomputer that proved ARM chips could power the world\\"
+    "description": "Japan\\"
   },
   "copilot": {
     "label": "GitHub Copilot",
-    "description": "An AI pair programmer. It helps developers write code faster by suggesting completions."
+    "description": "GitHub and OpenAI\\"
   },
   "chatgpt": {
     "label": "ChatGPT",
-    "description": "The chatbot that speaks like a human. It brought AI into the mainstream conversation."
+    "description": "OpenAI\\"
   },
   "midjourney": {
     "label": "Midjourney",
-    "description": "An AI artist. It creates stunning, photorealistic images from simple text prompts."
+    "description": "David Holz\\"
   },
   "perplexity": {
     "label": "Perplexity",
-    "description": "An AI answer engine. It reads the web and gives you summaries with citations."
+    "description": "The \\"
   },
   "spacex_falcon9": {
     "label": "Falcon 9",
-    "description": "The rocket that lands. It drastically lowered the cost of going to space."
+    "description": "SpaceX\\"
   },
   "starship": {
     "label": "Starship",
-    "description": "A massive, fully reusable rocket designed to carry humanity to Mars."
+    "description": "SpaceX\\"
   },
   "gemini": {
     "label": "Google Gemini",
-    "description": "Google\\"
+    "description": "Google DeepMind\\"
   },
   "claude": {
     "label": "Claude",
-    "description": "An AI assistant built with safety in mind. It excels at reading long documents."
+    "description": "Anthropic\\"
   },
   "cursor": {
     "label": "Cursor",
-    "description": "A code editor built for the AI era. It integrates LLMs directly into the coding workflow."
+    "description": "AI-first code editor that deeply integrates large language models into the development workflow. Built on VS Code foundation with custom AI features. Edit code through chat, inline completions, and codebase understanding. Part of the wave reimagining programming tools for the AI era."
   },
   "sora": {
     "label": "Sora",
-    "description": "An AI that dreams up realistic videos from simple text, understanding physics and motion."
+    "description": "OpenAI\\"
   },
   "vision_pro": {
     "label": "Apple Vision Pro",
@@ -837,22 +877,22 @@
   },
   "postscript": {
     "label": "PostScript",
-    "description": "A page description language that sparked the desktop publishing revolution."
+    "description": "Adobe\\"
   },
   "illustrator": {
     "label": "Adobe Illustrator",
-    "description": "The industry-standard vector graphics editor."
+    "description": "The industry-standard vector graphics editor for logos, icons, typography, and illustrations. Unlike Photoshop\\"
   },
   "premiere_pro": {
     "label": "Adobe Premiere Pro",
-    "description": "A timeline-based video editing software application."
+    "description": "Professional non-linear video editing software that brought Hollywood-quality editing to desktop computers. From indie YouTubers to major film productions, Premiere Pro handles everything from raw footage to final color grading. Deep integration with After Effects and Audition creates a complete post-production ecosystem."
   },
   "pdf": {
     "label": "PDF",
-    "description": "Portable Document Format. The global standard for digital document exchange."
+    "description": "Portable Document Format, Adobe\\"
   },
   "nano_banana": {
     "label": "Nano Banana",
-    "description": "The viral AI image model (Gemini 2.5 Flash) famous for its 3D figurine style and text rendering."
+    "description": "The viral AI image model built on Google\\"
   }
 }

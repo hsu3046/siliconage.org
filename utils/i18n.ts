@@ -13,6 +13,7 @@ const DEFAULT_LOCALE: Locale = 'en';
 // Store for current locale and translations
 let currentLocale: Locale = DEFAULT_LOCALE;
 let translations: Record<string, any> = {};
+let nodeTranslations: Record<string, { label: string; description: string }> = {};
 let isLoaded = false;
 
 /**
@@ -22,6 +23,16 @@ export const loadLocale = async (locale: Locale): Promise<void> => {
     try {
         const uiModule = await import(`../locales/${locale}/ui.json`);
         translations = uiModule.default || uiModule;
+
+        // Load node translations
+        try {
+            const nodesModule = await import(`../locales/${locale}/nodes.json`);
+            nodeTranslations = nodesModule.default || nodesModule;
+        } catch (nodeError) {
+            console.warn(`Node translations not found for locale: ${locale}`);
+            nodeTranslations = {};
+        }
+
         currentLocale = locale;
         isLoaded = true;
 

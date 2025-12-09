@@ -854,5 +854,45 @@
   "nano_banana": {
     "label": "Nano Banana",
     "description": "3D 피규어 스타일과 텍스트 렌더링으로 유명한 바이럴 AI 이미지 모델 (Gemini 2.5 Flash)입니다."
+  },
+  "broadcom": {
+    "label": "Broadcom",
+    "description": "Started as a fabless semiconductor company, now a $500B giant. Dominates networking chips, Wi-Fi, and enterprise storage. Acquired VMware, Symantec, and CA Technologies. Their chips connect virtually every device to the internet."
+  },
+  "hp": {
+    "label": "Hewlett-Packard",
+    "description": "The founding company of Silicon Valley, started in a Palo Alto garage by Stanford engineers Bill Hewlett and Dave Packard. Pioneered test equipment, calculators, and printers. HP Labs invented technologies from HP-UX to the inkjet. Split into HP Inc. and HPE in 2015."
+  },
+  "sun_micro": {
+    "label": "Sun Microsystems",
+    "description": "Stanford University Network graduates built powerful UNIX workstations. Created Java ("
+  },
+  "darpa": {
+    "label": "DARPA",
+    "description": "The Defense Advanced Research Projects Agency, created after Sputnik shocked America. Funded ARPANET (the internet\\"
+  },
+  "mit_csail": {
+    "label": "MIT CSAIL",
+    "description": "The MIT Computer Science and Artificial Intelligence Laboratory, founded by Minsky and McCarthy. Birthplace of AI as an academic field, hacker culture, and the Free Software movement. Tim Berners-Lee and many AI pioneers worked here."
+  },
+  "stanford_ai_lab": {
+    "label": "Stanford AI Lab",
+    "description": "Stanford Artificial Intelligence Laboratory, founded by John McCarthy (who coined "
+  },
+  "cern": {
+    "label": "CERN",
+    "description": "The European Organization for Nuclear Research, home of the Large Hadron Collider. Tim Berners-Lee invented the World Wide Web here in 1989 to share research data. Particle physics meets information technology."
+  },
+  "arpanet": {
+    "label": "ARPANET",
+    "description": "The Advanced Research Projects Agency Network, the direct ancestor of the modern internet. Funded by DARPA, it connected universities and research labs using packet switching. The first message sent in 1969 crashed after two letters. This experimental network proved that distributed communication could work and laid the groundwork for TCP/IP and the World Wide Web."
+  },
+  "john_mccarthy": {
+    "label": "John McCarthy",
+    "description": "수학자로, 인공지능이라는 용어를 처음 사용함"
+  },
+  "marvin_minsky": {
+    "label": "마빈 민스키",
+    "description": "MIT 인공지능 연구소 공동 설립자이자 선구자"
   }
 }

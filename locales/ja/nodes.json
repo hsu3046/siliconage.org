@@ -854,5 +854,45 @@
   "nano_banana": {
     "label": "Nano Banana",
     "description": "3Dフィギュアスタイルとテキストレンダリングで有名な、話題のAI画像モデル（Gemini 2.5 Flash）。"
+  },
+  "broadcom": {
+    "label": "Broadcom",
+    "description": "ファブレス半導体企業から5000億ドル規模の巨大企業へ。ネットワークチップ、Wi-Fi、エンタープライズストレージで圧倒的なシェア。VMware、Symantecなどを買収。ほぼ全てのデバイスをインターネットに接続。"
+  },
+  "hp": {
+    "label": "Hewlett-Packard",
+    "description": "シリコンバレーの創立企業。スタンフォード大学のエンジニア、ビル・ヒューレットとデイブ・パッカードがパロアルトのガレージで創業。試験装置、計算機、プリンターの先駆者。HP LabsはHP-UXからインクジェットまで発明。2015年にHP Inc.とHPEに分割。"
+  },
+  "sun_micro": {
+    "label": "Sun Microsystems",
+    "description": "スタンフォード大学ネットワークの卒業生が強力なUNIXワークステーションを構築。Javaを作成。"
+  },
+  "darpa": {
+    "label": "DARPA",
+    "description": "スプートニク・ショック後に設立された国防高等研究計画局。ARPANET（インターネットの前身）に資金を提供。"
+  },
+  "mit_csail": {
+    "label": "MIT CSAIL",
+    "description": "ミンスキーとマッカーシーが設立したMITコンピュータ科学・人工知能研究所。AIが学問分野として誕生した場所であり、ハッカー文化、フリーソフトウェア運動の発祥地。ティム・バーナーズ＝リーなど、多くのAIの先駆者がここで働いた。"
+  },
+  "stanford_ai_lab": {
+    "label": "Stanford AI Lab",
+    "description": "ジョン・マッカーシー（\"Artificial Intelligence\"という言葉を作った）が設立したスタンフォード人工知能研究所。"
+  },
+  "cern": {
+    "label": "CERN",
+    "description": "欧州原子核研究機構。大型ハドロン衝突型加速器の本拠地。ティム・バーナーズ＝リーが1989年に研究データを共有するためにWorld Wide Webを発明。素粒子物理学と情報技術が出会う場所。"
+  },
+  "john_mccarthy": {
+    "label": "John McCarthy",
+    "description": "\\\"Artificial Intelligence\\\"という言葉を作った数学者。"
+  },
+  "marvin_minsky": {
+    "label": "Marvin Minsky",
+    "description": "MITの先駆者で、AI研究所を共同設立し、\\\"Perceptrons\\\"を執筆。"
+  },
+  "arpanet": {
+    "label": "ARPANET",
+    "description": "現代のインターネットの直接の祖先であるAdvanced Research Projects Agency Network。DARPAの資金提供により、パケット交換を使用して大学と研究所を接続。1969年に送信された最初のメッセージは、2文字後にクラッシュ。この実験的なネットワークは、分散型通信が機能することを証明し、TCP/IPとWorld Wide Webの基礎を築いた。"
   }
 }
