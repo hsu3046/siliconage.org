@@ -1,0 +1,71 @@
+{
+  "traitorous_eight": {
+    "story": "「Traitorous Eight（裏切り者の8人）」がShockley Semiconductorを去り、Fairchildを設立したことが、事実上シリコンバレーの誕生につながった。"
+  },
+  "moores_law": {
+    "story": "Gordon Mooreは、マイクロチップ上のトランジスタ数が2年ごとに倍増すると予測した（ムーアの法則）。"
+  },
+  "ai_winter": {
+    "story": "「AI Winter（AIの冬）」の時代には、過剰な期待により、人工知能研究への資金提供と関心が減少した。"
+  },
+  "apple_1984_commercial": {
+    "story": "AppleはSuper Bowlで、Macintoshを紹介するために象徴的な「1984」のコマーシャルを放映した。"
+  },
+  "browser_wars": {
+    "story": "「Browser Wars（ブラウザ戦争）」は、市場の支配をめぐりNetscape NavigatorとMicrosoft Internet Explorerの間で繰り広げられた。"
+  },
+  "deep_blue_kasparov": {
+    "story": "IBMのDeep Blueスーパーコンピューターが、チェスの世界チャンピオンGarry Kasparovを破り、AIにとって画期的な出来事となった。"
+  },
+  "us_v_microsoft": {
+    "story": "United States v. Microsoft Corp.は、MicrosoftがIntelベースのPCにおける独占的地位を濫用したと判決を下した。"
+  },
+  "dotcom_bubble": {
+    "story": "ドットコムバブルが崩壊し、大規模な株式市場の暴落と、多くのインターネットスタートアップの崩壊を引き起こした。"
+  },
+  "iphone_unveil": {
+    "story": "Steve Jobsは、ワイドスクリーンのiPod、革新的な携帯電話、画期的なインターネットコミュニケーターを組み合わせたiPhoneを発表した。"
+  },
+  "bitcoin_genesis": {
+    "story": "Satoshi Nakamotoは、世界的な金融危機の中で、Bitcoinのジェネシスブロックを採掘した。"
+  },
+  "apple_samsung_lawsuit": {
+    "story": "AppleとSamsungは、スマートフォンのデザインに関して、複数の国で一連の注目を集める特許訴訟を繰り広げた。"
+  },
+  "snowden_leaks": {
+    "story": "Edward Snowdenのリークがきっかけとなり、大手テック企業はエンドツーエンドの暗号化とSSL/TLSの採用を加速させた。"
+  },
+  "alphago_lee_sedol": {
+    "story": "AlphaGoはソウルで、18回世界チャンピオンに輝いたLee Sedolを破り、深層強化学習の力を示した。"
+  },
+  "cambridge_analytica": {
+    "story": "Cambridge Analyticaのスキャンダルは、大規模なデータプライバシー侵害を明らかにし、ソーシャルメディアプラットフォームに対する監視の目を強めることになった。"
+  },
+  "chip_shortage": {
+    "story": "世界的な半導体不足が、自動車から家電製品まで、様々な産業に混乱をもたらし、サプライチェーンの脆弱性を浮き彫りにした。"
+  },
+  "ethereum_merge": {
+    "story": "Ethereumは「The Merge」を完了し、プルーフ・オブ・ワークからプルーフ・オブ・ステークに移行し、エネルギー消費量を99.9%削減した。"
+  },
+  "chatgpt_launch": {
+    "story": "OpenAIがChatGPTをリリースし、大手テック企業の間で世界的な生成AIの軍拡競争を引き起こした。"
+  },
+  "altman_firing": {
+    "story": "Sam Altmanは突然解雇された後、従業員とMicrosoftからの強い圧力の後、OpenAIのCEOとして復帰した。"
+  },
+  "nvidia_trillion": {
+    "story": "AIブームとH100の需要に牽引され、NVIDIAは時価総額1兆ドルを超える企業グループに加わった。"
+  },
+  "fugaku_covid": {
+    "story": "富岳はCOVID-19の飛沫分析シミュレーションに使用された"
+  },
+  "sequoia_whatsapp": {
+    "story": "Sequoia CapitalはWhatsAppの唯一の投資家であった(総額6,000万ドル)"
+  },
+  "yc_justintv": {
+    "story": "Y CombinatorはJustin.tvに資金を提供し、それはTwitchになった"
+  },
+  "thiel_palantir": {
+    "story": "Peter ThielはPayPalの後Palantirを共同設立した"
+  }
+}

@@ -78,7 +78,7 @@ const App: React.FC = () => {
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
 
   // i18n hook - handles locale initialization and provides t() function
-  const { t, locale, translateNode, translateLink } = useLocale();
+  const { t, locale, translateNode, translateLink, translateEvent } = useLocale();
 
   // Router hooks for SEO-friendly URLs
   const navigate = useNavigate();
@@ -105,12 +105,20 @@ const App: React.FC = () => {
       };
     });
 
+    const translatedEvents = (INITIAL_DATA.events || []).map(event => {
+      const translatedStory = translateEvent(event.id, event.story);
+      return {
+        ...event,
+        story: translatedStory
+      };
+    });
+
     return {
       nodes: translatedNodes,
       links: translatedLinks,
-      events: INITIAL_DATA.events
+      events: translatedEvents
     };
-  }, [locale, translateNode, translateLink]);
+  }, [locale, translateNode, translateLink, translateEvent]);
 
   // Featured Node of the Day - deterministic based on date
   const featuredNode = useMemo(() => {
@@ -529,7 +537,7 @@ const App: React.FC = () => {
   }, [filteredData, focusNodeId]);
 
   return (
-    <div className="flex flex-col h-screen w-screen bg-background text-white overflow-hidden" style={{ width: '100vw', height: '100vh', backgroundColor: '#0f172a', overflow: 'hidden' }}>
+    <div key={locale} className="flex flex-col h-screen w-screen bg-background text-white overflow-hidden" style={{ width: '100vw', height: '100vh', backgroundColor: '#0f172a', overflow: 'hidden' }}>
       {/* SEO: Dynamic meta tags based on selected node */}
       <SEOHead node={selectedNode} />
 
@@ -956,6 +964,7 @@ const App: React.FC = () => {
         {viewMode === 'TIMELINE' && (
           <HistoryView
             data={filteredDataFirstDegree}
+            fullData={translatedData}
             onNodeClick={handleNodeSelect}
             onNodeDoubleClick={handleNodeDoubleClick}
             scrollToNodeId={scrollToNodeId}

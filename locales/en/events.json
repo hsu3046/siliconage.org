@@ -1,0 +1,71 @@
+{
+  "traitorous_eight": {
+    "story": "The \"Traitorous Eight\" left Shockley Semiconductor to found Fairchild, effectively birthing Silicon Valley."
+  },
+  "moores_law": {
+    "story": "Gordon Moore predicted that the number of transistors on a microchip would double every two years (Moore's Law)."
+  },
+  "ai_winter": {
+    "story": "The \"AI Winter\" period saw reduced funding and interest in artificial intelligence research due to overhyped expectations."
+  },
+  "apple_1984_commercial": {
+    "story": "Apple aired the iconic \"1984\" commercial during the Super Bowl to introduce the Macintosh."
+  },
+  "browser_wars": {
+    "story": "The \"Browser Wars\" raged between Netscape Navigator and Microsoft Internet Explorer for market dominance."
+  },
+  "deep_blue_kasparov": {
+    "story": "IBM's Deep Blue supercomputer defeated world chess champion Garry Kasparov, a milestone for AI."
+  },
+  "us_v_microsoft": {
+    "story": "United States v. Microsoft Corp. ruled that Microsoft abused its monopoly power on Intel-based PCs."
+  },
+  "dotcom_bubble": {
+    "story": "The Dot-com Bubble burst, causing a massive stock market crash and the collapse of many internet startups."
+  },
+  "iphone_unveil": {
+    "story": "Steve Jobs unveiled the iPhone, combining a widescreen iPod, a revolutionary mobile phone, and a breakthrough internet communicator."
+  },
+  "bitcoin_genesis": {
+    "story": "Satoshi Nakamoto mined the Genesis Block of Bitcoin amidst the global financial crisis."
+  },
+  "apple_samsung_lawsuit": {
+    "story": "Apple and Samsung engaged in a series of high-profile patent lawsuits across multiple countries regarding smartphone designs."
+  },
+  "snowden_leaks": {
+    "story": "Edward Snowden's leaks prompted tech giants to accelerate the adoption of end-to-end encryption and SSL/TLS."
+  },
+  "alphago_lee_sedol": {
+    "story": "AlphaGo defeated 18-time world champion Lee Sedol in Seoul, demonstrating the power of deep reinforcement learning."
+  },
+  "cambridge_analytica": {
+    "story": "The Cambridge Analytica scandal revealed massive data privacy breaches, leading to increased scrutiny on social media platforms."
+  },
+  "chip_shortage": {
+    "story": "A global semiconductor shortage disrupted industries from automotive to consumer electronics, highlighting supply chain fragility."
+  },
+  "ethereum_merge": {
+    "story": "Ethereum completed \"The Merge,\" transitioning from Proof-of-Work to Proof-of-Stake, reducing energy consumption by 99.9%."
+  },
+  "chatgpt_launch": {
+    "story": "OpenAI released ChatGPT, triggering a global generative AI arms race among big tech companies."
+  },
+  "altman_firing": {
+    "story": "Sam Altman was abruptly fired and then reinstated as CEO of OpenAI after intense pressure from employees and Microsoft."
+  },
+  "nvidia_trillion": {
+    "story": "Driven by the AI boom and H100 demand, NVIDIA joined the club of companies with a market cap over $1 trillion."
+  },
+  "fugaku_covid": {
+    "story": "Fugaku was used for COVID-19 droplet analysis simulations"
+  },
+  "sequoia_whatsapp": {
+    "story": "Sequoia Capital was the sole investor in WhatsApp ($60M total)"
+  },
+  "yc_justintv": {
+    "story": "Y Combinator funded Justin.tv which became Twitch"
+  },
+  "thiel_palantir": {
+    "story": "Peter Thiel co-founded Palantir after PayPal"
+  }
+}

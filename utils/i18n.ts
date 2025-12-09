@@ -15,6 +15,7 @@ let currentLocale: Locale = DEFAULT_LOCALE;
 let translations: Record<string, any> = {};
 let nodeTranslations: Record<string, { label: string; description: string }> = {};
 let linkTranslations: Record<string, { story: string }> = {};
+let eventTranslations: Record<string, { story: string }> = {};
 let isLoaded = false;
 
 /**
@@ -41,6 +42,15 @@ export const loadLocale = async (locale: Locale): Promise<void> => {
         } catch (linkError) {
             console.warn(`Link translations not found for locale: ${locale}`);
             linkTranslations = {};
+        }
+
+        // Load event translations
+        try {
+            const eventsModule = await import(`../locales/${locale}/events.json`);
+            eventTranslations = eventsModule.default || eventsModule;
+        } catch (eventError) {
+            console.warn(`Event translations not found for locale: ${locale}`);
+            eventTranslations = {};
         }
 
         currentLocale = locale;
@@ -164,6 +174,30 @@ export const translateLink = (
 
     const key = `${source}__${target}`;
     const translation = linkTranslations[key];
+
+    if (translation?.story) {
+        return translation.story;
+    }
+
+    return fallbackStory || '';
+};
+
+/**
+ * Translate event story
+ * 
+ * @param eventId - Event ID (e.g., "event_0")
+ * @param fallbackStory - Original story (fallback if translation not found)
+ * @returns Translated story string
+ */
+export const translateEvent = (
+    eventId: string,
+    fallbackStory?: string
+): string => {
+    if (!isLoaded || currentLocale === 'en') {
+        return fallbackStory || '';
+    }
+
+    const translation = eventTranslations[eventId];
 
     if (translation?.story) {
         return translation.story;

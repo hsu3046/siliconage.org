@@ -6,6 +6,7 @@ import { useLocale } from '../hooks/useLocale';
 
 interface HistoryViewProps {
   data: GraphData;
+  fullData: GraphData;  // Unfiltered data for link stories
   onNodeClick: (node: NodeData) => void;
   onNodeDoubleClick?: (node: NodeData) => void;
   scrollToNodeId?: string | null;
@@ -25,7 +26,7 @@ const getNodeSizeClass = (radius: number) => {
   return 'small';
 };
 
-const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoubleClick, scrollToNodeId, focusNodeId, showStories = true }) => {
+const HistoryView: React.FC<HistoryViewProps> = ({ data, fullData, onNodeClick, onNodeDoubleClick, scrollToNodeId, focusNodeId, showStories = true }) => {
   // i18n hook
   const { t } = useLocale();
 
@@ -51,15 +52,15 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
     return [...data.nodes].sort((a, b) => a.year - b.year);
   }, [data.nodes]);
 
-  // Collect link events (links with story + startYear)
+  // Collect link events (links with story + startYear) - use fullData to show all stories regardless of category filter
   const linkEvents = useMemo(() => {
-    let events = data.links
+    let events = fullData.links
       .filter(link => link.story && link.startYear)
       .map(link => {
         const sourceId = typeof link.source === 'object' ? (link.source as any).id : link.source;
         const targetId = typeof link.target === 'object' ? (link.target as any).id : link.target;
-        const sourceNode = data.nodes.find(n => n.id === sourceId);
-        const targetNode = data.nodes.find(n => n.id === targetId);
+        const sourceNode = fullData.nodes.find(n => n.id === sourceId);
+        const targetNode = fullData.nodes.find(n => n.id === targetId);
         return {
           link,
           sourceNode,
@@ -79,11 +80,11 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
     }
 
     return events;
-  }, [focusNodeId, data.links, data.nodes]);
+  }, [focusNodeId, fullData.links, fullData.nodes]);
 
-  // Collect standalone events
+  // Collect standalone events - use fullData for translated events
   const standaloneEvents = useMemo(() => {
-    let events = (INITIAL_DATA.events || []).map(event => ({
+    let events = (fullData.events || []).map(event => ({
       event,
       year: event.year
     }));
@@ -97,7 +98,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, onNodeClick, onNodeDoub
     }
 
     return events;
-  }, [focusNodeId]);
+  }, [focusNodeId, fullData.events]);
 
   // Group by year (nodes + link events + standalone events)
   const groupedByYear = useMemo(() => {

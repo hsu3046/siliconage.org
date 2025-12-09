@@ -14,7 +14,10 @@
     "i18n:translate-links": "npx tsx scripts/translate-links.ts",
     "i18n:sync": "npm run i18n:extract && npm run i18n:translate",
     "i18n:sync-links": "npm run i18n:extract-links && npm run i18n:translate-links",
-    "i18n:sync-all": "npm run i18n:sync && npm run i18n:sync-links"
+    "i18n:extract-events": "npx tsx scripts/extract-events.ts",
+    "i18n:translate-events": "npx tsx scripts/translate-events.ts",
+    "i18n:sync-events": "npm run i18n:extract-events && npm run i18n:translate-events",
+    "i18n:sync-all": "npm run i18n:sync && npm run i18n:sync-links && npm run i18n:sync-events"
   },
   "dependencies": {
     "@formspree/react": "^2.5.1",

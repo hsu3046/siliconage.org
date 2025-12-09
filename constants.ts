@@ -56,12 +56,12 @@ const events: EventData[] = [];
 
 // Event helper function for adding timeline events without creating nodes
 const addEvent = (
+  id: string,
   story: string,
   year: number,
   endYear?: number,
   relatedNodes?: string[]
 ) => {
-  const id = `event_${events.length}`;
   events.push({ id, story, year, endYear, relatedNodes });
 };
 
@@ -1080,28 +1080,28 @@ linkRival('nano_banana', 'midjourney', 'Nano Banana challenged Midjourney with s
 // 5. HISTORICAL EVENTS (Timeline Markers)
 // ==============================================================================
 
-addEvent('The "Traitorous Eight" left Shockley Semiconductor to found Fairchild, effectively birthing Silicon Valley.', 1957, undefined, ['william_shockley', 'fairchild', 'robert_noyce', 'gordon_moore']);
-addEvent('Gordon Moore predicted that the number of transistors on a microchip would double every two years (Moore\'s Law).', 1965, undefined, ['gordon_moore', 'intel', 'transistor', 'ic']);
-addEvent('The "AI Winter" period saw reduced funding and interest in artificial intelligence research due to overhyped expectations.', 1974, 1980, ['geoffrey_hinton']);
-addEvent('Apple aired the iconic "1984" commercial during the Super Bowl to introduce the Macintosh.', 1984, undefined, ['apple', 'steve_jobs', 'macintosh']);
-addEvent('The "Browser Wars" raged between Netscape Navigator and Microsoft Internet Explorer for market dominance.', 1995, 2001, ['microsoft', 'netscape_co', 'marc_andreessen', 'bill_gates']);
-addEvent('IBM\'s Deep Blue supercomputer defeated world chess champion Garry Kasparov, a milestone for AI.', 1997, undefined, ['ibm']);
-addEvent('United States v. Microsoft Corp. ruled that Microsoft abused its monopoly power on Intel-based PCs.', 1998, 2001, ['microsoft', 'bill_gates', 'intel', 'windows_95']);
-addEvent('The Dot-com Bubble burst, causing a massive stock market crash and the collapse of many internet startups.', 2000, 2002, ['amazon', 'cisco', 'softbank', 'google', 'jeff_bezos']);
-addEvent('Steve Jobs unveiled the iPhone, combining a widescreen iPod, a revolutionary mobile phone, and a breakthrough internet communicator.', 2007, undefined, ['apple', 'steve_jobs', 'iphone']);
-addEvent('Satoshi Nakamoto mined the Genesis Block of Bitcoin amidst the global financial crisis.', 2009, undefined, ['bitcoin', 'satoshi_nakamoto']);
-addEvent('Apple and Samsung engaged in a series of high-profile patent lawsuits across multiple countries regarding smartphone designs.', 2011, 2018, ['apple', 'samsung', 'tim_cook']);
-addEvent('Edward Snowden\'s leaks prompted tech giants to accelerate the adoption of end-to-end encryption and SSL/TLS.', 2013, undefined, ['google', 'apple', 'meta', 'ssl_tls', 'rsa']);
-addEvent('AlphaGo defeated 18-time world champion Lee Sedol in Seoul, demonstrating the power of deep reinforcement learning.', 2016, undefined, ['deepmind', 'alphago', 'google', 'demis_hassabis']);
-addEvent('The Cambridge Analytica scandal revealed massive data privacy breaches, leading to increased scrutiny on social media platforms.', 2018, undefined, ['meta', 'mark_zuckerberg']);
-addEvent('A global semiconductor shortage disrupted industries from automotive to consumer electronics, highlighting supply chain fragility.', 2020, 2023, ['tsmc', 'samsung', 'intel', 'nvidia', 'apple', 'tesla']);
-addEvent('Ethereum completed "The Merge," transitioning from Proof-of-Work to Proof-of-Stake, reducing energy consumption by 99.9%.', 2022, undefined, ['ethereum', 'vitalik_buterin']);
-addEvent('OpenAI released ChatGPT, triggering a global generative AI arms race among big tech companies.', 2022, undefined, ['openai', 'chatgpt', 'google', 'microsoft', 'sam_altman']);
-addEvent('Sam Altman was abruptly fired and then reinstated as CEO of OpenAI after intense pressure from employees and Microsoft.', 2023, undefined, ['openai', 'sam_altman', 'microsoft', 'satya_nadella', 'ilya_sutskever']);
-addEvent('Driven by the AI boom and H100 demand, NVIDIA joined the club of companies with a market cap over $1 trillion.', 2023, undefined, ['nvidia', 'jensen_huang', 'nvidia_h100']);
-addEvent('Fugaku was used for COVID-19 droplet analysis simulations', 2020, undefined, ['fugaku']);
-addEvent('Sequoia Capital was the sole investor in WhatsApp ($60M total)', 2011, undefined, ['sequoia']);
-addEvent('Y Combinator funded Justin.tv which became Twitch', 2007, undefined, ['ycombinator']);
-addEvent('Peter Thiel co-founded Palantir after PayPal', 2003, undefined, ['paypal_co']);
+addEvent('traitorous_eight', 'The "Traitorous Eight" left Shockley Semiconductor to found Fairchild, effectively birthing Silicon Valley.', 1957, undefined, ['william_shockley', 'fairchild', 'robert_noyce', 'gordon_moore']);
+addEvent('moores_law', 'Gordon Moore predicted that the number of transistors on a microchip would double every two years (Moore\'s Law).', 1965, undefined, ['gordon_moore', 'intel', 'transistor', 'ic']);
+addEvent('ai_winter', 'The "AI Winter" period saw reduced funding and interest in artificial intelligence research due to overhyped expectations.', 1974, 1980, ['geoffrey_hinton']);
+addEvent('apple_1984_commercial', 'Apple aired the iconic "1984" commercial during the Super Bowl to introduce the Macintosh.', 1984, undefined, ['apple', 'steve_jobs', 'macintosh']);
+addEvent('browser_wars', 'The "Browser Wars" raged between Netscape Navigator and Microsoft Internet Explorer for market dominance.', 1995, 2001, ['microsoft', 'netscape_co', 'marc_andreessen', 'bill_gates']);
+addEvent('deep_blue_kasparov', 'IBM\'s Deep Blue supercomputer defeated world chess champion Garry Kasparov, a milestone for AI.', 1997, undefined, ['ibm']);
+addEvent('us_v_microsoft', 'United States v. Microsoft Corp. ruled that Microsoft abused its monopoly power on Intel-based PCs.', 1998, 2001, ['microsoft', 'bill_gates', 'intel', 'windows_95']);
+addEvent('dotcom_bubble', 'The Dot-com Bubble burst, causing a massive stock market crash and the collapse of many internet startups.', 2000, 2002, ['amazon', 'cisco', 'softbank', 'google', 'jeff_bezos']);
+addEvent('iphone_unveil', 'Steve Jobs unveiled the iPhone, combining a widescreen iPod, a revolutionary mobile phone, and a breakthrough internet communicator.', 2007, undefined, ['apple', 'steve_jobs', 'iphone']);
+addEvent('bitcoin_genesis', 'Satoshi Nakamoto mined the Genesis Block of Bitcoin amidst the global financial crisis.', 2009, undefined, ['bitcoin', 'satoshi_nakamoto']);
+addEvent('apple_samsung_lawsuit', 'Apple and Samsung engaged in a series of high-profile patent lawsuits across multiple countries regarding smartphone designs.', 2011, 2018, ['apple', 'samsung', 'tim_cook']);
+addEvent('snowden_leaks', 'Edward Snowden\'s leaks prompted tech giants to accelerate the adoption of end-to-end encryption and SSL/TLS.', 2013, undefined, ['google', 'apple', 'meta', 'ssl_tls', 'rsa']);
+addEvent('alphago_lee_sedol', 'AlphaGo defeated 18-time world champion Lee Sedol in Seoul, demonstrating the power of deep reinforcement learning.', 2016, undefined, ['deepmind', 'alphago', 'google', 'demis_hassabis']);
+addEvent('cambridge_analytica', 'The Cambridge Analytica scandal revealed massive data privacy breaches, leading to increased scrutiny on social media platforms.', 2018, undefined, ['meta', 'mark_zuckerberg']);
+addEvent('chip_shortage', 'A global semiconductor shortage disrupted industries from automotive to consumer electronics, highlighting supply chain fragility.', 2020, 2023, ['tsmc', 'samsung', 'intel', 'nvidia', 'apple', 'tesla']);
+addEvent('ethereum_merge', 'Ethereum completed "The Merge," transitioning from Proof-of-Work to Proof-of-Stake, reducing energy consumption by 99.9%.', 2022, undefined, ['ethereum', 'vitalik_buterin']);
+addEvent('chatgpt_launch', 'OpenAI released ChatGPT, triggering a global generative AI arms race among big tech companies.', 2022, undefined, ['openai', 'chatgpt', 'google', 'microsoft', 'sam_altman']);
+addEvent('altman_firing', 'Sam Altman was abruptly fired and then reinstated as CEO of OpenAI after intense pressure from employees and Microsoft.', 2023, undefined, ['openai', 'sam_altman', 'microsoft', 'satya_nadella', 'ilya_sutskever']);
+addEvent('nvidia_trillion', 'Driven by the AI boom and H100 demand, NVIDIA joined the club of companies with a market cap over $1 trillion.', 2023, undefined, ['nvidia', 'jensen_huang', 'nvidia_h100']);
+addEvent('fugaku_covid', 'Fugaku was used for COVID-19 droplet analysis simulations', 2020, undefined, ['fugaku']);
+addEvent('sequoia_whatsapp', 'Sequoia Capital was the sole investor in WhatsApp ($60M total)', 2011, undefined, ['sequoia']);
+addEvent('yc_justintv', 'Y Combinator funded Justin.tv which became Twitch', 2007, undefined, ['ycombinator']);
+addEvent('thiel_palantir', 'Peter Thiel co-founded Palantir after PayPal', 2003, undefined, ['paypal_co']);
 
 export const INITIAL_DATA: GraphData = { nodes, links, events };

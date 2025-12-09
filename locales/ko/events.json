@@ -1,0 +1,71 @@
+{
+  "traitorous_eight": {
+    "story": "\"Traitorous Eight\"는 Shockley Semiconductor를 떠나 Fairchild를 설립하며 실리콘 밸리의 탄생을 이끌었습니다."
+  },
+  "moores_law": {
+    "story": "Gordon Moore는 마이크로칩의 트랜지스터 수가 2년마다 두 배로 증가할 것이라고 예측했습니다 (Moore's Law)."
+  },
+  "ai_winter": {
+    "story": "\"AI Winter\" 시기에는 과장된 기대감으로 인해 인공 지능 연구에 대한 자금 지원과 관심이 감소했습니다."
+  },
+  "apple_1984_commercial": {
+    "story": "Apple은 Macintosh를 소개하기 위해 Super Bowl 경기 중 상징적인 \"1984\" 광고를 방영했습니다."
+  },
+  "browser_wars": {
+    "story": "\"Browser Wars\"는 시장 점유율을 놓고 Netscape Navigator와 Microsoft Internet Explorer 간에 치열하게 벌어졌습니다."
+  },
+  "deep_blue_kasparov": {
+    "story": "IBM의 Deep Blue 슈퍼컴퓨터가 세계 체스 챔피언 Garry Kasparov를 꺾으면서 AI의 이정표를 세웠습니다."
+  },
+  "us_v_microsoft": {
+    "story": "United States v. Microsoft Corp. 소송에서 Microsoft가 Intel 기반 PC 시장에서 독점적 지위를 남용했다고 판결했습니다."
+  },
+  "dotcom_bubble": {
+    "story": "닷컴 버블이 붕괴되면서 대규모 주식 시장 폭락과 많은 인터넷 스타트업의 몰락을 초래했습니다."
+  },
+  "iphone_unveil": {
+    "story": "Steve Jobs는 와이드스크린 iPod, 혁신적인 휴대 전화, 획기적인 인터넷 커뮤니케이터를 결합한 iPhone을 공개했습니다."
+  },
+  "bitcoin_genesis": {
+    "story": "Satoshi Nakamoto는 글로벌 금융 위기 속에서 Bitcoin의 제네시스 블록을 채굴했습니다."
+  },
+  "apple_samsung_lawsuit": {
+    "story": "Apple과 Samsung은 스마트폰 디자인과 관련하여 여러 국가에서 일련의 주목할 만한 특허 소송을 진행했습니다."
+  },
+  "snowden_leaks": {
+    "story": "Edward Snowden의 폭로는 대형 기술 기업들이 종단 간 암호화 및 SSL/TLS 도입을 가속화하도록 촉발했습니다."
+  },
+  "alphago_lee_sedol": {
+    "story": "AlphaGo는 서울에서 18회 세계 챔피언 Lee Sedol을 꺾고 심층 강화 학습의 힘을 입증했습니다."
+  },
+  "cambridge_analytica": {
+    "story": "Cambridge Analytica 스캔들은 대규모 데이터 프라이버시 침해를 드러내며 소셜 미디어 플랫폼에 대한 감시를 강화하게 했습니다."
+  },
+  "chip_shortage": {
+    "story": "글로벌 반도체 부족은 자동차에서 가전 제품에 이르기까지 산업 전반에 걸쳐 혼란을 야기하며 공급망의 취약성을 강조했습니다."
+  },
+  "ethereum_merge": {
+    "story": "Ethereum은 \"The Merge\"를 완료하여 작업 증명에서 지분 증명으로 전환하여 에너지 소비를 99.9% 줄였습니다."
+  },
+  "chatgpt_launch": {
+    "story": "OpenAI는 ChatGPT를 출시하여 빅테크 기업 간의 글로벌 생성형 AI 경쟁을 촉발했습니다."
+  },
+  "altman_firing": {
+    "story": "Sam Altman은 갑작스럽게 해고되었다가 직원과 Microsoft의 강력한 압력 이후 OpenAI의 CEO로 복귀했습니다."
+  },
+  "nvidia_trillion": {
+    "story": "AI 붐과 H100 수요에 힘입어 NVIDIA는 시가 총액 1조 달러 이상의 기업 클럽에 합류했습니다."
+  },
+  "fugaku_covid": {
+    "story": "Fugaku는 COVID-19 비말 분석 시뮬레이션에 사용되었습니다."
+  },
+  "sequoia_whatsapp": {
+    "story": "Sequoia Capital은 WhatsApp에 대한 유일한 투자자였습니다(총 6천만 달러)."
+  },
+  "yc_justintv": {
+    "story": "Y Combinator는 Twitch가 된 Justin.tv에 투자했습니다."
+  },
+  "thiel_palantir": {
+    "story": "Peter Thiel은 PayPal 이후 Palantir를 공동 창립했습니다."
+  }
+}
