@@ -1,1 +1,1493 @@
-{}
+{
+    "robert_noyce__intel": {
+        "story": "ロバート・ノイスがインテルの前身となるNMエレクトロニクスを設立"
+    },
+    "gordon_moore__intel": {
+        "story": "半導体メモリ技術に注力するため、ゴードン・ムーアがインテルを共同設立"
+    },
+    "morris_chang__tsmc": {
+        "story": "台湾政府の支援を受け、モリス・チャンがTSMCを設立"
+    },
+    "jensen_huang__nvidia": {
+        "story": "3Dグラフィックス計算の加速を目指し、ジェンスン・フアンがNVIDIAを共同設立"
+    },
+    "steve_jobs__apple": {
+        "story": "Apple Iを販売するため、スティーブ・ジョブズがガレージでAppleを創業"
+    },
+    "steve_wozniak__apple": {
+        "story": "スティーブ・ウォズニアックがApple IおよびIIを設計"
+    },
+    "bill_gates__microsoft": {
+        "story": "Altair 8800用BASICインタプリタ開発のため、ビル・ゲイツがマイクロソフトを設立"
+    },
+    "larry_ellison__oracle": {
+        "story": "オラクルの前身となるSoftware Development Laboratoriesをラリー・エリソンが設立"
+    },
+    "jeff_bezos__amazon": {
+        "story": "ジェフ・ベゾスがオンライン書店としてAmazonを開始"
+    },
+    "larry_page__google": {
+        "story": "自身のPageRankアルゴリズムに基づき、ラリー・ページがGoogleを設立"
+    },
+    "sergey_brin__google": {
+        "story": "スタンフォードでの研究中にセルゲイ・ブリンがGoogleを共同設立"
+    },
+    "marc_andreessen__netscape_co": {
+        "story": "モザイク・ブラウザの商用化のため、マーク・アンドリーセンがネットスケープを共同設立"
+    },
+    "reed_hastings__netflix_co": {
+        "story": "DVD郵送サービスとしてリード・ヘイスティングスがNetflixを共同創業"
+    },
+    "mark_zuckerberg__meta": {
+        "story": "マーク・ザッカーバーグがハーバードの寮からFacebookを立ち上げ"
+    },
+    "peter_thiel__paypal_co": {
+        "story": "後にPayPalに合併されるコンフィニティをピーター・ティールが共同設立"
+    },
+    "max_levchin__paypal_co": {
+        "story": "マックス・レヴチンがPayPalの不正防止システムを開発"
+    },
+    "elon_musk__paypal_co": {
+        "story": "イーロン・マスクが自身のX.comとコンフィニティを合併しPayPalを結成"
+    },
+    "elon_musk__spacex": {
+        "story": "宇宙輸送コスト削減のため、イーロン・マスクがSpaceXを設立"
+    },
+    "elon_musk__tesla": {
+        "story": "シリーズA投資家としてイーロン・マスクがテスラに参加し、会長に就任"
+    },
+    "elon_musk__openai": {
+        "story": "非営利AI研究組織としてイーロン・マスクがOpenAIを共同設立"
+    },
+    "sam_altman__openai": {
+        "story": "サム・アルトマンがOpenAIを共同設立し、後にCEOに就任"
+    },
+    "demis_hassabis__deepmind": {
+        "story": "汎用知能の実現を目指し、デミス・ハサビスがDeepMindを設立"
+    },
+    "jack_ma__alibaba": {
+        "story": "ジャック・マーが友人と共に自宅アパートでアリババを創業"
+    },
+    "pony_ma__tencent": {
+        "story": "OICQメッセージングサービス開始のため、ポニー・マーがテンセントを設立"
+    },
+    "chad_hurley__youtube": {
+        "story": "動画共有プラットフォームYouTubeをチャド・ハーリーが共同設立"
+    },
+    "travis_kalanick__uber_co": {
+        "story": "UberCabとしてトラビス・カラニックがUberを共同創業"
+    },
+    "patrick_collison__stripe_co": {
+        "story": "オンライン決済の簡素化のため、パトリック・コリソンがStripeを設立"
+    },
+    "marc_benioff__salesforce_co": {
+        "story": "クラウド経由でのソフト提供のため、マーク・ベニオフがセールスフォースを設立"
+    },
+    "don_valentine__sequoia": {
+        "story": "ドン・バレンタインがベンチャーキャピタル、セコイア・キャピタルを設立"
+    },
+    "paul_graham__ycombinator": {
+        "story": "ポール・グレアムがスタートアップアクセラレータYコンビネータを共同設立"
+    },
+    "marc_andreessen__a16z": {
+        "story": "マーク・アンドリーセンがVCファームAndreessen Horowitzを共同設立"
+    },
+    "masayoshi_son__softbank": {
+        "story": "孫正義がソフト流通業者としてソフトバンクを設立"
+    },
+    "cisco__cisco_router": {
+        "story": "初の商業的に成功したマルチプロトコルルーターをシスコが開発"
+    },
+    "qualcomm__5g_nr": {
+        "story": "クアルコムが世界的な5G標準規格の開発を主導"
+    },
+    "samsung__5g_nr": {
+        "story": "サムスンが5Gネットワーク機器の早期商用化をリード"
+    },
+    "alan_turing__turing_machine": {
+        "story": "アラン・チューリングが計算の数学的モデルを提唱"
+    },
+    "claude_shannon__info_theory": {
+        "story": "クロード・シャノンが「通信の数学的理論」を発表"
+    },
+    "william_shockley__transistor": {
+        "story": "ウィリアム・ショックレーが点接触型トランジスタを共同発明"
+    },
+    "robert_noyce__ic": {
+        "story": "ロバート・ノイスがモノリシック集積回路を発明"
+    },
+    "tim_berners_lee__www": {
+        "story": "CERNにてティム・バーナーズ＝リーがHTML、HTTP、Webブラウザを開発"
+    },
+    "dennis_ritchie__unix": {
+        "story": "ベル研究所にてデニス・リッチーがUNIX OSを共同開発"
+    },
+    "dennis_ritchie__c_lang": {
+        "story": "UNIXシステム記述のため、デニス・リッチーがC言語を開発"
+    },
+    "linus_torvalds__linux": {
+        "story": "リーナス・トーバルズがLinuxカーネルをフリーソフトとして公開"
+    },
+    "linus_torvalds__git": {
+        "story": "Linuxカーネル開発のため、リーナス・トーバルズがGitを作成"
+    },
+    "satoshi_nakamoto__bitcoin": {
+        "story": "サトシ・ナカモトがホワイトペーパーを発表し、ジェネシスブロックを採掘"
+    },
+    "vitalik_buterin__ethereum": {
+        "story": "ヴィタリック・ブテリンが分散型アプリプラットフォームとしてイーサリアムを提案"
+    },
+    "geoffrey_hinton__alexnet": {
+        "story": "畳み込みニューラルネットワークに関する画期的な論文をジェフリー・ヒントンが共著"
+    },
+    "yann_lecun__alexnet": {
+        "story": "AlexNetにつながるCNNアーキテクチャ(LeNet)をヤン・ルカンが開拓"
+    },
+    "ilya_sutskever__transformer": {
+        "story": "イリヤ・サツケヴァーが論文「Attention Is All You Need」を共著"
+    },
+    "google__word2vec": {
+        "story": "単語をベクトル表現するためにGoogleがWord2Vecを作成"
+    },
+    "marc_andreessen__mosaic": {
+        "story": "最初の普及型グラフィカルブラウザMosaicをマーク・アンドリーセンが共同開発"
+    },
+    "anthropic__claude": {
+        "story": "AnthropicがAIアシスタントClaudeをリリース"
+    },
+    "openai__sora": {
+        "story": "OpenAIが動画生成モデルSoraを発表"
+    },
+    "bell_labs__transistor": {
+        "story": "ベル研究所の研究者らが点接触型トランジスタを発明"
+    },
+    "bell_labs__unix": {
+        "story": "ベル研究所がUNIXオペレーティングシステムを開発"
+    },
+    "bell_labs__c_lang": {
+        "story": "ベル研究所がCプログラミング言語を開発"
+    },
+    "fairchild__ic": {
+        "story": "フェアチャイルドが初の商用的に実用可能な集積回路を開発"
+    },
+    "intel__x86": {
+        "story": "インテルが8086プロセッサでx86アーキテクチャを導入"
+    },
+    "intel__microprocessor": {
+        "story": "インテルが初の商用マイクロプロセッサ4004をリリース"
+    },
+    "nvidia__gpu_geforce": {
+        "story": "GeForce 256の発売に伴い、NVIDIAがGPUという用語を提唱"
+    },
+    "nvidia__nvidia_h100": {
+        "story": "大規模AIワークロード向けにNVIDIAがH100 GPUをリリース"
+    },
+    "nvidia__cuda": {
+        "story": "NVIDIAが並列コンピューティングプラットフォームCUDAをリリース"
+    },
+    "arm_ltd__arm_arch": {
+        "story": "Armホールディングスが電力効率に優れたRISCアーキテクチャを設計"
+    },
+    "arm_ltd__arm_cortex": {
+        "story": "ArmホールディングスがCortexプロセッサファミリをリリース"
+    },
+    "asml__euv": {
+        "story": "ASMLが初のEUVリソグラフィ試作機を出荷"
+    },
+    "tsmc__foundry_model": {
+        "story": "TSMCが専業半導体ファウンドリのビジネスモデルを開拓"
+    },
+    "ibm__ibm_360": {
+        "story": "IBMがメインフレーム・ファミリSystem/360を発表"
+    },
+    "sony__walkman": {
+        "story": "ソニーがTPS-L2 ウォークマンを発売"
+    },
+    "sony__optical_disc": {
+        "story": "ソニーがフィリップスと共にコンパクトディスク(CD)を共同開発"
+    },
+    "apple__macintosh": {
+        "story": "スーパーボウルCM「1984」と共にAppleがMacintoshを発表"
+    },
+    "apple__iphone": {
+        "story": "iPhoneの発売によりAppleが携帯電話を再発明"
+    },
+    "apple__ios": {
+        "story": "AppleがiPhone OS（後のiOS）をリリース"
+    },
+    "apple__app_store": {
+        "story": "Appleがサードパーティ開発者にApp Storeを開放"
+    },
+    "apple__vision_pro": {
+        "story": "Appleが空間コンピュータVision Proを発表"
+    },
+    "tesla__model_s": {
+        "story": "テスラが高級電気セダンModel Sを発売"
+    },
+    "tesla__tesla_autopilot": {
+        "story": "テスラが運転支援機能オートパイロットを導入"
+    },
+    "spacex__spacex_falcon9": {
+        "story": "SpaceXがファルコン9の打ち上げに初成功"
+    },
+    "spacex__starlink": {
+        "story": "SpaceXがスターリンク衛星の打ち上げを開始"
+    },
+    "spacex__starship": {
+        "story": "SpaceXがスターシップの初の統合飛行試験を実施"
+    },
+    "dji__dji_phantom": {
+        "story": "DJIがPhantomシリーズで消費者向けドローンを普及"
+    },
+    "xerox_parc__ethernet": {
+        "story": "ゼロックスPARCがローカルエリア接続用イーサネットを発明"
+    },
+    "att__bell_labs": {
+        "story": "AT&Tはベル研究所の親会社として機能"
+    },
+    "microsoft__windows_95": {
+        "story": "スタートメニューを備えたWindows 95をマイクロソフトがリリース"
+    },
+    "microsoft__excel": {
+        "story": "マイクロソフトがExcelの最初のGUI版をリリース"
+    },
+    "microsoft__copilot": {
+        "story": "マイクロソフトがOffice 365にAI Copilotを統合"
+    },
+    "oracle__oracle_db": {
+        "story": "オラクルが初の商用SQL関係データベースをリリース"
+    },
+    "adobe__photoshop": {
+        "story": "アドビがPhotoshopバージョン1.0をリリース"
+    },
+    "salesforce_co__salesforce_crm": {
+        "story": "セールスフォースが初のSaaS CRMプラットフォームを開始"
+    },
+    "netscape_co__netscape": {
+        "story": "ネットスケープがNavigatorウェブブラウザをリリース"
+    },
+    "netscape_co__javascript": {
+        "story": "ネットスケープにてブレンダン・アイクがJavaScriptを開発"
+    },
+    "netscape_co__ssl_tls": {
+        "story": "ネットスケープがSSL 2.0プロトコルを導入"
+    },
+    "google__google_search": {
+        "story": "Googleが検索エンジンを開始"
+    },
+    "google__android": {
+        "story": "GoogleがAndroid 1.0をリリース"
+    },
+    "google__google_chrome": {
+        "story": "GoogleがChromeウェブブラウザをリリース"
+    },
+    "google__mapreduce": {
+        "story": "GoogleがMapReduceに関する研究論文を発表"
+    },
+    "google__transformer": {
+        "story": "Googleが論文「Attention Is All You Need」を発表"
+    },
+    "google__tpu": {
+        "story": "GoogleがデータセンターにTPUを配備"
+    },
+    "google__gemini": {
+        "story": "GoogleがマルチモーダルAIモデルGeminiをリリース"
+    },
+    "deepmind__alphago": {
+        "story": "DeepMindのAlphaGoがイ・セドルに勝利"
+    },
+    "deepmind__alphago_zero": {
+        "story": "DeepMindがデータなしで囲碁を習得したAlphaGo Zeroを作成"
+    },
+    "meta__facebook": {
+        "story": "ハーバード大から「TheFacebook」をメタが開始"
+    },
+    "meta__pytorch": {
+        "story": "メタがPyTorch深層学習フレームワークをリリース"
+    },
+    "openai__chatgpt": {
+        "story": "OpenAIがChatGPTをリサーチプレビューとして公開"
+    },
+    "netflix_co__netflix": {
+        "story": "Netflixがストリーミング動画サービスを開始"
+    },
+    "spotify_co__spotify": {
+        "story": "Spotifyが音楽ストリーミングサービスを開始"
+    },
+    "uber_co__uber_app": {
+        "story": "サンフランシスコでUberが配車アプリを開始"
+    },
+    "paypal_co__paypal": {
+        "story": "PayPalが送金サービスを開始"
+    },
+    "stripe_co__stripe": {
+        "story": "Stripeが開発者向け決済APIをリリース"
+    },
+    "bytedance__tiktok": {
+        "story": "ByteDanceが抖音の国際版としてTikTokを開始"
+    },
+    "tencent__wechat": {
+        "story": "テンセントがモバイルメッセージアプリWeChatをリリース"
+    },
+    "amazon__amazon_com": {
+        "story": "Amazonがオンライン書店を開始"
+    },
+    "broadcom__wifi": {
+        "story": "ブロードコムがスマホ・ルーター向けWiFiチップの主要供給元となる"
+    },
+    "sun_micro__java": {
+        "story": "「どこでも動く」プラットフォームとしてSunがJavaを開発"
+    },
+    "darpa__arpanet": {
+        "story": "インターネットの原型、ARPANETの開発にDARPAが資金提供"
+    },
+    "darpa__gps": {
+        "story": "軍用航法のため、DARPAがGPS衛星計画を開始"
+    },
+    "marvin_minsky__mit_csail": {
+        "story": "CSAILの前身となるMIT AIラボをマービン・ミンスキーが共同設立"
+    },
+    "john_mccarthy__stanford_ai_lab": {
+        "story": "AIという言葉を作った後、ジョン・マッカーシーがスタンフォードAIラボを設立"
+    },
+    "stanford_ai_lab__cisco": {
+        "story": "学内ネット接続のためスタンフォードの夫婦がシスコを設立"
+    },
+    "cern__www": {
+        "story": "CERNにてティム・バーナーズ＝リーがWorld Wide Webを発明"
+    },
+    "ibm__dram": {
+        "story": "IBM研究員ロバート・デナードがDRAMを発明"
+    },
+    "ibm__floppy": {
+        "story": "携帯保存用としてIBMがフロッピーディスクを発明"
+    },
+    "ibm__sql": {
+        "story": "関係データベース管理のためIBMがSQLを開発"
+    },
+    "adobe__postscript": {
+        "story": "レーザー印刷を可能にするPostScript開発のためアドビを設立"
+    },
+    "adobe__illustrator": {
+        "story": "元はMacintosh用としてアドビがIllustratorをリリース"
+    },
+    "adobe__premiere_pro": {
+        "story": "PC向けプロ用動画編集ソフトPremiereをアドビが発売"
+    },
+    "adobe__pdf": {
+        "story": "あらゆるシステムで文書閲覧を可能にするPDFをアドビが発明"
+    },
+    "deepmind__nano_banana": {
+        "story": "コードネームNano BananaでGemini 2.5画像モデルを公開"
+    },
+    "lithography__ic": {
+        "story": "リソグラフィにより集積回路への微細回路転写が可能に"
+    },
+    "lithography__euv": {
+        "story": "より高精度な処理のためリソグラフィがEUVへと進化"
+    },
+    "lithography__lidar": {
+        "story": "リソグラフィがLiDARセンサーの微細加工を実現"
+    },
+    "lithography__cmos": {
+        "story": "CMOSセンサー製造における不可欠な工程がリソグラフィ"
+    },
+    "euv__nvidia_h100": {
+        "story": "EUVリソグラフィがNVIDIA H100の4nmプロセス製造を実現"
+    },
+    "euv__arm_cortex": {
+        "story": "EUVリソグラフィが最先端Arm Cortexコアの製造を実現"
+    },
+    "ic__microprocessor": {
+        "story": "CPU機能を持つ複雑な集積回路がマイクロプロセッサ"
+    },
+    "ic__dram": {
+        "story": "集積回路を用いてDRAMメモリを実現"
+    },
+    "ic__nand": {
+        "story": "集積回路を用いてNANDフラッシュを実現"
+    },
+    "hbm__nvidia_h100": {
+        "story": "NVIDIA H100の学習に必要なメモリ帯域をHBMが提供"
+    },
+    "hbm__tpu": {
+        "story": "Google TPUにHBMが高速メモリアクセスを提供"
+    },
+    "optical_fiber__tcp_ip": {
+        "story": "世界のTCP/IPトラフィックの物理層となる光ファイバー"
+    },
+    "optical_fiber__5g_nr": {
+        "story": "5G基地局のバックホール接続に光ファイバーが必須"
+    },
+    "blue_led__optical_disc": {
+        "story": "高密度光ディスクに必要な短波長を青色LEDが可能に"
+    },
+    "cmos__lidar": {
+        "story": "CMOS技術がLiDARシステムのセンサー基盤を提供"
+    },
+    "microprocessor__unix": {
+        "story": "マイクロプロセッサがUNIX実行のためのハードウェア基盤を提供"
+    },
+    "x86__linux": {
+        "story": "x86アーキテクチャがLinuxの初期開発プラットフォームに"
+    },
+    "x86__windows_95": {
+        "story": "Windows 95の支配的なプラットフォームとなったx86"
+    },
+    "x86__toshiba_t1100": {
+        "story": "インテル80C88 x86プロセッサが東芝T1100を駆動"
+    },
+    "arm_arch__ios": {
+        "story": "iOSデバイスのAppleシリコンの基盤はARMアーキテクチャ"
+    },
+    "arm_arch__android": {
+        "story": "Androidデバイスの支配的プラットフォームはARMアーキテクチャ"
+    },
+    "arm_arch__vision_pro": {
+        "story": "Vision ProのM2/R1チップをARMアーキテクチャが駆動"
+    },
+    "arm_arch__fugaku": {
+        "story": "富岳のA64FXチップをARMアーキテクチャが駆動"
+    },
+    "gpu_geforce__cuda": {
+        "story": "GeForce GPUがCUDA並列計算のためのハードウェアを提供"
+    },
+    "gpu_geforce__ethereum": {
+        "story": "イーサリアムのPoWマイニングにGPUが使用された"
+    },
+    "nvidia_h100__cuda": {
+        "story": "NVIDIA H100は最新のCUDAアーキテクチャに最適化"
+    },
+    "nvidia_h100__pytorch": {
+        "story": "PyTorchの加速バックエンドとしてNVIDIA H100が機能"
+    },
+    "nvidia_h100__chatgpt": {
+        "story": "ChatGPTの学習・推論ハードウェアをNVIDIA H100が提供"
+    },
+    "nvidia_h100__bytedance": {
+        "story": "ByteDanceのAIインフラをNVIDIA H100が支える"
+    },
+    "nvidia_h100__tencent": {
+        "story": "テンセントのクラウドAIインフラをNVIDIA H100が支える"
+    },
+    "nvidia_h100__starship": {
+        "story": "スターシップのCFDシミュレーションをNVIDIA H100が実行"
+    },
+    "nvidia_h100__sora": {
+        "story": "Sora動画生成の学習計算をNVIDIA H100が提供"
+    },
+    "tpu__tensorflow": {
+        "story": "Google TPUがTensorFlow向けカスタムハードウェア加速を提供"
+    },
+    "tcp_ip__www": {
+        "story": "TCP/IPがWWWの基礎となる転送プロトコルを提供"
+    },
+    "tcp_ip__aws_cloud": {
+        "story": "TCP/IPがAWSクラウドサービスのネットワーク基盤"
+    },
+    "tcp_ip__skype": {
+        "story": "SkypeのVoIP用転送レイヤーをTCP/IPが提供"
+    },
+    "ssl_tls__aws_cloud": {
+        "story": "AWSクラウドの通信セキュリティをSSL/TLSが保証"
+    },
+    "ssl_tls__paypal_co": {
+        "story": "PayPalの金融取引をSSL/TLSが保護"
+    },
+    "ssl_tls__amazon_com": {
+        "story": "Amazonの安全なEコマースをSSL/TLSが可能に"
+    },
+    "ssl_tls__zero_trust": {
+        "story": "ゼロトラスト・アーキテクチャの必須要件がSSL/TLS暗号化"
+    },
+    "rsa__ssl_tls": {
+        "story": "SSL/TLSの鍵交換アルゴリズムをRSAが提供"
+    },
+    "rsa__bitcoin": {
+        "story": "RSAの原理がビットコインの公開鍵暗号技術に影響"
+    },
+    "rsa__git": {
+        "story": "GitのSSH認証にRSAを使用"
+    },
+    "rsa__amazon_com": {
+        "story": "Amazonでの安全な決済をRSAが可能に"
+    },
+    "cisco_router__aws_cloud": {
+        "story": "クラウド事業者のデータセンターNWをシスコルーターが管理"
+    },
+    "cisco_router__att": {
+        "story": "シスコルーターがAT&Tネットワークの根幹を形成"
+    },
+    "cisco_router__google": {
+        "story": "Googleの初期ネットワークインフラをシスコルーターが支援"
+    },
+    "optical_fiber__att": {
+        "story": "AT&Tの基幹伝送媒体として光ファイバーが機能"
+    },
+    "optical_fiber__starlink": {
+        "story": "スターリンク地上局と基幹網を光ファイバーが接続"
+    },
+    "linux__android": {
+        "story": "Android OSの中核としてLinuxカーネルが機能"
+    },
+    "linux__aws_cloud": {
+        "story": "AWSクラウドの主要サーバーOSはLinux"
+    },
+    "linux__docker": {
+        "story": "Linuxカーネル機能(cgroups)がDockerコンテナを実現"
+    },
+    "linux__git": {
+        "story": "Gitの初期開発プラットフォームはLinux"
+    },
+    "linux__sap": {
+        "story": "SAP HANAプラットフォームのOSはLinux"
+    },
+    "linux__fugaku": {
+        "story": "スーパーコンピュータ富岳でRed Hat Enterprise Linuxが稼働"
+    },
+    "linux__starship": {
+        "story": "スターシップの飛行ソフトをLinuxが実行"
+    },
+    "linux__raspberry_pi": {
+        "story": "Raspberry Piの標準OSはRaspbian(Linux)"
+    },
+    "aws_cloud__docker": {
+        "story": "DockerコンテナのホスティングをAWSクラウドが提供"
+    },
+    "aws_cloud__netflix": {
+        "story": "データセンターからの移行をAWSクラウドがNetflixに提供"
+    },
+    "aws_cloud__zoom": {
+        "story": "ZoomのビデオインフラをAWSクラウドが提供"
+    },
+    "aws_cloud__slack": {
+        "story": "Slackのメッセージング基盤をAWSクラウドが提供"
+    },
+    "aws_cloud__uber_app": {
+        "story": "Uberの計算インフラをAWSクラウドが提供"
+    },
+    "aws_cloud__stripe": {
+        "story": "Stripeの決済処理インフラをAWSクラウドがホスト"
+    },
+    "aws_cloud__copilot": {
+        "story": "GitHub Copilot用モデルをAWSクラウドが提供"
+    },
+    "aws_cloud__netflix_co": {
+        "story": "Netflixの中核インフラ事業者はAWSクラウド"
+    },
+    "aws_cloud__uber_co": {
+        "story": "AWSクラウドによりUberの世界展開が可能に"
+    },
+    "aws_cloud__stripe_co": {
+        "story": "Stripeの信頼できる稼働時間をAWSクラウドが保証"
+    },
+    "aws_cloud__huggingface": {
+        "story": "Hugging FaceのモデルハブをAWSクラウドがホスト"
+    },
+    "aws_cloud__anthropic": {
+        "story": "Anthropicの学習インフラをAWSクラウドが提供"
+    },
+    "aws_cloud__twitter": {
+        "story": "Twitterの部分的クラウド移行をAWSクラウドが支援"
+    },
+    "aws_cloud__claude": {
+        "story": "Claudeモデルの推論をAWSクラウドがホスト"
+    },
+    "java__android": {
+        "story": "Androidアプリ開発の主要言語はJava"
+    },
+    "cuda__pytorch": {
+        "story": "PyTorchのGPU加速をCUDAが可能に"
+    },
+    "cuda__tensorflow": {
+        "story": "TensorFlowのGPU加速をCUDAが可能に"
+    },
+    "mapreduce__tensorflow": {
+        "story": "TensorFlowの分散処理はMapReduceの概念に影響"
+    },
+    "sql__sap": {
+        "story": "SAPデータベースのクエリ言語はSQL"
+    },
+    "oracle_db__salesforce_crm": {
+        "story": "セールスフォースCRMのバックエンドをOracle DBが駆動"
+    },
+    "oracle_db__sap": {
+        "story": "SAPのERPシステムをOracle DBが支援"
+    },
+    "oracle_db__amazon_com": {
+        "story": "Amazon初期システムの必須要素はOracle DB"
+    },
+    "pytorch__chatgpt": {
+        "story": "ChatGPTの学習に使用されたフレームワークはPyTorch"
+    },
+    "pytorch__stable_diffusion": {
+        "story": "Stable Diffusionモデルで使用されたのはPyTorch"
+    },
+    "pytorch__tesla_autopilot": {
+        "story": "テスラのコンピュータビジョン学習をPyTorchが支える"
+    },
+    "pytorch__huggingface": {
+        "story": "Hugging Faceがサポートする主要フレームワークはPyTorch"
+    },
+    "tensorflow__alphago": {
+        "story": "AlphaGoの深層学習モデルをTensorFlowが駆動"
+    },
+    "tensorflow__google_search": {
+        "story": "Googleのランクブレイン検索アルゴリズムをTensorFlowが駆動"
+    },
+    "tensorflow__tiktok": {
+        "story": "TikTokの推奨アルゴリズムをTensorFlowが駆動"
+    },
+    "google_chrome__google_search": {
+        "story": "ChromeがGoogle検索へのトラフィックを誘導"
+    },
+    "app_store__uber_app": {
+        "story": "Uberアプリの主要配信チャネルはApp Store"
+    },
+    "app_store__spotify": {
+        "story": "Spotifyのモバイル配信をApp Storeが可能に"
+    },
+    "app_store__tiktok": {
+        "story": "TikTokの世界配信をApp Storeが可能に"
+    },
+    "app_store__twitter": {
+        "story": "Twitterのモバイル利用をApp Storeが可能に"
+    },
+    "www__amazon_com": {
+        "story": "WWWがAmazonのECプラットフォームの基盤"
+    },
+    "www__mosaic": {
+        "story": "WWWのページ描画はMosaicに依存していた"
+    },
+    "zero_trust__aws_cloud": {
+        "story": "AWSアクセスのためのセキュリティ体系はゼロトラスト"
+    },
+    "zero_trust__salesforce_co": {
+        "story": "ゼロトラストがセールスフォースの企業データを保護"
+    },
+    "zero_trust__slack": {
+        "story": "ゼロトラストがSlackへの安全なアクセスを確保"
+    },
+    "transformer__huggingface": {
+        "story": "Hugging Faceライブラリの基盤はTransformer"
+    },
+    "transformer__claude": {
+        "story": "Claudeの基盤アーキテクチャはTransformer"
+    },
+    "openai__perplexity": {
+        "story": "OpenAIのAPIがPerplexityの初期推論を駆動"
+    },
+    "openai__cursor": {
+        "story": "OpenAI GPT-4がCursorのコード生成を駆動"
+    },
+    "claude__perplexity": {
+        "story": "PerplexityにClaude 3モデルが統合されている"
+    },
+    "claude__cursor": {
+        "story": "CursorにClaude 3モデルが統合されている"
+    },
+    "ios__iphone": {
+        "story": "iPhoneを動かすOSはiOS"
+    },
+    "ios__app_store": {
+        "story": "App StoreのプラットフォームをiOSが提供"
+    },
+    "ios__vision_pro": {
+        "story": "visionOSの基盤をiOSカーネルが提供"
+    },
+    "android__model_s": {
+        "story": "テスラのインフォテインメント基盤はAndroid/Linux"
+    },
+    "li_ion__iphone": {
+        "story": "リチウムイオン電池の密度がiPhoneのデザインを実現"
+    },
+    "li_ion__model_s": {
+        "story": "テスラモデルSのパックは18650リチウムイオンセルを使用"
+    },
+    "li_ion__dji_phantom": {
+        "story": "リチウムイオン電池がDJI Phantomの飛行時間を実現"
+    },
+    "gps__uber_app": {
+        "story": "GPSがUberにリアルタイム位置追跡を提供"
+    },
+    "gps__dji_phantom": {
+        "story": "GPSがドローンの安定化と自動帰還を実現"
+    },
+    "gps__tesla_autopilot": {
+        "story": "GPSがテスラ・オートパイロットにナビデータを提供"
+    },
+    "bluetooth__iphone": {
+        "story": "BluetoothがiPhoneと無線周辺機器を接続"
+    },
+    "bluetooth__model_s": {
+        "story": "BluetoothがモデルSのスマホキーと音声を接続"
+    },
+    "mp3__walkman": {
+        "story": "MP3対応がウォークマンをデジタルプレーヤーに変貌"
+    },
+    "floppy__windows_95": {
+        "story": "フロッピーディスクはWindows 95のインストール媒体"
+    },
+    "floppy__macintosh": {
+        "story": "フロッピーは初代マッキントッシュの主要ストレージ"
+    },
+    "floppy__excel": {
+        "story": "フロッピーディスクはExcelの配布メディアだった"
+    },
+    "lidar__boston_dynamics": {
+        "story": "ボストンダイナミクスのロボットにLiDARが空間認識を提供"
+    },
+    "lidar__uber_co": {
+        "story": "LiDARがUberの自動運転車両テストを可能に"
+    },
+    "cmos__iphone": {
+        "story": "CMOSセンサーがiPhoneのカメラを実現"
+    },
+    "cmos__tesla_autopilot": {
+        "story": "CMOSセンサーがオートパイロットに視覚データを提供"
+    },
+    "cmos__dji_phantom": {
+        "story": "CMOSセンサーがドローンの空撮を実現"
+    },
+    "cmos__vision_pro": {
+        "story": "CMOSセンサーがVision Proのパススルー映像を実現"
+    },
+    "arm_cortex__raspberry_pi": {
+        "story": "Raspberry PiのCPUコアとしてArm Cortexを採用"
+    },
+    "python__raspberry_pi": {
+        "story": "Raspberry Piの主要教育言語はPython"
+    },
+    "5g_nr__vision_pro": {
+        "story": "Vision Pro向けの低遅延ストリーミングを5Gが提供"
+    },
+    "5g_nr__dji_phantom": {
+        "story": "5G技術がOcuSync映像伝送に影響"
+    },
+    "5g_nr__tesla_autopilot": {
+        "story": "テスラの高速OTA更新とテレメトリを5Gが可能に"
+    },
+    "euv__tsmc": {
+        "story": "EUV露光がTSMCの7nm以下プロセス製造を実現"
+    },
+    "euv__samsung": {
+        "story": "EUV露光がサムスンの先端ファウンドリノードを実現"
+    },
+    "euv__intel": {
+        "story": "EUV露光がインテル4プロセスノードを実現"
+    },
+    "foundry_model__nvidia": {
+        "story": "ファウンドリモデルがNVIDIAのファブレス経営を実現"
+    },
+    "foundry_model__apple": {
+        "story": "ファウンドリモデルがAppleのカスタム半導体製造を実現"
+    },
+    "foundry_model__amd": {
+        "story": "ファウンドリモデルによりAMDはチップ設計に集中"
+    },
+    "foundry_model__qualcomm": {
+        "story": "ファウンドリモデルがQualcommのチップ量産を実現"
+    },
+    "arm_arch__apple": {
+        "story": "Apple A/Mシリーズチップの基礎はArmアーキテクチャ"
+    },
+    "arm_arch__qualcomm": {
+        "story": "Snapdragonプロセッサの基礎はArmアーキテクチャ"
+    },
+    "arm_arch__samsung": {
+        "story": "Exynosプロセッサの基礎はArmアーキテクチャ"
+    },
+    "nvidia_h100__openai": {
+        "story": "NVIDIA H100がOpenAIのモデル学習を加速"
+    },
+    "nvidia_h100__meta": {
+        "story": "NVIDIA H100がMetaでのLLaMA学習を駆動"
+    },
+    "nvidia_h100__tesla": {
+        "story": "NVIDIA H100がテスラのFSDスパコンを駆動"
+    },
+    "nvidia_h100__microsoft": {
+        "story": "NVIDIA H100がAzure AIインフラを駆動"
+    },
+    "broadcom__cisco": {
+        "story": "ブロードコムがシスコ機器にNWチップを供給"
+    },
+    "broadcom__apple": {
+        "story": "ブロードコムがiPhoneにWiFi/Bluetoothチップを供給"
+    },
+    "arpanet__cisco_router": {
+        "story": "ARPANETの成長がルーティング技術の必要性を創出"
+    },
+    "transistor__ibm": {
+        "story": "トランジスタによりIBMが商用コンピュータを製造可能に"
+    },
+    "ic__ibm": {
+        "story": "集積回路によりIBMがメインフレームを小型化"
+    },
+    "ic__ibm_360": {
+        "story": "集積回路がSystem/360の実用化と低価格化を実現"
+    },
+    "transistor__ibm_360": {
+        "story": "System/360でトランジスタが真空管を代替"
+    },
+    "c_lang__unity": {
+        "story": "UnityエンジンはC++コアとC#スクリプトを使用"
+    },
+    "gpu_geforce__unity": {
+        "story": "NVIDIA GPUがUnityゲームをリアルタイム描画"
+    },
+    "arm_cortex__unity": {
+        "story": "UnityゲームはArm搭載モバイル機器で動作"
+    },
+    "c_lang__unreal": {
+        "story": "Unreal Engineは完全にC++で記述されている"
+    },
+    "gpu_geforce__unreal": {
+        "story": "NVIDIA GPUがUnrealの写実的描画を駆動"
+    },
+    "nvidia_h100__unreal": {
+        "story": "Unreal Engine 5 NaniteはGPU計算を使用"
+    },
+    "turing_machine__microprocessor": {
+        "story": "マイクロプロセッサの計算限界をチューリングマシンが提示"
+    },
+    "info_theory__tcp_ip": {
+        "story": "TCP/IPのデータ伝送に情報理論が数学的基礎を提供"
+    },
+    "info_theory__cdma": {
+        "story": "情報理論がCDMAのスペクトラム拡散通信を実現"
+    },
+    "info_theory__5g_nr": {
+        "story": "情報理論が5Gの高度なチャネル符号化の基礎"
+    },
+    "info_theory__mp3": {
+        "story": "情報理論がMP3データ圧縮の基礎を提供"
+    },
+    "transistor__ic": {
+        "story": "集積回路は数十億のトランジスタを1チップに結合"
+    },
+    "transistor__blue_led": {
+        "story": "トランジスタがLEDのための半導体物理の基礎を確立"
+    },
+    "microprocessor__x86": {
+        "story": "マイクロプロセッサがPCを支配するx86へと進化"
+    },
+    "microprocessor__arm_arch": {
+        "story": "マイクロプロセッサの概念が高効率Armへと発展"
+    },
+    "dram__hbm": {
+        "story": "チップ積層によりDRAMが広帯域メモリ(HBM)へ進化"
+    },
+    "tcp_ip__ethernet": {
+        "story": "TCP/IPプロトコルはイーサネットスタック上で動作"
+    },
+    "ethernet__wifi": {
+        "story": "WiFiは無線LAN環境へイーサネット規格を適応"
+    },
+    "cdma__gsm": {
+        "story": "CDMA技術がGSM等のデジタル携帯規格の進化に影響"
+    },
+    "gsm__lte": {
+        "story": "GSM網は高速化のためLTE(4G)へと進化"
+    },
+    "lte__5g_nr": {
+        "story": "LTEインフラは広帯域5G NR標準へと進化"
+    },
+    "gps__5g_nr": {
+        "story": "GPSが5G網に重要なタイミング同期を提供"
+    },
+    "unix__c_lang": {
+        "story": "UNIXカーネル再記述のためC言語が作成された"
+    },
+    "unix__linux": {
+        "story": "UNIXの設計哲学がLinuxカーネルに直接影響"
+    },
+    "c_lang__python": {
+        "story": "Pythonインタプリタ(CPython)はC言語で実装"
+    },
+    "c_lang__java": {
+        "story": "Javaの構文はCおよびC++言語から派生"
+    },
+    "c_lang__sql": {
+        "story": "SQL用DBエンジンの主記述言語はC/C++"
+    },
+    "sql__oracle_db": {
+        "story": "Oracle DBがSQL言語標準を商用化"
+    },
+    "bittorrent__bitcoin": {
+        "story": "BitTorrentのP2P概念がビットコイン設計に影響"
+    },
+    "bitcoin__ethereum": {
+        "story": "イーサリアムは契約機能のためにビットコインの概念を拡張"
+    },
+    "alexnet__transformer": {
+        "story": "AlexNetがTransformerへと続く深層学習ブームに点火"
+    },
+    "word2vec__transformer": {
+        "story": "Word2Vec埋め込みはTransformerへの入力となる"
+    },
+    "word2vec__chatgpt": {
+        "story": "Word2VecがChatGPTの言語理解の基礎を築いた"
+    },
+    "gan__stable_diffusion": {
+        "story": "GANの概念がStable Diffusion用拡散モデルへ進化"
+    },
+    "gan__sora": {
+        "story": "GANの生成概念がSoraのような動画モデルへの道を拓く"
+    },
+    "gan__midjourney": {
+        "story": "GANの概念がMidjourney等の生成アートへの道を拓く"
+    },
+    "transformer__sora": {
+        "story": "SoraはTransformer内で時空パッチを使用"
+    },
+    "floppy__optical_disc": {
+        "story": "フロッピーから携帯保存用光ディスクへと進化"
+    },
+    "william_shockley__robert_noyce": {
+        "story": "ショックレーがロバート・ノイスを採用"
+    },
+    "robert_noyce__steve_jobs": {
+        "story": "Apple初期、ノイスがジョブズを指導"
+    },
+    "steve_jobs__mark_zuckerberg": {
+        "story": "ジョブズが会社構築についてザッカーバーグに助言"
+    },
+    "steve_jobs__tim_cook": {
+        "story": "ジョブズがティム・クックをCOOとして採用"
+    },
+    "don_valentine__steve_jobs": {
+        "story": "バレンタインはジョブズの初期投資家兼助言者"
+    },
+    "larry_ellison__marc_benioff": {
+        "story": "クラウド構想を巡りエリソンとベニオフが衝突"
+    },
+    "paul_graham__sam_altman": {
+        "story": "ポール・グレアムがアルトマンをYC社長に指名"
+    },
+    "paul_graham__patrick_collison": {
+        "story": "ポール・グレアムがStripeにYC経由で出資"
+    },
+    "peter_thiel__vitalik_buterin": {
+        "story": "ティールがブテリンにティール・フェローシップを授与"
+    },
+    "satoshi_nakamoto__vitalik_buterin": {
+        "story": "ナカモトのビットコインがイーサリアム開発に着想"
+    },
+    "xerox_parc__macintosh": {
+        "story": "ゼロックスPARCのGUIがMacのUIに着想"
+    },
+    "xerox_parc__windows_95": {
+        "story": "ゼロックスPARCのGUI概念がWindowsに影響"
+    },
+    "xerox_parc__adobe": {
+        "story": "ジョン・ワーノックがゼロックスPARCを出てアドビを創業"
+    },
+    "xerox_parc__microsoft": {
+        "story": "チャールズ・シモニーがゼロックスPARCからMSへ概念持ち込み"
+    },
+    "mosaic__netscape_co": {
+        "story": "アンドリーセンがMosaicとネットスケープを主導"
+    },
+    "mosaic__google_chrome": {
+        "story": "MosaicはChromeを含む近代的GUIブラウザの祖"
+    },
+    "toshiba_t1100__macintosh": {
+        "story": "東芝T1100がPowerBookのラップトップ形状を定義"
+    },
+    "spacex_falcon9__starship": {
+        "story": "ファルコン9の着陸技術がスターシップへ進化"
+    },
+    "tim_cook__apple": {
+        "story": "ティム・クックがAppleの運営と供給網を拡大"
+    },
+    "satya_nadella__microsoft": {
+        "story": "ナデラがMSの焦点をクラウドとAIに転換"
+    },
+    "satya_nadella__openai": {
+        "story": "ナデラがOpenAIとの戦略的提携を主導"
+    },
+    "sundar_pichai__google": {
+        "story": "ピチャイがChromeとAndroidの開発を主導"
+    },
+    "lisa_su__amd": {
+        "story": "リサ・スーがRyzenでAMDの再建を主導"
+    },
+    "roelof_botha__sequoia": {
+        "story": "ルロフ・ボサがセコイアのシニアスチュワードに就任"
+    },
+    "elon_musk__twitter": {
+        "story": "マスクがTwitterを買収しXへ名称変更"
+    },
+    "microsoft__skype": {
+        "story": "マイクロソフトがSkypeを85億ドルで買収"
+    },
+    "microsoft__cursor": {
+        "story": "CursorはマイクロソフトのVS Code上に構築"
+    },
+    "google__deepmind": {
+        "story": "GoogleがDeepMindを5億ドルで買収"
+    },
+    "google__uber_co": {
+        "story": "GoogleベンチャーズがUberへ2.58億ドル出資"
+    },
+    "google__boston_dynamics": {
+        "story": "Googleがロボット企業ボストンダイナミクスを買収"
+    },
+    "google__zero_trust": {
+        "story": "GoogleがBeyondCorpゼロトラストモデルを開拓"
+    },
+    "yann_lecun__meta": {
+        "story": "ヤン・ルカンがMetaのチーフAIサイエンティストに"
+    },
+    "yann_lecun__pytorch": {
+        "story": "ヤン・ルカンがPyTorch開発チームを率いた"
+    },
+    "reid_hoffman__facebook": {
+        "story": "リード・ホフマンはFacebook初期エンジェル投資家"
+    },
+    "reid_hoffman__airbnb": {
+        "story": "リード・ホフマンがAirbnbへのシリーズA投資を主導"
+    },
+    "reid_hoffman__microsoft": {
+        "story": "LinkedIn買収後、ホフマンがMSの取締役に"
+    },
+    "reid_hoffman__openai": {
+        "story": "リード・ホフマンはOpenAIの初期理事メンバー"
+    },
+    "sony__cmos": {
+        "story": "ソニーがCMOSセンサー市場の世界的リーダーに"
+    },
+    "sequoia__apple": {
+        "story": "セコイアがAppleへ15万ドル出資"
+    },
+    "sequoia__google": {
+        "story": "セコイアがGoogleへ1250万ドル出資"
+    },
+    "sequoia__nvidia": {
+        "story": "セコイアがNVIDIAの初期段階に出資"
+    },
+    "sequoia__paypal_co": {
+        "story": "セコイアがPayPalの初期段階に出資"
+    },
+    "sequoia__youtube": {
+        "story": "セコイアがYouTubeへ1150万ドル出資"
+    },
+    "sequoia__stripe_co": {
+        "story": "セコイアがStripeのシリーズAを主導"
+    },
+    "ycombinator__airbnb": {
+        "story": "YコンビネータがAirbnbへシード資金提供"
+    },
+    "ycombinator__stripe_co": {
+        "story": "YコンビネータがStripeへシード資金提供"
+    },
+    "ycombinator__openai": {
+        "story": "OpenAI創業時、サム・アルトマンがYCを指揮"
+    },
+    "a16z__meta": {
+        "story": "a16zがMetaの流通株に出資"
+    },
+    "a16z__airbnb": {
+        "story": "シェア経済を後押ししa16zがAirbnbに出資"
+    },
+    "a16z__stripe_co": {
+        "story": "a16zがStripeの決済大手への成長を支援"
+    },
+    "a16z__ethereum": {
+        "story": "a16zがイーサリアムエコシステムへ出資"
+    },
+    "a16z__openai": {
+        "story": "a16zが公開買付け経由でOpenAIに出資"
+    },
+    "arthur_rock__intel": {
+        "story": "アーサー・ロックはインテルの最初の出資者で会長"
+    },
+    "arthur_rock__apple": {
+        "story": "アーサー・ロックはAppleの初期投資家（5.7万ドル）"
+    },
+    "peter_thiel__meta": {
+        "story": "ピーター・ティールはFB初の外部投資家（50万ドル）"
+    },
+    "masayoshi_son__alibaba": {
+        "story": "孫正義がアリババへ2000万ドル出資"
+    },
+    "softbank__alibaba": {
+        "story": "ソフトバンクがアリババの主要株主に"
+    },
+    "softbank__arm_ltd": {
+        "story": "ソフトバンクがArmホールディングスを320億ドルで買収"
+    },
+    "softbank__uber_co": {
+        "story": "ソフトバンクがビジョン・ファンドでUberの主要株主に"
+    },
+    "softbank__boston_dynamics": {
+        "story": "ソフトバンクがGoogleからボストンダイナミクスを買収"
+    },
+    "amazon__anthropic": {
+        "story": "AmazonがAnthropicへ40億ドル出資"
+    },
+    "google__anthropic": {
+        "story": "GoogleがAnthropicへ20億ドル出資"
+    },
+    "jeff_bezos__perplexity": {
+        "story": "ジェフ・ベゾスがPerplexityのシリーズBに参加"
+    },
+    "nvidia__perplexity": {
+        "story": "NVIDIAがPerplexityのシリーズBに参加"
+    },
+    "fairchild__intel": {
+        "story": "ノイスとムーアがフェアチャイルドを去りインテル創業"
+    },
+    "fairchild__amd": {
+        "story": "サンダースがフェアチャイルドを去りAMD創業"
+    },
+    "fairchild__sequoia": {
+        "story": "バレンタインはセコイア前はフェアチャイルド営業責任者"
+    },
+    "paypal_co__spacex": {
+        "story": "PayPalの収益でマスクがSpaceXを設立"
+    },
+    "paypal_co__tesla": {
+        "story": "PayPalの収益でマスクがテスラに投資"
+    },
+    "paypal_co__linkedin": {
+        "story": "PayPalを経てホフマンがLinkedInを共同創業"
+    },
+    "paypal_co__youtube": {
+        "story": "PayPal勤務を経てハーリーらがYouTubeを共同創業"
+    },
+    "paypal_co__reid_hoffman": {
+        "story": "リード・ホフマンはPayPalの執行副社長を務めた"
+    },
+    "oracle__salesforce_co": {
+        "story": "DB対クラウドCRM市場でオラクルとセールスフォースが競合"
+    },
+    "hp__apple": {
+        "story": "HP勤務でジョブズはその工学文化に触発された"
+    },
+    "hp__xerox_parc": {
+        "story": "HPの文化がゼロックスPARCの研究姿勢に影響"
+    },
+    "hp__fairchild": {
+        "story": "HPがガレージ創業文化を確立し、フェアチャイルドが追随"
+    },
+    "hp__stanford_ai_lab": {
+        "story": "HPが研究協力でスタンフォードと提携"
+    },
+    "sun_micro__unix": {
+        "story": "Sunが商用UNIX系Solarisを作成"
+    },
+    "bell_labs__sun_micro": {
+        "story": "SunがAT&Tベル研からUNIXライセンスを取得"
+    },
+    "sun_micro__oracle": {
+        "story": "オラクルがSun Microsystemsを74億ドルで買収"
+    },
+    "stanford_ai_lab__sun_micro": {
+        "story": "スタンフォード卒業生らがSun Microsystemsを設立"
+    },
+    "darpa__tcp_ip": {
+        "story": "DARPAがARPANET用TCP/IP開発に資金提供"
+    },
+    "darpa__mit_csail": {
+        "story": "DARPAがMITの初期AI研究に資金提供"
+    },
+    "darpa__stanford_ai_lab": {
+        "story": "DARPAがスタンフォードAIラボへ主要資金提供"
+    },
+    "darpa__www": {
+        "story": "DARPAのARPANETがWWWの基礎を築いた"
+    },
+    "tim_berners_lee__mit_csail": {
+        "story": "WWW推進のためバーナーズ＝リーがMITで勤務"
+    },
+    "mit_csail__www": {
+        "story": "MIT CSAILがウェブ標準開発のためW3Cをホスト"
+    },
+    "geoffrey_hinton__mit_csail": {
+        "story": "ジェフリー・ヒントンはMITでミンスキーに師事"
+    },
+    "mit_csail__linux": {
+        "story": "MITのフリーソフト運動がLinux開発に影響"
+    },
+    "stanford_ai_lab__google": {
+        "story": "ページとブリンがスタンフォードでPageRankを開発"
+    },
+    "cern__linux": {
+        "story": "CERNが科学計算基盤にLinuxを採用"
+    },
+    "cern__mit_csail": {
+        "story": "CERNとMITがW3Cを通じてウェブ標準で協力"
+    },
+    "arpanet__tcp_ip": {
+        "story": "ARPANETがTCP/IPベースのインターネットへ進化"
+    },
+    "arpanet__www": {
+        "story": "ARPANETインフラ上にWWWが構築された"
+    },
+    "john_mccarthy__mit_csail": {
+        "story": "ジョン・マッカーシーがAI創設のダートマス会議を共催"
+    },
+    "john_mccarthy__deepmind": {
+        "story": "マッカーシーのAIビジョンがDeepMind研究に影響"
+    },
+    "john_mccarthy__unix": {
+        "story": "マッカーシーのタイムシェアリング概念がUNIXに影響"
+    },
+    "marvin_minsky__geoffrey_hinton": {
+        "story": "ミンスキーがMITでヒントンを指導"
+    },
+    "marvin_minsky__deepmind": {
+        "story": "ミンスキーのニューラルネット研究がDeepMindに影響"
+    },
+    "ibm__microsoft": {
+        "story": "DOSによりMSが巨大化した後、IBMは競合関係に"
+    },
+    "ibm__intel": {
+        "story": "IBM PCがインテルCPUを採用しx86支配を確立"
+    },
+    "ibm__oracle_db": {
+        "story": "IBMのSQL研究がオラクルの商用DBに影響"
+    },
+    "ibm_360__oracle_db": {
+        "story": "System/360のDB概念がオラクルに影響"
+    },
+    "ibm_360__unix": {
+        "story": "System/360のアーキテクチャがUNIX哲学に影響"
+    },
+    "ibm_360__microsoft": {
+        "story": "IBMメインフレーム支配が企業向けソフト市場を創出"
+    },
+    "unity__ios": {
+        "story": "UnityがiOSでのインディゲーム隆盛を支援"
+    },
+    "unity__android": {
+        "story": "UnityがAndroidの支配的なゲームエンジンに"
+    },
+    "unity__oculus_rift": {
+        "story": "Unityが初期VR体験の多くを駆動"
+    },
+    "unity__vision_pro": {
+        "story": "UnityがVision Pro空間コンピューティングに対応"
+    },
+    "unreal__meta": {
+        "story": "Unreal Engineがメタのメタバース構想を駆動"
+    },
+    "unreal__vision_pro": {
+        "story": "Unreal EngineがVision Pro開発に対応"
+    },
+    "unreal__nvidia": {
+        "story": "NVIDIAとEpicがGPU加速レンダリングで協力"
+    },
+    "gemini__nano_banana": {
+        "story": "Geminiファミリの基盤上にNano Bananaを構築"
+    },
+    "microsoft__intel": {
+        "story": "マイクロソフトとインテルが「Wintel」連合を結成"
+    },
+    "microsoft__openai": {
+        "story": "マイクロソフトがOpenAIと数十億ドルの戦略的提携"
+    },
+    "apple__tsmc": {
+        "story": "Appleシリコン独占製造のためAppleがTSMCと提携"
+    },
+    "apple__arm_ltd": {
+        "story": "AppleはArmの設立パートナーだった"
+    },
+    "salesforce_co__slack": {
+        "story": "セールスフォースがSlackを277億ドルで戦略的買収"
+    },
+    "wikipedia__google_search": {
+        "story": "Googleが知識グラフにウィキペディアデータを統合"
+    },
+    "att__cisco": {
+        "story": "AT&Tが主要インフラ展開でシスコと提携"
+    },
+    "yann_lecun__geoffrey_hinton": {
+        "story": "ルカンとヒントンが深層学習で協力しチューリング賞受賞"
+    },
+    "steve_jobs__steve_wozniak": {
+        "story": "ジョブズとウォズニアックがAppleを共同創業"
+    },
+    "larry_page__sergey_brin": {
+        "story": "ページとブリンがGoogleを共同創業"
+    },
+    "peter_thiel__max_levchin": {
+        "story": "ティールとレヴチンはPayPalの主要共同創業者"
+    },
+    "marvin_minsky__john_mccarthy": {
+        "story": "ミンスキーとマッカーシーがAI分野を共同創設"
+    },
+    "unity__meta": {
+        "story": "Quest VR開発でUnityがMetaと提携"
+    },
+    "unity__google": {
+        "story": "モバイルARのためUnityがGoogle ARCoreと統合"
+    },
+    "unreal__sony": {
+        "story": "ソニーがEpicに出資し、PS5ゲームにUnrealを使用"
+    },
+    "apple__google": {
+        "story": "AppleとGoogleがモバイルOS（iOS対Android）で競合"
+    },
+    "apple__microsoft": {
+        "story": "AppleとMSがPCおよびOS支配権で競合"
+    },
+    "apple__samsung": {
+        "story": "Appleとサムスンがスマホデザイン特許で競合"
+    },
+    "apple__meta": {
+        "story": "AppleとMetaが広告収益に関わるプライバシー方針で対立"
+    },
+    "amazon__microsoft": {
+        "story": "Amazon(AWS)とMS(Azure)がクラウド支配権で競合"
+    },
+    "amazon__google": {
+        "story": "AmazonとGoogleがクラウドおよび音声AIで競合"
+    },
+    "google__microsoft": {
+        "story": "GoogleとMSが検索、ブラウザ、AIで競合"
+    },
+    "intel__amd": {
+        "story": "インテルとAMDがx86 CPUシェアを巡り長年競合"
+    },
+    "nvidia__amd": {
+        "story": "NVIDIAとAMDがGPU市場で競合"
+    },
+    "nvidia__intel": {
+        "story": "NVIDIAとインテルがAI加速およびCPU支配権で競合"
+    },
+    "intel__tsmc": {
+        "story": "インテルとTSMCがファウンドリプロセス競争で競合"
+    },
+    "samsung__tsmc": {
+        "story": "サムスンとTSMCが先端ファウンドリノードで競合"
+    },
+    "qualcomm__apple": {
+        "story": "クアルコムとAppleがモデム特許ライセンスで対立"
+    },
+    "meta__bytedance": {
+        "story": "Meta(Reels)とByteDance(TikTok)が短尺動画で競合"
+    },
+    "twitter__meta": {
+        "story": "Twitter(X)とMeta(Threads)が短文投稿で競合"
+    },
+    "twitter__tiktok": {
+        "story": "TwitterとTikTokがユーザーの注目を巡り競合"
+    },
+    "ios__android": {
+        "story": "iOSとAndroidがモバイルエコシステムの複占で競合"
+    },
+    "netflix_co__youtube": {
+        "story": "NetflixとYouTubeが動画娯楽時間を巡り競合"
+    },
+    "amazon_com__alibaba": {
+        "story": "AmazonとAlibabaが世界EC支配権を巡り競合"
+    },
+    "amazon_com__google_search": {
+        "story": "商品検索の入り口としてAmazonとGoogleが競合"
+    },
+    "huggingface__github": {
+        "story": "モデル対コードホスティングでHugging FaceとGitHubが競合"
+    },
+    "sap__oracle": {
+        "story": "ERPソフト市場でSAPとオラクルが競合"
+    },
+    "sap__salesforce_co": {
+        "story": "企業ソフト分野でSAPとセールスフォースが競合"
+    },
+    "unreal__unity": {
+        "story": "ゲームエンジン市場シェアでUnrealとUnityが競合"
+    },
+    "skype__zoom": {
+        "story": "ビデオ会議支配権を巡りSkypeとZoomが競合"
+    },
+    "google__openai": {
+        "story": "生成AIのリーダーシップを巡りGoogleとOpenAIが競合"
+    },
+    "openai__anthropic": {
+        "story": "AI安全性と性能を巡りOpenAIとAnthropicが競合"
+    },
+    "huggingface__openai": {
+        "story": "Hugging Face（オープン）とOpenAI（クローズド）が対立"
+    },
+    "tensorflow__pytorch": {
+        "story": "TensorFlowとPyTorchが深層学習フレームワークで競合"
+    },
+    "perplexity__google_search": {
+        "story": "AI回答エンジンPerplexityがGoogle検索と競合"
+    },
+    "cursor__copilot": {
+        "story": "AIエディタ支配権を巡りCursorとCopilotが競合"
+    },
+    "claude__chatgpt": {
+        "story": "ClaudeとChatGPTがLLM性能で競合"
+    },
+    "claude__gemini": {
+        "story": "ClaudeとGeminiがLLM性能で競合"
+    },
+    "sora__midjourney": {
+        "story": "生成メディア分野でSoraとMidjourneyが競合"
+    },
+    "uber_co__tesla": {
+        "story": "未来のロボタクシー市場でUberとテスラが競合"
+    },
+    "boston_dynamics__tesla": {
+        "story": "人型ロボット分野でボストンダイナミクスとテスラが競合"
+    },
+    "lidar__tesla_autopilot": {
+        "story": "LiDAR技術とテスラの視覚のみ戦略が競合"
+    },
+    "vision_pro__oculus_rift": {
+        "story": "空間計算分野でVision ProとMeta Questが競合"
+    },
+    "5g_nr__starlink": {
+        "story": "地上5G網とスターリンク衛星通信が競合"
+    },
+    "fugaku__nvidia_h100": {
+        "story": "スパコン分野で富岳とNVIDIA H100クラスタが競合"
+    },
+    "steve_jobs__bill_gates": {
+        "story": "PC対Macの哲学を巡りジョブズとゲイツが衝突"
+    },
+    "elon_musk__jeff_bezos": {
+        "story": "宇宙競争においてマスクとベゾスが競合"
+    },
+    "elon_musk__mark_zuckerberg": {
+        "story": "SNSおよびAIにおいてマスクとザッカーバーグが競合"
+    },
+    "elon_musk__sam_altman": {
+        "story": "OpenAIの方針を巡りマスクとアルトマンが衝突"
+    },
+    "yann_lecun__elon_musk": {
+        "story": "AIの安全性と能力に関しルカンがマスクと論争"
+    },
+    "ethereum__bitcoin": {
+        "story": "プラットフォーム対価値貯蔵としてETHとBTCが競合"
+    },
+    "ethereum__paypal_co": {
+        "story": "イーサリアムDeFiがPayPalの既存決済と競合"
+    },
+    "vitalik_buterin__jack_ma": {
+        "story": "ブテリン（分散化）とジャック・マー（中央集権）が対照的"
+    },
+    "qualcomm__broadcom": {
+        "story": "無線接続チップ分野でクアルコムとブロードコムが競合"
+    },
+    "sun_micro__microsoft": {
+        "story": "企業サーバーとJava分野でSunとMSが競合"
+    },
+    "sun_micro__hp": {
+        "story": "UNIXワークステーション市場でSunとHPが競合"
+    },
+    "ibm__apple": {
+        "story": "IBM PCがApple IIおよびMacintoshと競合"
+    },
+    "photoshop__midjourney": {
+        "story": "企業向け安全画像生成でPhotoshopがMidjourneyと競合"
+    },
+    "nano_banana__midjourney": {
+        "story": "一貫性とキャラ維持力でNano BananaがMidjourneyに挑戦"
+    }
+}

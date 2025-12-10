@@ -114,7 +114,8 @@
         "disclaimer": "このサイトのコンテンツとリンクは、個人のキュレーションや主観的な選択ではなく、客観的な技術キーワードに基づいてAIアルゴリズムを通じて集約されています。"
     },
     "mapView": {
-        "searchPlaceholder": "ノードを検索..."
+        "searchPlaceholder": "ノードを検索...",
+        "connections": "つながり"
     },
     "historyView": {
         "showStories": "ストーリーを表示",

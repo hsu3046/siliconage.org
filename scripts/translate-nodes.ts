@@ -43,6 +43,8 @@ const PATHS = {
 interface NodeTranslation {
     label: string;
     description: string;
+    primaryRole?: string;
+    secondaryRole?: string;
 }
 
 interface NodesJson {
@@ -80,13 +82,15 @@ IMPORTANT RULES:
 3. Translate descriptions naturally and concisely
 4. Keep label under ${CONFIG.maxLabelLength} characters
 5. Keep description under ${CONFIG.maxDescriptionLength} characters
-6. Return ONLY a valid JSON object, no extra text
+6. If primaryRole and secondaryRole exist, translate them too (job titles, roles)
+7. Return ONLY a valid JSON object, no extra text
 
 Input nodes (JSON object with node IDs as keys):
 ${JSON.stringify(Object.fromEntries(batch), null, 2)}
 
 Return ONLY the translated JSON object with the SAME node IDs as keys.
-Example format: { "node_id": { "label": "...", "description": "..." }, ... }
+Example format: { "node_id": { "label": "...", "description": "...", "primaryRole": "...", "secondaryRole": "..." }, ... }
+If a node has no primaryRole/secondaryRole in input, do not include them in output.
 `.trim();
 
     try {

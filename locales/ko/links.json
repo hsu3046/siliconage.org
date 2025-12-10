@@ -1,7 +1,4 @@
 {
-    "william_shockley__fairchild": {
-        "story": "\"배신자 8인\"이 Shockley Semiconductor를 떠나 Fairchild를 설립"
-    },
     "robert_noyce__intel": {
         "story": "로버트 노이스가 인텔의 전신인 NM 일렉트로닉스 설립"
     },
@@ -1173,7 +1170,7 @@
         "story": "HP 문화가 제록스 연구 방식에 영향"
     },
     "hp__fairchild": {
-        "story": "HP가 페어차일드가 따른 차고 창업 문화 확립"
+        "story": "HP가 확립한 '차고 창업 문화'를 페어차일드가 계승"
     },
     "hp__stanford_ai_lab": {
         "story": "HP와 스탠퍼드 연구 협력 파트너십"

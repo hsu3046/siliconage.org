@@ -213,195 +213,291 @@
   },
   "alan_turing": {
     "label": "アラン・チューリング",
-    "description": "チューリングマシンで計算を定義し、ナチスの暗号エニグマを解読した英国の数学者。機械が思考可能か問いかけたコンピュータ科学の父だが、悲劇的な最期を遂げた。"
+    "description": "チューリングマシンで計算を定義し、ナチスの暗号エニグマを解読した英国の数学者。機械が思考可能か問いかけたコンピュータ科学の父だが、悲劇的な最期を遂げた。",
+    "primaryRole": "数学者",
+    "secondaryRole": "暗号解読者"
   },
   "claude_shannon": {
     "label": "クロード・シャノン",
-    "description": "1948年に情報理論を創始し「ビット」を定義。通信のデジタル化が可能だと証明した。ジャグリングロボットを作るなど奇才でもあった情報時代の異才。"
+    "description": "1948年に情報理論を創始し「ビット」を定義。通信のデジタル化が可能だと証明した。ジャグリングロボットを作るなど奇才でもあった情報時代の異才。",
+    "primaryRole": "数学者",
+    "secondaryRole": "電気工学者"
   },
   "william_shockley": {
     "label": "ウィリアム・ショックレー",
-    "description": "トランジスタを共同発明したノーベル賞受賞者。彼の酷い経営が「8人の反逆者」の離反とフェアチャイルド設立を招き、逆説的にシリコンバレーを生んだ。"
+    "description": "トランジスタを共同発明したノーベル賞受賞者。彼の酷い経営が「8人の反逆者」の離反とフェアチャイルド設立を招き、逆説的にシリコンバレーを生んだ。",
+    "primaryRole": "物理学者",
+    "secondaryRole": "ショックレー半導体 創業者"
   },
   "john_mccarthy": {
     "label": "ジョン・マッカーシー",
-    "description": "「人工知能」という用語を作り、ダートマス会議を主催した数学者。LISP言語を作り、タイムシェアリングの概念を提唱し現代コンピューティングに影響を与えた。"
+    "description": "「人工知能」という用語を作り、ダートマス会議を主催した数学者。LISP言語を作り、タイムシェアリングの概念を提唱し現代コンピューティングに影響を与えた。",
+    "primaryRole": "計算機科学者",
+    "secondaryRole": "LISP開発者"
   },
   "marvin_minsky": {
     "label": "マービン・ミンスキー",
-    "description": "MIT AIラボ共同設立者。「心の社会」を著述。初期ニューラルネットを構築後にその限界を指摘し、AI冬の時代を招いたともされるが、AIと人間の心を探究した博学者。"
+    "description": "MIT AIラボ共同設立者。「心の社会」を著述。初期ニューラルネットを構築後にその限界を指摘し、AI冬の時代を招いたともされるが、AIと人間の心を探究した博学者。",
+    "primaryRole": "認知科学者",
+    "secondaryRole": "MIT AIラボ共同設立者"
   },
   "dennis_ritchie": {
     "label": "デニス・リッチー",
-    "description": "ベル研でC言語を作り、UNIXを共同開発した。Cはシステム記述の標準となり、UNIX哲学は現代OSの基盤となった。ジョブズと同じ週に亡くなった偉大な計算機科学者。"
+    "description": "ベル研でC言語を作り、UNIXを共同開発した。Cはシステム記述の標準となり、UNIX哲学は現代OSの基盤となった。ジョブズと同じ週に亡くなった偉大な計算機科学者。",
+    "primaryRole": "計算機科学者",
+    "secondaryRole": "C言語開発者"
   },
   "tim_berners_lee": {
     "label": "ティム・バーナーズ＝リー",
-    "description": "CERNにて1989年にWWWを発明。特許を取得せず無償で公開した。現在はW3Cを率い、データプライバシーの保護やWebの中央集権化是正を提唱している。"
+    "description": "CERNにて1989年にWWWを発明。特許を取得せず無償で公開した。現在はW3Cを率い、データプライバシーの保護やWebの中央集権化是正を提唱している。",
+    "primaryRole": "計算機科学者",
+    "secondaryRole": "WWW発明者"
   },
   "geoffrey_hinton": {
     "label": "ジェフリー・ヒントン",
-    "description": "AIの冬の時代にも研究を続けた「深層学習の父」。アレックスネットなどを生み出し、2024年にノーベル物理学賞を受賞。Googleを去りAIの危険性に警鐘を鳴らす。"
+    "description": "AIの冬の時代にも研究を続けた「深層学習の父」。アレックスネットなどを生み出し、2024年にノーベル物理学賞を受賞。Googleを去りAIの危険性に警鐘を鳴らす。",
+    "primaryRole": "AI研究者",
+    "secondaryRole": "チューリング賞受賞者"
   },
   "yann_lecun": {
     "label": "ヤン・ルカン",
-    "description": "コンピュータに「視覚」を与えた畳み込みニューラルネット(CNN)の発明者。現在はMetaのチーフAIサイエンティストであり、オープンなAI研究を強く推奨している。"
+    "description": "コンピュータに「視覚」を与えた畳み込みニューラルネット(CNN)の発明者。現在はMetaのチーフAIサイエンティストであり、オープンなAI研究を強く推奨している。",
+    "primaryRole": "MetaチーフAIサイエンティスト",
+    "secondaryRole": "チューリング賞受賞者"
   },
   "robert_noyce": {
     "label": "ロバート・ノイス",
-    "description": "集積回路の共同発明者であり「シリコンバレーの市長」。フェアチャイルドとインテルを創業。平等主義的な企業文化を築き、テック企業の雛形を作った。"
+    "description": "集積回路の共同発明者であり「シリコンバレーの市長」。フェアチャイルドとインテルを創業。平等主義的な企業文化を築き、テック企業の雛形を作った。",
+    "primaryRole": "インテル共同創業者",
+    "secondaryRole": "フェアチャイルド共同創業者"
   },
   "gordon_moore": {
     "label": "ゴードン・ムーア",
-    "description": "インテル共同創業者。半導体密度が約2年で倍増するという「ムーアの法則」を提唱し、50年にわたり業界のロードマップを規定した。"
+    "description": "インテル共同創業者。半導体密度が約2年で倍増するという「ムーアの法則」を提唱し、50年にわたり業界のロードマップを規定した。",
+    "primaryRole": "インテル共同創業者",
+    "secondaryRole": "名誉会長"
   },
   "steve_jobs": {
     "label": "スティーブ・ジョブズ",
-    "description": "テクノロジーとリベラルアーツの交差点に立ったApple創業者。iPhoneなどで世界を一変させた。デザインとUXへの執着は消費者向け電子機器を再定義した。"
+    "description": "テクノロジーとリベラルアーツの交差点に立ったApple創業者。iPhoneなどで世界を一変させた。デザインとUXへの執着は消費者向け電子機器を再定義した。",
+    "primaryRole": "Apple共同創業者",
+    "secondaryRole": "NeXT創業者"
   },
   "steve_wozniak": {
     "label": "スティーブ・ウォズニアック",
-    "description": "Apple IとIIを独力で設計した天才エンジニア。実用的なパソコンを最初に作った人物。「ウォズ」の愛称で親しまれ、謙虚で技術者から愛される存在。"
+    "description": "Apple IとIIを独力で設計した天才エンジニア。実用的なパソコンを最初に作った人物。「ウォズ」の愛称で親しまれ、謙虚で技術者から愛される存在。",
+    "primaryRole": "Apple共同創業者",
+    "secondaryRole": "コンピュータエンジニア"
   },
   "bill_gates": {
     "label": "ビル・ゲイツ",
-    "description": "ソフトウェアがコンピューティングを定義すると見抜いたMS創業者。WindowsでPCを支配。現在は財団を通じて世界の健康や気候問題に取り組む慈善家。"
+    "description": "ソフトウェアがコンピューティングを定義すると見抜いたMS創業者。WindowsでPCを支配。現在は財団を通じて世界の健康や気候問題に取り組む慈善家。",
+    "primaryRole": "マイクロソフト共同創業者",
+    "secondaryRole": "ゲイツ財団共同議長"
   },
   "larry_ellison": {
     "label": "ラリー・エリソン",
-    "description": "オラクル創業者。攻撃的な販売と買収でDB帝国を築いた。ヨットや日本文化を愛する派手な生活でも知られ、80代でも現役CTOを務めるカリスマ。"
+    "description": "オラクル創業者。攻撃的な販売と買収でDB帝国を築いた。ヨットや日本文化を愛する派手な生活でも知られ、80代でも現役CTOを務めるカリスマ。",
+    "primaryRole": "オラクル共同創業者兼CTO",
+    "secondaryRole": "元CEO"
   },
   "morris_chang": {
     "label": "モリス・チャン",
-    "description": "TI出身で、台湾にてTSMCを創業。「ファウンドリ（受託製造）」モデルを確立し、NVIDIAやAppleのような企業が存在できる基盤を作った。半導体産業の最重要人物。"
+    "description": "TI出身で、台湾にてTSMCを創業。「ファウンドリ（受託製造）」モデルを確立し、NVIDIAやAppleのような企業が存在できる基盤を作った。半導体産業の最重要人物。",
+    "primaryRole": "TSMC創業者",
+    "secondaryRole": "元会長"
   },
   "linus_torvalds": {
     "label": "リーナス・トーバルズ",
-    "description": "学生時代にLinuxカーネルを書いたフィンランド人。Gitも開発した。Linuxは現在インターネットやクラウドの基盤となっている。コードに対する率直で過激な発言でも有名。"
+    "description": "学生時代にLinuxカーネルを書いたフィンランド人。Gitも開発した。Linuxは現在インターネットやクラウドの基盤となっている。コードに対する率直で過激な発言でも有名。",
+    "primaryRole": "ソフトウェアエンジニア",
+    "secondaryRole": "Linux開発者"
   },
   "jeff_bezos": {
     "label": "ジェフ・ベゾス",
-    "description": "書店から巨大テック企業Amazonを築いた。AWSでクラウドを普及させた。顧客至上主義と長期的思考で知られ、現在は宇宙開発企業ブルーオリジンに注力。"
+    "description": "書店から巨大テック企業Amazonを築いた。AWSでクラウドを普及させた。顧客至上主義と長期的思考で知られ、現在は宇宙開発企業ブルーオリジンに注力。",
+    "primaryRole": "Amazon創業者",
+    "secondaryRole": "ブルーオリジン創業者"
   },
   "jensen_huang": {
     "label": "ジェンスン・フアン",
-    "description": "NVIDIA創業者。GPUをゲーム用からAI計算用へと発展させた。革ジャン姿がトレードマーク。同社は今やAIインフラの供給元として世界屈指の価値を持つ。"
+    "description": "NVIDIA創業者。GPUをゲーム用からAI計算用へと発展させた。革ジャン姿がトレードマーク。同社は今やAIインフラの供給元として世界屈指の価値を持つ。",
+    "primaryRole": "NVIDIA共同創業者兼CEO",
+    "secondaryRole": "電気工学者"
   },
   "marc_benioff": {
     "label": "マーク・ベニオフ",
-    "description": "セールスフォース創業者。「ソフトウェアの終焉」を掲げクラウドSaaSを開拓。企業による社会貢献活動も積極的に推進するユニークなCEO。"
+    "description": "セールスフォース創業者。「ソフトウェアの終焉」を掲げクラウドSaaSを開拓。企業による社会貢献活動も積極的に推進するユニークなCEO。",
+    "primaryRole": "セールスフォース創業者兼CEO",
+    "secondaryRole": "慈善家"
   },
   "larry_page": {
     "label": "ラリー・ページ",
-    "description": "PageRankを発明したGoogle共同創業者。「世界の情報を整理する」という理念で巨大企業を築いた。空飛ぶ車などの野心的なプロジェクトも支援している。"
+    "description": "PageRankを発明したGoogle共同創業者。「世界の情報を整理する」という理念で巨大企業を築いた。空飛ぶ車などの野心的なプロジェクトも支援している。",
+    "primaryRole": "Google共同創業者",
+    "secondaryRole": "元Alphabet CEO"
   },
   "sergey_brin": {
     "label": "セルゲイ・ブリン",
-    "description": "ロシア出身のGoogle共同創業者。Google Glassや自動運転などの「ムーンショット」プロジェクトを主導。最近はAI開発の現場に復帰している。"
+    "description": "ロシア出身のGoogle共同創業者。Google Glassや自動運転などの「ムーンショット」プロジェクトを主導。最近はAI開発の現場に復帰している。",
+    "primaryRole": "Google共同創業者",
+    "secondaryRole": "計算機科学者"
   },
   "reed_hastings": {
     "label": "リード・ヘイスティングス",
-    "description": "DVD郵送事業からストリーミングへ転換したネットフリックス創業者。「ルールがないことがルール」という企業文化でコンテンツ業界を変革した。"
+    "description": "DVD郵送事業からストリーミングへ転換したネットフリックス創業者。「ルールがないことがルール」という企業文化でコンテンツ業界を変革した。",
+    "primaryRole": "Netflix共同創業者",
+    "secondaryRole": "取締役会長"
   },
   "elon_musk": {
     "label": "イーロン・マスク",
-    "description": "PayPal、テスラ、SpaceXなどを手掛ける起業家。EV普及やロケット着陸を実現。世界一の富豪であり、お騒がせ人物としても知られる技術界の象徴。"
+    "description": "PayPal、テスラ、SpaceXなどを手掛ける起業家。EV普及やロケット着陸を実現。世界一の富豪であり、お騒がせ人物としても知られる技術界の象徴。",
+    "primaryRole": "SpaceX創業者兼CEO",
+    "secondaryRole": "テスラCEO"
   },
   "mark_zuckerberg": {
     "label": "マーク・ザッカーバーグ",
-    "description": "ハーバード寮からFacebookを立ち上げ世界を繋いだ。Instagram買収などで成長。現在はメタバース構築に社運を賭け、Metaへと社名変更した。"
+    "description": "ハーバード寮からFacebookを立ち上げ世界を繋いだ。Instagram買収などで成長。現在はメタバース構築に社運を賭け、Metaへと社名変更した。",
+    "primaryRole": "Meta創業者兼CEO",
+    "secondaryRole": "慈善家"
   },
   "chad_hurley": {
     "label": "チャド・ハーリー",
-    "description": "PayPalロゴをデザインしたYouTube共同創業者。2005年に動画共有を開始し、Googleに買収された。クリエイター経済を生み出した立役者。"
+    "description": "PayPalロゴをデザインしたYouTube共同創業者。2005年に動画共有を開始し、Googleに買収された。クリエイター経済を生み出した立役者。",
+    "primaryRole": "YouTube共同創業者",
+    "secondaryRole": "元CEO"
   },
   "jack_ma": {
     "label": "ジャック・マー",
-    "description": "元英語教師のアリババ創業者。中国でEコマースと電子決済（Alipay）を普及させた。政府との対立以降、公の場から姿を消している。"
+    "description": "元英語教師のアリババ創業者。中国でEコマースと電子決済（Alipay）を普及させた。政府との対立以降、公の場から姿を消している。",
+    "primaryRole": "アリババ共同創業者",
+    "secondaryRole": "慈善家"
   },
   "pony_ma": {
     "label": "ポニー・マー",
-    "description": "テンセント創業者。WeChatを作り中国のデジタルインフラを築いた。控えめな技術者タイプだが、中国テック界で最も強力な人物の一人。"
+    "description": "テンセント創業者。WeChatを作り中国のデジタルインフラを築いた。控えめな技術者タイプだが、中国テック界で最も強力な人物の一人。",
+    "primaryRole": "テンセント創業者兼CEO",
+    "secondaryRole": "ソフトウェアエンジニア"
   },
   "travis_kalanick": {
     "label": "トラビス・カラニック",
-    "description": "Uber創業者。強引な手法で世界のタクシー業界を破壊し、ギグ・エコノミーを広めた。企業文化の問題で退任したが、破壊的イノベーションの象徴的存在。"
+    "description": "Uber創業者。強引な手法で世界のタクシー業界を破壊し、ギグ・エコノミーを広めた。企業文化の問題で退任したが、破壊的イノベーションの象徴的存在。",
+    "primaryRole": "Uber共同創業者",
+    "secondaryRole": "元CEO"
   },
   "patrick_collison": {
     "label": "パトリック・コリソン",
-    "description": "兄弟でStripeを創業したアイルランドの天才。開発者向けの決済インフラを構築。科学研究への資金提供などにも関心を持つ「ビルダーのためのビルダー」。"
+    "description": "兄弟でStripeを創業したアイルランドの天才。開発者向けの決済インフラを構築。科学研究への資金提供などにも関心を持つ「ビルダーのためのビルダー」。",
+    "primaryRole": "Stripe共同創業者兼CEO",
+    "secondaryRole": "起業家"
   },
   "satoshi_nakamoto": {
     "label": "サトシ・ナカモト",
-    "description": "ブロックチェーンを用いビットコインを作った正体不明の人物（または集団）。2011年に姿を消した。分散型デジタル通貨の概念を確立した伝説的存在。"
+    "description": "ブロックチェーンを用いビットコインを作った正体不明の人物（または集団）。2011年に姿を消した。分散型デジタル通貨の概念を確立した伝説的存在。",
+    "primaryRole": "暗号学者",
+    "secondaryRole": "ビットコイン開発者"
   },
   "vitalik_buterin": {
     "label": "ヴィタリック・ブテリン",
-    "description": "19歳でイーサリアムを考案したプログラマー。「スマートコントラクト」により、通貨以上の用途（DeFi、NFT等）をブロックチェーンにもたらした暗号資産界の哲学者。"
+    "description": "19歳でイーサリアムを考案したプログラマー。「スマートコントラクト」により、通貨以上の用途（DeFi、NFT等）をブロックチェーンにもたらした暗号資産界の哲学者。",
+    "primaryRole": "イーサリアム共同創設者",
+    "secondaryRole": "プログラマー"
   },
   "tim_cook": {
     "label": "ティム・クック",
-    "description": "ジョブズの後を継ぎAppleを世界一の企業に育てたCEO。サプライチェーン管理の天才。プライバシー保護を重視し、安定した経営手腕を発揮している。"
+    "description": "ジョブズの後を継ぎAppleを世界一の企業に育てたCEO。サプライチェーン管理の天才。プライバシー保護を重視し、安定した経営手腕を発揮している。",
+    "primaryRole": "Apple CEO",
+    "secondaryRole": "元COO"
   },
   "satya_nadella": {
     "label": "サティア・ナデラ",
-    "description": "クラウド（Azure）中心への転換とOpenAIとの提携でマイクロソフトを再興したCEO。閉鎖的な文化を変え、時価総額を大幅に向上させた。"
+    "description": "クラウド（Azure）中心への転換とOpenAIとの提携でマイクロソフトを再興したCEO。閉鎖的な文化を変え、時価総額を大幅に向上させた。",
+    "primaryRole": "マイクロソフト CEO",
+    "secondaryRole": "会長"
   },
   "sundar_pichai": {
     "label": "スンダー・ピチャイ",
-    "description": "ChromeやAndroidの開発を指揮し、GoogleとAlphabetのCEOに就任。AI競争や独禁法訴訟など困難な課題の中で舵取りを行っている。"
+    "description": "ChromeやAndroidの開発を指揮し、GoogleとAlphabetのCEOに就任。AI競争や独禁法訴訟など困難な課題の中で舵取りを行っている。",
+    "primaryRole": "Alphabet兼Google CEO",
+    "secondaryRole": "プロダクトマネージャー"
   },
   "lisa_su": {
     "label": "リサ・スー",
-    "description": "倒産寸前だったAMDをRyzenプロセッサで復活させたCEO。インテルに対抗できるまでに成長させ、株価を数十倍にしたエンジニア経営者。"
+    "description": "倒産寸前だったAMDをRyzenプロセッサで復活させたCEO。インテルに対抗できるまでに成長させ、株価を数十倍にしたエンジニア経営者。",
+    "primaryRole": "AMD会長兼CEO",
+    "secondaryRole": "電気工学者"
   },
   "demis_hassabis": {
     "label": "デミス・ハサビス",
-    "description": "少年チェスの天才、ゲーム開発者を経てDeepMindを創業。AlphaGoやAlphaFoldでAI史に残る成果を挙げた。2024年にノーベル化学賞を受賞。"
+    "description": "少年チェスの天才、ゲーム開発者を経てDeepMindを創業。AlphaGoやAlphaFoldでAI史に残る成果を挙げた。2024年にノーベル化学賞を受賞。",
+    "primaryRole": "DeepMind共同創業者兼CEO",
+    "secondaryRole": "AI研究者"
   },
   "sam_altman": {
     "label": "サム・アルトマン",
-    "description": "ChatGPTをリリースしAIブームを巻き起こしたOpenAIのCEO。元YC代表。マイクロソフト等から巨額資金を調達し、商業AIの爆発的普及を牽引している。"
+    "description": "ChatGPTをリリースしAIブームを巻き起こしたOpenAIのCEO。元YC代表。マイクロソフト等から巨額資金を調達し、商業AIの爆発的普及を牽引している。",
+    "primaryRole": "OpenAI共同創業者兼CEO",
+    "secondaryRole": "元Yコンビネータ社長"
   },
   "ilya_sutskever": {
     "label": "イリヤ・サツケヴァー",
-    "description": "AlexNetの共同開発者でOpenAIの主席科学者だった人物。GPTモデル開発の鍵を握る。アルトマン解任騒動に関与後、安全な超知能を目指す新会社を設立。"
+    "description": "AlexNetの共同開発者でOpenAIの主席科学者だった人物。GPTモデル開発の鍵を握る。アルトマン解任騒動に関与後、安全な超知能を目指す新会社を設立。",
+    "primaryRole": "OpenAI共同創業者",
+    "secondaryRole": "SSI共同創業者"
   },
   "arthur_rock": {
     "label": "アーサー・ロック",
-    "description": "「ベンチャーキャピタル」という言葉を作った投資家。フェアチャイルド、インテル、アップルに出資し、シリコンバレーの礎を築いた。"
+    "description": "「ベンチャーキャピタル」という言葉を作った投資家。フェアチャイルド、インテル、アップルに出資し、シリコンバレーの礎を築いた。",
+    "primaryRole": "ベンチャーキャピタリスト",
+    "secondaryRole": "初期投資家"
   },
   "don_valentine": {
     "label": "ドン・バレンタイン",
-    "description": "セコイア・キャピタル創業者。「巨大市場を狙え」という哲学でAppleやGoogleなどを支援。シリコンバレーで最も成功したVCファームを築いた。"
+    "description": "セコイア・キャピタル創業者。「巨大市場を狙え」という哲学でAppleやGoogleなどを支援。シリコンバレーで最も成功したVCファームを築いた。",
+    "primaryRole": "セコイア設立者",
+    "secondaryRole": "ベンチャーキャピタリスト"
   },
   "masayoshi_son": {
     "label": "孫正義",
-    "description": "ソフトバンク創業者。ビジョン・ファンドで投資の常識を変えた。アリババへの初期投資で巨富を築く。「シンギュラリティ」を信じAIに巨額を投じる勝負師。"
+    "description": "ソフトバンク創業者。ビジョン・ファンドで投資の常識を変えた。アリババへの初期投資で巨富を築く。「シンギュラリティ」を信じAIに巨額を投じる勝負師。",
+    "primaryRole": "ソフトバンク創業者兼CEO",
+    "secondaryRole": "投資家"
   },
   "marc_andreessen": {
     "label": "マーク・アンドリーセン",
-    "description": "モザイク開発者でありネットスケープ共同創業者。「ソフトウェアが世界を飲み込む」と提唱。技術楽観主義を掲げ、VCとして未来の技術に投資する。"
+    "description": "モザイク開発者でありネットスケープ共同創業者。「ソフトウェアが世界を飲み込む」と提唱。技術楽観主義を掲げ、VCとして未来の技術に投資する。",
+    "primaryRole": "a16z共同創業者",
+    "secondaryRole": "ネットスケープ共同創業者"
   },
   "peter_thiel": {
     "label": "ピーター・ティール",
-    "description": "ペイパル共同創業者でFB初の外部投資家。「ゼロ・トゥ・ワン」の著者。逆張り投資家として知られ、国防テックや延命研究にも投資する。"
+    "description": "ペイパル共同創業者でFB初の外部投資家。「ゼロ・トゥ・ワン」の著者。逆張り投資家として知られ、国防テックや延命研究にも投資する。",
+    "primaryRole": "ファウンダーズ・ファンドパートナー",
+    "secondaryRole": "ペイパル共同創業者"
   },
   "reid_hoffman": {
     "label": "リード・ホフマン",
-    "description": "LinkedIn共同創業者でペイパル・マフィアの一員。人脈が広く「シリコンバレーのオラクル」と呼ばれる。AI投資にも積極的。"
+    "description": "LinkedIn共同創業者でペイパル・マフィアの一員。人脈が広く「シリコンバレーのオラクル」と呼ばれる。AI投資にも積極的。",
+    "primaryRole": "グレイロックパートナー",
+    "secondaryRole": "LinkedIn共同創業者"
   },
   "paul_graham": {
     "label": "ポール・グレアム",
-    "description": "Yコンビネータ創設者。Lispハッカーでありエッセイスト。スタートアップの在り方や「スケールしないことをしよう」といった教えを広めた。"
+    "description": "Yコンビネータ創設者。Lispハッカーでありエッセイスト。スタートアップの在り方や「スケールしないことをしよう」といった教えを広めた。",
+    "primaryRole": "Yコンビネータ共同創設者",
+    "secondaryRole": "エッセイスト"
   },
   "max_levchin": {
     "label": "マックス・レヴチン",
-    "description": "ペイパルの不正検知システムを構築した技術者。現在は後払い決済AffirmのCEO。いまも現役でコードを書く技術志向の創業者。"
+    "description": "ペイパルの不正検知システムを構築した技術者。現在は後払い決済AffirmのCEO。いまも現役でコードを書く技術志向の創業者。",
+    "primaryRole": "Affirm創業者兼CEO",
+    "secondaryRole": "ペイパル共同創業者"
   },
   "roelof_botha": {
     "label": "ルロフ・ボサ",
-    "description": "ペイパルCFOからセコイア・キャピタルのトップへ。YouTubeやInstagramへの初期投資で知られる。静かなるペイパル・マフィアの成功者。"
+    "description": "ペイパルCFOからセコイア・キャピタルのトップへ。YouTubeやInstagramへの初期投資で知られる。静かなるペイパル・マフィアの成功者。",
+    "primaryRole": "セコイアパートナー",
+    "secondaryRole": "元ペイパルCFO"
   },
   "turing_machine": {
     "label": "チューリングマシン",

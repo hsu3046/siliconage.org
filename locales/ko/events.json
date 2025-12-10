@@ -1,71 +1,71 @@
 {
   "traitorous_eight": {
-    "story": "\"Traitorous Eight\"는 Shockley Semiconductor를 떠나 Fairchild를 설립하며 실리콘 밸리의 탄생을 이끌었습니다."
+    "story": "'8인의 배신자'가 페어차일드를 설립하며 실리콘밸리 탄생 주도"
   },
   "moores_law": {
-    "story": "Gordon Moore는 마이크로칩의 트랜지스터 수가 2년마다 두 배로 증가할 것이라고 예측했습니다 (Moore's Law)."
+    "story": "트랜지스터 수가 2년마다 두 배가 된다는 '무어의 법칙' 예측"
   },
   "ai_winter": {
-    "story": "\"AI Winter\" 시기에는 과장된 기대감으로 인해 인공 지능 연구에 대한 자금 지원과 관심이 감소했습니다."
+    "story": "과도한 기대로 인한 연구 자금 및 관심 감소로 'AI 겨울' 도래"
   },
   "apple_1984_commercial": {
-    "story": "Apple은 Macintosh를 소개하기 위해 Super Bowl 경기 중 상징적인 \"1984\" 광고를 방영했습니다."
+    "story": "슈퍼볼에서 매킨토시 공개를 위한 '1984' 광고 방영"
   },
   "browser_wars": {
-    "story": "\"Browser Wars\"는 시장 점유율을 놓고 Netscape Navigator와 Microsoft Internet Explorer 간에 치열하게 벌어졌습니다."
+    "story": "넷스케이프와 인터넷 익스플로러 간 시장 점유율 '브라우저 전쟁'"
   },
   "deep_blue_kasparov": {
-    "story": "IBM의 Deep Blue 슈퍼컴퓨터가 세계 체스 챔피언 Garry Kasparov를 꺾으면서 AI의 이정표를 세웠습니다."
+    "story": "IBM 딥블루가 세계 체스 챔피언 가리 카스파로프에게 승리"
   },
   "us_v_microsoft": {
-    "story": "United States v. Microsoft Corp. 소송에서 Microsoft가 Intel 기반 PC 시장에서 독점적 지위를 남용했다고 판결했습니다."
+    "story": "미국 정부 대 MS 소송에서 독점 금지법 위반 판결"
   },
   "dotcom_bubble": {
-    "story": "닷컴 버블이 붕괴되면서 대규모 주식 시장 폭락과 많은 인터넷 스타트업의 몰락을 초래했습니다."
+    "story": "'닷컴 버블' 붕괴로 인한 증시 폭락 및 인터넷 기업 연쇄 파산"
   },
   "iphone_unveil": {
-    "story": "Steve Jobs는 와이드스크린 iPod, 혁신적인 휴대 전화, 획기적인 인터넷 커뮤니케이터를 결합한 iPhone을 공개했습니다."
+    "story": "아이팟, 전화, 인터넷 통신 기기를 결합한 아이폰 최초 공개"
   },
   "bitcoin_genesis": {
-    "story": "Satoshi Nakamoto는 글로벌 금융 위기 속에서 Bitcoin의 제네시스 블록을 채굴했습니다."
+    "story": "금융 위기 속 사토시 나카모토의 비트코인 제네시스 블록 채굴"
   },
   "apple_samsung_lawsuit": {
-    "story": "Apple과 Samsung은 스마트폰 디자인과 관련하여 여러 국가에서 일련의 주목할 만한 특허 소송을 진행했습니다."
+    "story": "스마트폰 디자인 특허를 둘러싼 애플과 삼성의 글로벌 소송전"
   },
   "snowden_leaks": {
-    "story": "Edward Snowden의 폭로는 대형 기술 기업들이 종단 간 암호화 및 SSL/TLS 도입을 가속화하도록 촉발했습니다."
+    "story": "스노든 폭로를 계기로 테크 기업들의 종단간 암호화 도입 가속"
   },
   "alphago_lee_sedol": {
-    "story": "AlphaGo는 서울에서 18회 세계 챔피언 Lee Sedol을 꺾고 심층 강화 학습의 힘을 입증했습니다."
+    "story": "알파고가 서울에서 이세돌 9단에게 승리하며 딥러닝 위력 입증"
   },
   "cambridge_analytica": {
-    "story": "Cambridge Analytica 스캔들은 대규모 데이터 프라이버시 침해를 드러내며 소셜 미디어 플랫폼에 대한 감시를 강화하게 했습니다."
+    "story": "케임브리지 애널리티카 스캔들로 소셜 미디어 개인정보 감시 강화"
   },
   "chip_shortage": {
-    "story": "글로벌 반도체 부족은 자동차에서 가전 제품에 이르기까지 산업 전반에 걸쳐 혼란을 야기하며 공급망의 취약성을 강조했습니다."
+    "story": "글로벌 반도체 공급난으로 전 산업 타격 및 공급망 취약성 노출"
   },
   "ethereum_merge": {
-    "story": "Ethereum은 \"The Merge\"를 완료하여 작업 증명에서 지분 증명으로 전환하여 에너지 소비를 99.9% 줄였습니다."
+    "story": "이더리움 '머지' 완료 및 에너지 절감을 위한 지분 증명(PoS) 전환"
   },
   "chatgpt_launch": {
-    "story": "OpenAI는 ChatGPT를 출시하여 빅테크 기업 간의 글로벌 생성형 AI 경쟁을 촉발했습니다."
+    "story": "오픈AI의 챗GPT 출시로 글로벌 빅테크 간 생성형 AI 경쟁 촉발"
   },
   "altman_firing": {
-    "story": "Sam Altman은 갑작스럽게 해고되었다가 직원과 Microsoft의 강력한 압력 이후 OpenAI의 CEO로 복귀했습니다."
+    "story": "오픈AI CEO 샘 알트만의 해임과 직원 및 MS의 압박에 의한 복귀"
   },
   "nvidia_trillion": {
-    "story": "AI 붐과 H100 수요에 힘입어 NVIDIA는 시가 총액 1조 달러 이상의 기업 클럽에 합류했습니다."
+    "story": "AI 붐과 H100 수요 급증으로 엔비디아 시총 1조 달러 달성"
   },
   "fugaku_covid": {
-    "story": "Fugaku는 COVID-19 비말 분석 시뮬레이션에 사용되었습니다."
+    "story": "후가쿠를 코로나19 비말 확산 분석 시뮬레이션에 활용"
   },
   "sequoia_whatsapp": {
-    "story": "Sequoia Capital은 WhatsApp에 대한 유일한 투자자였습니다(총 6천만 달러)."
+    "story": "세콰이어 캐피탈이 왓츠앱에 총 6천만 달러 단독 투자"
   },
   "yc_justintv": {
-    "story": "Y Combinator는 Twitch가 된 Justin.tv에 투자했습니다."
+    "story": "훗날 트위치가 되는 Justin.tv에 YC가 초기 자금 지원"
   },
   "thiel_palantir": {
-    "story": "Peter Thiel은 PayPal 이후 Palantir를 공동 창립했습니다."
+    "story": "페이팔 이후 피터 틸이 팰런티어 공동 창업"
   }
 }

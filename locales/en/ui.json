@@ -101,7 +101,8 @@
         "disclaimer": "The content and links provided on this site are aggregated through AI algorithms based on objective technical keywords, rather than personal curation or subjective selection."
     },
     "mapView": {
-        "searchPlaceholder": "Search nodes..."
+        "searchPlaceholder": "Search nodes...",
+        "connections": "connections"
     },
     "historyView": {
         "showStories": "Show Stories",

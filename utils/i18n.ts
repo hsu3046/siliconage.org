@@ -13,7 +13,7 @@ const DEFAULT_LOCALE: Locale = 'en';
 // Store for current locale and translations
 let currentLocale: Locale = DEFAULT_LOCALE;
 let translations: Record<string, any> = {};
-let nodeTranslations: Record<string, { label: string; description: string }> = {};
+let nodeTranslations: Record<string, { label: string; description: string; primaryRole?: string; secondaryRole?: string }> = {};
 let linkTranslations: Record<string, { story: string }> = {};
 let eventTranslations: Record<string, { story: string }> = {};
 let isLoaded = false;
@@ -121,22 +121,28 @@ export const t = (key: string, params?: Record<string, string | number>): string
 };
 
 /**
- * Translate node data (label and description)
+ * Translate node data (label, description, and optional roles)
  * 
  * @param nodeId - Node ID from constants.ts
  * @param fallbackLabel - Original label (fallback if translation not found)
  * @param fallbackDescription - Original description (fallback if translation not found)
- * @returns Object with translated label and description
+ * @param fallbackPrimaryRole - Original primaryRole (fallback if translation not found)
+ * @param fallbackSecondaryRole - Original secondaryRole (fallback if translation not found)
+ * @returns Object with translated label, description, and optional roles
  */
 export const translateNode = (
     nodeId: string,
     fallbackLabel?: string,
-    fallbackDescription?: string
-): { label: string; description: string } => {
+    fallbackDescription?: string,
+    fallbackPrimaryRole?: string,
+    fallbackSecondaryRole?: string
+): { label: string; description: string; primaryRole?: string; secondaryRole?: string } => {
     if (!isLoaded || currentLocale === 'en') {
         return {
             label: fallbackLabel || nodeId,
-            description: fallbackDescription || ''
+            description: fallbackDescription || '',
+            primaryRole: fallbackPrimaryRole,
+            secondaryRole: fallbackSecondaryRole
         };
     }
 
@@ -145,13 +151,17 @@ export const translateNode = (
     if (translation) {
         return {
             label: translation.label || fallbackLabel || nodeId,
-            description: translation.description || fallbackDescription || ''
+            description: translation.description || fallbackDescription || '',
+            primaryRole: translation.primaryRole || fallbackPrimaryRole,
+            secondaryRole: translation.secondaryRole || fallbackSecondaryRole
         };
     }
 
     return {
         label: fallbackLabel || nodeId,
-        description: fallbackDescription || ''
+        description: fallbackDescription || '',
+        primaryRole: fallbackPrimaryRole,
+        secondaryRole: fallbackSecondaryRole
     };
 };
 

@@ -7,11 +7,13 @@ interface AboutModalProps {
   isOpen: boolean;
   onClose: () => void;
   onOpenChangeLog: () => void;
+  locale: Locale;
+  onLocaleChange: (locale: Locale) => Promise<void>;
 }
 
-const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose, onOpenChangeLog }) => {
+const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose, onOpenChangeLog, locale, onLocaleChange }) => {
   const [formStatus, setFormStatus] = useState<'IDLE' | 'SUBMITTING' | 'SUCCESS' | 'ERROR'>('IDLE');
-  const { locale, setLocale, availableLocales, t, isLoaded } = useLocale();
+  const { availableLocales, t } = useLocale();
 
   if (!isOpen) return null;
 
@@ -195,7 +197,7 @@ const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose, onOpenChangeLo
             </svg>
             <select
               value={locale}
-              onChange={(e) => setLocale(e.target.value as Locale)}
+              onChange={(e) => onLocaleChange(e.target.value as Locale)}
               className="bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded px-2 py-1 focus:outline-none focus:border-primary cursor-pointer hover:bg-slate-700 transition-colors"
             >
               {availableLocales.map((l) => (

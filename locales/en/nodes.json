@@ -213,195 +213,291 @@
   },
   "alan_turing": {
     "label": "Alan Turing",
-    "description": "British mathematician who defined computation with the Turing Machine and cracked Nazi Enigma codes at Bletchley Park. His 1950 paper \\\"Computing Machinery and Intelligence\\\" asked if machines can think. Prosecuted for homosexuality, he died tragically young. The father of computer science."
+    "description": "British mathematician who defined computation with the Turing Machine and cracked Nazi Enigma codes at Bletchley Park. His 1950 paper \\\"Computing Machinery and Intelligence\\\" asked if machines can think. Prosecuted for homosexuality, he died tragically young. The father of computer science.",
+    "primaryRole": "Mathematician",
+    "secondaryRole": "Cryptanalyst"
   },
   "claude_shannon": {
     "label": "Claude Shannon",
-    "description": "Bell Labs mathematician who invented information theory in 1948. Proved all communication could be digitized into bits, defined channel capacity, and invented error-correcting codes. Also built juggling robots and rode unicycles through MIT halls. The Einstein of the information age."
+    "description": "Bell Labs mathematician who invented information theory in 1948. Proved all communication could be digitized into bits, defined channel capacity, and invented error-correcting codes. Also built juggling robots and rode unicycles through MIT halls. The Einstein of the information age.",
+    "primaryRole": "Mathematician",
+    "secondaryRole": "Electrical Engineer"
   },
   "william_shockley": {
     "label": "William Shockley",
-    "description": "Nobel laureate who co-invented the transistor at Bell Labs with Bardeen and Brattain. His toxic management of Shockley Semiconductor drove the \\\"Traitorous Eight\\\" to leave and found Fairchild. Paradoxically, his failure spawned Silicon Valley. Brilliant physicist, terrible boss."
+    "description": "Nobel laureate who co-invented the transistor at Bell Labs with Bardeen and Brattain. His toxic management of Shockley Semiconductor drove the \\\"Traitorous Eight\\\" to leave and found Fairchild. Paradoxically, his failure spawned Silicon Valley. Brilliant physicist, terrible boss.",
+    "primaryRole": "Physicist",
+    "secondaryRole": "Founder, Shockley Semi"
   },
   "john_mccarthy": {
     "label": "John McCarthy",
-    "description": "The mathematician who coined the term \\\"Artificial Intelligence\\\" and organized the 1956 Dartmouth Conference that founded AI as a field. Created LISP, the language of AI research for decades. Founded Stanford AI Lab where students built early robotics and expert systems. His time-sharing concept shaped modern computing."
+    "description": "The mathematician who coined the term \\\"Artificial Intelligence\\\" and organized the 1956 Dartmouth Conference that founded AI as a field. Created LISP, the language of AI research for decades. Founded Stanford AI Lab where students built early robotics and expert systems. His time-sharing concept shaped modern computing.",
+    "primaryRole": "Computer Scientist",
+    "secondaryRole": "Inventor of LISP"
   },
   "marvin_minsky": {
     "label": "Marvin Minsky",
-    "description": "MIT pioneer who co-founded the AI Lab and wrote \\\"The Society of Mind\\\" exploring how intelligence emerges from simple processes. Built early neural networks, then critiqued their limitations, triggering an AI winter. Advised on \\\"2001: A Space Odyssey.\\\" A polymath who saw AI as the path to understanding the human mind itself."
+    "description": "MIT pioneer who co-founded the AI Lab and wrote \\\"The Society of Mind\\\" exploring how intelligence emerges from simple processes. Built early neural networks, then critiqued their limitations, triggering an AI winter. Advised on \\\"2001: A Space Odyssey.\\\" A polymath who saw AI as the path to understanding the human mind itself.",
+    "primaryRole": "Cognitive Scientist",
+    "secondaryRole": "Co-founder MIT AI Lab"
   },
   "dennis_ritchie": {
     "label": "Dennis Ritchie",
-    "description": "Bell Labs computer scientist who created the C programming language and co-created Unix with Ken Thompson. C became the mother tongue of systems programming. Unix philosophy shaped all modern operating systems. Died the same week as Steve Jobs but received far less recognition."
+    "description": "Bell Labs computer scientist who created the C programming language and co-created Unix with Ken Thompson. C became the mother tongue of systems programming. Unix philosophy shaped all modern operating systems. Died the same week as Steve Jobs but received far less recognition.",
+    "primaryRole": "Computer Scientist",
+    "secondaryRole": "Creator of C"
   },
   "tim_berners_lee": {
     "label": "Tim Berners-Lee",
-    "description": "British scientist at CERN who invented the World Wide Web in 1989—HTML, HTTP, and URLs. Crucially, he gave it away free instead of patenting it. Knighted by the Queen, W3C founder. Now advocates for data privacy and fights the web's centralization he never intended."
+    "description": "British scientist at CERN who invented the World Wide Web in 1989—HTML, HTTP, and URLs. Crucially, he gave it away free instead of patenting it. Knighted by the Queen, W3C founder. Now advocates for data privacy and fights the web's centralization he never intended.",
+    "primaryRole": "Computer Scientist",
+    "secondaryRole": "Inventor of WWW"
   },
   "geoffrey_hinton": {
     "label": "Geoffrey Hinton",
-    "description": "The \\\"Godfather of Deep Learning\\\" who championed neural networks through decades of AI winters. His students invented AlexNet, transformers, and more. 2024 Nobel Prize in Physics for foundational AI work. Left Google to warn about AI dangers. The conscience of the field he created."
+    "description": "The \\\"Godfather of Deep Learning\\\" who championed neural networks through decades of AI winters. His students invented AlexNet, transformers, and more. 2024 Nobel Prize in Physics for foundational AI work. Left Google to warn about AI dangers. The conscience of the field he created.",
+    "primaryRole": "AI Researcher",
+    "secondaryRole": "Turing Award Winner"
   },
   "yann_lecun": {
     "label": "Yann LeCun",
-    "description": "French AI scientist who invented convolutional neural networks that let computers \\\"see.\\\" His LeNet-5 read handwritten checks in the 1990s. Now Meta's Chief AI Scientist and Turing Award winner. Outspoken on AI Twitter, pushing for open research versus proprietary models."
+    "description": "French AI scientist who invented convolutional neural networks that let computers \\\"see.\\\" His LeNet-5 read handwritten checks in the 1990s. Now Meta's Chief AI Scientist and Turing Award winner. Outspoken on AI Twitter, pushing for open research versus proprietary models.",
+    "primaryRole": "Chief AI Scientist, Meta",
+    "secondaryRole": "Turing Award Winner"
   },
   "robert_noyce": {
     "label": "Robert Noyce",
-    "description": "The \\\"Mayor of Silicon Valley\\\" who co-invented the integrated circuit (with Jack Kilby) and co-founded Fairchild and Intel. Charismatic leader who shaped the egalitarian culture of tech—no reserved parking, no corner offices. Died young at 62 but created the template for tech startups."
+    "description": "The \\\"Mayor of Silicon Valley\\\" who co-invented the integrated circuit (with Jack Kilby) and co-founded Fairchild and Intel. Charismatic leader who shaped the egalitarian culture of tech—no reserved parking, no corner offices. Died young at 62 but created the template for tech startups.",
+    "primaryRole": "Co-founder, Intel",
+    "secondaryRole": "Co-founder, Fairchild"
   },
   "gordon_moore": {
     "label": "Gordon Moore",
-    "description": "Intel co-founder who in 1965 predicted transistor density would double roughly every two years—Moore's Law. This observation drove chip industry roadmaps for 50 years. Quiet and scholarly, the yin to Noyce's yang. Gave away $5B+ to conservation and research through philanthropy."
+    "description": "Intel co-founder who in 1965 predicted transistor density would double roughly every two years—Moore's Law. This observation drove chip industry roadmaps for 50 years. Quiet and scholarly, the yin to Noyce's yang. Gave away $5B+ to conservation and research through philanthropy.",
+    "primaryRole": "Co-founder, Intel",
+    "secondaryRole": "Chairman Emeritus"
   },
   "steve_jobs": {
     "label": "Steve Jobs",
-    "description": "Apple co-founder who stood at the intersection of technology and liberal arts. Created Macintosh, was fired, bought Pixar, returned, then delivered iMac, iPod, iPhone, and iPad. His obsession with design and user experience redefined consumer electronics. \\\"One more thing\\\" that changed the world."
+    "description": "Apple co-founder who stood at the intersection of technology and liberal arts. Created Macintosh, was fired, bought Pixar, returned, then delivered iMac, iPod, iPhone, and iPad. His obsession with design and user experience redefined consumer electronics. \\\"One more thing\\\" that changed the world.",
+    "primaryRole": "Co-founder, Apple",
+    "secondaryRole": "Founder, NeXT"
   },
   "steve_wozniak": {
     "label": "Steve Wozniak",
-    "description": "The engineering genius who single-handedly designed the Apple I and II. Woz built the first personal computers that actually worked and that people wanted. Later focused on education and philanthropy. The anti-Jobs—humble, generous, and beloved by engineers. \\\"Woz\\\" to everyone."
+    "description": "The engineering genius who single-handedly designed the Apple I and II. Woz built the first personal computers that actually worked and that people wanted. Later focused on education and philanthropy. The anti-Jobs—humble, generous, and beloved by engineers. \\\"Woz\\\" to everyone.",
+    "primaryRole": "Co-founder, Apple",
+    "secondaryRole": "Computer Engineer"
   },
   "bill_gates": {
     "label": "Bill Gates",
-    "description": "Microsoft co-founder who saw that software, not hardware, would define computing. MS-DOS then Windows dominated PCs for decades. Ruthless competitor, antitrust target, then world's richest person. Now spends billions through Gates Foundation on global health and climate. From villain to philanthropist."
+    "description": "Microsoft co-founder who saw that software, not hardware, would define computing. MS-DOS then Windows dominated PCs for decades. Ruthless competitor, antitrust target, then world's richest person. Now spends billions through Gates Foundation on global health and climate. From villain to philanthropist.",
+    "primaryRole": "Co-founder, Microsoft",
+    "secondaryRole": "Co-chair, Gates Foundation"
   },
   "larry_ellison": {
     "label": "Larry Ellison",
-    "description": "Oracle founder who built a database empire through relentless salesmanship and ruthless acquisition. Yachts, fighter jets, and Japanese samurai culture define his style. Became world's 5th richest by holding the Fortune 500's data hostage. Still CTO at 80. The unforgettable CEO."
+    "description": "Oracle founder who built a database empire through relentless salesmanship and ruthless acquisition. Yachts, fighter jets, and Japanese samurai culture define his style. Became world's 5th richest by holding the Fortune 500's data hostage. Still CTO at 80. The unforgettable CEO.",
+    "primaryRole": "Co-founder & CTO, Oracle",
+    "secondaryRole": "Former CEO"
   },
   "morris_chang": {
     "label": "Morris Chang",
-    "description": "Texas Instruments veteran who returned to Taiwan and founded TSMC in 1987. His \\\"foundry model\\\" let chip designers outsource manufacturing, enabling NVIDIA, Apple, and AMD to exist. Now 93, he built the company on which all advanced chips depend. The most important person most never heard of."
+    "description": "Texas Instruments veteran who returned to Taiwan and founded TSMC in 1987. His \\\"foundry model\\\" let chip designers outsource manufacturing, enabling NVIDIA, Apple, and AMD to exist. Now 93, he built the company on which all advanced chips depend. The most important person most never heard of.",
+    "primaryRole": "Founder, TSMC",
+    "secondaryRole": "Former Chairman"
   },
   "linus_torvalds": {
     "label": "Linus Torvalds",
-    "description": "Finnish programmer who wrote Linux as a hobby while a university student. It now runs the internet, Android, and the cloud. Also created Git for version control. Famous for blunt code reviews and profane mailing list posts. Gave software freedom to the world by accident."
+    "description": "Finnish programmer who wrote Linux as a hobby while a university student. It now runs the internet, Android, and the cloud. Also created Git for version control. Famous for blunt code reviews and profane mailing list posts. Gave software freedom to the world by accident.",
+    "primaryRole": "Software Engineer",
+    "secondaryRole": "Creator of Linux"
   },
   "jeff_bezos": {
     "label": "Jeff Bezos",
-    "description": "Amazon founder who started with books and built the \\\"Everything Store.\\\" AWS invented cloud computing and generates most of Amazon's profit. Customer obsession, long-term thinking, and controversial labor practices define his legacy. Now focused on Blue Origin spacecraft and buying the Washington Post."
+    "description": "Amazon founder who started with books and built the \\\"Everything Store.\\\" AWS invented cloud computing and generates most of Amazon's profit. Customer obsession, long-term thinking, and controversial labor practices define his legacy. Now focused on Blue Origin spacecraft and buying the Washington Post.",
+    "primaryRole": "Founder, Amazon",
+    "secondaryRole": "Founder, Blue Origin"
   },
   "jensen_huang": {
     "label": "Jensen Huang",
-    "description": "NVIDIA co-founder who bet the company on GPUs for gaming, then AI. The leather jacket, the keynotes, and the kitchen-table founding story are iconic. NVIDIA is now worth $3T+ as the AI revolution's infrastructure provider. From Denny's booth to world's most important chipmaker."
+    "description": "NVIDIA co-founder who bet the company on GPUs for gaming, then AI. The leather jacket, the keynotes, and the kitchen-table founding story are iconic. NVIDIA is now worth $3T+ as the AI revolution's infrastructure provider. From Denny's booth to world's most important chipmaker.",
+    "primaryRole": "Co-founder & CEO, NVIDIA",
+    "secondaryRole": "Electrical Engineer"
   },
   "marc_benioff": {
     "label": "Marc Benioff",
-    "description": "Salesforce founder who declared \\\"The End of Software\\\" and pioneered cloud SaaS. 1-1-1 philanthropy model (1% equity, time, product) inspired corporate giving. Bought Slack and Time magazine. Hawaiian shirts, Ohana culture, and activist stances make him tech's most unusual CEO."
+    "description": "Salesforce founder who declared \\\"The End of Software\\\" and pioneered cloud SaaS. 1-1-1 philanthropy model (1% equity, time, product) inspired corporate giving. Bought Slack and Time magazine. Hawaiian shirts, Ohana culture, and activist stances make him tech's most unusual CEO.",
+    "primaryRole": "Founder & CEO, Salesforce",
+    "secondaryRole": "Philanthropist"
   },
   "larry_page": {
     "label": "Larry Page",
-    "description": "Google co-founder who invented PageRank by treating web links like academic citations. His vision to \\\"organize the world's information\\\" built a $2T company. Known for \\\"moonshot\\\" bets at Alphabet. Reclusive now, flying experimental aircraft. The quiet architect of the information age."
+    "description": "Google co-founder who invented PageRank by treating web links like academic citations. His vision to \\\"organize the world's information\\\" built a $2T company. Known for \\\"moonshot\\\" bets at Alphabet. Reclusive now, flying experimental aircraft. The quiet architect of the information age.",
+    "primaryRole": "Co-founder, Google",
+    "secondaryRole": "Former CEO, Alphabet"
   },
   "sergey_brin": {
     "label": "Sergey Brin",
-    "description": "Google co-founder who emigrated from Russia age 6. His mathematical skills and Page's vision created the world's best search engine. Led Google X \\\"moonshots\\\" like Glass and self-driving cars. Returned from semi-retirement to oversee Google's AI response to ChatGPT."
+    "description": "Google co-founder who emigrated from Russia age 6. His mathematical skills and Page's vision created the world's best search engine. Led Google X \\\"moonshots\\\" like Glass and self-driving cars. Returned from semi-retirement to oversee Google's AI response to ChatGPT.",
+    "primaryRole": "Co-founder, Google",
+    "secondaryRole": "Computer Scientist"
   },
   "reed_hastings": {
     "label": "Reed Hastings",
-    "description": "Netflix co-founder who pivoted from DVD-by-mail to streaming before anyone else saw it coming. Built a content empire with \\\"no rules\\\" culture of radical transparency. Changed how the world watches TV, introducing binge-watching. \\\"The future of TV is the internet\\\" proved prophetic."
+    "description": "Netflix co-founder who pivoted from DVD-by-mail to streaming before anyone else saw it coming. Built a content empire with \\\"no rules\\\" culture of radical transparency. Changed how the world watches TV, introducing binge-watching. \\\"The future of TV is the internet\\\" proved prophetic.",
+    "primaryRole": "Co-founder, Netflix",
+    "secondaryRole": "Executive Chairman"
   },
   "elon_musk": {
     "label": "Elon Musk",
-    "description": "Serial founder of PayPal, Tesla, SpaceX, Neuralink, Boring Company, and xAI. Made EVs desirable, landed rockets, and deploys Starlink globally. Bought Twitter/X. World's richest person, most controversial tech figure. Either saving humanity or trolling it—often both simultaneously."
+    "description": "Serial founder of PayPal, Tesla, SpaceX, Neuralink, Boring Company, and xAI. Made EVs desirable, landed rockets, and deploys Starlink globally. Bought Twitter/X. World's richest person, most controversial tech figure. Either saving humanity or trolling it—often both simultaneously.",
+    "primaryRole": "Founder & CEO, SpaceX",
+    "secondaryRole": "CEO, Tesla"
   },
   "mark_zuckerberg": {
     "label": "Mark Zuckerberg",
-    "description": "Facebook founder who connected 3 billion people from a Harvard dorm room. Acquired Instagram and WhatsApp. \\\"Move fast and break things\\\" worked until privacy scandals and disinformation didn't. Rebranded to Meta betting on VR/AR metaverse. Reinventing himself and his company at 40."
+    "description": "Facebook founder who connected 3 billion people from a Harvard dorm room. Acquired Instagram and WhatsApp. \\\"Move fast and break things\\\" worked until privacy scandals and disinformation didn't. Rebranded to Meta betting on VR/AR metaverse. Reinventing himself and his company at 40.",
+    "primaryRole": "Founder & CEO, Meta",
+    "secondaryRole": "Philanthropist"
   },
   "chad_hurley": {
     "label": "Chad Hurley",
-    "description": "YouTube co-founder who designed PayPal's logo and imagined a world where anyone could share video. \\\"Broadcast Yourself\\\" launched in 2005. Google bought it 18 months later for $1.65B—one of tech's greatest acquisitions. Created the creator economy before the term existed."
+    "description": "YouTube co-founder who designed PayPal's logo and imagined a world where anyone could share video. \\\"Broadcast Yourself\\\" launched in 2005. Google bought it 18 months later for $1.65B—one of tech's greatest acquisitions. Created the creator economy before the term existed.",
+    "primaryRole": "Co-founder, YouTube",
+    "secondaryRole": "Former CEO"
   },
   "jack_ma": {
     "label": "Jack Ma",
-    "description": "Former English teacher who founded Alibaba in his Hangzhou apartment. Built China's answer to Amazon plus eBay. Flamboyant speaker, tai chi enthusiast. Created Singles Day, the world's biggest shopping day. Clashed with Chinese government, now rarely seen publicly."
+    "description": "Former English teacher who founded Alibaba in his Hangzhou apartment. Built China's answer to Amazon plus eBay. Flamboyant speaker, tai chi enthusiast. Created Singles Day, the world's biggest shopping day. Clashed with Chinese government, now rarely seen publicly.",
+    "primaryRole": "Co-founder, Alibaba",
+    "secondaryRole": "Philanthropist"
   },
   "pony_ma": {
     "label": "Pony Ma",
-    "description": "Tencent founder who built WeChat, the super-app that is China's digital infrastructure. Messaging, payments, mini-apps, games—all in one platform. Unlike flashy Jack Ma, Pony Ma is quiet and technical. Worth $40B+ while staying out of headlines. The most powerful person in Chinese tech."
+    "description": "Tencent founder who built WeChat, the super-app that is China's digital infrastructure. Messaging, payments, mini-apps, games—all in one platform. Unlike flashy Jack Ma, Pony Ma is quiet and technical. Worth $40B+ while staying out of headlines. The most powerful person in Chinese tech.",
+    "primaryRole": "Founder & CEO, Tencent",
+    "secondaryRole": "Software Engineer"
   },
   "travis_kalanick": {
     "label": "Travis Kalanick",
-    "description": "Uber co-founder whose \\\"always be hustlin'\\\" attitude disrupted global taxi industries. \\\"Uber\\\" became a verb meaning disruption itself. Toxic culture scandals forced his 2017 ouster. Still a billionaire, now investing quietly. The cautionary tale of how founder aggression can fail."
+    "description": "Uber co-founder whose \\\"always be hustlin'\\\" attitude disrupted global taxi industries. \\\"Uber\\\" became a verb meaning disruption itself. Toxic culture scandals forced his 2017 ouster. Still a billionaire, now investing quietly. The cautionary tale of how founder aggression can fail.",
+    "primaryRole": "Co-founder, Uber",
+    "secondaryRole": "Former CEO"
   },
   "patrick_collison": {
     "label": "Patrick Collison",
-    "description": "Irish prodigy who built Stripe with brother John from their MIT dorm. Seven lines of code to accept payments. Built developer-first infrastructure for internet commerce worth $65B+. Also runs research labs in science funding and progress studies. The builder's builder."
+    "description": "Irish prodigy who built Stripe with brother John from their MIT dorm. Seven lines of code to accept payments. Built developer-first infrastructure for internet commerce worth $65B+. Also runs research labs in science funding and progress studies. The builder's builder.",
+    "primaryRole": "Co-founder & CEO, Stripe",
+    "secondaryRole": "Entrepreneur"
   },
   "satoshi_nakamoto": {
     "label": "Satoshi Nakamoto",
-    "description": "Pseudonymous creator of Bitcoin who solved the double-spend problem for digital currency using blockchain. Published the whitepaper October 2008, launched Bitcoin January 2009, disappeared 2011. Identity unknown—individual or group? Owns 1M inactive BTC. The most influential ghost ever."
+    "description": "Pseudonymous creator of Bitcoin who solved the double-spend problem for digital currency using blockchain. Published the whitepaper October 2008, launched Bitcoin January 2009, disappeared 2011. Identity unknown—individual or group? Owns 1M inactive BTC. The most influential ghost ever.",
+    "primaryRole": "Cryptographer",
+    "secondaryRole": "Creator of Bitcoin"
   },
   "vitalik_buterin": {
     "label": "Vitalik Buterin",
-    "description": "Russian-Canadian programmer who conceived Ethereum at age 19. Built a \\\"world computer\\\" where code runs as \\\"smart contracts.\\\" Enabled DeFi, NFTs, DAOs. Publicly donates billions. Slim, awkward, brilliant—the philosopher king of crypto. Still coding and writing about coordination problems."
+    "description": "Russian-Canadian programmer who conceived Ethereum at age 19. Built a \\\"world computer\\\" where code runs as \\\"smart contracts.\\\" Enabled DeFi, NFTs, DAOs. Publicly donates billions. Slim, awkward, brilliant—the philosopher king of crypto. Still coding and writing about coordination problems.",
+    "primaryRole": "Co-founder, Ethereum",
+    "secondaryRole": "Programmer"
   },
   "tim_cook": {
     "label": "Tim Cook",
-    "description": "Apple CEO who succeeded Steve Jobs and proved the doubters wrong. Tripled revenue, reached $3T valuation. Operations genius who mastered supply chains. Quietly gay CEO of world's largest company, uses platform for privacy advocacy. \\\"The Apple story will continue with Tim\\\" was right."
+    "description": "Apple CEO who succeeded Steve Jobs and proved the doubters wrong. Tripled revenue, reached $3T valuation. Operations genius who mastered supply chains. Quietly gay CEO of world's largest company, uses platform for privacy advocacy. \\\"The Apple story will continue with Tim\\\" was right.",
+    "primaryRole": "CEO, Apple",
+    "secondaryRole": "Former COO"
   },
   "satya_nadella": {
     "label": "Satya Nadella",
-    "description": "Microsoft CEO who transformed the company from Windows-centric to cloud-first. Azure rivals AWS, GitHub powers developers, OpenAI partnership puts AI in everything. \\\"Growth mindset\\\" culture replaced Ballmer-era politics. Made Microsoft cool again and added $2T in market value."
+    "description": "Microsoft CEO who transformed the company from Windows-centric to cloud-first. Azure rivals AWS, GitHub powers developers, OpenAI partnership puts AI in everything. \\\"Growth mindset\\\" culture replaced Ballmer-era politics. Made Microsoft cool again and added $2T in market value.",
+    "primaryRole": "CEO, Microsoft",
+    "secondaryRole": "Chairman"
   },
   "sundar_pichai": {
     "label": "Sundar Pichai",
-    "description": "Indian-born CEO of Alphabet and Google. Rose through Chrome and Android leadership. Calm, diplomatic, navigating antitrust suits and AI competition. Pushed Bard/Gemini to compete with ChatGPT. Low-key style contrasts with predecessors. Steering the world's information giant through its biggest challenges."
+    "description": "Indian-born CEO of Alphabet and Google. Rose through Chrome and Android leadership. Calm, diplomatic, navigating antitrust suits and AI competition. Pushed Bard/Gemini to compete with ChatGPT. Low-key style contrasts with predecessors. Steering the world's information giant through its biggest challenges.",
+    "primaryRole": "CEO, Alphabet & Google",
+    "secondaryRole": "Product Manager"
   },
   "lisa_su": {
     "label": "Lisa Su",
-    "description": "AMD CEO who orchestrated one of tech's greatest turnarounds. Took over a near-bankrupt company, launched Ryzen CPUs and EPYC servers that now rival Intel. First woman to lead a major chip company. MIT PhD. Stock up 40x since 2014. The engineer-CEO who proved execution beats Intel."
+    "description": "AMD CEO who orchestrated one of tech's greatest turnarounds. Took over a near-bankrupt company, launched Ryzen CPUs and EPYC servers that now rival Intel. First woman to lead a major chip company. MIT PhD. Stock up 40x since 2014. The engineer-CEO who proved execution beats Intel.",
+    "primaryRole": "Chair & CEO, AMD",
+    "secondaryRole": "Electrical Engineer"
   },
   "demis_hassabis": {
     "label": "Demis Hassabis",
-    "description": "DeepMind co-founder, child chess prodigy, and game designer who now leads Google's AI research. AlphaGo shocked the world, AlphaFold solved protein folding (50-year-old problem!). 2024 Nobel Prize in Chemistry. Trying to \\\"solve intelligence\\\" for humanity's benefit. The real-life AI visionary."
+    "description": "DeepMind co-founder, child chess prodigy, and game designer who now leads Google's AI research. AlphaGo shocked the world, AlphaFold solved protein folding (50-year-old problem!). 2024 Nobel Prize in Chemistry. Trying to \\\"solve intelligence\\\" for humanity's benefit. The real-life AI visionary.",
+    "primaryRole": "Co-founder & CEO, DeepMind",
+    "secondaryRole": "AI Researcher"
   },
   "sam_altman": {
     "label": "Sam Altman",
-    "description": "OpenAI CEO who shipped ChatGPT and triggered the AI race. Previously ran Y Combinator age 28. Briefly fired then rehired in dramatic 2023 board chaos. Fundraising genius courting Microsoft and sovereign wealth. The CEO at the center of AI's commercial explosion—for now."
+    "description": "OpenAI CEO who shipped ChatGPT and triggered the AI race. Previously ran Y Combinator age 28. Briefly fired then rehired in dramatic 2023 board chaos. Fundraising genius courting Microsoft and sovereign wealth. The CEO at the center of AI's commercial explosion—for now.",
+    "primaryRole": "Co-founder & CEO, OpenAI",
+    "secondaryRole": "Former President, YC"
   },
   "ilya_sutskever": {
     "label": "Ilya Sutskever",
-    "description": "OpenAI co-founder and chief scientist behind GPT models. Student of Hinton who co-created AlexNet. Key figure in the dramatic 2023 board attempt to oust Sam Altman. Left to start Safe Superintelligence Inc. The scientist searching for both capability and alignment in AI."
+    "description": "OpenAI co-founder and chief scientist behind GPT models. Student of Hinton who co-created AlexNet. Key figure in the dramatic 2023 board attempt to oust Sam Altman. Left to start Safe Superintelligence Inc. The scientist searching for both capability and alignment in AI.",
+    "primaryRole": "Co-founder, OpenAI",
+    "secondaryRole": "Co-founder, SSI"
   },
   "arthur_rock": {
     "label": "Arthur Rock",
-    "description": "Coined the term \\\"venture capital\\\" and backed Fairchild Semiconductor, Intel, and Apple. The original Silicon Valley VC who funded the dreams of Noyce, Moore, and Jobs. His $57K investment in Apple became $14M. Ruthless board member, legendary returns. The financier who built the Valley."
+    "description": "Coined the term \\\"venture capital\\\" and backed Fairchild Semiconductor, Intel, and Apple. The original Silicon Valley VC who funded the dreams of Noyce, Moore, and Jobs. His $57K investment in Apple became $14M. Ruthless board member, legendary returns. The financier who built the Valley.",
+    "primaryRole": "Venture Capitalist",
+    "secondaryRole": "Early Investor"
   },
   "don_valentine": {
     "label": "Don Valentine",
-    "description": "Founded Sequoia Capital in 1972, backing Apple, Cisco, Google, and YouTube. \\\"Target big markets\\\" philosophy shaped VC forever. Blunt, fearless mentor who built the most successful venture firm in history. Sequoia's red logo adorns tech's greatest companies because of Don."
+    "description": "Founded Sequoia Capital in 1972, backing Apple, Cisco, Google, and YouTube. \\\"Target big markets\\\" philosophy shaped VC forever. Blunt, fearless mentor who built the most successful venture firm in history. Sequoia's red logo adorns tech's greatest companies because of Don.",
+    "primaryRole": "Founder, Sequoia",
+    "secondaryRole": "Venture Capitalist"
   },
   "masayoshi_son": {
     "label": "Masayoshi Son",
-    "description": "SoftBank founder who rewrote venture rules with the $100B Vision Fund. Early bet on Alibaba returned $80B+. WeWork and other failures taught that not every bet pays. Believes in the \\\"Singularity\\\" and pours billions into AI. The most audacious investor, for better or worse."
+    "description": "SoftBank founder who rewrote venture rules with the $100B Vision Fund. Early bet on Alibaba returned $80B+. WeWork and other failures taught that not every bet pays. Believes in the \\\"Singularity\\\" and pours billions into AI. The most audacious investor, for better or worse.",
+    "primaryRole": "Founder & CEO, SoftBank",
+    "secondaryRole": "Investor"
   },
   "marc_andreessen": {
     "label": "Marc Andreessen",
-    "description": "Netscape co-founder who made the web visual with Mosaic browser. \\\"Software is eating the world\\\" thesis at a16z invested in Facebook, GitHub, Coinbase. Controversial \\\"Techno-Optimist Manifesto\\\" advocate. From building browsers to funding the future. Tech's loudest voice for progress."
+    "description": "Netscape co-founder who made the web visual with Mosaic browser. \\\"Software is eating the world\\\" thesis at a16z invested in Facebook, GitHub, Coinbase. Controversial \\\"Techno-Optimist Manifesto\\\" advocate. From building browsers to funding the future. Tech's loudest voice for progress.",
+    "primaryRole": "Co-founder, a16z",
+    "secondaryRole": "Co-founder, Netscape"
   },
   "peter_thiel": {
     "label": "Peter Thiel",
-    "description": "PayPal co-founder, Facebook's first outside investor ($500K for 10%), Palantir founder. \\\"Zero to One\\\" philosophy—create new things, don't compete. Funds Founders Fund, conservative causes, and anti-aging research. Silicon Valley's most iconoclastic mind. The contrarian who is often right."
+    "description": "PayPal co-founder, Facebook's first outside investor ($500K for 10%), Palantir founder. \\\"Zero to One\\\" philosophy—create new things, don't compete. Funds Founders Fund, conservative causes, and anti-aging research. Silicon Valley's most iconoclastic mind. The contrarian who is often right.",
+    "primaryRole": "Partner, Founders Fund",
+    "secondaryRole": "Co-founder, PayPal"
   },
   "reid_hoffman": {
     "label": "Reid Hoffman",
-    "description": "LinkedIn co-founder who built the professional social network. PayPal Mafia member, Greylock partner, AI early-adopter. Hosts podcasts, invests in AI startups, wrote \\\"Blitzscaling.\\\" Connected to everyone in Valley. \\\"The Oracle of Silicon Valley\\\" who sees network effects everywhere."
+    "description": "LinkedIn co-founder who built the professional social network. PayPal Mafia member, Greylock partner, AI early-adopter. Hosts podcasts, invests in AI startups, wrote \\\"Blitzscaling.\\\" Connected to everyone in Valley. \\\"The Oracle of Silicon Valley\\\" who sees network effects everywhere.",
+    "primaryRole": "Partner, Greylock",
+    "secondaryRole": "Co-founder, LinkedIn"
   },
   "paul_graham": {
     "label": "Paul Graham",
-    "description": "Y Combinator co-founder who industrialized startup creation. Lisp hacker, essayist, painter. Funded Airbnb, Dropbox, Stripe, Reddit. Essays like \\\"Do Things That Don't Scale\\\" became startup orthodoxy. $500K for 7%, 3 months of mentorship, launched 4,000 companies. Changed how startups begin."
+    "description": "Y Combinator co-founder who industrialized startup creation. Lisp hacker, essayist, painter. Funded Airbnb, Dropbox, Stripe, Reddit. Essays like \\\"Do Things That Don't Scale\\\" became startup orthodoxy. $500K for 7%, 3 months of mentorship, launched 4,000 companies. Changed how startups begin.",
+    "primaryRole": "Co-founder, Y Combinator",
+    "secondaryRole": "Essayist"
   },
   "max_levchin": {
     "label": "Max Levchin",
-    "description": "PayPal co-founder who built the fraud-detection systems that saved the company. Ukrainian immigrant, cryptography expert, serial founder. Now CEO of Affirm (buy-now-pay-later). The PayPal Mafia technologist who keeps building instead of just investing. Still coding in his 40s."
+    "description": "PayPal co-founder who built the fraud-detection systems that saved the company. Ukrainian immigrant, cryptography expert, serial founder. Now CEO of Affirm (buy-now-pay-later). The PayPal Mafia technologist who keeps building instead of just investing. Still coding in his 40s.",
+    "primaryRole": "Founder & CEO, Affirm",
+    "secondaryRole": "Co-founder, PayPal"
   },
   "roelof_botha": {
     "label": "Roelof Botha",
-    "description": "South African-born Sequoia partner who went from PayPal CFO to the Valley's top VC. Backed YouTube ($8M→$2B), Square, Instagram, MongoDB. Now leads Sequoia. Calm, methodical, and consistently early. The quietest member of the PayPal Mafia with the best investment track record."
+    "description": "South African-born Sequoia partner who went from PayPal CFO to the Valley's top VC. Backed YouTube ($8M→$2B), Square, Instagram, MongoDB. Now leads Sequoia. Calm, methodical, and consistently early. The quietest member of the PayPal Mafia with the best investment track record.",
+    "primaryRole": "Partner, Sequoia",
+    "secondaryRole": "Former CFO, PayPal"
   },
   "turing_machine": {
     "label": "Turing Machine",

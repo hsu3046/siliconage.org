@@ -1080,7 +1080,6 @@ linkRival('nano_banana', 'midjourney', 'Nano Banana challenged Midjourney with s
 // 5. HISTORICAL EVENTS (Timeline Markers)
 // ==============================================================================
 
-addEvent('traitorous_eight', 'The "Traitorous Eight" left Shockley Semiconductor to found Fairchild, effectively birthing Silicon Valley.', 1957, undefined, ['william_shockley', 'fairchild', 'robert_noyce', 'gordon_moore']);
 addEvent('moores_law', 'Gordon Moore predicted that the number of transistors on a microchip would double every two years (Moore\'s Law).', 1965, undefined, ['gordon_moore', 'intel', 'transistor', 'ic']);
 addEvent('ai_winter', 'The "AI Winter" period saw reduced funding and interest in artificial intelligence research due to overhyped expectations.', 1974, 1980, ['geoffrey_hinton']);
 addEvent('apple_1984_commercial', 'Apple aired the iconic "1984" commercial during the Super Bowl to introduce the Macintosh.', 1984, undefined, ['apple', 'steve_jobs', 'macintosh']);

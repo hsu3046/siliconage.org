@@ -403,8 +403,8 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
     description: string;
     score: number;
     companyRole?: string;
-    personRole?: string;
-    techRole?: string;
+    primaryRole?: string;
+    secondaryRole?: string;
     techCategoryL1?: string;
     techCategoryL2?: string;
     hashtags?: { id: string, label: string }[];
@@ -1261,8 +1261,8 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
                 description: d.description,
                 // Assign roles based on node category
                 companyRole: d.category === Category.COMPANY ? d.companyCategories?.[0] : undefined,
-                personRole: d.category === Category.PERSON ? (d.impactRole as string) : undefined,
-                techRole: d.category === Category.TECHNOLOGY ? (d.impactRole as string) : undefined,
+                primaryRole: d.category === Category.PERSON ? d.primaryRole : undefined,
+                secondaryRole: d.category === Category.PERSON ? d.secondaryRole : undefined,
                 techCategoryL1: d.techCategoryL1,
                 techCategoryL2: d.techCategoryL2,
                 hashtags: hashtags
@@ -1425,8 +1425,8 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
               description: d.description,
               // Assign roles based on node category
               companyRole: d.category === Category.COMPANY ? d.companyCategories?.[0] : undefined,
-              personRole: d.category === Category.PERSON ? (d.impactRole as string) : undefined,
-              techRole: d.category === Category.TECHNOLOGY ? (d.impactRole as string) : undefined,
+              primaryRole: d.category === Category.PERSON ? d.primaryRole : undefined,
+              secondaryRole: d.category === Category.PERSON ? d.secondaryRole : undefined,
               techCategoryL1: d.techCategoryL1,
               techCategoryL2: d.techCategoryL2,
               hashtags: hashtags
@@ -1606,14 +1606,14 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
                 {t(`companyCategories.${tooltip.companyRole}`) || tooltip.companyRole.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase())}
               </span>
             )}
-            {tooltip.personRole && (
+            {tooltip.primaryRole && (
               <span className="text-[9px] px-1.5 py-0.5 rounded bg-purple-900/40 text-purple-300 border border-purple-800/50">
-                {t(`personRoles.${tooltip.personRole}`) || tooltip.personRole}
+                {tooltip.primaryRole}
               </span>
             )}
-            {tooltip.techRole && (
-              <span className="text-[9px] px-1.5 py-0.5 rounded bg-green-900/40 text-green-300 border border-green-800/50">
-                {t(`techRoles.${tooltip.techRole}`) || tooltip.techRole}
+            {tooltip.secondaryRole && (
+              <span className="text-[9px] px-1.5 py-0.5 rounded bg-purple-900/40 text-purple-200 border border-purple-800/50">
+                {tooltip.secondaryRole}
               </span>
             )}
             {tooltip.techCategoryL1 && (
@@ -1635,7 +1635,7 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
           {tooltip.hashtags && tooltip.hashtags.length > 0 && (
             <div className="flex justify-end mt-1">
               <span className="text-[9px] text-slate-500">
-                🔗 {tooltip.hashtags.length} connection{tooltip.hashtags.length > 1 ? 's' : ''}
+                🔗 {tooltip.hashtags.length} {t('mapView.connections')}
               </span>
             </div>
           )}

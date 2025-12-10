@@ -78,7 +78,7 @@ const App: React.FC = () => {
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
 
   // i18n hook - handles locale initialization and provides t() function
-  const { t, locale, translateNode, translateLink, translateEvent } = useLocale();
+  const { t, locale, setLocale, translateNode, translateLink, translateEvent } = useLocale();
 
   // Router hooks for SEO-friendly URLs
   const navigate = useNavigate();
@@ -87,11 +87,19 @@ const App: React.FC = () => {
   // Translate node and link data when locale changes
   const translatedData = useMemo(() => {
     const translatedNodes = INITIAL_DATA.nodes.map(node => {
-      const translated = translateNode(node.id, node.label, node.description);
+      const translated = translateNode(
+        node.id,
+        node.label,
+        node.description,
+        node.primaryRole,
+        node.secondaryRole
+      );
       return {
         ...node,
         label: translated.label,
-        description: translated.description
+        description: translated.description,
+        primaryRole: translated.primaryRole,
+        secondaryRole: translated.secondaryRole
       };
     });
 
@@ -118,7 +126,8 @@ const App: React.FC = () => {
       links: translatedLinks,
       events: translatedEvents
     };
-  }, [locale, translateNode, translateLink, translateEvent]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locale]); // Only depend on locale - translate functions read from module state
 
   // Featured Node of the Day - deterministic based on date
   const featuredNode = useMemo(() => {
@@ -769,11 +778,9 @@ const App: React.FC = () => {
           // Hide on PC for all views (each view has its own focus node display)
           return (
             <div className="h-14 flex items-center bg-slate-900/30 relative xl:hidden">
-              {/* Target icon on the left - exit focus mode */}
-              <button
-                onClick={exitFocusMode}
-                className="absolute left-4 p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-full transition-all"
-                title="Exit Focus Mode"
+              {/* Target icon on the left - decorative only (not clickable) */}
+              <div
+                className="absolute left-4 p-2 text-red-400"
               >
                 <svg className="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                   <circle cx="12" cy="12" r="10" />
@@ -784,7 +791,7 @@ const App: React.FC = () => {
                   <line x1="2" y1="12" x2="6" y2="12" />
                   <line x1="18" y1="12" x2="22" y2="12" />
                 </svg>
-              </button>
+              </div>
               {/* Centered Focus Text - flex-1 with center using the container width */}
               <div className="flex-1 flex justify-center">
                 <div className="flex flex-col items-center">
@@ -1007,6 +1014,8 @@ const App: React.FC = () => {
           isOpen={isAboutOpen}
           onClose={() => { setIsAboutOpen(false); updateAboutUrl(false); }}
           onOpenChangeLog={() => setIsChangeLogOpen(true)}
+          locale={locale}
+          onLocaleChange={setLocale}
         />
 
         <ChangeLog
