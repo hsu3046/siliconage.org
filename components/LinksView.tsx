@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { NodeData, LinkData, GraphData, LinkType, Category } from '../types';
 import { CATEGORY_COLORS, CATEGORY_LABELS } from '../constants';
-import { getPersonVerbs, getTechVerb, getConnectionLabel } from '../utils/labels';
 import { getLinkIconConfig, getLinkIcon } from '../utils/icons';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import { useLocale } from '../hooks/useLocale';
@@ -45,7 +44,7 @@ const getEngagesDisplay = (linkIcon?: string) => {
     };
 };
 
-// Get relationship description using labels.ts
+// Get relationship description (simplified without labels.ts)
 const getConnectionDescription = (
     focusNode: NodeData,
     otherNode: NodeData,
@@ -54,52 +53,31 @@ const getConnectionDescription = (
 ): string => {
     // Person connecting to focus
     if (otherNode.category === Category.PERSON) {
-        const verbs = getPersonVerbs(otherNode);
         if (linkType === LinkType.CREATES) {
-            if (focusNode.category === Category.COMPANY) {
-                return verbs.foundedCompany.replace(' of', '');
-            }
-            if (focusNode.category === Category.TECHNOLOGY) {
-                return verbs.createdTech;
-            }
+            if (focusNode.category === Category.COMPANY) return 'Founded';
+            if (focusNode.category === Category.TECHNOLOGY) return 'Created';
         }
-        if (linkType === LinkType.CONTRIBUTES) {
-            if (focusNode.category === Category.COMPANY) {
-                return verbs.contributedCompany.replace(' to', '').replace(' at', '');
-            }
-            return verbs.contributedTech.replace(' to', '');
-        }
+        if (linkType === LinkType.CONTRIBUTES) return 'Contributed';
     }
 
     // Technology connecting to focus
     if (otherNode.category === Category.TECHNOLOGY) {
-        const verb = getTechVerb(otherNode);
-        if (linkType === LinkType.CREATES) {
-            return isInbound ? verb : `${verb} by`;
-        }
-        if (linkType === LinkType.POWERS) {
-            return isInbound ? 'Foundation' : 'Enables';
-        }
-        if (linkType === LinkType.CONTRIBUTES) {
-            return isInbound ? 'Based on' : 'Inspired';
-        }
+        if (linkType === LinkType.CREATES) return isInbound ? 'Created' : 'Created by';
+        if (linkType === LinkType.POWERS) return isInbound ? 'Foundation' : 'Enables';
+        if (linkType === LinkType.CONTRIBUTES) return isInbound ? 'Based on' : 'Inspired';
     }
 
     // Company connecting
     if (otherNode.category === Category.COMPANY) {
-        if (linkType === LinkType.CREATES) {
-            return isInbound ? 'Created by' : 'Created';
-        }
-        if (linkType === LinkType.POWERS) {
-            return isInbound ? 'Powered by' : 'Powers';
-        }
+        if (linkType === LinkType.CREATES) return isInbound ? 'Created by' : 'Created';
+        if (linkType === LinkType.POWERS) return isInbound ? 'Powered by' : 'Powers';
     }
 
     // Default
     switch (linkType) {
         case LinkType.CREATES: return isInbound ? 'Created by' : 'Created';
         case LinkType.POWERS: return isInbound ? 'Powered by' : 'Powers';
-        case LinkType.CONTRIBUTES: return isInbound ? 'Influenced by' : 'Influenced';
+        case LinkType.CONTRIBUTES: return isInbound ? 'From' : 'To';
         default: return '';
     }
 };
@@ -656,9 +634,9 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, fullData, focusNodeI
                                 <div className="mb-2">{getCategoryBadge(focusNode)}</div>
                                 <div className="text-3xl font-extrabold text-white mb-1 leading-tight tracking-tight">{focusNode.label}</div>
                                 <div className="text-sm text-slate-300 font-medium mb-4 opacity-80">
-                                    {focusNode.category === Category.COMPANY && `Founded ${focusNode.year}`}
+                                    {focusNode.category === Category.COMPANY && t('nodeLabels.foundedIn').replace('{year}', String(focusNode.year))}
                                     {focusNode.category === Category.PERSON && focusNode.primaryRole}
-                                    {focusNode.category === Category.TECHNOLOGY && `Introduced ${focusNode.year}`}
+                                    {focusNode.category === Category.TECHNOLOGY && `(${focusNode.year})`}
                                 </div>
                                 <div className="w-full text-left text-sm text-slate-300 leading-relaxed px-1">{focusNode.description}</div>
                             </div>
@@ -731,9 +709,9 @@ export const LinksView: React.FC<LinksViewProps> = ({ data, fullData, focusNodeI
                             <div className="text-xl font-bold text-white mb-1">{focusNode.label}</div>
                             {/* Date Info - like PC */}
                             <div className="text-sm text-slate-300 font-medium mb-3 opacity-80">
-                                {focusNode.category === Category.COMPANY && `Founded ${focusNode.year}`}
+                                {focusNode.category === Category.COMPANY && t('nodeLabels.foundedIn').replace('{year}', String(focusNode.year))}
                                 {focusNode.category === Category.PERSON && focusNode.primaryRole}
-                                {focusNode.category === Category.TECHNOLOGY && `Introduced ${focusNode.year}`}
+                                {focusNode.category === Category.TECHNOLOGY && `(${focusNode.year})`}
                             </div>
                             {/* Description - Left aligned like PC */}
                             <div className="w-full text-left text-sm text-slate-300 leading-relaxed">{focusNode.description}</div>

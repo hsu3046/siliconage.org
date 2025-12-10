@@ -2,8 +2,8 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { NodeData, AIResponse, GraphData, Category } from '../types';
 import { CATEGORY_COLORS, CATEGORY_LABELS } from '../constants';
 import { fetchNodeDetails } from '../services/geminiService';
-import { getTechVerb, getPersonVerbs, getConnectionLabel as getConnectionLabelFromLabels } from '../utils/labels';
 import { useLocale } from '../hooks/useLocale';
+import { EXTERNAL_LINKS, getExternalLinkUrl, getApplicableLinks, SupportedLocale } from '../config/externalLinks';
 
 interface DetailPanelProps {
   node: NodeData | null;
@@ -104,285 +104,43 @@ const getStockTicker = (nodeId: string): { ticker: string; exchange: string } | 
   return STOCK_TICKERS[nodeId] || null;
 };
 
-// === HELPER: Generate Smart External Links ===
-const getExternalLinks = (node: NodeData) => {
-  const name = node.label;
-  const category = node.category;
-
-  // For all categories (Company, Person, Technology)
-  const links: Array<{
-    label: string;
-    url: string;
-    icon: React.ReactNode;
-    show: boolean;
-  }> = [
-      // 1. Wikipedia
-      {
-        label: 'Wikipedia',
-        url: `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(name)}`,
-        icon: (
-          <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12.09 13.119c-.936 1.932-2.217 4.548-2.853 5.728-.616 1.074-1.127.931-1.532.029-1.406-3.321-4.293-9.144-5.651-12.409-.251-.601-.441-.987-.619-1.139-.181-.15-.554-.24-1.122-.271C.12 5.045 0 4.992 0 4.894v-.528c0-.119.068-.189.207-.19h3.852c.118.001.178.062.179.18v.485c0 .11-.061.179-.18.18-.968.042-1.196.344-.701 1.024l4.455 9.195 2.115-4.263-1.836-3.807c-.577-1.132-.975-1.611-1.594-1.754-.229-.049-.593-.092-.684-.243-.06-.112-.074-.178-.074-.332V4.88c0-.107.062-.175.169-.175h4.086c.099 0 .169.068.169.175v.533c0 .105-.079.185-.193.185-.478.008-.847.104-.847.417 0 .158.058.33.174.518l2.155 4.373 2.119-4.243c.117-.235.189-.462.189-.688 0-.375-.384-.447-.847-.447-.11 0-.186-.08-.186-.185v-.537c0-.107.07-.175.17-.175h3.29c.099 0 .168.068.168.175v.519c0 .111-.057.19-.17.19-.544.009-.97.143-1.274.404-.304.259-.658.821-1.065 1.684l-2.47 4.967 2.578 5.339c.634 1.354 1.04 1.607 1.647 1.607.207 0 .394-.027.558-.082.163-.055.336-.134.519-.239.183-.105.352-.171.508-.199.156-.028.306.015.452.128.145.113.218.266.218.459 0 .256-.114.464-.342.622-.229.159-.564.238-1.006.238-1.348 0-2.292-.595-2.834-1.785l-2.91-6.022-2.677 5.39c-.35.712-.632 1.21-.846 1.49-.214.281-.508.422-.883.422-.356 0-.707-.133-1.052-.4-.345-.266-.517-.59-.517-.97 0-.193.052-.357.155-.49.104-.134.285-.271.543-.41.157-.088.275-.159.353-.213.079-.054.195-.15.349-.288.154-.138.289-.31.404-.516.115-.207.25-.472.404-.797l3.142-6.51-2.29-4.686c-.422-.87-.752-1.384-1.088-1.54-.181-.088-.431-.116-.749-.085-.11 0-.186-.08-.186-.185v-.537c0-.107.07-.175.17-.175h4.17c.1 0 .17.068.17.175v.537c0 .105-.08.185-.186.185" />
-          </svg>
-        ),
-        show: true
-      },
-      // 2. YouTube
-      {
-        label: 'YouTube',
-        url: (() => {
-          switch (category) {
-            case Category.PERSON:
-              return `https://www.youtube.com/results?search_query=${encodeURIComponent(`"${name}" documentary biography interview`)}`;
-            case Category.TECHNOLOGY:
-              return `https://www.youtube.com/results?search_query=${encodeURIComponent(`How "${name}" works explained`)}`;
-            default:
-              return `https://www.youtube.com/results?search_query=${encodeURIComponent(`"${name}" overview`)}`;
-          }
-        })(),
-        icon: (
-          <svg className="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
-          </svg>
-        ),
-        show: true
-      },
-      // 3. Web Search (Google)
-      {
-        label: 'Web Search',
-        url: `https://www.google.com/search?q=${encodeURIComponent(`"${name}" overview`)}`,
-        icon: (
-          <svg className="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
-          </svg>
-        ),
-        show: true
-      },
-      // 4. Research Paper (arXiv) - Tech & Person only
-      {
-        label: 'Paper',
-        url: (() => {
-          if (category === Category.PERSON) {
-            return `https://arxiv.org/search/?query=${encodeURIComponent(name)}&searchtype=all`;
-          }
-          return `https://arxiv.org/search/?query=${encodeURIComponent(name)}&searchtype=all`;
-        })(),
-        icon: (
-          <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
-          </svg>
-        ),
-        show: category === Category.TECHNOLOGY || category === Category.PERSON
-      },
-      // 5. Books (Amazon)
-      {
-        label: 'Books',
-        url: (() => {
-          if (category === Category.PERSON) {
-            return `https://www.amazon.com/s?k=${encodeURIComponent(`Books by "${name}"`)}`;
-          }
-          return `https://www.amazon.com/s?k=${encodeURIComponent(`"${name}" book`)}`;
-        })(),
-        icon: (
-          <svg className="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z" />
-          </svg>
-        ),
-        show: true
-      }
-    ];
-
-  return links.filter(link => link.show);
+// === HELPER: Generate Smart External Links (using config) ===
+const LINK_ICONS: Record<string, React.ReactNode> = {
+  wikipedia: (
+    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12.09 13.119c-.936 1.932-2.217 4.548-2.853 5.728-.616 1.074-1.127.931-1.532.029-1.406-3.321-4.293-9.144-5.651-12.409-.251-.601-.441-.987-.619-1.139-.181-.15-.554-.24-1.122-.271C.12 5.045 0 4.992 0 4.894v-.528c0-.119.068-.189.207-.19h3.852c.118.001.178.062.179.18v.485c0 .11-.061.179-.18.18-.968.042-1.196.344-.701 1.024l4.455 9.195 2.115-4.263-1.836-3.807c-.577-1.132-.975-1.611-1.594-1.754-.229-.049-.593-.092-.684-.243-.06-.112-.074-.178-.074-.332V4.88c0-.107.062-.175.169-.175h4.086c.099 0 .169.068.169.175v.533c0 .105-.079.185-.193.185-.478.008-.847.104-.847.417 0 .158.058.33.174.518l2.155 4.373 2.119-4.243c.117-.235.189-.462.189-.688 0-.375-.384-.447-.847-.447-.11 0-.186-.08-.186-.185v-.537c0-.107.07-.175.17-.175h3.29c.099 0 .168.068.168.175v.519c0 .111-.057.19-.17.19-.544.009-.97.143-1.274.404-.304.259-.658.821-1.065 1.684l-2.47 4.967 2.578 5.339c.634 1.354 1.04 1.607 1.647 1.607.207 0 .394-.027.558-.082.163-.055.336-.134.519-.239.183-.105.352-.171.508-.199.156-.028.306.015.452.128.145.113.218.266.218.459 0 .256-.114.464-.342.622-.229.159-.564.238-1.006.238-1.348 0-2.292-.595-2.834-1.785l-2.91-6.022-2.677 5.39c-.35.712-.632 1.21-.846 1.49-.214.281-.508.422-.883.422-.356 0-.707-.133-1.052-.4-.345-.266-.517-.59-.517-.97 0-.193.052-.357.155-.49.104-.134.285-.271.543-.41.157-.088.275-.159.353-.213.079-.054.195-.15.349-.288.154-.138.289-.31.404-.516.115-.207.25-.472.404-.797l3.142-6.51-2.29-4.686c-.422-.87-.752-1.384-1.088-1.54-.181-.088-.431-.116-.749-.085-.11 0-.186-.08-.186-.185v-.537c0-.107.07-.175.17-.175h4.17c.1 0 .17.068.17.175v.537c0 .105-.08.185-.186.185" />
+    </svg>
+  ),
+  youtube: (
+    <svg className="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+    </svg>
+  ),
+  google: (
+    <svg className="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
+    </svg>
+  ),
+  arxiv: (
+    <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+    </svg>
+  ),
+  amazon: (
+    <svg className="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z" />
+    </svg>
+  ),
 };
 
-// ============================================================================
-// HELPER: Generate Natural Language Connection Labels
-// ============================================================================
-// Labels include context: subject node's label + appropriate year
-// Example: "Founder of Google (1998)", "Created by Apple (2007)"
-//
-// === LABEL EXAMPLES BY CATEGORY ===
-//
-// 🔗 ENGAGES:
-//   - HEART icon    → "Strategic partner of {subject}"
-//   - RIVALRY icon  → "Market competitor of {subject}"
-//
-// 🏢 COMPANY (회사 노드를 보고 있을 때):
-//   - Person → COMPANY (CREATES)     → "Founder of {company} ({year})"
-//   - Person → COMPANY (CONTRIBUTES) → "Key contributor to {company}"
-//   - COMPANY → Tech (CREATES)       → "Created by {company} ({year})"
-//   - Tech → COMPANY (POWERS)        → "Powers {company}"
-//   - COMPANY → COMPANY (CONTRIBUTES)→ "Investor in {company}"
-//
-// 👤 PERSON (인물 노드를 보고 있을 때):
-//   - PERSON → Company (CREATES)     → "Founded ({year})"
-//   - PERSON → Tech (CREATES)        → "Invented ({year})"
-//   - PERSON ↔ PERSON (CONTRIBUTES)  → "Mentor to {person}"
-//
-// 💡 TECHNOLOGY (기술 노드를 보고 있을 때):
-//   - Company/Person → TECH (CREATES)→ "Created {tech} ({year})"
-//   - Tech → TECH (POWERS/Inbound)   → "Built on {tech} ({year})"
-// ============================================================================
-const getConnectionLabel = (
-  subjectNode: NodeData,
-  objectNode: NodeData,
-  linkType: string,
-  direction: 'Inbound' | 'Outbound',
-  linkIcon?: string
-): string => {
-  const subjectCat = subjectNode.category;
-  const objectCat = objectNode.category;
-  const subjectLabel = subjectNode.label;
-  const objectLabel = objectNode.label;
-  const subjectYear = subjectNode.year;
-  const objectYear = objectNode.year;
+const getExternalLinks = (node: NodeData, locale: SupportedLocale) => {
+  const applicableLinks = getApplicableLinks(node.category);
 
-  // Helper: Format year string
-  const yearStr = (year?: number) => year ? ` (${year})` : '';
-
-
-  // === Handle ENGAGES with icon distinction first ===
-  if (linkType === 'ENGAGES') {
-    if (linkIcon === 'HEART') return `Strategic partner of ${subjectLabel}`;
-    if (linkIcon === 'RIVALRY') return `Market competitor of ${subjectLabel}`;
-    if (subjectCat === Category.COMPANY && objectCat === Category.COMPANY) return `Industry peer of ${subjectLabel}`;
-    if (subjectCat === Category.PERSON && objectCat === Category.PERSON) return `Professional ally of ${subjectLabel}`;
-    if (subjectCat === Category.TECHNOLOGY && objectCat === Category.TECHNOLOGY) return `Competing standard with ${subjectLabel}`;
-    return `Related to ${subjectLabel}`;
-  }
-
-  // === CASE A: COMPANY (viewing a Company's connections) ===
-  if (subjectCat === Category.COMPANY) {
-    // Person → Company (INBOUND)
-    if (objectCat === Category.PERSON && direction === 'Inbound') {
-      const verbs = getPersonVerbs(objectNode);
-      if (linkType === 'CREATES') return `${verbs.foundedCompany} ${subjectLabel}${yearStr(subjectYear)}`;
-      if (linkType === 'CONTRIBUTES') return `${verbs.contributedCompany} ${subjectLabel}`;
-    }
-    // Company → Person (OUTBOUND)
-    if (objectCat === Category.PERSON && direction === 'Outbound') {
-      if (linkType === 'CONTRIBUTES') return `Mentored by ${subjectLabel}`;
-    }
-    // Company → Technology (OUTBOUND)
-    if (objectCat === Category.TECHNOLOGY && direction === 'Outbound') {
-      const verb = getTechVerb(objectNode);
-      if (linkType === 'CREATES') return `${verb} by ${subjectLabel}${yearStr(objectYear)}`;
-      if (linkType === 'POWERS') return `Powered by ${subjectLabel}`;
-      if (linkType === 'CONTRIBUTES') return `Contribution from ${subjectLabel}`;
-    }
-    // Technology → Company (INBOUND)
-    if (objectCat === Category.TECHNOLOGY && direction === 'Inbound') {
-      if (linkType === 'POWERS') return `Powers ${subjectLabel}`;
-      if (linkType === 'CREATES') return `Technology behind ${subjectLabel}`;
-    }
-    // Company ↔ Company (non-ENGAGES)
-    if (objectCat === Category.COMPANY) {
-      if (direction === 'Inbound' && linkType === 'CONTRIBUTES') return `Investor in ${subjectLabel}`;
-      if (direction === 'Outbound' && linkType === 'CONTRIBUTES') return `Invested by ${subjectLabel}`;
-      if (direction === 'Inbound' && linkType === 'POWERS') return `Infrastructure for ${subjectLabel}`;
-      if (direction === 'Outbound' && linkType === 'POWERS') return `Uses ${objectLabel}`;
-    }
-  }
-
-  // === CASE B: PERSON (viewing a Person's connections) ===
-  if (subjectCat === Category.PERSON) {
-    const verbs = getPersonVerbs(subjectNode);
-
-    // Person → Company (OUTBOUND)
-    if (objectCat === Category.COMPANY && direction === 'Outbound') {
-      if (linkType === 'CREATES') return `${verbs.foundedCompany} ${objectLabel}${yearStr(objectYear)}`;
-      if (linkType === 'CONTRIBUTES') return `${verbs.contributedCompany} ${objectLabel}`;
-    }
-    // Company → Person (INBOUND)
-    if (objectCat === Category.COMPANY && direction === 'Inbound') {
-      if (linkType === 'CONTRIBUTES') return `At ${objectLabel}`;
-    }
-    // Person → Technology (OUTBOUND)
-    if (objectCat === Category.TECHNOLOGY && direction === 'Outbound') {
-      if (linkType === 'CREATES') return `${verbs.createdTech}${yearStr(objectYear)}`;
-      if (linkType === 'CONTRIBUTES') return `${verbs.contributedTech}${yearStr(objectYear)}`;
-    }
-    // Technology → Person (INBOUND)
-    if (objectCat === Category.TECHNOLOGY && direction === 'Inbound') {
-      if (linkType === 'CREATES') return `Behind ${objectLabel}`;
-    }
-    // Person ↔ Person (non-ENGAGES)
-    if (objectCat === Category.PERSON) {
-      if (direction === 'Outbound' && linkType === 'CONTRIBUTES') return `${verbs.mentored} ${objectLabel}`;
-      if (direction === 'Inbound' && linkType === 'CONTRIBUTES') return `${verbs.mentoredBy} ${objectLabel}`;
-    }
-  }
-
-  // === CASE C: TECHNOLOGY (viewing a Technology's connections) ===
-  if (subjectCat === Category.TECHNOLOGY) {
-    const verb = getTechVerb(subjectNode);
-    const subjectRole = subjectNode.impactRole;
-
-    // Helper: Get TechRole-specific relation description for Tech ↔ Tech
-    const getTechRelationLabel = (
-      subjectTechRole: string | undefined,
-      objectTechRole: string | undefined,
-      linkType: string,
-      dir: 'Inbound' | 'Outbound'
-    ): string | null => {
-      // POWERS relationship
-      if (linkType === 'POWERS') {
-        if (dir === 'Outbound') {
-          // This tech's foundation is objectNode
-          if (objectTechRole === 'FOUNDATION') return `Based on theory`;
-          if (objectTechRole === 'CORE') return `Built on core`;
-          if (objectTechRole === 'PLATFORM') return `Runs on`;
-          return `Powered by`;
-        } else {
-          // objectNode is built on this tech
-          if (subjectTechRole === 'FOUNDATION') return `Theoretical foundation for`;
-          if (subjectTechRole === 'CORE') return `Core architecture for`;
-          if (subjectTechRole === 'PLATFORM') return `Platform layer for`;
-          return `Powers`;
-        }
-      }
-      // CONTRIBUTES relationship
-      if (linkType === 'CONTRIBUTES') {
-        if (dir === 'Outbound') {
-          // This tech was influenced by objectNode
-          if (objectTechRole === 'FOUNDATION') return `Evolved from theory`;
-          if (objectTechRole === 'CORE') return `Extended from`;
-          return `Inspired by`;
-        } else {
-          // This tech influenced objectNode
-          if (subjectTechRole === 'FOUNDATION') return `Theoretical basis for`;
-          if (subjectTechRole === 'CORE') return `Technical inspiration for`;
-          return `Influenced`;
-        }
-      }
-      return null;
-    };
-
-    // Company/Person → Tech (INBOUND)
-    if ((objectCat === Category.COMPANY || objectCat === Category.PERSON) && direction === 'Inbound') {
-      if (linkType === 'CREATES') return `${verb} ${subjectLabel}${yearStr(subjectYear)}`;
-      if (linkType === 'CONTRIBUTES') return `Contributed to ${subjectLabel}`;
-    }
-    // Tech → Company/Person (OUTBOUND)
-    if ((objectCat === Category.COMPANY || objectCat === Category.PERSON) && direction === 'Outbound') {
-      if (linkType === 'POWERS') return `${subjectLabel} powers this`;
-    }
-    // Tech → Tech (OUTBOUND - this tech depends on object tech)
-    if (objectCat === Category.TECHNOLOGY && direction === 'Outbound') {
-      const objectRole = objectNode.impactRole;
-      const label = getTechRelationLabel(subjectRole, objectRole, linkType, 'Outbound');
-      if (label) return `${label}: ${objectLabel}${yearStr(objectYear)}`;
-    }
-    // Tech → Tech (INBOUND - object tech depends on this tech)
-    if (objectCat === Category.TECHNOLOGY && direction === 'Inbound') {
-      const objectRole = objectNode.impactRole;
-      const label = getTechRelationLabel(subjectRole, objectRole, linkType, 'Inbound');
-      if (label) return `${label} ${objectLabel}`;
-    }
-  }
-
-  // === Fallback ===
-  return `Connected to ${subjectLabel}`;
+  return applicableLinks.map(config => ({
+    label: config.label,
+    url: getExternalLinkUrl(config, node.label, node.category, locale),
+    icon: LINK_ICONS[config.iconId] || LINK_ICONS.google,
+  }));
 };
 
 
@@ -398,10 +156,10 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
     return node ? getSectionHeaders(node.category, t) : getSectionHeaders(Category.TECHNOLOGY, t);
   }, [node?.category, t]);
 
-  // Get smart external links
+  // Get smart external links (locale-aware)
   const externalLinks = useMemo(() => {
-    return node ? getExternalLinks(node) : [];
-  }, [node]);
+    return node ? getExternalLinks(node, locale as SupportedLocale) : [];
+  }, [node, locale]);
 
   // Calculate connections with smart sorting
   const connections = useMemo(() => {
@@ -586,7 +344,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
           <div className="flex items-center gap-2 mt-2 text-sm">
             {isNotPublic ? (
               // Case A: Not publicly traded - no link
-              <span className="text-slate-400 font-medium italic">Not Publicly Traded</span>
+              <span className="text-slate-400 font-medium italic">{t('detailPanel.notPubliclyTraded')}</span>
             ) : (() => {
               // Case B: Standard market cap - clickable to Google Finance
               const stockInfo = getStockTicker(node.id);
@@ -612,7 +370,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
                   )}
                   {peakValue && (
                     <span className="text-slate-500 group-hover:text-slate-400 transition-colors duration-200">
-                      / Peak {peakValue}
+                      / {t('nodeLabels.peak')} {peakValue}
                     </span>
                   )}
                   {/* External link indicator */}
@@ -647,11 +405,10 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
         return null;
 
       case Category.TECHNOLOGY:
-        // Lifecycle display - Verb + Year (e.g., "Invented in 1973")
-        const techVerb = getTechVerb(node).toLowerCase();
+        // Lifecycle display - Just (year)
         return (
           <div className="flex items-center gap-2 mt-2 text-sm text-slate-400">
-            {techVerb} in {node.year}
+            ({node.year})
           </div>
         );
 

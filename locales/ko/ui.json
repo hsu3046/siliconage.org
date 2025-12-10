@@ -17,7 +17,7 @@
     "eras": {
         "genesis": "태동기",
         "dawn": "반도체의 시작",
-        "pc": "PC 혁명",
+        "pc": "PC 보급",
         "internet": "인터넷 시대",
         "mobile": "모바일 혁명",
         "ai_early": "AI의 탄생",
@@ -50,10 +50,10 @@
         "APPLICATION": "응용 기술"
     },
     "linkTypes": {
-        "POWERS": "기반",
-        "CREATES": "창조",
-        "CONTRIBUTES": "기여",
-        "ENGAGES": "협력과 대립"
+        "POWERS": "기반/동력",
+        "CREATES": "창조/설립",
+        "CONTRIBUTES": "기여/가치",
+        "ENGAGES": "협력/대립"
     },
     "toggles": {
         "episode": "에피소드"
@@ -70,7 +70,7 @@
         "feedback": "피드백 및 버그 신고",
         "feedbackEmail": "이메일 주소",
         "feedbackMessage": "메시지",
-        "feedbackPlaceholder": "잘못된 정보나 버그, 기능 요청 등",
+        "feedbackPlaceholder": "혹시 개선할 점이나 오류가 있다면, 언제든지 알려주세요.",
         "feedbackSend": "피드백 보내기",
         "feedbackSending": "전송 중...",
         "feedbackSuccess": "메시지 전송 완료!",
@@ -80,7 +80,7 @@
         "copyright": "© 2025 Silicon Age Project"
     },
     "detailPanel": {
-        "connections": "연결",
+        "connections": "관련 항목",
         "aiDeepDive": "AI 심층 분석",
         "selectNode": "노드를 선택하여 역사를 분석하세요.",
         "enterFocusMode": "포커스 모드 진입",
@@ -111,11 +111,16 @@
         "notPubliclyTraded": "비상장",
         "learnMore": "더 알아보기",
         "externalLinksLabel": "(외부 링크)",
-        "disclaimer": "이 사이트의 콘텐츠와 링크는 개인의 큐레이션이나 주관적 선택이 아닌 객관적인 기술 키워드를 기반으로 AI 알고리즘을 통해 집계되었습니다."
+        "disclaimer": "본 사이트의 콘텐츠와 링크는 운영자의 주관적 개입 없이, AI 알고리즘이 기술 키워드를 기반으로 객관적으로 수집 및 구성했습니다."
     },
     "mapView": {
         "searchPlaceholder": "회사, 인물, 기술을 포커스...",
         "connections": "연결"
+    },
+    "nodeLabels": {
+        "bornIn": "{year}년 출생",
+        "foundedIn": "{year}년 설립",
+        "peak": "최고치"
     },
     "historyView": {
         "showStories": "스토리 보기",
@@ -130,7 +135,7 @@
         "searchPlaceholder": "회사, 인물, 기술의 관계 탐색..."
     },
     "cardView": {
-        "searchPlaceholder": "키워드, 카테고리 필터...",
+        "searchPlaceholder": "키워드, 카테고리 검색...",
         "sortOptions": {
             "alphabetical": "가나다순",
             "category": "카테고리",

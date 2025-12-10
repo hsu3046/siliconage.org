@@ -70,6 +70,9 @@ const App: React.FC = () => {
   const [focusNodeId, setFocusNodeId] = useState<string | null>(null);
   const [scrollToNodeId, setScrollToNodeId] = useState<string | null>(null);
 
+  // Flag to prevent URL sync on initial load (let handleUrlChange set state first)
+  const isInitialLoadRef = React.useRef(true);
+
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isChangeLogOpen, setIsChangeLogOpen] = useState(false);
   const [isWelcomeOpen, setIsWelcomeOpen] = useState(() => {
@@ -229,6 +232,10 @@ const App: React.FC = () => {
 
   // --- SYNC VIEW MODE WITH URL ---
   useEffect(() => {
+    // Skip on initial load - let handleUrlChange set state from URL first
+    if (isInitialLoadRef.current) {
+      return;
+    }
     updateViewUrl(viewMode);
   }, [viewMode]);
 
@@ -256,7 +263,21 @@ const App: React.FC = () => {
       const params = new URLSearchParams(window.location.search);
       const legacyNodeId = params.get('node');
 
-      // Check for path-based node: /company/apple or /tech/transistor
+      // NEW: Check for view+node combined path: /history/company/apple, /cards/tech/transistor
+      if (pathParts.length >= 3 && pathToView[pathParts[0]] && pathToCategory[pathParts[1]]) {
+        const view = pathToView[pathParts[0]];
+        const nodeId = pathParts[2];
+        const node = INITIAL_DATA.nodes.find(n => n.id === nodeId);
+        if (node) {
+          setViewMode(view);
+          setFocusNodeId(nodeId);
+          setSelectedNode(node);
+          setScrollToNodeId(nodeId);
+          return;
+        }
+      }
+
+      // Check for path-based node (Map view default): /company/apple or /tech/transistor
       if (pathParts.length >= 2 && pathToCategory[pathParts[0]]) {
         const nodeId = pathParts[1];
         const node = INITIAL_DATA.nodes.find(n => n.id === nodeId);
@@ -305,6 +326,12 @@ const App: React.FC = () => {
 
     handleUrlChange();
 
+    // After initial URL parsing, allow viewMode changes to sync to URL
+    // Use setTimeout to ensure state updates from handleUrlChange complete first
+    setTimeout(() => {
+      isInitialLoadRef.current = false;
+    }, 0);
+
     window.addEventListener('popstate', handleUrlChange);
     return () => window.removeEventListener('popstate', handleUrlChange);
   }, []);
@@ -318,17 +345,40 @@ const App: React.FC = () => {
     [Category.TECHNOLOGY]: 'tech',
   };
 
-  // Navigate to a specific node with SEO-friendly path
-  const navigateToNode = useCallback((node: NodeData | null) => {
+  // View mode to URL path mapping
+  const viewToPath: Record<string, string> = {
+    'TIMELINE': 'history',
+    'CARD': 'cards',
+    'LINKS': 'links',
+    'MAP': '',
+  };
+
+  // Navigate to a specific node with SEO-friendly path, preserving current view
+  const navigateToNode = useCallback((node: NodeData | null, targetViewMode?: 'MAP' | 'TIMELINE' | 'CARD' | 'LINKS') => {
+    const currentView = targetViewMode || viewMode;
+
     if (!node) {
       // Clear selection, go to current view
-      navigate(location.pathname.includes('/about') ? '/about' : '/');
+      if (location.pathname.includes('/about')) {
+        navigate('/about');
+      } else if (currentView === 'MAP') {
+        navigate('/');
+      } else {
+        navigate(`/${viewToPath[currentView]}`);
+      }
       return;
     }
 
     const categoryPath = categoryToPath[node.category];
-    navigate(`/${categoryPath}/${node.id}`);
-  }, [navigate, location.pathname]);
+
+    // For Map view, use simple path: /company/apple
+    // For other views, use combined path: /history/company/apple
+    if (currentView === 'MAP') {
+      navigate(`/${categoryPath}/${node.id}`);
+    } else {
+      navigate(`/${viewToPath[currentView]}/${categoryPath}/${node.id}`);
+    }
+  }, [navigate, location.pathname, viewMode]);
 
   // Legacy updateUrl for compatibility (now using navigateToNode)
   const updateUrl = (nodeId: string | null) => {
@@ -339,19 +389,34 @@ const App: React.FC = () => {
         return;
       }
     }
-    navigate('/');
+    // Go to current view without focus
+    if (viewMode === 'MAP') {
+      navigate('/');
+    } else {
+      navigate(`/${viewToPath[viewMode]}`);
+    }
   };
 
-  // Navigate to a specific view with SEO-friendly path
+  // Navigate to a specific view with SEO-friendly path, preserving focus node
   const updateViewUrl = useCallback((view: 'MAP' | 'TIMELINE' | 'CARD' | 'LINKS') => {
-    const viewToPath: Record<string, string> = {
+    // If there's a focused node, include it in the URL
+    if (focusNodeId) {
+      const focusedNode = INITIAL_DATA.nodes.find(n => n.id === focusNodeId);
+      if (focusedNode) {
+        navigateToNode(focusedNode, view);
+        return;
+      }
+    }
+
+    // No focus node, just navigate to view
+    const viewPaths: Record<string, string> = {
       'TIMELINE': '/history',
       'CARD': '/cards',
       'LINKS': '/links',
       'MAP': '/',
     };
-    navigate(viewToPath[view]);
-  }, [navigate]);
+    navigate(viewPaths[view]);
+  }, [navigate, focusNodeId, navigateToNode]);
 
   const updateAboutUrl = useCallback((isOpen: boolean) => {
     if (isOpen) {
@@ -399,9 +464,10 @@ const App: React.FC = () => {
     }
     setFocusNodeId(node.id);
     setSelectedNode(null); // Auto-close Detail Panel
-    updateUrl(node.id);
+    // Use navigateToNode to preserve current view in URL
+    navigateToNode(node);
     // Don't change viewMode - stay in current view
-  }, []);
+  }, [navigateToNode]);
 
   const exitFocusMode = () => {
     if (focusNodeId) {
@@ -1004,7 +1070,7 @@ const App: React.FC = () => {
 
         <DetailPanel
           node={selectedNode}
-          data={filteredData}
+          data={translatedData}
           onClose={() => { setSelectedNode(null); setScrollToNodeId(null); updateUrl(null); }}
           onFocus={() => { if (selectedNode) handleNodeDoubleClick(selectedNode); }}
           onNodeSelect={handleNodeSelect}

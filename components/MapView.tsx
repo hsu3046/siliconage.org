@@ -104,7 +104,7 @@ const PHYSICS_CONFIG = {
 // Helper to formulate the Sub-Label (Role or Year) based on Category
 const getSubLabel = (node: NodeData) => {
   if (node.category === Category.COMPANY) {
-    return `${node.year} - Current`;
+    return `${node.year}`;
   }
   if (node.category === Category.PERSON) {
     return node.primaryRole || null;

@@ -48,16 +48,16 @@
     "about": {
         "title": "The Silicon Age",
         "subtitle": "From Transistors to AI",
-        "version": "v1.4.0",
-        "aboutProject": "About Project",
-        "description": "The Silicon Age is an interactive visualization project designed to map the complex evolution of computing and artificial intelligence. By connecting the dots between legendary companies, visionary pioneers, and breakthrough technologies, we aim to provide a holistic view of how we arrived at the modern AI era.\nUnlike linear timelines, this 4-dimensional map (Graph, Time, List, Space) reveals the hidden influence and structural relationships that define the industry.",
+        "version": "v1.5.0",
+        "aboutProject": "",
+        "description": "It's often a little startling—or maybe even a bit scary—to witness what Artificial Intelligence (AI) is capable of these days. It feels as if the distant future was suddenly delivered right to our doorstep. But when you stop to think about it, this massive shift couldn't have just appeared by magic.\nWho was the first person to come up with such a wild idea? How did that one struggling startup become the Big Tech giant it is today?\nSilicon Age was born out of these simple, underlying curiosities.\nPeople have mixed predictions about AI. Some worry it's 'just another bubble,' while others anticipate 'a seismic transformation that will upend the world.' In this moment of confusion, we believe we need to trace the path technology has taken to find the answers.\nOf course, this story is too immense to organize alone. That's why, from the very beginning of creating this website you are viewing now, we collaborated with smart AI companions. We are using the power of AI to gather the scattered fragments of tech history, finding and documenting the hidden 'connections' within them.\nFrom the birth of the transistor—the 'Stone Age' of semiconductors—to the emergence of cutting-edge generative AI. If you share our curiosity, we believe this journey through time and technology will be quite fascinating.",
         "buyMeACoffee": "Buy me a coffee",
         "disclaimer": "Disclaimer",
-        "disclaimerText": "Content on this website is generated using AI (LLM) and may contain inaccuracies.\nThis site is provided \"as is\" without warranty, and the creators are not liable for content errors.",
+        "disclaimerText": "Content on this site is generated in collaboration with AI and may contain inaccuracies (including Hallucinations). Content is provided 'as is,' with no warranties. Cross-verification of important information is the user's responsibility. The operator is not liable for any damages resulting from content errors.",
         "feedback": "Feedback & Bug Report",
         "feedbackEmail": "Your Email",
         "feedbackMessage": "Message / Correction",
-        "feedbackPlaceholder": "Found a bug? Information correction? Feature request?",
+        "feedbackPlaceholder": "Found a bug or incorrect information? Please feel free to let us know!",
         "feedbackSend": "Send Feedback",
         "feedbackSending": "Sending...",
         "feedbackSuccess": "Message Sent!",
@@ -104,6 +104,11 @@
         "searchPlaceholder": "Search nodes...",
         "connections": "connections"
     },
+    "nodeLabels": {
+        "bornIn": "Born in {year}",
+        "foundedIn": "Founded in {year}",
+        "peak": "Peak"
+    },
     "historyView": {
         "showStories": "Show Stories",
         "hideStories": "Hide Stories",
@@ -117,7 +122,7 @@
         "searchPlaceholder": "Search connections..."
     },
     "cardView": {
-        "searchPlaceholder": "Search cards...",
+        "searchPlaceholder": "Search keywords, categories...",
         "sortOptions": {
             "alphabetical": "Name (A-Z)",
             "category": "Category",

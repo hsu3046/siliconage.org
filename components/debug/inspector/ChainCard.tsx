@@ -1,7 +1,6 @@
 import React from 'react';
 import { ChainNode } from '../../../utils/debug/graphTraversal';
 import { CATEGORY_COLORS } from '../../../constants';
-import { getConnectionLabel } from '../../../utils/labels';
 import { getLinkIcon } from '../../../utils/icons';
 
 interface ChainCardProps {
@@ -32,19 +31,11 @@ const ChainCard: React.FC<ChainCardProps> = ({
     const indentClass = level > 0 ? `ml-${Math.min(level * 4, 12)}` : '';
     const depthBadgeColor =
       chainNode.depth === 1 ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' :
-      chainNode.depth === 2 ? 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30' :
-      'bg-purple-500/20 text-purple-400 border-purple-500/30';
+        chainNode.depth === 2 ? 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30' :
+          'bg-purple-500/20 text-purple-400 border-purple-500/30';
 
-    // Get label description for the link
-    const focusNode = { id: focusNodeId } as any; // Simplified for label generation
-    const linkLabel = chainNode.link
-      ? getConnectionLabel(
-          direction === 'upstream' ? node : focusNode,
-          direction === 'upstream' ? focusNode : node,
-          chainNode.link,
-          direction === 'downstream'
-        )
-      : '';
+    // Use link story instead of generated label
+    const linkLabel = chainNode.link?.story || '';
 
     return (
       <div key={node.id} className={`${indentClass} mb-2`}>

@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { GraphData, NodeData, Category, LinkType, LinkData, EventData } from '../types';
 import { CATEGORY_COLORS, ERAS, INITIAL_DATA } from '../constants';
-import { getTechVerb, getPersonVerbs, getNodeSubtitle, Achievement } from '../utils/labels';
 import { useLocale } from '../hooks/useLocale';
 
 interface HistoryViewProps {
@@ -141,6 +140,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, fullData, onNodeClick, 
   // Build creator map from INITIAL_DATA (not filtered data) to always show all created entities
   const creatorMap = useMemo(() => {
     // Achievement structure: { label, year, category }
+    interface Achievement { label: string; year: number; category: Category; }
     const achievementMap: Record<string, Achievement[]> = {}; // personId -> [achievements]
     const createdByMap: Record<string, string> = {}; // techId -> creator label
 
@@ -387,7 +387,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, fullData, onNodeClick, 
       >
         <div className={`flex items-baseline gap-1 flex-wrap ${isLeft ? 'md:justify-end justify-start' : 'justify-start'}`}>
           <span className={`font-bold text-white ${textSizeStyles[sizeClass]}`}>{node.label}</span>
-          <span className="text-slate-500 text-xs">{getNodeSubtitle(node)}</span>
+          <span className="text-slate-500 text-xs">{t('nodeLabels.foundedIn').replace('{year}', String(node.year))}</span>
         </div>
         {node.description && (
           <p className={`text-slate-400 text-xs mt-1 line-clamp-4 ${isLeft ? 'md:text-right text-left' : 'text-left'}`}>
@@ -398,19 +398,13 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, fullData, onNodeClick, 
     );
   };
 
-  // Get person context based on PersonRole (impactRole)
-  const getPersonContext = (node: NodeData): string => {
-    const verbs = getPersonVerbs(node);
-    // For timeline, use createdTech verb as the primary action
-    return verbs.createdTech;
-  };
+
 
   // Render Person Node - dot centered vertically relative to text block
   const renderPersonNode = (node: NodeData, isLeft: boolean) => {
-    const verbs = getPersonVerbs(node);
     const achievements = creatorMap.achievements[node.id] || [];
 
-    const subtitle = getNodeSubtitle(node, { achievements });
+    const subtitle = t('nodeLabels.bornIn').replace('{year}', String(node.birthYear || node.year));
 
     return (
       <div
@@ -461,13 +455,22 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, fullData, onNodeClick, 
       return 'Technology';
     };
 
-    // Unified width: ~70% of company box (company is full width, so ~70%)
-    const sizeClass = 'md:w-[70%]';
-    let textSize = 'text-sm';
-    let padding = 'px-3 py-2';
+    // Use same sizing as Company node
+    const sizeClass = getNodeSizeClass(radius);
+    const sizeStyles = {
+      large: 'py-3 px-4',
+      medium: 'py-2 px-3',
+      small: 'py-1.5 px-2'
+    };
+    const textSizeStyles = {
+      large: 'text-base',
+      medium: 'text-sm',
+      small: 'text-sm'
+    };
 
-    // Build description text using getNodeSubtitle
-    const descriptionText = getNodeSubtitle(node, { creatorLabel: creator });
+    // Build year + description text (no parentheses)
+    const yearText = String(node.year);
+    const descriptionText = node.description || '';
 
     return (
       <div
@@ -475,8 +478,8 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, fullData, onNodeClick, 
         onClick={() => onNodeClick(node)}
         onDoubleClick={() => onNodeDoubleClick?.(node)}
         className={`
-          cursor-pointer transition-all duration-200 hover:scale-105
-          w-full ${sizeClass}
+          cursor-pointer transition-all duration-200 hover:scale-[1.02]
+          w-full
           select-none
           ${isLeft ? 'md:ml-auto' : 'md:mr-auto'}
         `}
@@ -486,16 +489,23 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, fullData, onNodeClick, 
           className={`
             flex flex-col items-start text-left w-full
             border border-emerald-500/50 bg-emerald-500/10 rounded-lg
-            ${padding}
+            ${sizeStyles[sizeClass]}
             ${isLeft ? 'md:items-end md:text-right' : 'md:items-start md:text-left'}
           `}
         >
-          <span className={`text-emerald-400 font-medium ${textSize}`}>
-            {node.label}
-          </span>
-          <span className="text-slate-500 text-xs">
-            {descriptionText}
-          </span>
+          <div className="flex items-baseline gap-2">
+            <span className={`text-emerald-400 font-medium ${textSizeStyles[sizeClass]}`}>
+              {node.label}
+            </span>
+            <span className="text-slate-500 text-xs">
+              {yearText}
+            </span>
+          </div>
+          {descriptionText && (
+            <p className={`text-slate-400 text-xs mt-1 line-clamp-4 ${isLeft ? 'md:text-right text-left' : 'text-left'}`}>
+              {descriptionText}
+            </p>
+          )}
         </div>
       </div>
     );
