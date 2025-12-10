@@ -1,6 +1,7 @@
 import React from 'react';
 import { X, MousePointer, Sparkles } from 'lucide-react';
 import { useLocale } from '../hooks/useLocale';
+import type { Locale } from '../utils/i18n';
 
 interface WelcomeModalProps {
     isOpen: boolean;
@@ -10,7 +11,11 @@ interface WelcomeModalProps {
 
 const WelcomeModal: React.FC<WelcomeModalProps> = ({ isOpen, onClose, onStartTutorial }) => {
     // i18n hook (must be before any returns)
-    const { t } = useLocale();
+    const { t, locale, setLocale, availableLocales } = useLocale();
+
+    const handleLocaleChange = async (newLocale: Locale) => {
+        await setLocale(newLocale);
+    };
 
     if (!isOpen) return null;
 
@@ -52,7 +57,26 @@ const WelcomeModal: React.FC<WelcomeModalProps> = ({ isOpen, onClose, onStartTut
                 </div>
 
                 {/* Content */}
-                <div className="px-6 py-4">
+                <div className="px-6 py-4 space-y-4">
+                    {/* Language Selector */}
+                    <div className="flex flex-col items-center gap-3 pb-4 border-b border-slate-700">
+                        <label className="text-xs text-slate-500 uppercase tracking-wider">
+                            {t('tutorial.selectLanguage')}
+                        </label>
+                        <select
+                            value={locale}
+                            onChange={(e) => handleLocaleChange(e.target.value as Locale)}
+                            className="px-4 py-2 bg-slate-700/50 border border-slate-600 text-white rounded-lg text-sm hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors cursor-pointer"
+                        >
+                            {availableLocales.map((loc) => (
+                                <option key={loc.code} value={loc.code}>
+                                    {loc.nativeLabel}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* Click & Explore Section */}
                     <div className="flex items-start gap-4 p-4 bg-slate-800/50 rounded-xl">
                         <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
                             <MousePointer className="w-5 h-5 text-blue-400" />

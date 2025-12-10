@@ -152,8 +152,48 @@
     "tutorial": {
         "next": "Next",
         "previous": "Previous",
+        "back": "Back",
         "finish": "Finish",
-        "skip": "Skip"
+        "skip": "Skip",
+        "startExploring": "Start Exploring",
+        "stepCounter": "{current} / {total}",
+        "selectLanguage": "Select Language",
+        "steps": {
+            "welcome": {
+                "title": "Welcome to The Silicon Age",
+                "description": "Choose your preferred language to begin exploring the interconnected history of technology, from transistors to AI."
+            },
+            "mapView": {
+                "title": "Map View",
+                "description": "Visualize the connections between companies, technologies, people, and events in an interactive network graph."
+            },
+            "historyView": {
+                "title": "History View",
+                "description": "Browse innovations chronologically — from the first transistor in 1947 to AI breakthroughs today."
+            },
+            "cardView": {
+                "title": "Card View",
+                "description": "Filter and sort all nodes by name, category, or year. Great for quick lookups."
+            },
+            "linksView": {
+                "title": "Links View",
+                "description": "Trace the origins and impact of any node. See exactly what it was based on, what it created, and what it influenced."
+            },
+            "interaction": {
+                "title": "Click to Explore",
+                "titleTouch": "Tap to Explore",
+                "description": "Click any node for details. Double-click to enter Focus Mode and see all connections.",
+                "descriptionTouch": "Tap any node for details. Double-tap to enter Focus Mode and see all connections."
+            },
+            "search": {
+                "title": "Search Anything",
+                "description": "Use the search bar to find Apple, Google, Elon Musk, iPhone, or any topic you're curious about."
+            },
+            "ready": {
+                "title": "You're Ready!",
+                "description": "Explore the connections between companies, technologies, and the people who shaped the digital age."
+            }
+        }
     },
     "techCategoryL1": {
         "Hardware & Infrastructure": "Hardware & Infrastructure",

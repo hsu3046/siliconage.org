@@ -165,8 +165,48 @@
     "tutorial": {
         "next": "次へ",
         "previous": "前へ",
+        "back": "戻る",
         "finish": "完了",
-        "skip": "スキップ"
+        "skip": "スキップ",
+        "startExploring": "探索を開始",
+        "stepCounter": "{current} / {total}",
+        "selectLanguage": "言語を選択",
+        "steps": {
+            "welcome": {
+                "title": "Silicon Ageへようこそ",
+                "description": "トランジスタからAIまで、テクノロジーのつながった歴史を探索するために、お好みの言語を選択してください。"
+            },
+            "mapView": {
+                "title": "マップビュー",
+                "description": "インタラクティブなネットワークグラフで、企業、技術、人物、イベント間のつながりを視覚化します。"
+            },
+            "historyView": {
+                "title": "歴史ビュー",
+                "description": "最初のトランジスタから今日の生成型AIに至るまで、時系列でイノベーションを閲覧します。"
+            },
+            "cardView": {
+                "title": "カードビュー",
+                "description": "名前、カテゴリ、年で情報をフィルタリングおよびソートします。素早い検索に便利です。"
+            },
+            "linksView": {
+                "title": "つながりビュー",
+                "description": "会社や技術の起源と影響を追跡します。何に基づいているか、何を作り出したか、何に影響を与えたかを正確に確認できます。"
+            },
+            "interaction": {
+                "title": "クリックして探索",
+                "titleTouch": "タップして探索",
+                "description": "各項目をクリックすると詳細が表示されます。ダブルクリックするとフォーカスモードに入り、すべてのつながりが表示されます。",
+                "descriptionTouch": "各項目をタップすると詳細が表示されます。ダブルタップするとフォーカスモードに入り、すべてのつながりが表示されます。"
+            },
+            "search": {
+                "title": "何でも検索",
+                "description": "検索バーを使用して、Apple、Google、イーロン・マスク、iPhone、または興味のあるトピックを見つけてください。"
+            },
+            "ready": {
+                "title": "準備完了！",
+                "description": "AI時代を形作った企業、技術、人物間のつながりを探索してください。"
+            }
+        }
     },
     "techCategoryL1": {
         "Hardware & Infrastructure": "ハードウェア & インフラ",
