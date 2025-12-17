@@ -622,7 +622,7 @@ const App: React.FC = () => {
           className="flex items-center gap-2 sm:gap-3 shrink-0 hover:bg-slate-800 p-2 -ml-2 rounded-lg transition-colors group"
           title="About The Silicon Age"
         >
-          <Logo className="w-10 h-10 drop-shadow-lg group-hover:scale-110 transition-transform" />
+          <Logo className="hidden sm:block w-10 h-10 drop-shadow-lg group-hover:scale-110 transition-transform" />
           <div className="flex flex-col items-start">
             <h1 className="font-bold tracking-tight text-slate-100 text-base sm:text-lg md:text-xl truncate group-hover:text-primary transition-colors">
               The Silicon Age
