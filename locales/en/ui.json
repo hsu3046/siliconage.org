@@ -64,7 +64,17 @@
         "feedbackSuccessDesc": "Thank you for your feedback. We will review it shortly.",
         "feedbackError": "Something went wrong. Please try again later.",
         "changelog": "ChangeLog",
-        "copyright": "© 2025 The Silicon Age Project"
+        "copyright": "© 2025 The Silicon Age Project",
+        "apiKeySettings": "API Key Settings",
+        "apiKeyActive": "Active",
+        "apiKeyDescription": "Enter your Google Gemini API key to enable AI Deep Dive feature. Your key is stored locally in your browser and never sent to our servers.",
+        "apiKeyPlaceholder": "Enter your Gemini API key...",
+        "apiKeySave": "Save",
+        "apiKeyRemove": "Remove",
+        "apiKeyGetKey": "Get a free API key at Google AI Studio →",
+        "apiKeySaved": "API key saved successfully!",
+        "apiKeyRemoved": "API key removed.",
+        "apiKeyNote": "Your API key is stored only in your browser's localStorage. It is never transmitted to any server other than Google's API."
     },
     "detailPanel": {
         "connections": "Connections",

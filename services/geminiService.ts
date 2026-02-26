@@ -3,13 +3,40 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { AIResponse, NodeData } from "../types";
 import { staticCache } from "./staticCache";
 
-const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
+const API_KEY_STORAGE_KEY = 'silicon_age_api_key';
 
-if (!apiKey) {
-  console.error("❌ API Key is missing! Please check Vercel Environment Variables (VITE_GOOGLE_API_KEY).");
-}
+// API Key management via localStorage
+export const getApiKey = (): string | null => {
+  try {
+    return localStorage.getItem(API_KEY_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+};
 
-const ai = new GoogleGenAI({ apiKey: apiKey });
+export const setApiKey = (key: string): void => {
+  try {
+    localStorage.setItem(API_KEY_STORAGE_KEY, key);
+    window.dispatchEvent(new CustomEvent('apiKeyChanged'));
+  } catch (e) {
+    console.warn("Failed to save API key to localStorage", e);
+  }
+};
+
+export const removeApiKey = (): void => {
+  try {
+    localStorage.removeItem(API_KEY_STORAGE_KEY);
+    window.dispatchEvent(new CustomEvent('apiKeyChanged'));
+  } catch (e) {
+    console.warn("Failed to remove API key from localStorage", e);
+  }
+};
+
+const getAI = (): GoogleGenAI | null => {
+  const key = getApiKey();
+  if (!key) return null;
+  return new GoogleGenAI({ apiKey: key });
+};
 
 const CACHE_PREFIX = 'silicon_age_ai_cache_';
 
@@ -44,6 +71,15 @@ export const fetchNodeDetails = async (node: NodeData, locale: string = 'en'): P
 
   // 3. Fetch from API with enhanced context
   try {
+    const ai = getAI();
+    if (!ai) {
+      return {
+        summary: "API key not configured.",
+        significance: "Enter your Gemini API key in the About page to enable AI Deep Dive.",
+        keyFacts: ["Go to About → Settings to add your API key", "Get a free key at ai.google.dev"],
+      };
+    }
+
     console.log(`[API Call] Fetching Gemini data for ${node.id} in ${langName}`);
 
     // Build rich context from node data

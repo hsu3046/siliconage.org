@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Logo } from './Logo';
 import { useLocale } from '../hooks/useLocale';
 import { Locale } from '../utils/i18n';
+import { getApiKey, setApiKey, removeApiKey } from '../services/geminiService';
 
 interface AboutModalProps {
   isOpen: boolean;
@@ -14,8 +15,44 @@ interface AboutModalProps {
 const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose, onOpenChangeLog, locale, onLocaleChange }) => {
   const [formStatus, setFormStatus] = useState<'IDLE' | 'SUBMITTING' | 'SUCCESS' | 'ERROR'>('IDLE');
   const { availableLocales, t } = useLocale();
+  const [apiKeyInput, setApiKeyInput] = useState('');
+  const [hasApiKey, setHasApiKey] = useState(false);
+  const [showApiKeySection, setShowApiKeySection] = useState(false);
+  const [apiKeySaveStatus, setApiKeySaveStatus] = useState<'IDLE' | 'SAVED' | 'REMOVED'>('IDLE');
+
+  useEffect(() => {
+    if (isOpen) {
+      setHasApiKey(!!getApiKey());
+      setApiKeyInput('');
+      setApiKeySaveStatus('IDLE');
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
+
+  const handleSaveApiKey = () => {
+    const trimmed = apiKeyInput.trim();
+    if (trimmed) {
+      setApiKey(trimmed);
+      setHasApiKey(true);
+      setApiKeyInput('');
+      setApiKeySaveStatus('SAVED');
+      setTimeout(() => setApiKeySaveStatus('IDLE'), 3000);
+    }
+  };
+
+  const handleRemoveApiKey = () => {
+    removeApiKey();
+    setHasApiKey(false);
+    setApiKeySaveStatus('REMOVED');
+    setTimeout(() => setApiKeySaveStatus('IDLE'), 3000);
+  };
+
+  const maskedKey = () => {
+    const key = getApiKey();
+    if (!key) return '';
+    return key.substring(0, 8) + '••••••••' + key.substring(key.length - 4);
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -99,6 +136,98 @@ const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose, onOpenChangeLo
               </svg>
               <span className="font-['Poppins',sans-serif] font-medium text-sm">{t('about.buyMeACoffee')}</span>
             </a>
+          </section>
+
+          {/* Section: API Key Settings */}
+          <section>
+            <button
+              onClick={() => setShowApiKeySection(!showApiKeySection)}
+              className="flex items-center gap-2 w-full text-left"
+            >
+              <svg className={`w-4 h-4 text-slate-400 transition-transform ${showApiKeySection ? 'rotate-90' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+              <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider">
+                {t('about.apiKeySettings')}
+              </h3>
+              {hasApiKey && (
+                <span className="ml-auto inline-flex items-center gap-1 text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">
+                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
+                  {t('about.apiKeyActive')}
+                </span>
+              )}
+            </button>
+
+            {showApiKeySection && (
+              <div className="mt-3 bg-slate-800/50 p-4 rounded-lg border border-slate-700 space-y-3">
+                <p className="text-xs text-slate-400">
+                  {t('about.apiKeyDescription')}
+                </p>
+
+                {hasApiKey ? (
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 bg-slate-900 p-2 rounded border border-slate-600">
+                      <svg className="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+                      </svg>
+                      <code className="text-xs text-slate-300 font-mono flex-1">{maskedKey()}</code>
+                      <button
+                        onClick={handleRemoveApiKey}
+                        className="text-xs text-red-400 hover:text-red-300 px-2 py-1 rounded hover:bg-red-500/10 transition-colors"
+                      >
+                        {t('about.apiKeyRemove')}
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="flex gap-2">
+                      <input
+                        type="password"
+                        value={apiKeyInput}
+                        onChange={(e) => setApiKeyInput(e.target.value)}
+                        placeholder={t('about.apiKeyPlaceholder')}
+                        className="flex-1 bg-slate-900 border border-slate-600 rounded p-2 text-sm text-white focus:outline-none focus:border-primary placeholder-slate-600 font-mono"
+                        onKeyDown={(e) => e.key === 'Enter' && handleSaveApiKey()}
+                      />
+                      <button
+                        onClick={handleSaveApiKey}
+                        disabled={!apiKeyInput.trim()}
+                        className="px-4 py-2 bg-primary hover:bg-blue-600 text-white font-bold rounded text-sm transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                      >
+                        {t('about.apiKeySave')}
+                      </button>
+                    </div>
+                    <a
+                      href="https://ai.google.dev/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs text-primary hover:text-blue-400 transition-colors"
+                    >
+                      {t('about.apiKeyGetKey')}
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                  </div>
+                )}
+
+                {apiKeySaveStatus === 'SAVED' && (
+                  <div className="text-xs text-emerald-400 flex items-center gap-1">
+                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
+                    {t('about.apiKeySaved')}
+                  </div>
+                )}
+                {apiKeySaveStatus === 'REMOVED' && (
+                  <div className="text-xs text-amber-400 flex items-center gap-1">
+                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" /></svg>
+                    {t('about.apiKeyRemoved')}
+                  </div>
+                )}
+
+                <p className="text-[10px] text-slate-500">
+                  {t('about.apiKeyNote')}
+                </p>
+              </div>
+            )}
           </section>
 
           {/* Section 2: Feedback Form (Formspree) */}
