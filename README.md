@@ -1,151 +1,168 @@
-<div align="center">
-<img width="1200" height="475" alt="The Silicon Age" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+# 🧬 The Silicon Age
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)](https://react.dev/)
-[![D3.js](https://img.shields.io/badge/D3.js-7-F9A03C?logo=d3.js&logoColor=white)](https://d3js.org/)
-</div>
+## Tagline-en
 
----
+Technology didn't evolve in isolation — every breakthrough was caused by something before it.
+The Silicon Age connects 100 years of digital history into a visual web of cause and effect, so you can see *why* things happened, not just *what* happened.
 
-## 🇰🇷 Summary
+## Tagline-ko
 
-**Silicon Age**는 1947년 최초의 트랜지스터 발명부터 오늘날의 생성형 AI까지, **80년에 걸친 컴퓨팅 혁명의 역사**를 인터랙티브 네트워크 그래프로 시각화하는 오픈소스 웹 애플리케이션입니다. 200개 이상의 기업·인물·기술 노드와 그들 사이의 관계를 D3.js 기반 포스 그래프, 타임라인, 카드 뷰 등 다양한 시점에서 탐색할 수 있으며, Gemini AI를 활용한 딥 다이브 분석으로 각 노드의 맥락과 영향력을 깊이 있게 이해할 수 있습니다. "우리는 어떻게 여기까지 왔는가?"라는 질문에 대한 시각적 답을 찾아보세요.
+기술은 혼자 발전하지 않았습니다 — 모든 혁신에는 그 전에 일어난 원인이 있었습니다.
+The Silicon Age는 100년 디지털 역사를 점과 점의 나열이 아닌, 인과관계와 영향력의 시각적 네트워크로 연결합니다. '무엇이' 일어났는지가 아니라, '왜' 일어났는지를 직관적으로 탐구하세요.
 
-## 🇺🇸 Summary
+## Tagline-ja
 
-**Silicon Age** is an open-source interactive web application that maps **the entire arc of the computing revolution** — from the invention of the transistor in 1947 to the rise of generative AI today. With over 200 entities spanning companies, pioneers, and breakthrough technologies, it weaves their stories into a dynamic, explorable knowledge graph powered by D3.js. Switch between a force-directed map, chronological timeline, filterable card grid, and relationship explorer to uncover the hidden connections that shaped our digital world. Optional Gemini AI integration offers on-demand deep dives into any node's history and impact. Discover the answer to: *"How did we get here?"*
-
-## 🇯🇵 Summary
-
-**Silicon Age**は、1947年のトランジスタ発明から現在の生成AIに至るまで、**コンピューティング革命の80年の歴史**をインタラクティブなナレッジグラフで可視化するオープンソースWebアプリです。200以上の企業・人物・技術ノードとその関係性を、D3.jsフォースグラフ、タイムライン、カードビュー、リンクエクスプローラーなど多彩なビューで探索できます。Gemini AIによるディープダイブ分析機能も搭載し、各ノードの文脈と影響力を深く理解できます。「私たちはどうやってここまで来たのか？」——その答えを、ぜひ探してみてください。
+テクノロジーは孤立して進化したのではありません——すべてのブレイクスルーには、その前に起きた原因がありました。
+The Silicon Ageは100年のデジタル史を断片的な情報の羅列ではなく、因果関係と影響力のビジュアルネットワークとしてつなぎます。「何が」起きたかではなく、「なぜ」起きたかを直感的に探求してください。
 
 ---
 
-## Features
+## Summary-en
 
-- **🗺️ Map View** — D3.js force-directed graph with 200+ entities and their relationships
-- **📅 History View** — Chronological timeline from 1947 to present
-- **🃏 Card View** — Filterable, sortable card grid for all entities
-- **🔗 Links View** — Relationship explorer tracing origins and impact
-- **🤖 AI Deep Dive** — Gemini-powered analysis with Google Search grounding (BYOK)
-- **🌐 i18n** — English, Korean, Japanese
-- **📱 Responsive** — Desktop and mobile support
+We learn tech history as isolated facts — the transistor, the internet, the iPhone, ChatGPT — as if each one appeared out of thin air. But in reality, every innovation was triggered by a chain of causes, rivalries, and collaborations stretching back decades. The Silicon Age makes those invisible threads visible. It maps 200+ companies, pioneers, and technologies across a century of digital evolution into an interactive knowledge graph where you can *see* the cause-and-effect relationships, trace how one invention made another possible, and discover why certain breakthroughs happened exactly when they did. Navigate a force-directed galaxy map, scroll a living timeline, or let AI unpack any connection in depth. This isn't a list of facts — it's history you can finally *see*.
 
-## Tech Stack
+## Summary-ko
+
+우리는 기술의 역사를 단편적으로 배웁니다 — 트랜지스터, 인터넷, 아이폰, ChatGPT — 마치 각각이 갑자기 하늘에서 떨어진 것처럼요. 하지만 현실에서 모든 혁신은 수십 년에 걸친 인과관계, 경쟁, 협력의 사슬 위에서 탄생했습니다. The Silicon Age는 그 보이지 않던 연결 고리를 눈에 보이게 만듭니다. 100년 디지털 역사 속 200개 이상의 기업·인물·기술을 인터랙티브 지식 그래프 위에 펼쳐, 하나의 발명이 어떻게 다음 혁신을 가능하게 했는지, 왜 특정 기술이 바로 그 시점에 등장했는지를 시각적으로 탐구할 수 있습니다. 포스 그래프로 전체 지형을 조망하고, 타임라인으로 역사의 흐름을 따라가고, AI로 궁금한 관계를 깊이 파고들어 보세요. 사실의 나열이 아닌, 드디어 *보이는* 역사입니다.
+
+## Summary-ja
+
+私たちはテクノロジーの歴史を断片的に学んできました——トランジスタ、インターネット、iPhone、ChatGPT——まるでそれぞれが突然現れたかのように。しかし現実では、すべてのイノベーションは数十年にわたる因果関係、競争、協力の連鎖の上に生まれたものです。The Silicon Ageは、その見えなかったつながりを可視化します。100年のデジタル史における200以上の企業・人物・技術をインタラクティブなナレッジグラフに展開し、一つの発明がどのように次の革新を可能にしたか、なぜ特定の技術がまさにその時に登場したかを視覚的に探求できます。フォースグラフで全体像を俯瞰し、タイムラインで歴史の流れを辿り、AIで気になるつながりを深掘りしてください。事実の羅列ではなく、ようやく*見える*歴史です。
+
+---
+
+## ✨ What It Does
+
+- **Visualizes the entire computing universe** — 200+ entities rendered as a force-directed galaxy map using D3.js, revealing clusters and hidden connections at a glance.
+- **Traces history on a living timeline** — Scroll from 1947 to the present, watching eras unfold and pivotal moments light up in chronological order.
+- **Filters and sorts with a card grid** — Browse companies, people, and technologies through a searchable, filterable card view organized by era, category, and influence.
+- **Explores relationships in depth** — A dedicated link explorer traces origin chains, rivalry webs, and technology lineages between any two nodes.
+- **Delivers AI-powered deep dives** — Optional Gemini AI integration generates on-demand analysis of any entity's history, rivals, and lasting impact — grounded with Google Search.
+- **Speaks three languages natively** — Full English, Korean, and Japanese interfaces with culturally adapted content, not just machine translations.
+- **Works beautifully on any screen** — Responsive design optimized for both desktop exploration and mobile browsing.
+
+---
+
+## 🚀 Try It Now
+
+👉 **[Live Demo](https://siliconage.org)**
+
+---
+
+## 🛠 Tech Stack
 
 | Layer | Technology |
-|-------|-----------|
-| Frontend | React 18, TypeScript 5.8 |
+|-------|------------|
+| Framework | React 18 |
+| Language | TypeScript 5.8 (Strict) |
 | Visualization | D3.js 7, Recharts |
 | Styling | Tailwind CSS 3 |
-| AI | Google Gemini API (optional, BYOK) |
-| Build | Vite 6 |
+| AI Integration | Google Gemini API (BYOK, Optional) |
 | Routing | React Router 7 |
+| Build | Vite 6 |
+| Analytics | Vercel Analytics, Speed Insights |
 | Deploy | Vercel |
 
-## Getting Started
+---
 
-### Prerequisites
-
-- Node.js 18+
-- npm
-
-### Installation
+## 📦 Installation
 
 ```bash
-# Clone the repository
 git clone https://github.com/hsu3046/siliconage.org.git
 cd siliconage.org
-
-# Install dependencies
 npm install
-
-# Run development server (localhost:3000)
 npm run dev
 ```
 
+Open [http://localhost:3000](http://localhost:3000)
+
 ### API Key (Optional)
 
-The app works fully without an API key using pre-generated static cache. To enable real-time AI analysis:
+The app works fully without an API key — all AI content is pre-cached as static data. To enable real-time Gemini analysis:
 
-1. Get a free API key at [Google AI Studio](https://ai.google.dev/)
-2. Open the app → click **About** → expand **API Key Settings**
-3. Enter your key — it's stored locally in your browser only
+1. Get a free key at [Google AI Studio](https://ai.google.dev/)
+2. In the app, click **About** → expand **API Key Settings** → paste your key
+3. Your key stays in your browser's local storage only — never sent to our servers
 
-Or for development scripts, create a `.env` file:
+For build-time scripts:
+
 ```bash
 cp .env.example .env
-# Edit .env with your key
+# Edit .env with your VITE_GOOGLE_API_KEY
 ```
-
-## Scripts
-
-```bash
-npm run dev              # Start dev server (localhost:3000)
-npm run build            # Production build
-npm run preview          # Preview production build
-npm run generate-cache   # Generate AI content static cache
-npm run i18n:sync-all    # Full i18n sync (extract + translate)
-```
-
-## Architecture
-
-```
-├── App.tsx             # Root component, global state management
-├── components/         # React components
-│   ├── MapView.tsx     # D3.js force-directed graph
-│   ├── HistoryView.tsx # Chronological timeline
-│   ├── CardView.tsx    # Filterable card grid
-│   ├── LinksView.tsx   # Relationship explorer
-│   ├── DetailPanel.tsx # Node detail sidebar
-│   └── AboutModal.tsx  # About page with API key settings
-├── constants.ts        # All historical data (entities, links, eras)
-├── services/
-│   ├── geminiService.ts   # Gemini API integration (BYOK)
-│   └── staticCache.ts     # Pre-generated AI responses
-├── locales/            # i18n translations (en, ko, ja)
-├── hooks/              # Custom React hooks
-├── utils/              # Utilities (ranking, i18n, etc.)
-└── scripts/            # Build-time scripts (cache gen, i18n)
-```
-
-## How Data Works
-
-All entities are defined in `constants.ts` using builder functions:
-
-```typescript
-createCompany('apple', 'Apple', 1976, CompanyRole.PLATFORM, '...', { ... });
-createTech('transformer', 'Transformer', 2017, TechRole.L0_THEORY_PHYSICS, '...');
-createPerson('steve_jobs', 'Steve Jobs', 1955, PersonRole.VISIONARY, '...', { ... });
-
-linkCreates('steve_jobs', 'apple', 'Co-founded Apple in a garage', 1976);
-linkPowers('transformer', 'gpt', 'Foundation architecture for GPT');
-```
-
-## Contributing
-
-Contributions are welcome! Here are some ways to help:
-
-- **Add entities** — New companies, people, or technologies to `constants.ts`
-- **Improve translations** — Update files in `locales/`
-- **Fix bugs** — Check the Issues tab
-- **Suggest features** — Open a Discussion
-
-## License
-
-This project is licensed under the [GNU General Public License v3.0](LICENSE).  
-Copyright © 2025 [KnowAI](https://knowai.space). See [LICENSE](LICENSE) for details.
-
-## Acknowledgments
-
-- Built with AI collaboration (Gemini, Claude)
-- Historical data curated from public sources
-- Inspired by the curiosity of "How did we get here?"
 
 ---
 
-<div align="center">
-  <sub>© 2025 <a href="https://knowai.space">KnowAI</a> — Licensed under GNU GPL v3</sub>
-</div>
+## 📁 Project Structure
+
+```
+├── App.tsx                 # Root component, global state & routing
+├── constants.ts            # All historical data (entities, links, eras)
+├── types.ts                # TypeScript type definitions
+├── index.tsx               # Entry point
+├── index.css               # Global styles & Tailwind directives
+├── components/
+│   ├── MapView.tsx         # D3.js force-directed graph
+│   ├── HistoryView.tsx     # Chronological timeline
+│   ├── CardView.tsx        # Filterable card grid
+│   ├── LinksView.tsx       # Relationship explorer
+│   ├── DetailPanel.tsx     # Node detail sidebar
+│   ├── AboutModal.tsx      # About page & API key settings
+│   ├── ChangeLog.tsx       # Version changelog
+│   ├── Tutorial.tsx        # Interactive onboarding
+│   ├── WelcomeModal.tsx    # First-visit welcome
+│   ├── Logo.tsx            # Animated logo component
+│   ├── SEOHead.tsx         # Dynamic SEO meta tags
+│   └── debug/              # Debug & diagnostic tools
+├── services/
+│   ├── geminiService.ts    # Gemini API integration (BYOK)
+│   └── staticCache.ts      # Pre-generated AI response cache
+├── hooks/                  # Custom React hooks
+├── utils/                  # Utilities (ranking, i18n, formatting)
+├── locales/                # i18n translations (en, ko, ja)
+├── scripts/                # Build-time scripts (cache gen, i18n sync)
+├── config/                 # App configuration
+├── public/                 # Static assets
+└── docs/                   # Internal documentation
+```
+
+---
+
+## 🗺 Roadmap
+
+- [ ] Search with natural language queries
+- [ ] Interactive "What-if" scenario mode
+- [ ] Community-contributed entity submissions
+- [ ] Graph comparison mode (side-by-side era comparison)
+- [ ] Shareable deep-link to any node or view state
+- [ ] Offline PWA support
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feat/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat(scope): add amazing feature'`)
+4. Push to the branch (`git push origin feat/amazing-feature`)
+5. Open a Pull Request
+
+**Some great ways to contribute:**
+
+- 📊 **Add entities** — New companies, people, or technologies to `constants.ts`
+- 🌐 **Improve translations** — Refine content in `locales/`
+- 🐛 **Fix bugs** — Check the [Issues](https://github.com/hsu3046/siliconage.org/issues) tab
+- 💡 **Suggest features** — Open a [Discussion](https://github.com/hsu3046/siliconage.org/discussions)
+
+---
+
+## 📄 License
+
+This project is licensed under the [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.html).  
+Copyright © 2026 [KnowAI](https://knowai.space). See [LICENSE](LICENSE) for details.
+
+---
+
+*Built by [KnowAI](https://knowai.space) · © 2026 KnowAI*
