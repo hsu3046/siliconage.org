@@ -17,6 +17,8 @@ import LinksView from './components/LinksView';
 import WelcomeModal from './components/WelcomeModal';
 import Tutorial from './components/Tutorial';
 import SEOHead from './components/SEOHead';
+import AskAI from './components/AskAI/AskAI';
+import type { Locale as QALocale } from './services/qaService';
 
 // Debug mode - lazy loaded to exclude from production bundle
 const DebugDashboard = lazy(() => import('./components/debug/DebugDashboard'));
@@ -1101,6 +1103,15 @@ const App: React.FC = () => {
         <Tutorial
           isOpen={isTutorialOpen}
           onClose={() => setIsTutorialOpen(false)}
+        />
+
+        <AskAI
+          locale={(locale as QALocale)}
+          onSourcesChange={() => { /* Phase 4 will hook this into MapView's _focusDistance */ }}
+          onNodeRefClick={(id: string) => {
+            const node = INITIAL_DATA.nodes.find(n => n.id === id);
+            if (node) navigateToNode(node);
+          }}
         />
       </main>
 
