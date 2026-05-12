@@ -18,7 +18,10 @@
     "i18n:translate-events": "npx tsx scripts/translate-events.ts",
     "i18n:sync-events": "npm run i18n:extract-events && npm run i18n:translate-events",
     "i18n:sync-all": "npm run i18n:sync && npm run i18n:sync-links && npm run i18n:sync-events",
-    "seed": "npx tsx scripts/seedSupabase.ts"
+    "seed": "npx tsx scripts/seedSupabase.ts",
+    "wikidata:map": "npx tsx scripts/mapToWikidata.ts",
+    "wikidata:enrich": "npx tsx scripts/enrichFromWikidata.ts",
+    "embed": "npx tsx scripts/generateEmbeddings.ts"
   },
   "dependencies": {
     "@formspree/react": "^2.5.1",
