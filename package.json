@@ -21,6 +21,8 @@
     "seed": "npx tsx scripts/seedSupabase.ts",
     "wikidata:map": "npx tsx scripts/mapToWikidata.ts",
     "wikidata:enrich": "npx tsx scripts/enrichFromWikidata.ts",
+    "wikidata:bfs": "npx tsx scripts/wikidataBfs.ts",
+    "classify": "npx tsx scripts/classifyNodes.ts",
     "embed": "npx tsx scripts/generateEmbeddings.ts"
   },
   "dependencies": {

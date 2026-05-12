@@ -153,12 +153,19 @@ async function main() {
     for (const n of (nodes as NodeRow[] ?? [])) nodeById.set(n.id, n);
     console.log(`  nodes: ${nodeById.size}`);
 
-    const { data: trans, error: e2 } = await sb
+    // By default only target rows whose embedding is still NULL — this lets the
+    // script run incrementally as new ai_discovered nodes arrive. Pass --force
+    // to regenerate every row.
+    const force = process.argv.includes('--force');
+    let q = sb
         .from('node_translations')
         .select('node_id, locale, label, description, primary_role');
+    if (!force) q = q.is('embedding', null);
+    const { data: trans, error: e2 } = await q;
     if (e2) throw e2;
     const transRows = (trans as NodeTransRow[] ?? []);
-    console.log(`  translations: ${transRows.length}`);
+    console.log(`  translations needing embedding: ${transRows.length}${force ? ' (force)' : ''}`);
+    if (transRows.length === 0) { console.log('[embed] nothing to do.'); return; }
 
     // 2. Build "related link stories" lookup, per (source_id, locale)
     console.log('[embed] indexing related link stories ...');
@@ -205,49 +212,41 @@ async function main() {
     }
     console.log(`  total tasks: ${tasks.length}`);
 
-    // 4. Call Gemini in batches
-    console.log('[embed] requesting embeddings ...');
-    const updates: Array<{ node_id: string; locale: string; embedding: number[] }> = [];
+    // 4. Call Gemini and persist each batch immediately. This way a 429 in the
+    //    middle of the run does not throw away embeddings we already paid for.
+    console.log('[embed] requesting embeddings + writing per batch ...');
+    let written = 0;
     for (let i = 0; i < tasks.length; i += BATCH_SIZE) {
         const slice = tasks.slice(i, i + BATCH_SIZE);
-        const vectors = await batchEmbed(apiKey, slice.map(s => s.text));
-        for (let j = 0; j < slice.length; j++) {
-            updates.push({ node_id: slice[j].node_id, locale: slice[j].locale, embedding: vectors[j] });
+        let vectors: number[][];
+        try {
+            vectors = await batchEmbed(apiKey, slice.map(s => s.text));
+        } catch (err) {
+            console.error(`[embed] batch ${i} failed:`, err instanceof Error ? err.message : err);
+            console.error(`[embed] partial result: ${written} translations embedded so far`);
+            throw err;
         }
-        process.stdout.write(`  embeddings: ${Math.min(i + BATCH_SIZE, tasks.length)}/${tasks.length}\n`);
+        const NOW = new Date().toISOString();
+        for (let j = 0; j < slice.length; j++) {
+            const { error } = await sb
+                .from('node_translations')
+                .update({ embedding: vectors[j], embedding_model: MODEL, embedding_updated_at: NOW } as never)
+                .eq('node_id', slice[j].node_id)
+                .eq('locale', slice[j].locale);
+            if (error) {
+                console.warn(`  update ${slice[j].node_id}/${slice[j].locale} failed: ${error.message}`);
+                continue;
+            }
+            written++;
+        }
+        console.log(`  embeddings written: ${written}/${tasks.length}`);
         if (i + BATCH_SIZE < tasks.length) {
-            process.stdout.write(`  sleeping ${INTER_BATCH_MS / 1000}s before next batch (free tier RPM)\n`);
+            console.log(`  sleeping ${INTER_BATCH_MS / 1000}s before next batch (free tier RPM)`);
             await new Promise(r => setTimeout(r, INTER_BATCH_MS));
         }
     }
-    process.stdout.write('\n');
 
-    // 5. Write back to node_translations.embedding
-    console.log('[embed] writing back to node_translations ...');
-    const NOW = new Date().toISOString();
-    for (let i = 0; i < updates.length; i++) {
-        const u = updates[i];
-        const { error } = await sb
-            .from('node_translations')
-            .update({
-                embedding: u.embedding,
-                embedding_model: MODEL,
-                embedding_updated_at: NOW,
-            } as never)
-            .eq('node_id', u.node_id)
-            .eq('locale', u.locale);
-        if (error) {
-            console.error(`[embed] update ${u.node_id}/${u.locale} failed:`, error);
-            throw error;
-        }
-        if ((i + 1) % 50 === 0 || i === updates.length - 1) {
-            process.stdout.write(`  writes: ${i + 1}/${updates.length}\r`);
-        }
-    }
-    process.stdout.write('\n');
-
-    console.log('[embed] done.');
-    console.log(`  total rows updated: ${updates.length}`);
+    console.log(`[embed] done. total rows updated: ${written}`);
 }
 
 main().catch(err => { console.error('[embed] FAILED:', err); process.exit(1); });
