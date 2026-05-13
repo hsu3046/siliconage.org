@@ -15,6 +15,8 @@ interface MapViewProps {
   scrollToNodeId?: string | null;
   companyMode: CompanyMode;
   featuredNode?: NodeData;
+  /** Phase 4-A: node IDs the AskAI answer cited — drawn with a glow ring. */
+  qaHighlightedIds?: string[];
 }
 
 // ============================================================================
@@ -382,7 +384,7 @@ const getCircleIntersection = (
   };
 };
 
-const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNodeDoubleClick, width, height, focusNodeId, scrollToNodeId, companyMode, featuredNode }) => {
+const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNodeDoubleClick, width, height, focusNodeId, scrollToNodeId, companyMode, featuredNode, qaHighlightedIds }) => {
   // i18n hook
   const { t } = useLocale();
 

@@ -71,6 +71,9 @@ const App: React.FC = () => {
   const [selectedNode, setSelectedNode] = useState<NodeData | null>(null);
   const [focusNodeId, setFocusNodeId] = useState<string | null>(null);
   const [scrollToNodeId, setScrollToNodeId] = useState<string | null>(null);
+  // Phase 4-A: nodes the AskAI answer cited. Re-used by MapView/LinksView for
+  // a glow ring so the visual mirrors what's in the answer body.
+  const [qaHighlightedIds, setQaHighlightedIds] = useState<string[]>([]);
 
   // Flag to prevent URL sync on initial load (let handleUrlChange set state first)
   const isInitialLoadRef = React.useRef(true);
@@ -1033,6 +1036,7 @@ const App: React.FC = () => {
             scrollToNodeId={scrollToNodeId}
             companyMode={companyMode}
             featuredNode={featuredNode}
+            qaHighlightedIds={qaHighlightedIds}
           />
         )}
 
@@ -1107,7 +1111,17 @@ const App: React.FC = () => {
 
         <AskAI
           locale={(locale as QALocale)}
-          onSourcesChange={() => { /* Phase 4 will hook this into MapView's _focusDistance */ }}
+          onSourcesChange={(ids: string[]) => {
+            setQaHighlightedIds(ids);
+            // Auto-focus the first cited node so the camera follows the answer.
+            // We use setFocusNodeId (not navigateToNode) on purpose: it pans the
+            // graph + dims the rest, but keeps the AskAI panel open and the URL
+            // unchanged so the user can keep reading.
+            const first = ids[0];
+            if (first && INITIAL_DATA.nodes.some(n => n.id === first)) {
+              setFocusNodeId(first);
+            }
+          }}
           onNodeRefClick={(id: string) => {
             const node = INITIAL_DATA.nodes.find(n => n.id === id);
             if (node) navigateToNode(node);
