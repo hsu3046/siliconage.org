@@ -23,41 +23,11 @@ function readPublicEnv(): { url?: string; anonKey?: string } {
     return { url: process.env.VITE_SUPABASE_URL, anonKey: process.env.VITE_SUPABASE_ANON_KEY };
 }
 
-// Dev-only admin key. The leading `if (!import.meta.env.DEV) return undefined;`
-// lets Vite's esbuild constant-fold the whole function to a no-op in prod
-// builds, so the service-role key string is never inlined into the prod bundle
-// even if VITE_SUPABASE_SERVICE_ROLE_KEY is set in the deploy environment.
-function readDevAdminKey(): string | undefined {
-    if (!import.meta.env.DEV) return undefined;
-    try {
-        const env = (import.meta as { env?: Record<string, string | undefined> }).env;
-        if (env?.VITE_SUPABASE_SERVICE_ROLE_KEY) return env.VITE_SUPABASE_SERVICE_ROLE_KEY;
-    } catch { /* ignore */ }
-    return undefined;
-}
-
 let browserClient: SupabaseClient | null = null;
-let devAdminClient: SupabaseClient | null = null;
 
-/**
- * Admin client for the local /admin dashboard. Returns null in production
- * builds and whenever VITE_SUPABASE_SERVICE_ROLE_KEY is not set in .env.local.
- * The service-role key bypasses RLS so this MUST never reach the prod bundle.
- */
-export function getDevAdminClient(): SupabaseClient | null {
-    const { url } = readPublicEnv();
-    const key = readDevAdminKey();
-    if (!url || !key) return null;
-    if (devAdminClient) return devAdminClient;
-    devAdminClient = createClient(url, key, {
-        auth: { persistSession: false, autoRefreshToken: false },
-    });
-    return devAdminClient;
-}
-
-export function isAdminAvailable(): boolean {
-    return getDevAdminClient() !== null;
-}
+// NOTE: /admin work goes through services/adminService.ts which calls the
+// password-protected `admin` Edge Function. The service-role key never enters
+// the client bundle — even in dev. Do not add a client-side admin factory here.
 
 export function getSupabase(): SupabaseClient | null {
     const { url, anonKey } = readPublicEnv();
