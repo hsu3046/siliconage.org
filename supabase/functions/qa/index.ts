@@ -57,24 +57,32 @@ interface RetrievedNode {
 }
 
 async function embed(apiKey: string, text: string): Promise<number[]> {
-    const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${EMBED_MODEL}:embedContent?key=${apiKey}`,
-        {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                content: { parts: [{ text }] },
-                outputDimensionality: EMBED_DIM,
-            }),
-        },
-    );
-    if (!res.ok) throw new Error(`embed ${res.status}: ${await res.text()}`);
-    const data = await res.json();
-    const values = data.embedding?.values as number[] | undefined;
-    if (!values || values.length !== EMBED_DIM) {
-        throw new Error(`embed: bad shape (got ${values?.length})`);
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${EMBED_MODEL}:embedContent?key=${apiKey}`;
+    const body = JSON.stringify({ content: { parts: [{ text }] }, outputDimensionality: EMBED_DIM });
+    for (let attempt = 1; attempt <= 3; attempt++) {
+        const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body });
+        if (res.ok) {
+            const data = await res.json();
+            const values = data.embedding?.values as number[] | undefined;
+            if (!values || values.length !== EMBED_DIM) {
+                throw new Error(`embed: bad shape (got ${values?.length})`);
+            }
+            return values;
+        }
+        const errText = await res.text();
+        const transient5xx = res.status >= 500 && res.status < 600;
+        if (res.status === 429 || transient5xx) {
+            const m = errText.match(/"retryDelay":\s*"(\d+)s"/);
+            const waitSec = res.status === 429
+                ? (m ? Math.min(Number(m[1]) + 2, 25) : 12)
+                : Math.min(2 * Math.pow(2, attempt - 1), 12);
+            console.warn(`[qa] ${res.status} from embedContent, retrying in ${waitSec}s (attempt ${attempt}/3)`);
+            await new Promise(r => setTimeout(r, waitSec * 1000));
+            continue;
+        }
+        throw new Error(`embed ${res.status}: ${errText.slice(0, 400)}`);
     }
-    return values;
+    throw new Error('embed: exhausted retries');
 }
 
 async function generate(apiKey: string, system: string, user: string): Promise<{ answer: string; source_node_ids: string[] }> {
@@ -104,16 +112,22 @@ async function generate(apiKey: string, system: string, user: string): Promise<{
             };
         }
         const errText = await res.text();
-        if (res.status === 429) {
+        // 429 = quota; 500/502/503/504 = transient model overload. Retry both,
+        // with exponential-ish backoff (3s → 6s → 12s) on 5xx and the
+        // server-supplied retryDelay on 429.
+        const transient5xx = res.status >= 500 && res.status < 600;
+        if (res.status === 429 || transient5xx) {
             const m = errText.match(/"retryDelay":\s*"(\d+)s"/);
-            const waitSec = m ? Math.min(Number(m[1]) + 2, 25) : 12;
-            console.warn(`[qa] 429 from generateContent, retrying in ${waitSec}s (attempt ${attempt}/3)`);
+            const waitSec = res.status === 429
+                ? (m ? Math.min(Number(m[1]) + 2, 25) : 12)
+                : Math.min(3 * Math.pow(2, attempt - 1), 20);
+            console.warn(`[qa] ${res.status} from generateContent, retrying in ${waitSec}s (attempt ${attempt}/3)`);
             await new Promise(r => setTimeout(r, waitSec * 1000));
             continue;
         }
         throw new Error(`generate ${res.status}: ${errText.slice(0, 400)}`);
     }
-    throw new Error('generate: exhausted retries on 429');
+    throw new Error('generate: exhausted retries');
 }
 
 function buildContext(nodes: RetrievedNode[]): string {
