@@ -35,7 +35,7 @@ begin
     with
     -- vector top-K seeds, locale-aware, RLS-shape (approved-only) enforced
     seeds as (
-        select nt.node_id,
+        select nt.node_id as seed_id,
                (1 - (nt.embedding <=> query_emb))::real as similarity
         from public.node_translations nt
         join public.nodes n
@@ -45,25 +45,25 @@ begin
         order by nt.embedding <=> query_emb
         limit k
     ),
-    seed_ids as (select node_id from seeds),
+    seed_ids as (select seed_id from seeds),
     -- 1-hop neighbours of seeds (both directions). Excludes seeds themselves.
     -- We carry along the link metadata needed to score the bonus.
     hop1 as (
-        select l.target_id as node_id, l.type, l.strength
+        select l.target_id as nbr_id, l.type, l.strength
         from public.links l
-        where l.source_id in (select node_id from seed_ids)
-          and l.target_id not in (select node_id from seed_ids)
+        where l.source_id in (select seed_id from seed_ids)
+          and l.target_id not in (select seed_id from seed_ids)
           and l.approved_at is not null
         union all
-        select l.source_id as node_id, l.type, l.strength
+        select l.source_id as nbr_id, l.type, l.strength
         from public.links l
-        where l.target_id in (select node_id from seed_ids)
-          and l.source_id not in (select node_id from seed_ids)
+        where l.target_id in (select seed_id from seed_ids)
+          and l.source_id not in (select seed_id from seed_ids)
           and l.approved_at is not null
     ),
     -- Hop bonus: link-type weight × target category multiplier × strength
     hop_bonus as (
-        select h.node_id,
+        select h.nbr_id as bonus_id,
                sum(
                    (case h.type
                        when 'CREATES'     then 10.0
@@ -81,12 +81,12 @@ begin
                  * coalesce(h.strength, 0.5)
                )::real as bonus
         from hop1 h
-        join public.nodes n on n.id = h.node_id and n.approved_at is not null
-        group by h.node_id
+        join public.nodes n on n.id = h.nbr_id and n.approved_at is not null
+        group by h.nbr_id
     ),
     -- TechRole add-on for the seeds + hop nodes that are technology-tier
     role_bonus as (
-        select n.id as node_id,
+        select n.id as role_id,
                (case n.impact_role
                    when 'FOUNDATION' then 5.0
                    when 'CORE'       then 3.0
@@ -98,19 +98,19 @@ begin
     ),
     -- Merge seeds and hop nodes into one keyed set
     combined as (
-        select s.node_id,
+        select s.seed_id as merged_id,
                s.similarity,
                0::int as hop
         from seeds s
         union all
-        select h.node_id,
+        select h.bonus_id as merged_id,
                0::real as similarity,
                1::int as hop
         from hop_bonus h
-        where h.node_id not in (select node_id from seeds)
+        where h.bonus_id not in (select seed_id from seeds)
     ),
     scored as (
-        select c.node_id,
+        select c.merged_id,
                c.similarity,
                c.hop,
                -- weight: similarity contributes ~0..1, bonuses contribute up to ~10
@@ -118,10 +118,10 @@ begin
                   + coalesce(hb.bonus, 0) * 0.05
                   + coalesce(rb.bonus, 0) * 0.02)::real as score
         from combined c
-        left join hop_bonus hb on hb.node_id = c.node_id
-        left join role_bonus rb on rb.node_id = c.node_id
+        left join hop_bonus hb on hb.bonus_id = c.merged_id
+        left join role_bonus rb on rb.role_id  = c.merged_id
     )
-    select s.node_id,
+    select s.merged_id    as node_id,
            nt.label,
            n.category,
            n.year,
@@ -130,8 +130,8 @@ begin
            s.score,
            s.hop
     from scored s
-    join public.nodes n              on n.id = s.node_id and n.approved_at is not null
-    join public.node_translations nt on nt.node_id = s.node_id and nt.locale = q_locale
+    join public.nodes n              on n.id = s.merged_id and n.approved_at is not null
+    join public.node_translations nt on nt.node_id = s.merged_id and nt.locale = q_locale
     order by s.score desc
     limit max_total;
 end;

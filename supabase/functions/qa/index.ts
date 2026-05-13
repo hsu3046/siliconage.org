@@ -25,7 +25,9 @@ import { createClient } from 'jsr:@supabase/supabase-js@2';
 declare const Deno: { env: { get(name: string): string | undefined } };
 
 const EMBED_MODEL = 'gemini-embedding-001';
-const ANSWER_MODEL = 'gemini-2.5-flash';
+// gemini-2.5-flash-lite has a more generous free-tier RPD than full flash and
+// is plenty smart enough for the 2-4 sentence cited-context answers we need.
+const ANSWER_MODEL = 'gemini-2.5-flash-lite';
 const EMBED_DIM = 768;
 const DAILY_LIMIT = 20;
 const CACHE_SIM_THRESHOLD = 0.92;
@@ -75,30 +77,42 @@ async function embed(apiKey: string, text: string): Promise<number[]> {
 }
 
 async function generate(apiKey: string, system: string, user: string): Promise<{ answer: string; source_node_ids: string[] }> {
-    const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${ANSWER_MODEL}:generateContent?key=${apiKey}`,
-        {
+    const body = {
+        systemInstruction: { parts: [{ text: system }] },
+        contents: [{ role: 'user', parts: [{ text: user }] }],
+        generationConfig: {
+            responseMimeType: 'application/json',
+            temperature: 0.3,
+            maxOutputTokens: 2048,
+        },
+    };
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${ANSWER_MODEL}:generateContent?key=${apiKey}`;
+    for (let attempt = 1; attempt <= 3; attempt++) {
+        const res = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                systemInstruction: { parts: [{ text: system }] },
-                contents: [{ role: 'user', parts: [{ text: user }] }],
-                generationConfig: {
-                    responseMimeType: 'application/json',
-                    temperature: 0.3,
-                    maxOutputTokens: 2048,
-                },
-            }),
-        },
-    );
-    if (!res.ok) throw new Error(`generate ${res.status}: ${await res.text()}`);
-    const data = await res.json();
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
-    const parsed = JSON.parse(text);
-    return {
-        answer: String(parsed.answer ?? ''),
-        source_node_ids: Array.isArray(parsed.source_node_ids) ? parsed.source_node_ids.map(String) : [],
-    };
+            body: JSON.stringify(body),
+        });
+        if (res.ok) {
+            const data = await res.json();
+            const text = data.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
+            const parsed = JSON.parse(text);
+            return {
+                answer: String(parsed.answer ?? ''),
+                source_node_ids: Array.isArray(parsed.source_node_ids) ? parsed.source_node_ids.map(String) : [],
+            };
+        }
+        const errText = await res.text();
+        if (res.status === 429) {
+            const m = errText.match(/"retryDelay":\s*"(\d+)s"/);
+            const waitSec = m ? Math.min(Number(m[1]) + 2, 25) : 12;
+            console.warn(`[qa] 429 from generateContent, retrying in ${waitSec}s (attempt ${attempt}/3)`);
+            await new Promise(r => setTimeout(r, waitSec * 1000));
+            continue;
+        }
+        throw new Error(`generate ${res.status}: ${errText.slice(0, 400)}`);
+    }
+    throw new Error('generate: exhausted retries on 429');
 }
 
 function buildContext(nodes: RetrievedNode[]): string {
