@@ -37,7 +37,7 @@ async function translateBatch(
     entries: [string, EventTranslation][],
     targetLang: TargetLang
 ): Promise<Record<string, EventTranslation>> {
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-3.1-flash-lite' });
 
     const prompt = `Translate the following event descriptions to ${LANGUAGE_NAMES[targetLang]}.
 

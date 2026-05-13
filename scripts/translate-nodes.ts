@@ -94,7 +94,7 @@ If a node has no primaryRole/secondaryRole in input, do not include them in outp
 `.trim();
 
     try {
-        const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-001:generateContent', {
+        const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

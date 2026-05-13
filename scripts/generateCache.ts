@@ -74,7 +74,7 @@ function extractNodes(): NodeData[] {
 }
 
 async function generateForNode(node: NodeData): Promise<AIResponse | null> {
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-001' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-3.1-flash-lite' });
 
     const prompt = `
 You are an expert technology historian. Analyze the following entity in the context of computing and AI history.

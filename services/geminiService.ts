@@ -110,7 +110,7 @@ Remember: Your entire response must be in ${langName}.
     `.trim();
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash-001",  // Upgraded model
+      model: "gemini-3.1-flash-lite",  // 2026-05 GA fast tier
       contents: prompt,
       config: {
         tools: [{ googleSearch: {} }],  // Enable Google Search Grounding

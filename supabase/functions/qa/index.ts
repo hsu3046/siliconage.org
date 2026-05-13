@@ -7,7 +7,7 @@
 //   3. Embed query via gemini-embedding-001 (768d)
 //   4. Try qa_cache: cosine >= 0.92 hit → return cached answer
 //   5. Miss → match_nodes_with_graph RPC → assemble context
-//   6. Call gemini-2.5-flash with JSON response + citations
+//   6. Call gemini-3.1-flash-lite with JSON response + citations
 //   7. Persist into qa_cache (best-effort)
 //   8. Return { answer, source_node_ids, cached: boolean }
 //
@@ -25,9 +25,10 @@ import { createClient } from 'jsr:@supabase/supabase-js@2';
 declare const Deno: { env: { get(name: string): string | undefined } };
 
 const EMBED_MODEL = 'gemini-embedding-001';
-// gemini-2.5-flash-lite has a more generous free-tier RPD than full flash and
-// is plenty smart enough for the 2-4 sentence cited-context answers we need.
-const ANSWER_MODEL = 'gemini-2.5-flash-lite';
+// gemini-3.1-flash-lite is the current GA fast model (2026-05). Plenty smart
+// for the 2-4 sentence cited-context answers we generate and the cheapest
+// generate-tier we can use without losing JSON-mode reliability.
+const ANSWER_MODEL = 'gemini-3.1-flash-lite';
 const EMBED_DIM = 768;
 const DAILY_LIMIT = 20;
 const CACHE_SIM_THRESHOLD = 0.92;
