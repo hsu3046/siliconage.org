@@ -44,11 +44,18 @@ function json(body: unknown, init?: ResponseInit): Response {
     });
 }
 
-/** Constant-time string compare so a timing oracle does not leak prefix matches */
+/**
+ * Constant-time string compare. The length difference is folded into the
+ * accumulator instead of `return false`, so the call takes the same time
+ * regardless of where the inputs diverge — a timing oracle cannot recover
+ * the password length.
+ */
 function safeEqual(a: string, b: string): boolean {
-    if (a.length !== b.length) return false;
-    let r = 0;
-    for (let i = 0; i < a.length; i++) r |= a.charCodeAt(i) ^ b.charCodeAt(i);
+    const max = Math.max(a.length, b.length);
+    let r = a.length ^ b.length;
+    for (let i = 0; i < max; i++) {
+        r |= (a.charCodeAt(i) | 0) ^ (b.charCodeAt(i) | 0);
+    }
     return r === 0;
 }
 
