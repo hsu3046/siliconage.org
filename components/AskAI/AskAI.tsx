@@ -31,13 +31,20 @@ const AskAI: React.FC<Props> = ({ locale, onSourcesChange, onNodeRefClick, initi
     const submit = useCallback(async (q: string) => {
         const text = q.trim();
         if (!text || loading) return;
+        // Pre-check: if there's no BYOK key yet, surface the prompt
+        // immediately without bothering the Edge Function.
+        if (!getApiKey() || (getApiKey() ?? '').trim().length < 10) {
+            setNeedKey(true);
+            setResult({ status: 'no_key', message: 'Gemini API key required. Paste a free key below — it stays in your browser.' });
+            return;
+        }
         setLoading(true);
         setResult(null);
         setNeedKey(false);
         try {
             const r = await askGraphRag(text, locale);
             setResult(r);
-            if (r.status === 'quota_exceeded') {
+            if (r.status === 'no_key') {
                 setNeedKey(true);
             } else if (r.status === 'ok' && r.source_node_ids) {
                 onSourcesChange(r.source_node_ids);
@@ -155,13 +162,9 @@ const AskAI: React.FC<Props> = ({ locale, onSourcesChange, onNodeRefClick, initi
                     )}
                     {!loading && needKey && (
                         <div className="bg-amber-900/40 border border-amber-700/60 rounded-sm p-3 text-amber-100 text-sm">
-                            <p className="font-medium mb-1">Daily free quota used.</p>
+                            <p className="font-medium mb-1">Gemini API key required</p>
                             <p className="text-amber-200/80 text-xs mb-2">
-                                {result?.daily_used != null && result?.daily_limit != null
-                                    ? `${result.daily_used} / ${result.daily_limit} used today. `
-                                    : ''}
-                                Paste a free Gemini key from <a className="underline" href="https://ai.google.dev/" target="_blank" rel="noreferrer">ai.google.dev</a> to keep asking.
-                                Your key stays in this browser only.
+                                AskAI uses the same Gemini key as Deep Dive. Paste a free key from <a className="underline" href="https://ai.google.dev/" target="_blank" rel="noreferrer">ai.google.dev</a>. Your key stays in this browser only — it is never sent to our servers.
                             </p>
                             <div className="flex gap-2 mt-2">
                                 <input
@@ -186,9 +189,6 @@ const AskAI: React.FC<Props> = ({ locale, onSourcesChange, onNodeRefClick, initi
                                     Save & retry
                                 </button>
                             </div>
-                            {getApiKey() && (
-                                <p className="text-amber-200/60 text-[11px] mt-2">A key is already saved — quota came from the system key pool.</p>
-                            )}
                         </div>
                     )}
                     {!loading && result?.status === 'ok' && result.answer && (

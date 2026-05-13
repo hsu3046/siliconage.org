@@ -1,9 +1,10 @@
-// Phase 3 Graph-RAG QA Edge Function
+// Phase 3 Graph-RAG QA Edge Function (BYOK-only, parity with Deep Dive)
 //
 // Flow:
 //   1. CORS + body parse
-//   2. If BYOK key present → skip rate limit, use BYOK for Gemini calls
-//      else → increment rate_limits, refuse with status=quota_exceeded if >20/day
+//   2. Require x-byok-gemini-key header — otherwise return status='no_key'.
+//      The graph-RAG retrieval + cache infrastructure runs server-side, but
+//      every Gemini call uses the user's own key. No system key, no quota.
 //   3. Embed query via gemini-embedding-001 (768d)
 //   4. Try qa_cache: cosine >= 0.92 hit → return cached answer
 //   5. Miss → match_nodes_with_graph RPC → assemble context
@@ -14,9 +15,9 @@
 // Deploy:
 //   supabase functions deploy qa
 //
-// Secrets required (supabase secrets set):
-//   GEMINI_API_KEY          (system key — server side only)
-//   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY are injected automatically.
+// Secrets required (auto-injected by Supabase):
+//   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
+// GEMINI_API_KEY is no longer used — clients bring their own key.
 
 // @ts-ignore — Deno-only import; not resolved by Node tsc but runs in Edge runtime.
 import { createClient } from 'jsr:@supabase/supabase-js@2';
@@ -30,7 +31,6 @@ const EMBED_MODEL = 'gemini-embedding-001';
 // generate-tier we can use without losing JSON-mode reliability.
 const ANSWER_MODEL = 'gemini-3.1-flash-lite';
 const EMBED_DIM = 768;
-const DAILY_LIMIT = 20;
 const CACHE_SIM_THRESHOLD = 0.92;
 
 const corsHeaders = {
@@ -42,7 +42,6 @@ const corsHeaders = {
 interface QABody {
     query: string;
     locale?: 'en' | 'ko' | 'ja';
-    anon_id?: string;
 }
 
 interface RetrievedNode {
@@ -153,17 +152,6 @@ async function hashQuery(locale: string, normalized: string): Promise<string> {
     return `q_${hex}`;
 }
 
-/** Get a stable per-caller identity for rate limiting. anon_id alone can be
- *  spoofed by clearing localStorage; combining it with the source IP makes
- *  the basic spoof harder without needing real auth. */
-function callerIdentity(req: Request, anon_id: string): string {
-    const ipRaw = req.headers.get('cf-connecting-ip')
-        ?? req.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
-        ?? '';
-    const ip = ipRaw.slice(0, 64);
-    return ip ? `${anon_id}|${ip}` : anon_id;
-}
-
 // @ts-ignore — Deno.serve is the Edge runtime entry point
 Deno.serve(async (req: Request) => {
     if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
@@ -173,22 +161,24 @@ Deno.serve(async (req: Request) => {
         const body = await req.json() as QABody;
         const query = (body.query ?? '').trim();
         const locale = (body.locale ?? 'en') as 'en' | 'ko' | 'ja';
-        const anon_id = body.anon_id ?? 'anonymous';
         if (!query) {
             return new Response(JSON.stringify({ error: 'query required' }), {
                 status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
             });
         }
 
-        // BYOK header: when present, the user's own Gemini key is used and no
-        // rate limit is enforced (they're paying their own quota).
-        const byokKey = req.headers.get('x-byok-gemini-key') ?? '';
-        const systemKey = Deno.env.get('GEMINI_API_KEY') ?? '';
-        const useByok = byokKey.length > 10;
-        const geminiKey = useByok ? byokKey : systemKey;
-        if (!geminiKey) {
-            return new Response(JSON.stringify({ error: 'no Gemini key configured' }), {
-                status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        // BYOK only — same model as the existing Deep Dive flow. The client
+        // pastes a Gemini key in About → API Key Settings, stores it in
+        // localStorage, and forwards it on each call via x-byok-gemini-key.
+        // No system key fallback and no daily quota: the user pays their own
+        // Gemini quota directly.
+        const geminiKey = (req.headers.get('x-byok-gemini-key') ?? '').trim();
+        if (geminiKey.length < 10) {
+            return new Response(JSON.stringify({
+                status: 'no_key',
+                message: 'Gemini API key required. Add one in About → API Key Settings.',
+            }), {
+                status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
             });
         }
 
@@ -198,29 +188,6 @@ Deno.serve(async (req: Request) => {
         const supaUrl = Deno.env.get('SUPABASE_URL')!;
         const supaKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
         const supa = createClient(supaUrl, supaKey, { auth: { persistSession: false } });
-
-        // Rate limit (system-key flow only). Caller identity blends anon_id
-        // with IP so clearing localStorage alone does not reset the counter.
-        const identity = callerIdentity(req, anon_id);
-        if (!useByok) {
-            const { data: newCount, error: rlErr } = await supa.rpc('increment_rate_limit', { p_anon_id: identity });
-            if (rlErr) {
-                return new Response(JSON.stringify({ error: 'rate_limit RPC failed', detail: rlErr.message }), {
-                    status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-                });
-            }
-            const used = typeof newCount === 'number' ? newCount : 0;
-            if (used > DAILY_LIMIT) {
-                return new Response(JSON.stringify({
-                    status: 'quota_exceeded',
-                    daily_used: used,
-                    daily_limit: DAILY_LIMIT,
-                    message: 'Free daily quota reached. Add your own Gemini key for unlimited queries.',
-                }), {
-                    status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-                });
-            }
-        }
 
         // 1. Embed the query
         const queryEmb = await embed(geminiKey, query);

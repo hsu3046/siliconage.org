@@ -1,53 +1,24 @@
 /// <reference types="vite/client" />
 /**
- * qaService.ts — client wrapper around the Phase 3 Graph-RAG QA Edge Function.
+ * qaService.ts — client wrapper around the Graph-RAG QA Edge Function.
  *
- * Behavior:
- *   - Generates a stable anonymous UUID and stores it in localStorage.
- *   - POSTs to /functions/v1/qa with { query, locale, anon_id }.
- *   - If the user has a BYOK Gemini key (getApiKey() in geminiService),
- *     it is sent in the `x-byok-gemini-key` header and the Edge Function
- *     bypasses the daily quota.
- *   - Returns { status: 'ok' | 'quota_exceeded' | 'error', answer, source_node_ids, cached }
+ * BYOK-only, same key as the Deep Dive flow. The user pastes a Gemini key in
+ * About → API Key Settings (stored in localStorage as silicon_age_api_key),
+ * and every QA call forwards that key in the x-byok-gemini-key header. With
+ * no key the call short-circuits to status='no_key' so the UI can prompt.
  */
 
 import { getApiKey } from './geminiService';
 
-const ANON_ID_KEY = 'silicon_age_anon_id';
-
 export type Locale = 'en' | 'ko' | 'ja';
 
 export interface QAResult {
-    status: 'ok' | 'quota_exceeded' | 'error';
+    status: 'ok' | 'no_key' | 'error';
     answer?: string;
     source_node_ids?: string[];
     cached?: boolean;
-    daily_used?: number;
-    daily_limit?: number;
     message?: string;
     error?: string;
-}
-
-function uuid(): string {
-    // Browser crypto.randomUUID is widely available since 2022.
-    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-        return crypto.randomUUID();
-    }
-    // Fallback: timestamp + random
-    return `anon_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
-}
-
-export function getAnonId(): string {
-    try {
-        let id = localStorage.getItem(ANON_ID_KEY);
-        if (!id) {
-            id = uuid();
-            localStorage.setItem(ANON_ID_KEY, id);
-        }
-        return id;
-    } catch {
-        return 'anonymous';
-    }
 }
 
 function getQaEndpoint(): string | null {
@@ -67,22 +38,29 @@ export async function askGraphRag(query: string, locale: Locale = 'en'): Promise
         return { status: 'error', error: 'Supabase env vars missing (VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY)' };
     }
 
+    // Short-circuit: no key at all → tell the UI to prompt without bothering
+    // the Edge Function.
+    const byok = getApiKey()?.trim() ?? '';
+    if (byok.length < 10) {
+        return {
+            status: 'no_key',
+            message: 'Gemini API key required. Add one in About → API Key Settings.',
+        };
+    }
+
     const headers: Record<string, string> = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${anonKey}`,
         'apikey': anonKey,
+        'x-byok-gemini-key': byok,
     };
-    const byok = getApiKey();
-    if (byok && byok.trim().length > 10) {
-        headers['x-byok-gemini-key'] = byok.trim();
-    }
 
     let res: Response;
     try {
         res = await fetch(endpoint, {
             method: 'POST',
             headers,
-            body: JSON.stringify({ query, locale, anon_id: getAnonId() }),
+            body: JSON.stringify({ query, locale }),
         });
     } catch (err) {
         return { status: 'error', error: err instanceof Error ? err.message : 'network error' };
@@ -95,12 +73,11 @@ export async function askGraphRag(query: string, locale: Locale = 'en'): Promise
         return { status: 'error', error: `bad JSON response (HTTP ${res.status})` };
     }
 
-    if (res.status === 429 && body.status === 'quota_exceeded') {
+    // Server may also say "no_key" (e.g. header was stripped en route).
+    if (res.status === 401 && body.status === 'no_key') {
         return {
-            status: 'quota_exceeded',
-            daily_used: typeof body.daily_used === 'number' ? body.daily_used : undefined,
-            daily_limit: typeof body.daily_limit === 'number' ? body.daily_limit : undefined,
-            message: typeof body.message === 'string' ? body.message : undefined,
+            status: 'no_key',
+            message: typeof body.message === 'string' ? body.message : 'Gemini API key required.',
         };
     }
     if (!res.ok) {
@@ -113,13 +90,4 @@ export async function askGraphRag(query: string, locale: Locale = 'en'): Promise
         source_node_ids: Array.isArray(body.source_node_ids) ? (body.source_node_ids as string[]) : [],
         cached: Boolean(body.cached),
     };
-}
-
-/** Convenience helper for the UI: clears the anon id (e.g. "reset my daily quota") */
-export function resetAnonId(): void {
-    try {
-        localStorage.removeItem(ANON_ID_KEY);
-    } catch {
-        /* ignore */
-    }
 }
