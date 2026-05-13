@@ -425,6 +425,10 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
   const prevFocusNodeIdRef = useRef<string | null>(null);
   // Track last layout dimensions for recalculation detection
   const lastLayoutRef = useRef<{ width: number; height: number } | null>(null);
+  // Phase 4-C: stagger the first appearance ("cinematic intro"). True only
+  // for the first redraw of this MapView instance; subsequent updates get no
+  // delay so focus mode, filter toggles, etc. feel snappy.
+  const isFirstRenderRef = useRef<boolean>(true);
 
 
   const handleNodeClick = (d: NodeData) => {
@@ -1396,7 +1400,12 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
           .attr("fill-opacity", (d: any) => d._focusDistance === 2 ? 0.15 : 1)
           .attr("stroke", "none")
           .attr("cursor", "pointer")
-          .call(enter => enter.transition(t).attr("r", (d: any) => d._radius || 10))
+          // Phase 4-C: stagger the first render so nodes pop in like stars
+          // appearing (cinematic intro). Subsequent updates (focus mode, filter
+          // toggle) keep delay=0 so interactions feel instant.
+          .call(enter => enter.transition(t)
+            .delay((_d, i) => isFirstRenderRef.current ? Math.min(i * 10, 1400) : 0)
+            .attr("r", (d: any) => d._radius || 10))
           .on("click", (event, d) => { event.stopPropagation(); handleNodeClick(d); })
           .on("dblclick", (event, d) => { event.stopPropagation(); handleNodeDoubleClick(d); })
           .on("touchstart", (event, d) => { event.stopPropagation(); handleTouchStart(event, d); })
@@ -1533,6 +1542,35 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
       rootGroup.select(".layer-qa-highlight").selectAll<SVGCircleElement, NodeData>("circle")
         .attr("cx", (d: any) => d.x).attr("cy", (d: any) => d.y);
     });
+
+    // Phase 4-D: hover preview — paint a soft amber drop-shadow on the
+    // 1-hop neighbours of whatever node is being hovered. Uses a `.preview`
+    // d3 namespace so the existing tooltip handler is not affected, and
+    // SVG `filter` style instead of stroke so we never fight the main
+    // redraw's attr-set logic.
+    nodesSel
+      .on("mouseenter.preview", function (_event, d: any) {
+        if (window.matchMedia('(pointer: coarse)').matches) return;
+        const neighborIds = new Set<string>();
+        for (const l of visibleLinks) {
+          const s = typeof l.source === 'object' ? (l.source as any).id : l.source;
+          const t = typeof l.target === 'object' ? (l.target as any).id : l.target;
+          if (s === d.id) neighborIds.add(t);
+          if (t === d.id) neighborIds.add(s);
+        }
+        rootGroup.select(".layer-nodes").selectAll<SVGCircleElement, NodeData>("circle")
+          .filter((n: any) => neighborIds.has(n.id))
+          .style("filter", "drop-shadow(0 0 6px rgba(253, 224, 71, 0.7))");
+      })
+      .on("mouseleave.preview", function () {
+        rootGroup.select(".layer-nodes").selectAll<SVGCircleElement, NodeData>("circle")
+          .style("filter", null);
+      });
+
+    // Phase 4-C: the cinematic intro is one-shot. Flip the flag after this
+    // first redraw completes so the next update (focus mode, filter toggle,
+    // etc.) does not re-stagger.
+    isFirstRenderRef.current = false;
 
   }, [data, width, height, focusNodeId, onNodeClick, onNodeDoubleClick, companyMode]);
 
