@@ -134,57 +134,70 @@ Deno.serve(async (req: Request) => {
                 const ids = validIds(body.ids);
                 if (!ids) return json({ error: 'invalid ids' }, { status: 400 });
                 const NOW = new Date().toISOString();
-                const { error: e1, count: approvedNodes } = await supa
-                    .from('nodes')
-                    .update({ approved_at: NOW }, { count: 'exact' })
-                    .in('id', ids)
-                    .eq('provenance', 'ai_discovered')
-                    .is('approved_at', null);
-                if (e1) throw e1;
+                // Chunk to 200 — the link UPDATE puts every id twice into a
+                // PostgREST `or=` filter (source_id.in.(...), target_id.in.(...)),
+                // so 2000 ids would blow past the URL length limit.
+                const CHUNK = 200;
+                let approvedNodes = 0, approvedLinks = 0;
+                for (let i = 0; i < ids.length; i += CHUNK) {
+                    const chunk = ids.slice(i, i + CHUNK);
+                    const { error: e1, count: nCount } = await supa
+                        .from('nodes')
+                        .update({ approved_at: NOW }, { count: 'exact' })
+                        .in('id', chunk)
+                        .eq('provenance', 'ai_discovered')
+                        .is('approved_at', null);
+                    if (e1) throw e1;
+                    approvedNodes += nCount ?? 0;
 
-                // Approve any ai_discovered link that touches the just-approved
-                // set on either side, so the graph stays connected.
-                const idList = ids.map(i => `"${i}"`).join(',');
-                const { error: e2, count: approvedLinks } = await supa
-                    .from('links')
-                    .update({ approved_at: NOW }, { count: 'exact' })
-                    .eq('provenance', 'ai_discovered')
-                    .is('approved_at', null)
-                    .or(`source_id.in.(${idList}),target_id.in.(${idList})`);
-                if (e2) throw e2;
-
-                return json({ approved_nodes: approvedNodes ?? 0, approved_links: approvedLinks ?? 0 });
+                    const idList = chunk.map(id => `"${id}"`).join(',');
+                    const { error: e2, count: lCount } = await supa
+                        .from('links')
+                        .update({ approved_at: NOW }, { count: 'exact' })
+                        .eq('provenance', 'ai_discovered')
+                        .is('approved_at', null)
+                        .or(`source_id.in.(${idList}),target_id.in.(${idList})`);
+                    if (e2) throw e2;
+                    approvedLinks += lCount ?? 0;
+                }
+                return json({ approved_nodes: approvedNodes, approved_links: approvedLinks });
             }
 
             case 'reject': {
                 const ids = validIds(body.ids);
                 if (!ids) return json({ error: 'invalid ids' }, { status: 400 });
-                // Pull Q-ids first so we can negative-cache them in BFS.
-                const { data: q, error: e0 } = await supa
-                    .from('nodes')
-                    .select('wikidata_qid')
-                    .in('id', ids)
-                    .not('wikidata_qid', 'is', null);
-                if (e0) throw e0;
-                const qids = ((q as Array<{ wikidata_qid: string }>) ?? [])
-                    .map(r => r.wikidata_qid)
-                    .filter(Boolean);
-                if (qids.length > 0) {
-                    const rows = qids.map(qid => ({ qid, reason: 'admin reject' }));
-                    const { error: e1 } = await supa
-                        .from('wikidata_excluded')
-                        .upsert(rows as never, { onConflict: 'qid' });
-                    if (e1) throw e1;
+                const CHUNK = 200;
+                let totalQids = 0, totalDeleted = 0;
+                for (let i = 0; i < ids.length; i += CHUNK) {
+                    const chunk = ids.slice(i, i + CHUNK);
+                    // Pull Q-ids first so we can negative-cache them in BFS.
+                    const { data: q, error: e0 } = await supa
+                        .from('nodes')
+                        .select('wikidata_qid')
+                        .in('id', chunk)
+                        .not('wikidata_qid', 'is', null);
+                    if (e0) throw e0;
+                    const qids = ((q as Array<{ wikidata_qid: string }>) ?? [])
+                        .map(r => r.wikidata_qid)
+                        .filter(Boolean);
+                    if (qids.length > 0) {
+                        const rows = qids.map(qid => ({ qid, reason: 'admin reject' }));
+                        const { error: e1 } = await supa
+                            .from('wikidata_excluded')
+                            .upsert(rows as never, { onConflict: 'qid' });
+                        if (e1) throw e1;
+                    }
+                    totalQids += qids.length;
+                    // Hard delete; ON DELETE CASCADE removes translations + links.
+                    const { error: e2, count: dCount } = await supa
+                        .from('nodes')
+                        .delete({ count: 'exact' })
+                        .in('id', chunk)
+                        .eq('provenance', 'ai_discovered');
+                    if (e2) throw e2;
+                    totalDeleted += dCount ?? 0;
                 }
-                // Hard delete; ON DELETE CASCADE removes translations + links.
-                const { error: e2, count: deletedNodes } = await supa
-                    .from('nodes')
-                    .delete({ count: 'exact' })
-                    .in('id', ids)
-                    .eq('provenance', 'ai_discovered');
-                if (e2) throw e2;
-
-                return json({ deleted_nodes: deletedNodes ?? 0, excluded_qids: qids.length });
+                return json({ deleted_nodes: totalDeleted, excluded_qids: totalQids });
             }
 
             default:

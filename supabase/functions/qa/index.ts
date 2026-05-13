@@ -137,10 +137,31 @@ function buildContext(nodes: RetrievedNode[]): string {
     return lines.join('\n');
 }
 
-function hash(s: string): string {
-    let h = 0;
-    for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
-    return `q_${(h >>> 0).toString(16)}_${s.length}`;
+/** Lowercase, trim, collapse internal whitespace so equivalent questions hit
+ *  the same cache row regardless of typing artefacts. */
+function normalizeQuery(s: string): string {
+    return s.trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+/** SHA-1 hex of `${locale}::${normalized query}`. SHA-1 (not collision-safe
+ *  but plenty unique for a cache key) keeps the key short and stable. */
+async function hashQuery(locale: string, normalized: string): Promise<string> {
+    const buf = new TextEncoder().encode(`${locale}::${normalized}`);
+    const digest = await crypto.subtle.digest('SHA-1', buf);
+    const hex = Array.from(new Uint8Array(digest))
+        .map(b => b.toString(16).padStart(2, '0')).join('');
+    return `q_${hex}`;
+}
+
+/** Get a stable per-caller identity for rate limiting. anon_id alone can be
+ *  spoofed by clearing localStorage; combining it with the source IP makes
+ *  the basic spoof harder without needing real auth. */
+function callerIdentity(req: Request, anon_id: string): string {
+    const ipRaw = req.headers.get('cf-connecting-ip')
+        ?? req.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+        ?? '';
+    const ip = ipRaw.slice(0, 64);
+    return ip ? `${anon_id}|${ip}` : anon_id;
 }
 
 // @ts-ignore — Deno.serve is the Edge runtime entry point
@@ -178,9 +199,11 @@ Deno.serve(async (req: Request) => {
         const supaKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
         const supa = createClient(supaUrl, supaKey, { auth: { persistSession: false } });
 
-        // Rate limit (system-key flow only)
+        // Rate limit (system-key flow only). Caller identity blends anon_id
+        // with IP so clearing localStorage alone does not reset the counter.
+        const identity = callerIdentity(req, anon_id);
         if (!useByok) {
-            const { data: newCount, error: rlErr } = await supa.rpc('increment_rate_limit', { p_anon_id: anon_id });
+            const { data: newCount, error: rlErr } = await supa.rpc('increment_rate_limit', { p_anon_id: identity });
             if (rlErr) {
                 return new Response(JSON.stringify({ error: 'rate_limit RPC failed', detail: rlErr.message }), {
                     status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -210,8 +233,8 @@ Deno.serve(async (req: Request) => {
         });
         if (Array.isArray(cacheRows) && cacheRows.length > 0) {
             const hit = cacheRows[0];
-            // Best-effort hits++
-            await supa.from('qa_cache').update({ hits: undefined } as never).eq('query_hash', hit.query_hash); // no-op; left as future tweak
+            // hits++ AND bump expires_at — popular questions stay warm.
+            void supa.rpc('increment_qa_cache_hits', { p_query_hash: hit.query_hash });
             return new Response(JSON.stringify({
                 status: 'ok',
                 cached: true,
@@ -256,8 +279,11 @@ ${context}`;
 
         const { answer, source_node_ids } = await generate(geminiKey, system, query);
 
-        // 5. Persist into qa_cache (best-effort; ignore errors)
-        const query_hash = hash(`${locale}::${query.toLowerCase()}`);
+        // 5. Persist into qa_cache (best-effort; ignore errors). Normalize the
+        // query (trim + lowercase + collapse whitespace) and SHA-1 it so
+        // equivalent questions land on the same cache row.
+        const normalized = normalizeQuery(query);
+        const query_hash = await hashQuery(locale, normalized);
         await supa.from('qa_cache').upsert({
             query_hash,
             query_text: query,
