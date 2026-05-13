@@ -715,6 +715,7 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
     rootGroup.append("g").attr("class", "layer-link-icons"); // NEW: Icons on links
     rootGroup.append("g").attr("class", "layer-company-labels");
     rootGroup.append("g").attr("class", "layer-nodes");
+    rootGroup.append("g").attr("class", "layer-qa-highlight");  // Phase 4-B: glow ring over cited nodes
     rootGroup.append("g").attr("class", "layer-labels");
 
     // Aspect Ratio Logic
@@ -1527,9 +1528,50 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
 
       nodesSel.attr("cx", (d: any) => d.x).attr("cy", (d: any) => d.y);
       labelsSel.attr("transform", (d: any) => `translate(${d.x},${d.y})`);
+
+      // Phase 4-B: keep QA glow rings pinned to their nodes as the simulation moves
+      rootGroup.select(".layer-qa-highlight").selectAll<SVGCircleElement, NodeData>("circle")
+        .attr("cx", (d: any) => d.x).attr("cy", (d: any) => d.y);
     });
 
   }, [data, width, height, focusNodeId, onNodeClick, onNodeDoubleClick, companyMode]);
+
+  // Phase 4-B: glow ring overlay for nodes cited in the AskAI answer.
+  // This is independent of the main D3 redraw — we only enter/exit rings here,
+  // and the main tick loop (above) keeps their cx/cy pinned to each node.
+  useEffect(() => {
+    if (!svgRef.current || !simulationRef.current) return;
+    const set = new Set(qaHighlightedIds ?? []);
+    const allNodes = simulationRef.current.nodes() as Array<NodeData & { x?: number; y?: number; _radius?: number }>;
+    const highlighted = allNodes.filter(n => set.has(n.id));
+
+    const layer = d3.select(svgRef.current).select<SVGGElement>(".layer-qa-highlight");
+    if (layer.empty()) return;
+
+    layer.selectAll<SVGCircleElement, NodeData>("circle")
+      .data(highlighted, (d: any) => d.id)
+      .join(
+        enter => enter.append("circle")
+          .attr("class", "qa-glow")
+          .attr("fill", "none")
+          .attr("stroke", "#34d399")
+          .attr("stroke-width", 3)
+          .attr("opacity", 0)
+          .attr("r", (d: any) => (d._radius || 10) + 4)
+          .attr("cx", (d: any) => d.x ?? 0)
+          .attr("cy", (d: any) => d.y ?? 0)
+          .attr("pointer-events", "none")
+          .style("filter", "drop-shadow(0 0 10px rgba(52, 211, 153, 0.6))")
+          .call(e => e.transition().duration(450)
+            .attr("r", (d: any) => (d._radius || 10) + 14)
+            .attr("opacity", 0.9)),
+        update => update
+          .call(u => u.transition().duration(450)
+            .attr("r", (d: any) => (d._radius || 10) + 14)
+            .attr("opacity", 0.9)),
+        exit => exit.transition().duration(300).attr("opacity", 0).remove(),
+      );
+  }, [qaHighlightedIds]);
 
 
   return (
