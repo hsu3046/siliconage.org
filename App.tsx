@@ -1136,7 +1136,15 @@ const App: React.FC = () => {
           }}
           onNodeRefClick={(id: string) => {
             const node = INITIAL_DATA.nodes.find(n => n.id === id);
-            if (node) navigateToNode(node);
+            if (!node) return;
+            // navigateToNode only pushes the URL — the router state listener
+            // is wired to `popstate`, which is not triggered by programmatic
+            // navigate(). Drive the visible state explicitly so the click
+            // pans the camera and opens DetailPanel like a normal node click.
+            setSelectedNode(node);
+            setFocusNodeId(node.id);
+            setScrollToNodeId(node.id);
+            navigateToNode(node);
           }}
         />
       </main>
