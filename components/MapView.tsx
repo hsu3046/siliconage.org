@@ -15,6 +15,8 @@ interface MapViewProps {
   scrollToNodeId?: string | null;
   companyMode: CompanyMode;
   featuredNode?: NodeData;
+  /** Phase 4-A: node IDs the AskAI answer cited — drawn with a glow ring. */
+  qaHighlightedIds?: string[];
 }
 
 // ============================================================================
@@ -382,7 +384,7 @@ const getCircleIntersection = (
   };
 };
 
-const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNodeDoubleClick, width, height, focusNodeId, scrollToNodeId, companyMode, featuredNode }) => {
+const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNodeDoubleClick, width, height, focusNodeId, scrollToNodeId, companyMode, featuredNode, qaHighlightedIds }) => {
   // i18n hook
   const { t } = useLocale();
 
@@ -423,6 +425,10 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
   const prevFocusNodeIdRef = useRef<string | null>(null);
   // Track last layout dimensions for recalculation detection
   const lastLayoutRef = useRef<{ width: number; height: number } | null>(null);
+  // Phase 4-C: stagger the first appearance ("cinematic intro"). True only
+  // for the first redraw of this MapView instance; subsequent updates get no
+  // delay so focus mode, filter toggles, etc. feel snappy.
+  const isFirstRenderRef = useRef<boolean>(true);
 
 
   const handleNodeClick = (d: NodeData) => {
@@ -713,6 +719,7 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
     rootGroup.append("g").attr("class", "layer-link-icons"); // NEW: Icons on links
     rootGroup.append("g").attr("class", "layer-company-labels");
     rootGroup.append("g").attr("class", "layer-nodes");
+    rootGroup.append("g").attr("class", "layer-qa-highlight");  // Phase 4-B: glow ring over cited nodes
     rootGroup.append("g").attr("class", "layer-labels");
 
     // Aspect Ratio Logic
@@ -1393,7 +1400,12 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
           .attr("fill-opacity", (d: any) => d._focusDistance === 2 ? 0.15 : 1)
           .attr("stroke", "none")
           .attr("cursor", "pointer")
-          .call(enter => enter.transition(t).attr("r", (d: any) => d._radius || 10))
+          // Phase 4-C: stagger the first render so nodes pop in like stars
+          // appearing (cinematic intro). Subsequent updates (focus mode, filter
+          // toggle) keep delay=0 so interactions feel instant.
+          .call(enter => enter.transition(t)
+            .delay((_d, i) => isFirstRenderRef.current ? Math.min(i * 10, 1400) : 0)
+            .attr("r", (d: any) => d._radius || 10))
           .on("click", (event, d) => { event.stopPropagation(); handleNodeClick(d); })
           .on("dblclick", (event, d) => { event.stopPropagation(); handleNodeDoubleClick(d); })
           .on("touchstart", (event, d) => { event.stopPropagation(); handleTouchStart(event, d); })
@@ -1525,9 +1537,79 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
 
       nodesSel.attr("cx", (d: any) => d.x).attr("cy", (d: any) => d.y);
       labelsSel.attr("transform", (d: any) => `translate(${d.x},${d.y})`);
+
+      // Phase 4-B: keep QA glow rings pinned to their nodes as the simulation moves
+      rootGroup.select(".layer-qa-highlight").selectAll<SVGCircleElement, NodeData>("circle")
+        .attr("cx", (d: any) => d.x).attr("cy", (d: any) => d.y);
     });
 
+    // Phase 4-D: hover preview — paint a soft amber drop-shadow on the
+    // 1-hop neighbours of whatever node is being hovered. Uses a `.preview`
+    // d3 namespace so the existing tooltip handler is not affected, and
+    // SVG `filter` style instead of stroke so we never fight the main
+    // redraw's attr-set logic.
+    nodesSel
+      .on("mouseenter.preview", function (_event, d: any) {
+        if (window.matchMedia('(pointer: coarse)').matches) return;
+        const neighborIds = new Set<string>();
+        for (const l of visibleLinks) {
+          const s = typeof l.source === 'object' ? (l.source as any).id : l.source;
+          const t = typeof l.target === 'object' ? (l.target as any).id : l.target;
+          if (s === d.id) neighborIds.add(t);
+          if (t === d.id) neighborIds.add(s);
+        }
+        rootGroup.select(".layer-nodes").selectAll<SVGCircleElement, NodeData>("circle")
+          .filter((n: any) => neighborIds.has(n.id))
+          .style("filter", "drop-shadow(0 0 6px rgba(253, 224, 71, 0.7))");
+      })
+      .on("mouseleave.preview", function () {
+        rootGroup.select(".layer-nodes").selectAll<SVGCircleElement, NodeData>("circle")
+          .style("filter", null);
+      });
+
+    // Phase 4-C: the cinematic intro is one-shot. Flip the flag after this
+    // first redraw completes so the next update (focus mode, filter toggle,
+    // etc.) does not re-stagger.
+    isFirstRenderRef.current = false;
+
   }, [data, width, height, focusNodeId, onNodeClick, onNodeDoubleClick, companyMode]);
+
+  // Phase 4-B: glow ring overlay for nodes cited in the AskAI answer.
+  // This is independent of the main D3 redraw — we only enter/exit rings here,
+  // and the main tick loop (above) keeps their cx/cy pinned to each node.
+  useEffect(() => {
+    if (!svgRef.current || !simulationRef.current) return;
+    const set = new Set(qaHighlightedIds ?? []);
+    const allNodes = simulationRef.current.nodes() as Array<NodeData & { x?: number; y?: number; _radius?: number }>;
+    const highlighted = allNodes.filter(n => set.has(n.id));
+
+    const layer = d3.select(svgRef.current).select<SVGGElement>(".layer-qa-highlight");
+    if (layer.empty()) return;
+
+    layer.selectAll<SVGCircleElement, NodeData>("circle")
+      .data(highlighted, (d: any) => d.id)
+      .join(
+        enter => enter.append("circle")
+          .attr("class", "qa-glow")
+          .attr("fill", "none")
+          .attr("stroke", "#34d399")
+          .attr("stroke-width", 3)
+          .attr("opacity", 0)
+          .attr("r", (d: any) => (d._radius || 10) + 4)
+          .attr("cx", (d: any) => d.x ?? 0)
+          .attr("cy", (d: any) => d.y ?? 0)
+          .attr("pointer-events", "none")
+          .style("filter", "drop-shadow(0 0 10px rgba(52, 211, 153, 0.6))")
+          .call(e => e.transition().duration(450)
+            .attr("r", (d: any) => (d._radius || 10) + 14)
+            .attr("opacity", 0.9)),
+        update => update
+          .call(u => u.transition().duration(450)
+            .attr("r", (d: any) => (d._radius || 10) + 14)
+            .attr("opacity", 0.9)),
+        exit => exit.transition().duration(300).attr("opacity", 0).remove(),
+      );
+  }, [qaHighlightedIds]);
 
 
   return (

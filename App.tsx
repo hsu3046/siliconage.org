@@ -17,9 +17,14 @@ import LinksView from './components/LinksView';
 import WelcomeModal from './components/WelcomeModal';
 import Tutorial from './components/Tutorial';
 import SEOHead from './components/SEOHead';
+import AskAI from './components/AskAI/AskAI';
+import type { Locale as QALocale } from './services/qaService';
 
 // Debug mode - lazy loaded to exclude from production bundle
 const DebugDashboard = lazy(() => import('./components/debug/DebugDashboard'));
+// Admin dashboard (Phase 5 MVP) — dev-only, lazy so the bundle does not pull
+// in service_role usage paths in production builds.
+const AdminDashboard = lazy(() => import('./components/admin/AdminDashboard'));
 
 const LoadingSpinner = () => (
   <div className="w-full h-full flex items-center justify-center bg-background">
@@ -54,12 +59,21 @@ const useWindowSize = () => {
 const App: React.FC = () => {
   // Check if we're in debug mode (only in development)
   const isDebugMode = import.meta.env.DEV && window.location.pathname === '/debug';
+  // Phase 5 MVP: admin dashboard at /admin (dev-only). Service-role bypass of
+  // RLS happens inside the admin client, never exposed to anon visitors.
+  const isAdminMode = import.meta.env.DEV && window.location.pathname.startsWith('/admin');
 
-  // If debug mode, render DebugDashboard
   if (isDebugMode) {
     return (
       <Suspense fallback={<LoadingSpinner />}>
         <DebugDashboard />
+      </Suspense>
+    );
+  }
+  if (isAdminMode) {
+    return (
+      <Suspense fallback={<LoadingSpinner />}>
+        <AdminDashboard />
       </Suspense>
     );
   }
@@ -69,6 +83,9 @@ const App: React.FC = () => {
   const [selectedNode, setSelectedNode] = useState<NodeData | null>(null);
   const [focusNodeId, setFocusNodeId] = useState<string | null>(null);
   const [scrollToNodeId, setScrollToNodeId] = useState<string | null>(null);
+  // Phase 4-A: nodes the AskAI answer cited. Re-used by MapView/LinksView for
+  // a glow ring so the visual mirrors what's in the answer body.
+  const [qaHighlightedIds, setQaHighlightedIds] = useState<string[]>([]);
 
   // Flag to prevent URL sync on initial load (let handleUrlChange set state first)
   const isInitialLoadRef = React.useRef(true);
@@ -1031,6 +1048,7 @@ const App: React.FC = () => {
             scrollToNodeId={scrollToNodeId}
             companyMode={companyMode}
             featuredNode={featuredNode}
+            qaHighlightedIds={qaHighlightedIds}
           />
         )}
 
@@ -1101,6 +1119,33 @@ const App: React.FC = () => {
         <Tutorial
           isOpen={isTutorialOpen}
           onClose={() => setIsTutorialOpen(false)}
+        />
+
+        <AskAI
+          locale={(locale as QALocale)}
+          onSourcesChange={(ids: string[]) => {
+            setQaHighlightedIds(ids);
+            // Auto-focus the first cited node so the camera follows the answer.
+            // We use setFocusNodeId (not navigateToNode) on purpose: it pans the
+            // graph + dims the rest, but keeps the AskAI panel open and the URL
+            // unchanged so the user can keep reading.
+            const first = ids[0];
+            if (first && INITIAL_DATA.nodes.some(n => n.id === first)) {
+              setFocusNodeId(first);
+            }
+          }}
+          onNodeRefClick={(id: string) => {
+            const node = INITIAL_DATA.nodes.find(n => n.id === id);
+            if (!node) return;
+            // navigateToNode only pushes the URL — the router state listener
+            // is wired to `popstate`, which is not triggered by programmatic
+            // navigate(). Drive the visible state explicitly so the click
+            // pans the camera and opens DetailPanel like a normal node click.
+            setSelectedNode(node);
+            setFocusNodeId(node.id);
+            setScrollToNodeId(node.id);
+            navigateToNode(node);
+          }}
         />
       </main>
 

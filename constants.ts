@@ -503,7 +503,6 @@ linkCreates('alan_turing', 'turing_machine', 'Alan Turing proposed the mathemati
 linkCreates('claude_shannon', 'info_theory', 'Claude Shannon published "A Mathematical Theory of Communication"', 1948);
 linkCreates('william_shockley', 'transistor', 'William Shockley co-invented the point-contact transistor', 1947);
 linkCreates('robert_noyce', 'ic', 'Robert Noyce invented the monolithic integrated circuit', 1959);
-linkCreates('tim_berners_lee', 'www', 'Tim Berners-Lee proposed the World Wide Web project at CERN', 1989);
 linkCreates('dennis_ritchie', 'unix', 'Dennis Ritchie co-created the Unix operating system at Bell Labs', 1969);
 linkCreates('dennis_ritchie', 'c_lang', 'Dennis Ritchie developed C language for Unix system programming', 1972);
 linkCreates('linus_torvalds', 'linux', 'Linus Torvalds released the Linux kernel as free software', 1991);
@@ -967,7 +966,6 @@ linkContributes('bell_labs', 'sun_micro', 'Sun licensed Unix from AT&T Bell Labs
 linkContributes('sun_micro', 'oracle', 'Oracle acquired Sun Microsystems for $7.4B', 2010);
 linkRival('sun_micro', 'microsoft', 'Sun and Microsoft competed in enterprise servers and Java', 1996);
 linkRival('sun_micro', 'hp', 'Sun and HP competed in the Unix workstation market', 1985);
-linkContributes('stanford_ai_lab', 'sun_micro', 'Sun Microsystems was founded by Stanford graduates', 1982);
 
 // DARPA connections
 linkCreates('darpa', 'arpanet', 'DARPA funded the development of ARPANET, the internet\'s ancestor', 1969);

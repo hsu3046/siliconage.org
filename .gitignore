@@ -24,3 +24,6 @@ docs/
 
 # 7. OS 파일
 .DS_Store
+
+# 8. Supabase CLI 임시
+supabase/.temp/
