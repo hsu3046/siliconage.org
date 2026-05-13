@@ -14,6 +14,8 @@ const CATEGORY_TINT: Record<PendingNode['category'], string> = {
     TECHNOLOGY: 'bg-emerald-500/15 text-emerald-200 border-emerald-700/50',
 };
 
+const SIDEBAR_KEY = 'silicon_age_admin_sidebar';
+
 const AdminDashboard: React.FC = () => {
     const [authed, setAuthed] = useState<boolean>(() => !!getAdminPassword());
     const [pwDraft, setPwDraft] = useState('');
@@ -25,6 +27,12 @@ const AdminDashboard: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [selected, setSelected] = useState<Set<string>>(new Set());
     const [filter, setFilter] = useState<'all' | 'COMPANY' | 'PERSON' | 'TECHNOLOGY'>('all');
+    const [sidebarOpen, setSidebarOpen] = useState<boolean>(() => {
+        try { return localStorage.getItem(SIDEBAR_KEY) !== '0'; } catch { return true; }
+    });
+    useEffect(() => {
+        try { localStorage.setItem(SIDEBAR_KEY, sidebarOpen ? '1' : '0'); } catch { /* ignore */ }
+    }, [sidebarOpen]);
 
     const refresh = useCallback(async () => {
         if (!authed) return;
@@ -140,10 +148,27 @@ const AdminDashboard: React.FC = () => {
     // ─── Dashboard ─────────────────────────────────────────────────────────
     return (
         <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
-            <div className="border-b border-slate-800 px-6 py-4 flex items-center justify-between">
-                <div>
-                    <h1 className="text-xl font-semibold">Silicon Age — Admin</h1>
-                    <p className="text-xs text-slate-500">Edge Function · service_role · Phase 5 MVP</p>
+            <div className="border-b border-slate-800 px-4 py-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                    <button
+                        type="button"
+                        onClick={() => setSidebarOpen(o => !o)}
+                        className="p-1.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-sm"
+                        aria-label={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+                        title={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+                    >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            {sidebarOpen ? (
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                            ) : (
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                            )}
+                        </svg>
+                    </button>
+                    <div>
+                        <h1 className="text-xl font-semibold">Silicon Age — Admin</h1>
+                        <p className="text-xs text-slate-500">Edge Function · service_role · Phase 5 MVP</p>
+                    </div>
                 </div>
                 <div className="flex items-center gap-2">
                     <button type="button" onClick={() => { void refresh(); }} className="px-3 py-1.5 text-sm bg-slate-800 hover:bg-slate-700 rounded-sm">
@@ -156,20 +181,24 @@ const AdminDashboard: React.FC = () => {
             </div>
 
             <div className="flex">
-                <nav className="w-48 border-r border-slate-800 p-3 space-y-1">
-                    {([
-                        ['pending-nodes', `Pending Nodes${stats ? ` (${stats.pending})` : ''}`],
-                        ['stats', 'Stats'],
-                    ] as Array<[Tab, string]>).map(([key, label]) => (
-                        <button
-                            key={key}
-                            type="button"
-                            onClick={() => setTab(key)}
-                            className={`w-full text-left px-3 py-2 text-sm rounded-sm transition-colors ${tab === key ? 'bg-emerald-600/20 text-emerald-200' : 'hover:bg-slate-800 text-slate-300'}`}
-                        >
-                            {label}
-                        </button>
-                    ))}
+                <nav
+                    className={`border-r border-slate-800 overflow-hidden transition-[width] duration-200 ease-in-out ${sidebarOpen ? 'w-48 p-3' : 'w-0 p-0'}`}
+                >
+                    <div className="space-y-1 min-w-[160px]">
+                        {([
+                            ['pending-nodes', `Pending Nodes${stats ? ` (${stats.pending})` : ''}`],
+                            ['stats', 'Stats'],
+                        ] as Array<[Tab, string]>).map(([key, label]) => (
+                            <button
+                                key={key}
+                                type="button"
+                                onClick={() => setTab(key)}
+                                className={`w-full text-left px-3 py-2 text-sm rounded-sm transition-colors ${tab === key ? 'bg-emerald-600/20 text-emerald-200' : 'hover:bg-slate-800 text-slate-300'}`}
+                            >
+                                {label}
+                            </button>
+                        ))}
+                    </div>
                 </nav>
 
                 <main className="flex-1 p-4">
