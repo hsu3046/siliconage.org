@@ -263,7 +263,7 @@ const AdminDashboard: React.FC = () => {
 
                             {!loading && (
                                 <div className="border border-slate-800 rounded-sm overflow-hidden">
-                                    <div className="grid grid-cols-[40px_1fr_100px_60px_90px_1fr_80px] gap-2 px-3 py-2 bg-slate-900 text-xs uppercase tracking-wider text-slate-500 border-b border-slate-800 sticky top-0">
+                                    <div className="grid grid-cols-[32px_minmax(140px,1.1fr)_72px_52px_64px_minmax(200px,2fr)_minmax(80px,90px)] gap-2 px-3 py-2 bg-slate-900 text-xs uppercase tracking-wider text-slate-500 border-b border-slate-800 sticky top-0">
                                         <div>
                                             <input type="checkbox" checked={allSelected} onChange={toggleAll} className="accent-emerald-500" />
                                         </div>
@@ -278,15 +278,15 @@ const AdminDashboard: React.FC = () => {
                                         {filtered.map(r => (
                                             <label
                                                 key={r.id}
-                                                className={`grid grid-cols-[40px_1fr_100px_60px_90px_1fr_80px] gap-2 px-3 py-2 border-b border-slate-800/50 text-sm cursor-pointer hover:bg-slate-900/50 ${selected.has(r.id) ? 'bg-emerald-900/15' : ''}`}
+                                                className={`grid grid-cols-[32px_minmax(140px,1.1fr)_72px_52px_64px_minmax(200px,2fr)_minmax(80px,90px)] gap-2 px-3 py-2 border-b border-slate-800/50 text-sm cursor-pointer hover:bg-slate-900/50 ${selected.has(r.id) ? 'bg-emerald-900/15' : ''}`}
                                             >
                                                 <div>
                                                     <input type="checkbox" checked={selected.has(r.id)} onChange={() => toggleOne(r.id)} className="accent-emerald-500" />
                                                 </div>
-                                                <div>
-                                                    <div className="text-slate-100">{r.label}</div>
+                                                <div className="min-w-0">
+                                                    <div className="text-slate-100 truncate">{r.label}</div>
                                                     <div className="text-xs text-slate-500 font-mono truncate">{r.id}</div>
-                                                    {r.impact_role && <div className="text-[11px] text-slate-400 mt-0.5">{r.impact_role}{r.tech_l2 ? ` · ${r.tech_l2}` : ''}</div>}
+                                                    {r.impact_role && <div className="text-[11px] text-slate-400 mt-0.5 truncate">{r.impact_role}{r.tech_l2 ? ` · ${r.tech_l2}` : ''}</div>}
                                                 </div>
                                                 <div>
                                                     <span className={`text-[10px] px-2 py-0.5 rounded-sm border ${CATEGORY_TINT[r.category]}`}>{r.category}</span>
@@ -296,15 +296,15 @@ const AdminDashboard: React.FC = () => {
                                                     <div>{(r.relevance_score ?? 0).toFixed(1)}</div>
                                                     <div className="text-slate-500">{r.sitelinks_count ?? 0}</div>
                                                 </div>
-                                                <div className="text-slate-400 text-xs line-clamp-2">{r.description ?? '—'}</div>
-                                                <div className="text-xs">
+                                                <div className="text-slate-400 text-xs line-clamp-2 min-w-0 break-words">{r.description ?? '—'}</div>
+                                                <div className="text-xs min-w-0 truncate">
                                                     {r.wikipedia_urls && r.wikipedia_urls.en ? (
                                                         <a href={r.wikipedia_urls.en} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} className="text-cyan-400 hover:underline">en</a>
                                                     ) : (
                                                         <span className="text-slate-600">—</span>
                                                     )}
                                                     {r.wikidata_qid && (
-                                                        <a href={`https://www.wikidata.org/wiki/${r.wikidata_qid}`} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} className="ml-2 text-purple-400 hover:underline">{r.wikidata_qid}</a>
+                                                        <a href={`https://www.wikidata.org/wiki/${r.wikidata_qid}`} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} className="ml-1 text-purple-400 hover:underline">{r.wikidata_qid}</a>
                                                     )}
                                                 </div>
                                             </label>
