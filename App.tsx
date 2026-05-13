@@ -22,6 +22,9 @@ import type { Locale as QALocale } from './services/qaService';
 
 // Debug mode - lazy loaded to exclude from production bundle
 const DebugDashboard = lazy(() => import('./components/debug/DebugDashboard'));
+// Admin dashboard (Phase 5 MVP) — dev-only, lazy so the bundle does not pull
+// in service_role usage paths in production builds.
+const AdminDashboard = lazy(() => import('./components/admin/AdminDashboard'));
 
 const LoadingSpinner = () => (
   <div className="w-full h-full flex items-center justify-center bg-background">
@@ -56,12 +59,21 @@ const useWindowSize = () => {
 const App: React.FC = () => {
   // Check if we're in debug mode (only in development)
   const isDebugMode = import.meta.env.DEV && window.location.pathname === '/debug';
+  // Phase 5 MVP: admin dashboard at /admin (dev-only). Service-role bypass of
+  // RLS happens inside the admin client, never exposed to anon visitors.
+  const isAdminMode = import.meta.env.DEV && window.location.pathname.startsWith('/admin');
 
-  // If debug mode, render DebugDashboard
   if (isDebugMode) {
     return (
       <Suspense fallback={<LoadingSpinner />}>
         <DebugDashboard />
+      </Suspense>
+    );
+  }
+  if (isAdminMode) {
+    return (
+      <Suspense fallback={<LoadingSpinner />}>
+        <AdminDashboard />
       </Suspense>
     );
   }

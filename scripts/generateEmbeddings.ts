@@ -157,13 +157,26 @@ async function main() {
     // script run incrementally as new ai_discovered nodes arrive. Pass --force
     // to regenerate every row.
     const force = process.argv.includes('--force');
-    let q = sb
-        .from('node_translations')
-        .select('node_id, locale, label, description, primary_role');
-    if (!force) q = q.is('embedding', null);
-    const { data: trans, error: e2 } = await q;
+    // Supabase JS defaults to a 1000-row PostgREST limit. node_translations is
+    // ~2k rows now and will grow with admin approvals, so paginate explicitly.
+    const transRowsAcc: NodeTransRow[] = [];
+    const PAGE = 1000;
+    for (let from = 0; ; from += PAGE) {
+        let q = sb
+            .from('node_translations')
+            .select('node_id, locale, label, description, primary_role')
+            .range(from, from + PAGE - 1);
+        if (!force) q = q.is('embedding', null);
+        const { data, error } = await q;
+        if (error) throw error;
+        const rows = (data as NodeTransRow[]) ?? [];
+        transRowsAcc.push(...rows);
+        if (rows.length < PAGE) break;
+    }
+    const trans = transRowsAcc;
+    const e2 = null as null;
     if (e2) throw e2;
-    const transRows = (trans as NodeTransRow[] ?? []);
+    const transRows = trans;
     console.log(`  translations needing embedding: ${transRows.length}${force ? ' (force)' : ''}`);
     if (transRows.length === 0) { console.log('[embed] nothing to do.'); return; }
 
