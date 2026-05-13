@@ -95,11 +95,13 @@ const AskAI: React.FC<Props> = ({ locale, onSourcesChange, onNodeRefClick, initi
 
     return (
         <>
-            {/* Floating Ask button — always visible bottom-right */}
+            {/* Floating Ask button — bottom-left so it doesn't overlap the
+                MapView's zoom slider on the right. AskAI panel slides in from
+                the left, so the button and the panel share an edge. */}
             <button
                 type="button"
                 onClick={() => setOpen(o => !o)}
-                className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg flex items-center justify-center transition-all duration-200"
+                className="fixed bottom-6 left-6 z-40 w-14 h-14 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg flex items-center justify-center transition-all duration-200"
                 aria-label="Ask the Silicon Age"
                 title="Ask the Silicon Age"
             >
