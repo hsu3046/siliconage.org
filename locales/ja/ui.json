@@ -121,6 +121,17 @@
         "notPubliclyTraded": "非上場",
         "learnMore": "もっと詳しく",
         "externalLinksLabel": "(外部リンク)",
+        "aibTitle": "いま aib vote で",
+        "aibSubtitle": "この歴史の“現在”— 最新モデル・ランキング・ニュース",
+        "aibModel": "性能・価格・比較を見る",
+        "aibLab": "現在のモデルとランキング",
+        "aibRanking": "AIモデルランキング",
+        "aibNews": "最新ニュース",
+        "deepDiveNoKey": "この項目のAIディープダイブはまだ用意されていません。",
+        "deepDiveNoKeyHint": "左上のロゴ → APIキー設定でGeminiキーを入力すると、今すぐ生成できます。",
+        "deepDiveError": "現在AI分析を取得できません（利用上限または接続の問題）。しばらくしてから再度お試しください。",
+        "deepDivePregenerated": "AIが作成し、キュレーションされたグラフと照合して検査しています。誤りが含まれる場合があります。",
+        "reviewedAddition": "Wikidata・aib voteのデータから取り込み、編集者が承認した項目です。キュレーション項目より説明が短い場合があります。",
         "disclaimer": "当サイトのコンテンツは個人の主観によらず、AIが技術キーワードに基づき客観的に収集・構成しています。"
     },
     "mapView": {

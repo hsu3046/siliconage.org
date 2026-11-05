@@ -4,6 +4,7 @@ import { CATEGORY_COLORS, CATEGORY_LABELS } from '../constants';
 import { fetchNodeDetails } from '../services/geminiService';
 import { useLocale } from '../hooks/useLocale';
 import { EXTERNAL_LINKS, getExternalLinkUrl, getApplicableLinks, SupportedLocale } from '../config/externalLinks';
+import { getAibLinks } from '../config/aibLinks';
 
 interface DetailPanelProps {
   node: NodeData | null;
@@ -161,6 +162,11 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
     return node ? getExternalLinks(node, locale as SupportedLocale) : [];
   }, [node, locale]);
 
+  // "Now on aib vote" — history → present bridge for AI-era nodes
+  const aibLinks = useMemo(() => {
+    return node ? getAibLinks(node, locale as SupportedLocale) : [];
+  }, [node, locale]);
+
   // Calculate connections with smart sorting
   const connections = useMemo(() => {
     if (!node) return [];
@@ -309,19 +315,23 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
     });
   }, [node, data]);
 
-  const loadAiData = () => {
-    if (node) {
-      setLoading(true);
-      // Pass locale for language-specific AI responses
-      fetchNodeDetails(node, locale)
-        .then(data => setAiData(data))
-        .finally(() => setLoading(false));
-    }
-  };
-
+  // Re-fetch when node or locale changes. The static Deep Dive is now a
+  // network fetch, so ignore responses that arrive after the user moved on.
+  const [apiKeyVersion, setApiKeyVersion] = useState(0);
   useEffect(() => {
-    loadAiData();
-  }, [node, locale]);  // Re-fetch when locale changes
+    const bump = () => setApiKeyVersion(v => v + 1);
+    window.addEventListener('apiKeyChanged', bump);
+    return () => window.removeEventListener('apiKeyChanged', bump);
+  }, []);
+  useEffect(() => {
+    if (!node) return;
+    let cancelled = false;
+    setLoading(true);
+    fetchNodeDetails(node, locale)
+      .then(data => { if (!cancelled) setAiData(data); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, [node, locale, apiKeyVersion]);
 
   if (!node) return null;
 
@@ -555,6 +565,13 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
                   <div className="h-3 bg-slate-800 rounded w-1/2"></div>
                 </div>
               </div>
+            ) : aiData && (aiData.source === 'none' || aiData.source === 'error') ? (
+              <div className="text-sm text-slate-400 leading-relaxed space-y-2">
+                <p>{t(aiData.source === 'none' ? 'detailPanel.deepDiveNoKey' : 'detailPanel.deepDiveError')}</p>
+                {aiData.source === 'none' && (
+                  <p className="text-xs text-slate-500">{t('detailPanel.deepDiveNoKeyHint')}</p>
+                )}
+              </div>
             ) : aiData ? (
               <div className="space-y-6 animate-in fade-in duration-500">
                 <div>
@@ -578,6 +595,9 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
                     ))}
                   </ul>
                 </div>
+                {aiData.source === 'static' && (
+                  <p className="text-[10px] text-slate-500">{t('detailPanel.deepDivePregenerated')}</p>
+                )}
               </div>
             ) : (
               <div className="text-sm text-slate-500 italic">Select a node to analyze its history.</div>
@@ -653,6 +673,34 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
           </div>
         )}
 
+        {/* 3a. Now on aib vote (sister site: live model rankings + news) */}
+        {aibLinks.length > 0 && (
+          <div className="mb-6">
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+              {t('detailPanel.aibTitle')}
+            </h3>
+            <p className="text-[11px] text-slate-500 mb-3">{t('detailPanel.aibSubtitle')}</p>
+            <div className="flex flex-wrap gap-3">
+              {aibLinks.map(link => (
+                <a
+                  key={link.kind}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener"
+                  className="flex items-center gap-2 px-3 py-2 bg-indigo-950/60 border border-indigo-700/60 rounded-lg hover:bg-indigo-900/60 hover:border-indigo-500 transition-colors text-xs font-medium text-indigo-100"
+                >
+                  {link.kind === 'news' ? (
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" /></svg>
+                  ) : (
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                  )}
+                  {t(link.kind === 'model' ? 'detailPanel.aibModel' : link.kind === 'lab' ? 'detailPanel.aibLab' : link.kind === 'ranking' ? 'detailPanel.aibRanking' : 'detailPanel.aibNews')}
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* 3. Learn More Section (External Links) */}
         <div>
           <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">
@@ -676,6 +724,9 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
 
         {/* Disclaimer */}
         <p className="text-[10px] text-slate-500 leading-relaxed mt-6 pt-4 border-t border-slate-700/50">
+          {node.provenance && node.provenance !== 'curated' && (
+            <span className="block mb-1">{t('detailPanel.reviewedAddition')}</span>
+          )}
           {t('detailPanel.disclaimer')}
         </p>
 

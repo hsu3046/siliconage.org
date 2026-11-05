@@ -1239,9 +1239,9 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
 
           g.on("click", (event, d) => { event.stopPropagation(); handleNodeClick(d); })
             .on("dblclick", (event, d) => { event.stopPropagation(); handleNodeDoubleClick(d); })
-            .on("touchstart", (event, d) => { event.stopPropagation(); handleTouchStart(event, d); })
-            .on("touchend", (event) => { event.stopPropagation(); handleTouchEnd(event); })
-            .on("touchcancel", (event) => { event.stopPropagation(); handleTouchEnd(event); })
+            .on("touchstart", (event) => { event.stopPropagation(); })
+            .on("touchend", (event) => { event.stopPropagation(); })
+            .on("touchcancel", (event) => { event.stopPropagation(); })
             .on("mouseenter", (event, d) => {
               // Disable tooltip on touch devices (모바일에서는 tooltip 비활성화)
               if (window.matchMedia('(pointer: coarse)').matches) return;
@@ -1408,9 +1408,9 @@ const MapView: React.FC<MapViewProps> = ({ data, onNodeClick, onNodeFocus, onNod
             .attr("r", (d: any) => d._radius || 10))
           .on("click", (event, d) => { event.stopPropagation(); handleNodeClick(d); })
           .on("dblclick", (event, d) => { event.stopPropagation(); handleNodeDoubleClick(d); })
-          .on("touchstart", (event, d) => { event.stopPropagation(); handleTouchStart(event, d); })
-          .on("touchend", (event) => { event.stopPropagation(); handleTouchEnd(event); })
-          .on("touchcancel", (event) => { event.stopPropagation(); handleTouchEnd(event); })
+          .on("touchstart", (event) => { event.stopPropagation(); })
+          .on("touchend", (event) => { event.stopPropagation(); })
+          .on("touchcancel", (event) => { event.stopPropagation(); })
           .on("mouseenter", (event, d) => {
             // Disable tooltip on touch devices (모바일에서는 tooltip 비활성화)
             if (window.matchMedia('(pointer: coarse)').matches) return;

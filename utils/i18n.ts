@@ -18,6 +18,44 @@ let linkTranslations: Record<string, { story: string }> = {};
 let eventTranslations: Record<string, { story: string }> = {};
 let isLoaded = false;
 
+export const LOCALE_CHANGE_EVENT = 'silicon-age:locale-change';
+
+// Translations carried by reviewed additions (data/approved.json). They are
+// not part of the locales/*.json pipeline, so translateNode/translateLink fall
+// back to this registry after the locale files.
+type ExtraNodeTr = Record<string, { label?: string; description?: string; primaryRole?: string; secondaryRole?: string }>;
+type ExtraLinkTr = Record<string, { story?: string }>;
+const extraNodeTr: Partial<Record<Locale, ExtraNodeTr>> = {};
+const extraLinkTr: Partial<Record<Locale, ExtraLinkTr>> = {};
+
+const extraEventTr: Partial<Record<Locale, ExtraLinkTr>> = {};
+
+export const registerExtraTranslations = (
+    locale: Locale,
+    nodes: ExtraNodeTr,
+    links: ExtraLinkTr,
+    events: ExtraLinkTr = {},
+): void => {
+    extraNodeTr[locale] = { ...(extraNodeTr[locale] ?? {}), ...nodes };
+    extraLinkTr[locale] = { ...(extraLinkTr[locale] ?? {}), ...links };
+    extraEventTr[locale] = { ...(extraEventTr[locale] ?? {}), ...events };
+};
+
+const LOCALE_PREFIX_RE = /^\/(ko|ja|en)(?=\/|$)/;
+
+/** '/ko/company/apple' → '/company/apple'; '/ko' → '/' */
+export const stripLocalePrefix = (pathname: string): string => {
+    const stripped = pathname.replace(LOCALE_PREFIX_RE, '');
+    return stripped === '' ? '/' : stripped;
+};
+
+/** '/company/apple' + 'ko' → '/ko/company/apple'. English is unprefixed (canonical). */
+export const localizePath = (pathname: string, locale: Locale): string => {
+    const base = stripLocalePrefix(pathname);
+    if (locale === 'en') return base;
+    return base === '/' ? `/${locale}` : `/${locale}${base}`;
+};
+
 /**
  * Load translations for a specific locale
  */
@@ -58,7 +96,11 @@ export const loadLocale = async (locale: Locale): Promise<void> => {
 
         // Store preference in localStorage
         if (typeof window !== 'undefined') {
-            localStorage.setItem('locale', locale);
+            try { localStorage.setItem('locale', locale); } catch { /* private mode */ }
+            // Every useLocale() instance has its own state; broadcast so a
+            // change made in one component (WelcomeModal, Tutorial, About)
+            // re-renders the whole app, not just that component.
+            window.dispatchEvent(new CustomEvent<Locale>(LOCALE_CHANGE_EVENT, { detail: locale }));
         }
     } catch (error) {
         console.error(`Failed to load locale: ${locale}`, error);
@@ -146,7 +188,7 @@ export const translateNode = (
         };
     }
 
-    const translation = nodeTranslations[nodeId];
+    const translation = nodeTranslations[nodeId] ?? extraNodeTr[currentLocale]?.[nodeId];
 
     if (translation) {
         return {
@@ -183,7 +225,7 @@ export const translateLink = (
     }
 
     const key = `${source}__${target}`;
-    const translation = linkTranslations[key];
+    const translation = linkTranslations[key] ?? extraLinkTr[currentLocale]?.[key];
 
     if (translation?.story) {
         return translation.story;
@@ -207,7 +249,7 @@ export const translateEvent = (
         return fallbackStory || '';
     }
 
-    const translation = eventTranslations[eventId];
+    const translation = eventTranslations[eventId] ?? extraEventTr[currentLocale]?.[eventId];
 
     if (translation?.story) {
         return translation.story;
@@ -245,9 +287,23 @@ export const detectBrowserLocale = (): Locale => {
 /**
  * Initialize i18n with saved or detected locale
  */
+export const getUrlLocale = (): Locale | null => {
+    try {
+        const prefix = LOCALE_PREFIX_RE.exec(window.location.pathname)?.[1];
+        if (prefix) return prefix as Locale;
+        const q = new URLSearchParams(window.location.search).get('lang');
+        if (q === 'ko' || q === 'ja' || q === 'en') return q;
+    } catch {
+        // non-browser context
+    }
+    return null;
+};
+
 export const initLocale = async (): Promise<Locale> => {
+    // An explicit locale in the URL (/ko/company/apple, ?lang=ja) wins over
+    // the saved preference: it is what the search result / shared link promised.
     const saved = getSavedLocale();
-    const locale = saved || detectBrowserLocale();
+    const locale = getUrlLocale() || saved || detectBrowserLocale();
     await loadLocale(locale);
     return locale;
 };

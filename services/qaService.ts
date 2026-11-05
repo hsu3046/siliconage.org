@@ -17,6 +17,10 @@ export interface QAResult {
     answer?: string;
     source_node_ids?: string[];
     cached?: boolean;
+    /** Jev P(answer supported by the graph context); null/undefined = not checked */
+    grounded?: number | null;
+    /** Jev found nothing relevant in the graph — answer is a placeholder */
+    no_context?: boolean;
     message?: string;
     error?: string;
 }
@@ -89,5 +93,7 @@ export async function askGraphRag(query: string, locale: Locale = 'en'): Promise
         answer: typeof body.answer === 'string' ? body.answer : undefined,
         source_node_ids: Array.isArray(body.source_node_ids) ? (body.source_node_ids as string[]) : [],
         cached: Boolean(body.cached),
+        grounded: typeof body.grounded === 'number' ? body.grounded : null,
+        no_context: Boolean(body.no_context),
     };
 }

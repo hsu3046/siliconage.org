@@ -1,126 +1,65 @@
 /**
  * SEOHead Component
- * 
- * Dynamically updates document meta tags based on the currently selected node.
- * This helps search engines index node-specific content when users share or bookmark URLs.
+ *
+ * The single owner of runtime document meta (title, description, og/twitter,
+ * canonical). It mirrors scripts/prerender.ts through config/seoStrings.ts, so
+ * the JS-rendered DOM (what Googlebot indexes) never contradicts the static
+ * page: same localized title, same curated description, same canonical.
+ *
+ * Pass the TRANSLATED node so ko/ja pages keep their localized text.
  */
 
 import React, { useEffect } from 'react';
-import { NodeData, Category } from '../types';
-import { staticCache } from '../services/staticCache';
+import { NodeData } from '../types';
+import {
+    SEO_STRINGS, SITE_URL, homeUrl, nodePath, nodeTitle, truncateDescription, type SeoLocale,
+} from '../config/seoStrings';
 
 interface SEOHeadProps {
-    /** Currently selected node for meta tag updates */
+    /** Currently selected node (already translated to `locale`) */
     node: NodeData | null;
-    /** Base URL of the site */
-    baseUrl?: string;
+    locale: SeoLocale;
 }
 
-// Default meta values
-const DEFAULT_META = {
-    title: 'The Silicon Age | Interactive Map of AI History',
-    description: 'Explore the evolution of Artificial Intelligence through an interactive map connecting legendary Companies, Visionary People, and Breakthrough Technologies.',
-    image: '/og-image.jpg',
-};
+const OG_IMAGE = `${SITE_URL}/og-image.jpg`;
 
-/**
- * Get category label for SEO
- */
-const getCategoryLabel = (category: Category): string => {
-    switch (category) {
-        case Category.COMPANY: return 'Company';
-        case Category.PERSON: return 'Person';
-        case Category.TECHNOLOGY: return 'Technology';
-        default: return 'Topic';
-    }
-};
-
-/**
- * Generate meta description from node data and static cache
- */
-const generateDescription = (node: NodeData): string => {
-    // Try to get cached summary first
-    const cached = staticCache[node.id];
-    if (cached?.summary) {
-        // Truncate to ~160 chars for meta description
-        const summary = cached.summary;
-        return summary.length > 160 ? summary.substring(0, 157) + '...' : summary;
-    }
-
-    // Fallback: generate from node properties
-    const categoryLabel = getCategoryLabel(node.category);
-    const yearInfo = node.year ? ` (${node.year})` : '';
-    return `${node.label}${yearInfo} - Explore the ${categoryLabel.toLowerCase()} and its connections in the Silicon Age interactive map.`;
-};
-
-/**
- * SEOHead Component
- * Updates document meta tags dynamically
- */
-export const SEOHead: React.FC<SEOHeadProps> = ({
-    node,
-    baseUrl = 'https://siliconage.org'
-}) => {
-    // Map category to URL path segment
-    const categoryToPath: Record<Category, string> = {
-        [Category.COMPANY]: 'company',
-        [Category.PERSON]: 'person',
-        [Category.TECHNOLOGY]: 'tech',
-    };
-
+export const SEOHead: React.FC<SEOHeadProps> = ({ node, locale }) => {
     useEffect(() => {
-        // Determine values based on node
-        const title = node
-            ? `${node.label} | The Silicon Age`
-            : DEFAULT_META.title;
-
+        const s = SEO_STRINGS[locale] ?? SEO_STRINGS.en;
+        const title = node ? nodeTitle(node, locale) : s.siteTitle;
         const description = node
-            ? generateDescription(node)
-            : DEFAULT_META.description;
+            ? truncateDescription((node.description ?? '').trim() || s.siteDescription)
+            : s.siteDescription;
+        const url = node ? `${SITE_URL}${nodePath(node, locale)}` : homeUrl(locale);
 
-        // SEO-friendly path-based URL
-        const url = node
-            ? `${baseUrl}/${categoryToPath[node.category]}/${node.id}`
-            : baseUrl;
-
-        const image = `${baseUrl}${DEFAULT_META.image}`;
-
-        // Update document title
         document.title = title;
 
-        // Helper to update or create meta tag
-        const updateMeta = (selector: string, content: string, attr: string = 'content') => {
-            let element = document.querySelector(selector) as HTMLMetaElement | null;
-            if (element) {
-                element.setAttribute(attr, content);
-            }
+        const setMeta = (selector: string, content: string) => {
+            const el = document.querySelector(selector);
+            if (el) el.setAttribute('content', content);
         };
+        setMeta('meta[name="title"]', title);
+        setMeta('meta[name="description"]', description);
+        setMeta('meta[property="og:title"]', title);
+        setMeta('meta[property="og:description"]', description);
+        setMeta('meta[property="og:url"]', url);
+        setMeta('meta[property="og:image"]', OG_IMAGE);
+        setMeta('meta[property="twitter:title"]', title);
+        setMeta('meta[property="twitter:description"]', description);
+        setMeta('meta[property="twitter:url"]', url);
+        setMeta('meta[property="twitter:image"]', OG_IMAGE);
 
-        // Update primary meta tags
-        updateMeta('meta[name="title"]', title);
-        updateMeta('meta[name="description"]', description);
-
-        // Update Open Graph tags
-        updateMeta('meta[property="og:title"]', title);
-        updateMeta('meta[property="og:description"]', description);
-        updateMeta('meta[property="og:url"]', url);
-        updateMeta('meta[property="og:image"]', image);
-
-        // Update Twitter tags
-        updateMeta('meta[property="twitter:title"]', title);
-        updateMeta('meta[property="twitter:description"]', description);
-        updateMeta('meta[property="twitter:url"]', url);
-        updateMeta('meta[property="twitter:image"]', image);
-
-        // Update canonical URL if present
+        // The SPA shell (index.html) ships without a canonical because it is
+        // served for many routes — create it here.
         let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
-        if (canonical) {
-            canonical.href = url;
+        if (!canonical) {
+            canonical = document.createElement('link');
+            canonical.rel = 'canonical';
+            document.head.appendChild(canonical);
         }
+        canonical.href = url;
+    }, [node, locale]);
 
-    }, [node, baseUrl]);
-
-    // This component doesn't render anything visible
     return null;
 };
 

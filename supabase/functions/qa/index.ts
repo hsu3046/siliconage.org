@@ -9,8 +9,9 @@
 //   4. Try qa_cache: cosine >= 0.92 hit → return cached answer
 //   5. Miss → match_nodes_with_graph RPC → assemble context
 //   6. Call gemini-3.1-flash-lite with JSON response + citations
+//   5b. (optional) Jev relevance gate on retrieved nodes, Jev groundedness on the answer
 //   7. Persist into qa_cache (best-effort)
-//   8. Return { answer, source_node_ids, cached: boolean }
+//   8. Return { answer, source_node_ids, cached, grounded, no_context }
 //
 // Deploy:
 //   supabase functions deploy qa
@@ -32,6 +33,73 @@ const EMBED_MODEL = 'gemini-embedding-001';
 const ANSWER_MODEL = 'gemini-3.1-flash-lite';
 const EMBED_DIM = 768;
 const CACHE_SIM_THRESHOLD = 0.92;
+
+// ── TypeSafe Jev quality gates (optional) ───────────────────────────────────
+// Enabled only when the OPENROUTER_API_KEY secret is set:
+//   supabase secrets set OPENROUTER_API_KEY=...
+// Cost is ours, not the visitor's (~$0.0004 per uncached question), and it
+// only runs after the visitor's own key already embedded the query.
+//  1. relevance gate — vector search cannot say "nothing relevant", it always
+//     returns top-k. Jev scores every retrieved node; when none clears the
+//     bar we answer "not in the graph" WITHOUT spending the visitor's Gemini
+//     generate quota. (Same lesson as aib vote's rerank gate.)
+//  2. groundedness — P(every claim in the answer is supported by the cited
+//     context). Returned to the client, which flags weakly grounded answers.
+// Any Jev failure fails open (previous behaviour).
+const JEV_MODEL = Deno.env.get('JEV_MODEL') ?? 'typesafe/jev-1.13';
+const RELEVANCE_MIN = Number(Deno.env.get('QA_RELEVANCE_MIN') ?? '0.3');
+const RELEVANCE_KEEP_MAX = 20;
+
+async function jev(questions: Record<string, unknown>, state: unknown): Promise<Record<string, { noul?: number }> | null> {
+    const key = Deno.env.get('OPENROUTER_API_KEY');
+    if (!key) return null;
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 8000);
+    try {
+        const res = await fetch('https://openrouter.ai/api/alpha/decisions', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json', 'X-Title': 'The Silicon Age' },
+            body: JSON.stringify({ model: JEV_MODEL, state, questions }),
+            signal: ctrl.signal,
+        });
+        if (!res.ok) { console.warn(`[qa] jev ${res.status}: ${(await res.text()).slice(0, 200)}`); return null; }
+        const data = await res.json();
+        return (data?.answers ?? null) as Record<string, { noul?: number }> | null;
+    } catch (err) {
+        console.warn('[qa] jev failed (fail-open):', err instanceof Error ? err.message : String(err));
+        return null;
+    } finally {
+        clearTimeout(timer);
+    }
+}
+
+/** Keep retrieved nodes Jev judges useful. null = gate unavailable (keep all). */
+async function relevanceGate(query: string, nodes: RetrievedNode[]): Promise<RetrievedNode[] | null> {
+    const pool = nodes.slice(0, 40);
+    const questions: Record<string, unknown> = {};
+    pool.forEach((_, i) => {
+        questions[`n${i}`] = { type: 'noul', instructions: `Would node n${i} help answer the question (directly relevant facts, people, companies or technologies the question is about)?` };
+    });
+    const answers = await jev(questions, {
+        question: query,
+        nodes: pool.map((n, i) => ({ key: `n${i}`, name: n.label, category: n.category, year: n.year, description: (n.description ?? '').slice(0, 240) })),
+    });
+    if (!answers) return null;
+    return pool
+        .map((n, i) => ({ n, p: answers[`n${i}`]?.noul ?? 0 }))
+        .filter(x => x.p >= RELEVANCE_MIN)
+        .sort((a, b) => b.p - a.p)
+        .slice(0, RELEVANCE_KEEP_MAX)
+        .map(x => x.n);
+}
+
+async function groundedness(answer: string, context: string): Promise<number | null> {
+    const answers = await jev({
+        grounded: { type: 'noul', instructions: 'Is every factual claim in the answer supported by the context (names, dates, relationships)? False if the answer adds facts the context does not contain or contradicts it.' },
+    }, { context, answer });
+    const p = answers?.grounded?.noul;
+    return typeof p === 'number' ? p : null;
+}
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -206,6 +274,7 @@ Deno.serve(async (req: Request) => {
                 status: 'ok',
                 cached: true,
                 answer: hit.answer?.answer ?? hit.answer,
+                grounded: typeof hit.answer?.grounded === 'number' ? hit.answer.grounded : null,
                 source_node_ids: hit.source_node_ids ?? [],
                 similarity: hit.similarity,
             }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
@@ -223,13 +292,22 @@ Deno.serve(async (req: Request) => {
                 status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
             });
         }
-        const retrievals = (nodes as RetrievedNode[]) ?? [];
+        let retrievals = (nodes as RetrievedNode[]) ?? [];
+        // 3b. Jev relevance gate (fail-open when unavailable)
+        let gated = false;
+        if (retrievals.length > 0) {
+            const kept = await relevanceGate(query, retrievals);
+            if (kept !== null) { retrievals = kept; gated = true; }
+        }
         if (retrievals.length === 0) {
+            // no_context lets the client show a localized message.
             return new Response(JSON.stringify({
                 status: 'ok',
                 cached: false,
+                no_context: true,
                 answer: 'No relevant nodes found in the graph for that query.',
                 source_node_ids: [],
+                gated,
             }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
         }
 
@@ -246,6 +324,9 @@ ${context}`;
 
         const { answer, source_node_ids } = await generate(geminiKey, system, query);
 
+        // 4b. Jev groundedness (null when unavailable)
+        const grounded = await groundedness(answer, context);
+
         // 5. Persist into qa_cache (best-effort; ignore errors). Normalize the
         // query (trim + lowercase + collapse whitespace) and SHA-1 it so
         // equivalent questions land on the same cache row.
@@ -256,7 +337,7 @@ ${context}`;
             query_text: query,
             query_embedding: queryEmb as unknown as string,
             locale,
-            answer: { answer },
+            answer: { answer, grounded },
             source_node_ids,
         } as never, { onConflict: 'query_hash' });
 
@@ -265,6 +346,8 @@ ${context}`;
             cached: false,
             answer,
             source_node_ids,
+            grounded,
+            gated,
             retrieval_count: retrievals.length,
         }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     } catch (err) {

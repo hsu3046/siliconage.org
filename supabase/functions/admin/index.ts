@@ -24,6 +24,8 @@
 //     → { approved_nodes, approved_links }
 //   { action: 'reject', ids: string[] }
 //     → { deleted_nodes, excluded_qids }
+//   { action: 'list_events' } / 'approve_events' / 'reject_events' (ids: ev_*)
+//     → timeline event candidates from scripts/scoutEvents.ts (0009)
 
 // @ts-ignore — Deno-only import
 import { createClient } from 'jsr:@supabase/supabase-js@2';
@@ -71,6 +73,12 @@ function validIds(input: unknown): string[] | null {
     return out;
 }
 
+const EVENT_ID_RE = /^ev_[a-f0-9]{12}$/;
+function validEventIds(input: unknown): string[] | null {
+    if (!Array.isArray(input) || input.length === 0 || input.length > 500) return null;
+    return input.every(id => typeof id === 'string' && EVENT_ID_RE.test(id)) ? input as string[] : null;
+}
+
 // @ts-ignore — Deno runtime entrypoint
 Deno.serve(async (req: Request) => {
     if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
@@ -100,13 +108,24 @@ Deno.serve(async (req: Request) => {
     try {
         switch (action) {
             case 'list_pending': {
-                const { data, error } = await supa
+                const base = 'id, label, category, year, description, impact_role, tech_l1, tech_l2, company_categories, relevance_score, sitelinks_count, wikidata_qid, discovered_from, discovery_depth, wikipedia_urls';
+                const pending = (cols: string) => supa
                     .from('nodes')
-                    .select('id, label, category, year, description, impact_role, tech_l1, tech_l2, company_categories, relevance_score, sitelinks_count, wikidata_qid, discovered_from, discovery_depth, wikipedia_urls')
+                    .select(cols)
                     .eq('provenance', 'ai_discovered')
-                    .is('approved_at', null)
+                    .is('approved_at', null);
+                // Jev-scored rows first (scripts/triageCandidates.ts), then the
+                // Wikidata BFS heuristic for anything not yet triaged.
+                let { data, error } = await pending(`${base}, jev_relevance, jev_suggestion`)
+                    .order('jev_relevance', { ascending: false, nullsFirst: false })
                     .order('relevance_score', { ascending: false, nullsFirst: false })
                     .limit(2000);
+                // Database without migration 0007: keep the queue usable.
+                if (error && /jev_/.test(error.message)) {
+                    ({ data, error } = await pending(base)
+                        .order('relevance_score', { ascending: false, nullsFirst: false })
+                        .limit(2000));
+                }
                 if (error) throw error;
                 return json({ rows: data ?? [] });
             }
@@ -188,6 +207,16 @@ Deno.serve(async (req: Request) => {
                         if (e1) throw e1;
                     }
                     totalQids += qids.length;
+                    // Source-agnostic negative cache (0008) — aib vote imports
+                    // have no Q-id. Best-effort: a missing table must not block
+                    // rejection on databases that predate the migration.
+                    const { data: srcRows } = await supa.from('nodes').select('id, discovered_from').in('id', chunk);
+                    const rejRows = ((srcRows as Array<{ id: string; discovered_from: string | null }>) ?? [])
+                        .map(r => ({ id: r.id, source: r.discovered_from, reason: 'admin reject' }));
+                    if (rejRows.length > 0) {
+                        const { error: eRej } = await supa.from('rejected_node_ids').upsert(rejRows as never, { onConflict: 'id' });
+                        if (eRej) console.warn('[admin] rejected_node_ids upsert skipped:', eRej.message);
+                    }
                     // Hard delete; ON DELETE CASCADE removes translations + links.
                     const { error: e2, count: dCount } = await supa
                         .from('nodes')
@@ -198,6 +227,60 @@ Deno.serve(async (req: Request) => {
                     totalDeleted += dCount ?? 0;
                 }
                 return json({ deleted_nodes: totalDeleted, excluded_qids: totalQids });
+            }
+
+            // ── Timeline event candidates (0009, scripts/scoutEvents.ts) ──
+            case 'list_events': {
+                const { data, error } = await supa
+                    .from('event_candidates')
+                    .select('id, year, story_en, story_ko, story_ja, related_nodes, source_url, published_at, jev_milestone')
+                    .eq('status', 'pending')
+                    .order('jev_milestone', { ascending: false, nullsFirst: false })
+                    .limit(500);
+                if (error) throw error;
+                return json({ rows: data ?? [] });
+            }
+
+            case 'approve_events': {
+                const ids = validEventIds(body.ids);
+                if (!ids) return json({ error: 'invalid ids' }, { status: 400 });
+                const { data, error } = await supa
+                    .from('event_candidates')
+                    .select('id, year, story_en, story_ko, story_ja, related_nodes, source_url')
+                    .in('id', ids)
+                    .eq('status', 'pending');
+                if (error) throw error;
+                const rows = (data as Array<{ id: string; year: number; story_en: string; story_ko: string | null; story_ja: string | null; related_nodes: string[]; source_url: string }>) ?? [];
+                if (rows.length === 0) return json({ approved_events: 0 });
+                const { error: e1 } = await supa.from('events').upsert(
+                    rows.map(r => ({ id: r.id, year: r.year, related_nodes: r.related_nodes, source_url: r.source_url })) as never,
+                    { onConflict: 'id' },
+                );
+                if (e1) throw e1;
+                const tr = rows.flatMap(r => ([
+                    { event_id: r.id, locale: 'en', story: r.story_en },
+                    ...(r.story_ko ? [{ event_id: r.id, locale: 'ko', story: r.story_ko }] : []),
+                    ...(r.story_ja ? [{ event_id: r.id, locale: 'ja', story: r.story_ja }] : []),
+                ]));
+                const { error: e2 } = await supa.from('event_translations').upsert(tr as never, { onConflict: 'event_id,locale' });
+                if (e2) throw e2;
+                const { error: e3 } = await supa.from('event_candidates')
+                    .update({ status: 'approved', decided_at: new Date().toISOString() } as never)
+                    .in('id', rows.map(r => r.id));
+                if (e3) throw e3;
+                return json({ approved_events: rows.length });
+            }
+
+            case 'reject_events': {
+                const ids = validEventIds(body.ids);
+                if (!ids) return json({ error: 'invalid ids' }, { status: 400 });
+                // Keep the row (status=rejected) so the scout never re-queues it.
+                const { error, count } = await supa.from('event_candidates')
+                    .update({ status: 'rejected', decided_at: new Date().toISOString() } as never, { count: 'exact' })
+                    .in('id', ids)
+                    .eq('status', 'pending');
+                if (error) throw error;
+                return json({ rejected_events: count ?? 0 });
             }
 
             default:

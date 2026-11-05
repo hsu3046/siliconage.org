@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useMemo, useCallback, Suspense, lazy } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Logo } from './components/Logo';
-import { INITIAL_DATA, CATEGORY_COLORS } from './constants';
+import { CATEGORY_COLORS } from './constants';
+import { GRAPH_DATA as INITIAL_DATA } from './data/graphData';
 import { NodeData, Category, GraphData, LinkType, CompanyMode } from './types';
 import { calculateSiliconRank } from './utils/ranking';
 import { useLocale } from './hooks/useLocale';
+import { localizePath } from './utils/i18n';
 
 // Static Imports (non-lazy for performance)
 import MapView from './components/MapView';
@@ -98,11 +100,34 @@ const App: React.FC = () => {
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
 
   // i18n hook - handles locale initialization and provides t() function
-  const { t, locale, setLocale, translateNode, translateLink, translateEvent } = useLocale();
+  const { t, locale, setLocale, translateNode, translateLink, translateEvent, isLoaded: isLocaleReady } = useLocale();
 
-  // Router hooks for SEO-friendly URLs
-  const navigate = useNavigate();
+  // Router hooks for SEO-friendly URLs. Every in-app URL carries the locale
+  // prefix (/ko/…, /ja/…; English unprefixed) so a shared link or a reload
+  // reopens the same language — and matches the prerendered static pages.
+  const rawNavigate = useNavigate();
   const location = useLocation();
+  const navigate = useCallback((to: string) => {
+    rawNavigate(localizePath(to, locale));
+  }, [rawNavigate, locale]);
+
+  // Language switched anywhere (About, Welcome, Tutorial) → rewrite the URL
+  // prefix in place. Waits for i18n init so a /ko landing URL is not stripped
+  // while the default 'en' state is still in place.
+  useEffect(() => {
+    if (!isLocaleReady) return;
+    const want = localizePath(location.pathname, locale);
+    // ?lang= is an entry hint only; once applied it must not outlive a later
+    // language switch (getUrlLocale() would restore it on reload).
+    const params = new URLSearchParams(location.search);
+    const hadLang = params.has('lang');
+    params.delete('lang');
+    if (want !== location.pathname || hadLang) {
+      const qs = params.toString();
+      rawNavigate(`${want}${qs ? `?${qs}` : ''}${location.hash}`, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locale, isLocaleReady]);
 
   // Translate node and link data when locale changes
   const translatedData = useMemo(() => {
@@ -215,17 +240,7 @@ const App: React.FC = () => {
     return () => document.removeEventListener('keydown', handleGlobalKeyDown);
   }, [focusNodeId]);
 
-  // --- DYNAMIC TITLE MANAGEMENT (SEO) ---
-  useEffect(() => {
-    if (selectedNode) {
-      document.title = `${selectedNode.label} - The Silicon Age`;
-    } else if (focusNodeId) {
-      const focused = INITIAL_DATA.nodes.find(n => n.id === focusNodeId);
-      if (focused) document.title = `${focused.label} - The Silicon Age`;
-    } else {
-      document.title = "The Silicon Age | Interactive Map of AI History";
-    }
-  }, [selectedNode, focusNodeId]);
+  // Document title/meta are owned by <SEOHead> (localized, mirrors prerender).
 
   // --- SCROLL RESET MANAGEMENT ---
   useEffect(() => {
@@ -275,6 +290,9 @@ const App: React.FC = () => {
     const handleUrlChange = () => {
       const path = window.location.pathname;
       const pathParts = path.split('/').filter(Boolean);
+      // Localized landing URLs (/ko/company/apple) — the locale itself is
+      // picked up by initLocale(); routing ignores the prefix.
+      if (pathParts[0] === 'ko' || pathParts[0] === 'ja' || pathParts[0] === 'en') pathParts.shift();
 
       // Legacy query param support (for backwards compatibility)
       const params = new URLSearchParams(window.location.search);
@@ -631,7 +649,13 @@ const App: React.FC = () => {
   return (
     <div key={locale} className="flex flex-col h-screen w-screen bg-background text-white overflow-hidden" style={{ width: '100vw', height: '100vh', backgroundColor: '#0f172a', overflow: 'hidden' }}>
       {/* SEO: Dynamic meta tags based on selected node */}
-      <SEOHead node={selectedNode} />
+      <SEOHead
+        node={(() => {
+          const id = selectedNode?.id ?? focusNodeId;
+          return id ? translatedData.nodes.find(n => n.id === id) ?? null : null;
+        })()}
+        locale={locale}
+      />
 
       <header className="h-16 border-b border-slate-700 bg-surface flex items-center justify-between px-4 sm:px-6 z-10 shrink-0 relative">
         <button

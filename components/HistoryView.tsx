@@ -1,7 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { GraphData, NodeData, Category, LinkType, LinkData, EventData } from '../types';
-import { CATEGORY_COLORS, ERAS, INITIAL_DATA } from '../constants';
+import { CATEGORY_COLORS, ERAS } from '../constants';
+import { GRAPH_DATA as INITIAL_DATA } from '../data/graphData';
 import { useLocale } from '../hooks/useLocale';
+import { localizeAibUrl } from '../config/aibLinks';
+import type { SupportedLocale } from '../config/externalLinks';
 
 interface HistoryViewProps {
   data: GraphData;
@@ -27,7 +30,7 @@ const getNodeSizeClass = (radius: number) => {
 
 const HistoryView: React.FC<HistoryViewProps> = ({ data, fullData, onNodeClick, onNodeDoubleClick, scrollToNodeId, focusNodeId, showStories = true }) => {
   // i18n hook
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
 
   // Search State
   const [searchTerm, setSearchTerm] = useState("");
@@ -707,7 +710,19 @@ const HistoryView: React.FC<HistoryViewProps> = ({ data, fullData, onNodeClick, 
                         >
                           <span className={`text-xs text-slate-400 inline-flex items-center gap-1.5 ${isLeft ? 'md:flex-row-reverse md:text-right' : 'flex-row text-left'}`}>
                             <span className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0"></span>
-                            <span>{se.event.story}</span>
+                            <span>
+                              {se.event.story}
+                              {se.event.sourceUrl && (
+                                <a
+                                  href={localizeAibUrl(se.event.sourceUrl, locale as SupportedLocale, 'timeline')}
+                                  target="_blank"
+                                  rel="noopener"
+                                  className="ml-1.5 text-indigo-300 hover:text-indigo-200 underline-offset-2 hover:underline"
+                                >
+                                  aib vote ↗
+                                </a>
+                              )}
+                            </span>
                           </span>
                         </div>
                       );

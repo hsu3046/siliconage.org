@@ -85,6 +85,13 @@ export interface PendingNode {
     discovered_from: string | null;
     discovery_depth: number | null;
     wikipedia_urls: Record<string, string> | null;
+    /** P(belongs in the graph) from TypeSafe Jev — scripts/triageCandidates.ts */
+    jev_relevance?: number | null;
+    jev_suggestion?: {
+        role?: { value: string; confidence: number } | null;
+        company_category?: { value: string; confidence: number } | null;
+        tech?: { l1: string; l2: string; confidence: number } | null;
+    } | null;
 }
 
 export interface AdminStats {
@@ -100,3 +107,19 @@ export const listPending = () => call<{ rows: PendingNode[] }>('list_pending');
 export const adminStats = () => call<AdminStats>('stats');
 export const approveNodes = (ids: string[]) => call<{ approved_nodes: number; approved_links: number }>('approve', { ids });
 export const rejectNodes = (ids: string[]) => call<{ deleted_nodes: number; excluded_qids: number }>('reject', { ids });
+
+export interface EventCandidate {
+    id: string;
+    year: number;
+    story_en: string;
+    story_ko: string | null;
+    story_ja: string | null;
+    related_nodes: string[];
+    source_url: string;
+    published_at: string | null;
+    jev_milestone: number | null;
+}
+
+export const listEventCandidates = () => call<{ rows: EventCandidate[] }>('list_events');
+export const approveEvents = (ids: string[]) => call<{ approved_events: number }>('approve_events', { ids });
+export const rejectEvents = (ids: string[]) => call<{ rejected_events: number }>('reject_events', { ids });

@@ -1,7 +1,6 @@
 /// <reference types="vite/client" />
 import { GoogleGenAI, Type } from "@google/genai";
 import { AIResponse, NodeData } from "../types";
-import { staticCache } from "./staticCache";
 
 const API_KEY_STORAGE_KEY = 'silicon_age_api_key';
 
@@ -47,23 +46,45 @@ const LANGUAGE_NAMES: Record<string, string> = {
   ja: 'Japanese',
 };
 
+// Pre-generated Deep Dives: one small JSON per node × locale, fetched on
+// demand so nothing lands in the JS bundle. Unknown paths fall through the SPA
+// rewrite and return index.html — treat anything that is not our JSON as absent.
+const staticMemo = new Map<string, Promise<AIResponse | null>>();
+
+export const fetchStaticDeepDive = (nodeId: string, locale: string): Promise<AIResponse | null> => {
+  const key = `${locale}/${nodeId}`;
+  let p = staticMemo.get(key);
+  if (!p) {
+    p = fetch(`/deepdive/${encodeURIComponent(locale)}/${encodeURIComponent(nodeId)}.json`)
+      .then(async res => {
+        // 5xx = transient: don't remember the miss, retry on next open.
+        if (res.status >= 500) { staticMemo.delete(key); return null; }
+        if (!res.ok || !(res.headers.get('content-type') ?? '').includes('json')) return null;
+        const data = await res.json() as AIResponse & { entity?: string };
+        if (!data || data.entity !== nodeId || typeof data.summary !== 'string') return null;
+        return { ...data, source: 'static' as const };
+      })
+      .catch(() => { staticMemo.delete(key); return null; });  // network error: retry later
+    staticMemo.set(key, p);
+  }
+  return p;
+};
+
 export const fetchNodeDetails = async (node: NodeData, locale: string = 'en'): Promise<AIResponse> => {
   // Include locale in cache key for language-specific caching
   const cacheKey = `${CACHE_PREFIX}${node.id}_${locale}`;
   const langName = LANGUAGE_NAMES[locale] || 'English';
 
-  // 1. Check Server-Side Static Cache (Fastest, Free)
-  if (staticCache[node.id]) {
-    console.log(`[Static Cache] Serving pre-computed data for ${node.id}`);
-    return staticCache[node.id];
-  }
+  // 1. Pre-generated, Jev-checked Deep Dive (scripts/generateDeepDive.ts).
+  //    Free for every visitor, no key needed.
+  const pregenerated = await fetchStaticDeepDive(node.id, locale);
+  if (pregenerated) return pregenerated;
 
   // 2. Check Client-Side LocalStorage Cache (Persistence for non-static nodes)
   try {
     const cachedData = localStorage.getItem(cacheKey);
     if (cachedData) {
-      console.log(`[Local Cache] Serving local data for ${node.id} (${locale})`);
-      return JSON.parse(cachedData) as AIResponse;
+      return { ...(JSON.parse(cachedData) as AIResponse), source: 'local' };
     }
   } catch (e) {
     console.warn("Failed to read from localStorage", e);
@@ -73,11 +94,7 @@ export const fetchNodeDetails = async (node: NodeData, locale: string = 'en'): P
   try {
     const ai = getAI();
     if (!ai) {
-      return {
-        summary: "API key not configured.",
-        significance: "Enter your Gemini API key in the About page to enable AI Deep Dive.",
-        keyFacts: ["Go to About → Settings to add your API key", "Get a free key at ai.google.dev"],
-      };
+      return { summary: '', significance: '', keyFacts: [], source: 'none' };
     }
 
     console.log(`[API Call] Fetching Gemini data for ${node.id} in ${langName}`);
@@ -138,7 +155,7 @@ Remember: Your entire response must be in ${langName}.
     });
 
     if (response.text) {
-      const result = JSON.parse(response.text) as AIResponse;
+      const result = { ...(JSON.parse(response.text) as AIResponse), source: 'live' as const };
 
       // Save to Local Cache for future visits
       try {
@@ -152,11 +169,7 @@ Remember: Your entire response must be in ${langName}.
     throw new Error("No response text");
   } catch (error) {
     console.error("Gemini API Error:", error);
-    return {
-      summary: "Could not fetch details at this time.",
-      significance: "AI analysis unavailable (Check API Quota or Connection).",
-      keyFacts: ["Rate limit may be exceeded", "Try again in a minute"],
-    };
+    return { summary: '', significance: '', keyFacts: [], source: 'error' };
   }
 };
 
