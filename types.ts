@@ -176,4 +176,14 @@ export interface AIResponse {
   entity?: string;
   category?: string;
   year?: number | string;
+  /**
+   * Where the Deep Dive came from:
+   *  static — pre-generated + Jev-checked (public/deepdive/<locale>/<id>.json)
+   *  local  — cached live answer in this browser
+   *  live   — just generated with the visitor's own key (BYOK)
+   *  none   — nothing available and no key: UI shows a localized prompt
+   *  error  — live call failed: UI shows a localized error
+   */
+  source?: 'static' | 'local' | 'live' | 'none' | 'error';
+  generatedAt?: string;
 }

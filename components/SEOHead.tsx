@@ -7,7 +7,6 @@
 
 import React, { useEffect } from 'react';
 import { NodeData, Category } from '../types';
-import { staticCache } from '../services/staticCache';
 
 interface SEOHeadProps {
     /** Currently selected node for meta tag updates */
@@ -36,17 +35,13 @@ const getCategoryLabel = (category: Category): string => {
 };
 
 /**
- * Generate meta description from node data and static cache
+ * Generate meta description from the node's curated description
  */
 const generateDescription = (node: NodeData): string => {
-    // Try to get cached summary first
-    const cached = staticCache[node.id];
-    if (cached?.summary) {
-        // Truncate to ~160 chars for meta description
-        const summary = cached.summary;
-        return summary.length > 160 ? summary.substring(0, 157) + '...' : summary;
-    }
-
+    // Same text the prerendered page ships (scripts/prerender.ts), so the
+    // rendered DOM never downgrades the static description.
+    const desc = (node.description ?? '').trim();
+    if (desc) return desc.length <= 158 ? desc : `${desc.slice(0, 157).trimEnd()}…`;
     // Fallback: generate from node properties
     const categoryLabel = getCategoryLabel(node.category);
     const yearInfo = node.year ? ` (${node.year})` : '';

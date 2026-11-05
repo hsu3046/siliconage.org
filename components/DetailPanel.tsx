@@ -315,19 +315,23 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
     });
   }, [node, data]);
 
-  const loadAiData = () => {
-    if (node) {
-      setLoading(true);
-      // Pass locale for language-specific AI responses
-      fetchNodeDetails(node, locale)
-        .then(data => setAiData(data))
-        .finally(() => setLoading(false));
-    }
-  };
-
+  // Re-fetch when node or locale changes. The static Deep Dive is now a
+  // network fetch, so ignore responses that arrive after the user moved on.
+  const [apiKeyVersion, setApiKeyVersion] = useState(0);
   useEffect(() => {
-    loadAiData();
-  }, [node, locale]);  // Re-fetch when locale changes
+    const bump = () => setApiKeyVersion(v => v + 1);
+    window.addEventListener('apiKeyChanged', bump);
+    return () => window.removeEventListener('apiKeyChanged', bump);
+  }, []);
+  useEffect(() => {
+    if (!node) return;
+    let cancelled = false;
+    setLoading(true);
+    fetchNodeDetails(node, locale)
+      .then(data => { if (!cancelled) setAiData(data); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, [node, locale, apiKeyVersion]);
 
   if (!node) return null;
 
@@ -561,6 +565,13 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
                   <div className="h-3 bg-slate-800 rounded w-1/2"></div>
                 </div>
               </div>
+            ) : aiData && (aiData.source === 'none' || aiData.source === 'error') ? (
+              <div className="text-sm text-slate-400 leading-relaxed space-y-2">
+                <p>{t(aiData.source === 'none' ? 'detailPanel.deepDiveNoKey' : 'detailPanel.deepDiveError')}</p>
+                {aiData.source === 'none' && (
+                  <p className="text-xs text-slate-500">{t('detailPanel.deepDiveNoKeyHint')}</p>
+                )}
+              </div>
             ) : aiData ? (
               <div className="space-y-6 animate-in fade-in duration-500">
                 <div>
@@ -584,6 +595,9 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
                     ))}
                   </ul>
                 </div>
+                {aiData.source === 'static' && (
+                  <p className="text-[10px] text-slate-500">{t('detailPanel.deepDivePregenerated')}</p>
+                )}
               </div>
             ) : (
               <div className="text-sm text-slate-500 italic">Select a node to analyze its history.</div>

@@ -62,6 +62,9 @@ const T: Record<Locale, {
     aibRanking: string;
     aibNews: string;
     ogLocale: string;
+    whyItMatters: string;
+    keyFacts: string;
+    aiNote: string;
 }> = {
     en: {
         cat: { [Category.COMPANY]: 'Company', [Category.PERSON]: 'Person', [Category.TECHNOLOGY]: 'Technology' },
@@ -77,6 +80,9 @@ const T: Record<Locale, {
         aibRanking: 'AI model rankings',
         aibNews: 'Latest news',
         ogLocale: 'en_US',
+        whyItMatters: 'Why it matters',
+        keyFacts: 'Key facts',
+        aiNote: 'AI-generated overview, checked against the curated graph.',
     },
     ko: {
         cat: { [Category.COMPANY]: '기업', [Category.PERSON]: '인물', [Category.TECHNOLOGY]: '기술' },
@@ -92,6 +98,9 @@ const T: Record<Locale, {
         aibRanking: 'AI 모델 순위',
         aibNews: '최신 뉴스',
         ogLocale: 'ko_KR',
+        whyItMatters: '왜 중요한가',
+        keyFacts: '핵심 사실',
+        aiNote: 'AI가 작성하고 큐레이션된 그래프와 대조해 검사한 개요입니다.',
     },
     ja: {
         cat: { [Category.COMPANY]: '企業', [Category.PERSON]: '人物', [Category.TECHNOLOGY]: '技術' },
@@ -107,6 +116,9 @@ const T: Record<Locale, {
         aibRanking: 'AIモデルランキング',
         aibNews: '最新ニュース',
         ogLocale: 'ja_JP',
+        whyItMatters: 'なぜ重要か',
+        keyFacts: '主な事実',
+        aiNote: 'AIが作成し、キュレーションされたグラフと照合した概要です。',
     },
 };
 
@@ -259,6 +271,16 @@ function entityLd(n: NodeData, loc: Locale) {
     };
 }
 
+// Pre-generated Deep Dives (scripts/generateDeepDive.ts) — copied to dist by
+// Vite from public/deepdive. Only files that passed the Jev check exist.
+interface DeepDive { summary: string; significance: string; keyFacts: string[]; entity: string }
+function deepDiveFor(id: string, loc: Locale): DeepDive | null {
+    try {
+        const d = JSON.parse(fs.readFileSync(path.join(DIST, 'deepdive', loc, `${id}.json`), 'utf-8')) as DeepDive;
+        return d.entity === id && d.summary ? d : null;
+    } catch { return null; }
+}
+
 function nodeBody(n: NodeData, loc: Locale): string {
     const t = T[loc];
     const conns = connectionsOf(n).slice(0, 40);
@@ -274,6 +296,17 @@ function nodeBody(n: NodeData, loc: Locale): string {
 <h1>${esc(label(n, loc))}</h1>
 <p class="meta">${esc(meta)}</p>
 <p>${esc(description(n, loc))}</p>
+${(() => {
+    const dd = deepDiveFor(n.id, loc);
+    if (!dd) return '';
+    return `<section>
+<p>${esc(dd.summary)}</p>
+<h2>${esc(t.whyItMatters)}</h2>
+<p>${esc(dd.significance)}</p>
+${dd.keyFacts.length ? `<h2>${esc(t.keyFacts)}</h2><ul>${dd.keyFacts.map(f => `<li>${esc(f)}</li>`).join('')}</ul>` : ''}
+<p class="story"><small>${esc(t.aiNote)}</small></p>
+</section>`;
+})()}
 ${conns.length ? `<h2>${esc(t.connections)}</h2>
 <ul>
 ${conns.map(({ link, other }) => {

@@ -113,6 +113,10 @@
         "aibLab": "Current models & rankings",
         "aibRanking": "AI model rankings",
         "aibNews": "Latest news",
+        "deepDiveNoKey": "An AI Deep Dive for this entry hasn't been generated yet.",
+        "deepDiveNoKeyHint": "Click the logo (top left) → API Key Settings and add your own Gemini key to generate one now.",
+        "deepDiveError": "AI analysis is unavailable right now (quota or connection). Please try again in a minute.",
+        "deepDivePregenerated": "AI-generated, then checked against our curated graph. May still contain errors.",
         "disclaimer": "The content and links provided on this site are aggregated through AI algorithms based on objective technical keywords, rather than personal curation or subjective selection."
     },
     "mapView": {
