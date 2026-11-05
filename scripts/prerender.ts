@@ -32,6 +32,7 @@ import { fileURLToPath } from 'url';
 import { GRAPH_DATA as INITIAL_DATA } from '../data/graphData';
 import { Category, LinkType, type NodeData, type LinkData } from '../types';
 import { getAibLinks } from '../config/aibLinks';
+import { SEO_STRINGS, homeUrl, nodeTitle, truncateDescription } from '../config/seoStrings';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
@@ -68,13 +69,11 @@ const T: Record<Locale, {
     aiNote: string;
 }> = {
     en: {
-        cat: { [Category.COMPANY]: 'Company', [Category.PERSON]: 'Person', [Category.TECHNOLOGY]: 'Technology' },
+        ...SEO_STRINGS.en,
         linkType: { [LinkType.POWERS]: 'Powers', [LinkType.CREATES]: 'Created', [LinkType.CONTRIBUTES]: 'Influenced', [LinkType.ENGAGES]: 'Rivalry / partnership' },
         connections: 'Connections',
         explore: 'Explore the interactive map',
         since: 'since',
-        siteTitle: 'The Silicon Age | Interactive Map of AI History',
-        siteDescription: 'Explore 100 years of digital history as a web of cause and effect — the companies, people and technologies that led to the AI era.',
         allEntities: 'All entities',
         aibTitle: 'Now on aib vote',
         aibModel: 'Scores, prices & comparisons',
@@ -87,13 +86,11 @@ const T: Record<Locale, {
         aiNote: 'AI-generated overview, checked against the curated graph.',
     },
     ko: {
-        cat: { [Category.COMPANY]: '기업', [Category.PERSON]: '인물', [Category.TECHNOLOGY]: '기술' },
+        ...SEO_STRINGS.ko,
         linkType: { [LinkType.POWERS]: '기반 제공', [LinkType.CREATES]: '창조', [LinkType.CONTRIBUTES]: '영향', [LinkType.ENGAGES]: '경쟁 / 협력' },
         connections: '연결 관계',
         explore: '인터랙티브 지도에서 보기',
         since: '시작',
-        siteTitle: 'The Silicon Age | 인터랙티브 AI 역사 지도',
-        siteDescription: '100년 디지털 역사를 인과관계의 네트워크로 — AI 시대를 만든 기업·인물·기술을 한눈에 탐구하세요.',
         allEntities: '전체 항목',
         aibTitle: '지금 aib vote에서',
         aibModel: '성능·가격·비교 보기',
@@ -106,13 +103,11 @@ const T: Record<Locale, {
         aiNote: 'AI가 작성하고 큐레이션된 그래프와 대조해 검사한 개요입니다.',
     },
     ja: {
-        cat: { [Category.COMPANY]: '企業', [Category.PERSON]: '人物', [Category.TECHNOLOGY]: '技術' },
+        ...SEO_STRINGS.ja,
         linkType: { [LinkType.POWERS]: '基盤', [LinkType.CREATES]: '創出', [LinkType.CONTRIBUTES]: '影響', [LinkType.ENGAGES]: '競争 / 協力' },
         connections: 'つながり',
         explore: 'インタラクティブマップで見る',
         since: '開始',
-        siteTitle: 'The Silicon Age | インタラクティブAI史マップ',
-        siteDescription: '100年のデジタル史を因果関係のネットワークで — AI時代を生んだ企業・人物・技術を探求しよう。',
         allEntities: 'すべての項目',
         aibTitle: 'いま aib vote で',
         aibModel: '性能・価格・比較を見る',
@@ -159,7 +154,6 @@ const story = (l: LinkData, loc: Locale) => {
 const pathFor = (n: NodeData, loc: Locale) =>
     `${loc === 'en' ? '' : `/${loc}`}/${CATEGORY_PATH[n.category]}/${n.id}`;
 const urlFor = (n: NodeData, loc: Locale) => `${BASE_URL}${pathFor(n, loc)}`;
-const homeUrl = (loc: Locale) => `${BASE_URL}${loc === 'en' ? '/' : `/${loc}/`}`;
 
 const esc = (s: string) => s
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -167,21 +161,34 @@ const esc = (s: string) => s
 // JSON inside <script>: neutralize "</script>" and HTML comment openers.
 const jsonLd = (obj: unknown) => JSON.stringify(obj).replace(/</g, '\\u003c');
 
-const truncate = (s: string, max: number) => (s.length <= max ? s : `${s.slice(0, max - 1).trimEnd()}…`);
+const truncate = (s: string, max: number) => truncateDescription(s, max);
 
 // ---------------------------------------------------------------------------
 // Template surgery
 // ---------------------------------------------------------------------------
+// dist/index.html is rewritten below (SPA shell + noscript index). Keep the
+// pristine Vite output in dist/.spa-template.html so re-running this script
+// without a fresh `vite build` is idempotent (vite build empties dist).
 const templatePath = path.join(DIST, 'index.html');
-if (!fs.existsSync(templatePath)) {
-    console.error('[prerender] dist/index.html missing — run `vite build` first.');
+const pristinePath = path.join(DIST, '.spa-template.html');
+if (!fs.existsSync(pristinePath)) {
+    if (!fs.existsSync(templatePath)) {
+        console.error('[prerender] dist/index.html missing — run `vite build` first.');
+        process.exit(1);
+    }
+    fs.copyFileSync(templatePath, pristinePath);
+}
+const TEMPLATE = fs.readFileSync(pristinePath, 'utf-8');
+if (!TEMPLATE.includes('<div id="root"></div>')) {
+    console.error('[prerender] template is not a pristine Vite index.html — run `vite build` again.');
     process.exit(1);
 }
-const TEMPLATE = fs.readFileSync(templatePath, 'utf-8');
 
 function setMeta(html: string, attr: 'name' | 'property', key: string, value: string): string {
     const re = new RegExp(`(<meta\\s+${attr}="${key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"\\s+content=")[^"]*(")`, 's');
-    return re.test(html) ? html.replace(re, `$1${esc(value)}$2`) : html;
+    // Function replacer: a string replacement would treat "$2.6B" in the
+    // description as a capture-group reference and break the attribute.
+    return html.replace(re, (_m, open: string, close: string) => `${open}${esc(value)}${close}`);
 }
 
 interface PageSpec {
@@ -334,7 +341,7 @@ for (const n of nodes) {
     for (const loc of LOCALES) {
         const name = label(n, loc);
         const t = T[loc];
-        const title = `${name} (${n.category === Category.PERSON && n.birthYear ? n.birthYear : n.year}) — ${t.cat[n.category]} | The Silicon Age`;
+        const title = nodeTitle({ ...n, label: name }, loc);
         const html = renderPage({
             loc,
             title,
@@ -388,8 +395,16 @@ for (const loc of LOCALES) {
         }],
         body,
     });
-    if (loc === 'en') fs.writeFileSync(templatePath, html);
-    else writePage(`/${loc}`, html);
+    if (loc !== 'en') { writePage(`/${loc}`, html); pageCount++; continue; }
+
+    // English home = dist/index.html, which is ALSO the SPA fallback for every
+    // non-prerendered route (/history, /about, unknown ids …). So it must not
+    // claim a canonical or carry the home body inside #root: ship the pristine
+    // shell (SEOHead sets canonical/meta per route at runtime) plus a
+    // <noscript> entity index for no-JS readers and crawlers.
+    const shell = TEMPLATE.replace('<div id="root"></div>', `<div id="root"></div>\n  <noscript>${body}</noscript>`)
+        .replace('</head>', `  ${FALLBACK_STYLE}\n</head>`);
+    fs.writeFileSync(templatePath, shell);
     pageCount++;
 }
 
@@ -405,9 +420,8 @@ const homeAlts = { en: homeUrl('en'), ko: homeUrl('ko'), ja: homeUrl('ja') };
 for (const loc of LOCALES) {
     sitemapEntries.push(`  <url>\n    <loc>${homeUrl(loc)}</loc>\n    <lastmod>${TODAY}</lastmod>\n${altLinks(homeAlts)}\n  </url>`);
 }
-for (const view of ['history', 'cards', 'links']) {
-    sitemapEntries.push(`  <url>\n    <loc>${BASE_URL}/${view}</loc>\n    <lastmod>${TODAY}</lastmod>\n  </url>`);
-}
+// View routes (/history, /cards, /links) are client-only views of the same
+// data served by the SPA shell — not listed, they have no page of their own.
 for (const n of nodes) {
     const alts = Object.fromEntries(LOCALES.map(l => [l, urlFor(n, l)])) as Record<Locale, string>;
     for (const loc of LOCALES) {

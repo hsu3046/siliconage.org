@@ -108,16 +108,24 @@ Deno.serve(async (req: Request) => {
     try {
         switch (action) {
             case 'list_pending': {
-                const { data, error } = await supa
+                const base = 'id, label, category, year, description, impact_role, tech_l1, tech_l2, company_categories, relevance_score, sitelinks_count, wikidata_qid, discovered_from, discovery_depth, wikipedia_urls';
+                const pending = (cols: string) => supa
                     .from('nodes')
-                    .select('id, label, category, year, description, impact_role, tech_l1, tech_l2, company_categories, relevance_score, sitelinks_count, wikidata_qid, discovered_from, discovery_depth, wikipedia_urls, jev_relevance, jev_suggestion')
+                    .select(cols)
                     .eq('provenance', 'ai_discovered')
-                    .is('approved_at', null)
-                    // Jev-scored rows first (scripts/triageCandidates.ts), then the
-                    // Wikidata BFS heuristic for anything not yet triaged.
+                    .is('approved_at', null);
+                // Jev-scored rows first (scripts/triageCandidates.ts), then the
+                // Wikidata BFS heuristic for anything not yet triaged.
+                let { data, error } = await pending(`${base}, jev_relevance, jev_suggestion`)
                     .order('jev_relevance', { ascending: false, nullsFirst: false })
                     .order('relevance_score', { ascending: false, nullsFirst: false })
                     .limit(2000);
+                // Database without migration 0007: keep the queue usable.
+                if (error && /jev_/.test(error.message)) {
+                    ({ data, error } = await pending(base)
+                        .order('relevance_score', { ascending: false, nullsFirst: false })
+                        .limit(2000));
+                }
                 if (error) throw error;
                 return json({ rows: data ?? [] });
             }

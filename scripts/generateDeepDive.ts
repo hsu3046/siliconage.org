@@ -205,6 +205,9 @@ async function processOne(n: NodeData, loc: Locale) {
             if (verdict.summaryOk < SUMMARY_MIN || verdict.significanceOk < SUMMARY_MIN) {
                 stats.rejected++;
                 console.warn(`  ✗ ${loc}/${n.id}: rejected after rewrite (summary=${verdict.summaryOk.toFixed(2)}, significance=${verdict.significanceOk.toFixed(2)})`);
+                // The node changed (or --force) and the new text failed the
+                // check: do not keep serving the outdated file.
+                if (fs.existsSync(file)) { fs.unlinkSync(file); console.warn(`    removed stale ${loc}/${n.id}.json`); }
                 return;
             }
         }

@@ -117,8 +117,14 @@ const App: React.FC = () => {
   useEffect(() => {
     if (!isLocaleReady) return;
     const want = localizePath(location.pathname, locale);
-    if (want !== location.pathname) {
-      rawNavigate(`${want}${location.search}${location.hash}`, { replace: true });
+    // ?lang= is an entry hint only; once applied it must not outlive a later
+    // language switch (getUrlLocale() would restore it on reload).
+    const params = new URLSearchParams(location.search);
+    const hadLang = params.has('lang');
+    params.delete('lang');
+    if (want !== location.pathname || hadLang) {
+      const qs = params.toString();
+      rawNavigate(`${want}${qs ? `?${qs}` : ''}${location.hash}`, { replace: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locale, isLocaleReady]);
@@ -234,17 +240,7 @@ const App: React.FC = () => {
     return () => document.removeEventListener('keydown', handleGlobalKeyDown);
   }, [focusNodeId]);
 
-  // --- DYNAMIC TITLE MANAGEMENT (SEO) ---
-  useEffect(() => {
-    if (selectedNode) {
-      document.title = `${selectedNode.label} - The Silicon Age`;
-    } else if (focusNodeId) {
-      const focused = INITIAL_DATA.nodes.find(n => n.id === focusNodeId);
-      if (focused) document.title = `${focused.label} - The Silicon Age`;
-    } else {
-      document.title = "The Silicon Age | Interactive Map of AI History";
-    }
-  }, [selectedNode, focusNodeId]);
+  // Document title/meta are owned by <SEOHead> (localized, mirrors prerender).
 
   // --- SCROLL RESET MANAGEMENT ---
   useEffect(() => {
@@ -653,7 +649,13 @@ const App: React.FC = () => {
   return (
     <div key={locale} className="flex flex-col h-screen w-screen bg-background text-white overflow-hidden" style={{ width: '100vw', height: '100vh', backgroundColor: '#0f172a', overflow: 'hidden' }}>
       {/* SEO: Dynamic meta tags based on selected node */}
-      <SEOHead node={selectedNode} />
+      <SEOHead
+        node={(() => {
+          const id = selectedNode?.id ?? focusNodeId;
+          return id ? translatedData.nodes.find(n => n.id === id) ?? null : null;
+        })()}
+        locale={locale}
+      />
 
       <header className="h-16 border-b border-slate-700 bg-surface flex items-center justify-between px-4 sm:px-6 z-10 shrink-0 relative">
         <button

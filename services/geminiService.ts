@@ -57,12 +57,14 @@ export const fetchStaticDeepDive = (nodeId: string, locale: string): Promise<AIR
   if (!p) {
     p = fetch(`/deepdive/${encodeURIComponent(locale)}/${encodeURIComponent(nodeId)}.json`)
       .then(async res => {
+        // 5xx = transient: don't remember the miss, retry on next open.
+        if (res.status >= 500) { staticMemo.delete(key); return null; }
         if (!res.ok || !(res.headers.get('content-type') ?? '').includes('json')) return null;
         const data = await res.json() as AIResponse & { entity?: string };
         if (!data || data.entity !== nodeId || typeof data.summary !== 'string') return null;
         return { ...data, source: 'static' as const };
       })
-      .catch(() => null);
+      .catch(() => { staticMemo.delete(key); return null; });  // network error: retry later
     staticMemo.set(key, p);
   }
   return p;

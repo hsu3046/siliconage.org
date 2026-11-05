@@ -14,7 +14,9 @@
  *      /admin review. Approved ones flow into the site via export-approved.
  *
  * The feed holds only the latest ~30 stories, so run it regularly
- * (e.g. daily or weekly) — already-seen articles are skipped by id.
+ * (e.g. daily or weekly) — already-seen articles (queued, decided, or
+ * auto-skipped below --min) are skipped by id; --rescore re-judges the
+ * auto-skipped ones.
  *
  * Usage:
  *   npm run scout-events -- --dry-run
@@ -34,6 +36,10 @@ const argv = process.argv.slice(2);
 const DRY = argv.includes('--dry-run');
 const MIN = (() => { const i = argv.indexOf('--min'); return i >= 0 ? Number(argv[i + 1]) : 0.6; })();
 const BATCH = 10;
+// Stories below --min are stored as status='rejected' with decided_at NULL
+// (auto-skipped, never shown in /admin) so they are not re-scored every run.
+// --rescore re-judges those auto-skipped rows.
+const RESCORE = argv.includes('--rescore');
 // aib vote's firewall rate-limits generic HTTP-library user agents per IP;
 // a distinctive UA without "bot"/"crawl" keeps a 3-request run well clear.
 const UA = 'SiliconAge-EventScout/1.0 (+https://siliconage.org)';
@@ -113,8 +119,11 @@ async function main() {
     let seen = new Set<string>();
     if (sb) {
         const ids = items.map(idFor);
-        const { data } = await sb.from('event_candidates').select('id').in('id', ids);
-        seen = new Set(((data as Array<{ id: string }>) ?? []).map(r => r.id));
+        const { data, error } = await sb.from('event_candidates').select('id, status, decided_at').in('id', ids);
+        if (error) throw new Error(`event_candidates read failed: ${error.message} (is migration 0009 applied?)`);
+        seen = new Set(((data as Array<{ id: string; status: string; decided_at: string | null }>) ?? [])
+            .filter(r => !(RESCORE && r.status === 'rejected' && r.decided_at === null))
+            .map(r => r.id));
     }
     const fresh = items.filter(i => !seen.has(idFor(i)));
     console.log(`[scout-events] ${fresh.length} new stories (model=${JEV_MODEL}, min=${MIN}, dry=${DRY})`);
@@ -141,7 +150,7 @@ async function main() {
             const p = noulOf(res, `s${j}`) ?? 0;
             const related = relatedNodes(item);
             console.log(`  ${p >= MIN ? '✓' : '·'} ${p.toFixed(2)} ${item.pubDate.toISOString().slice(0, 10)} ${item.title.slice(0, 70)}${related.length ? `  [${related.join(', ')}]` : ''}`);
-            if (p < MIN || !sb) continue;
+            if (!sb) continue;
             const { error } = await sb.from('event_candidates').upsert({
                 id: idFor(item),
                 year: item.pubDate.getUTCFullYear(),
@@ -153,9 +162,11 @@ async function main() {
                 published_at: item.pubDate.toISOString(),
                 jev_milestone: p,
                 jev_model: res.model,
-            } as never, { onConflict: 'id', ignoreDuplicates: true });
+                // Below threshold → auto-skipped (rejected, decided_at NULL).
+                status: p >= MIN ? 'pending' : 'rejected',
+            } as never, { onConflict: 'id', ignoreDuplicates: !RESCORE });
             if (error) { console.warn(`    queue failed: ${error.message}`); continue; }
-            queued++;
+            if (p >= MIN) queued++;
         }
     }
     console.log(`[scout-events] queued=${queued} cost≈$${cost.toFixed(4)}${DRY ? ' (dry run — nothing written)' : ''}`);

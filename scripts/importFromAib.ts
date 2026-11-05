@@ -28,6 +28,7 @@
  *   npm run import-aib -- --dry-run                 # print verdicts, write nothing
  *   npm run import-aib -- --since 2023-01-01 --min 0.5
  *   npm run import-aib -- --file ./aib-models.json --dry-run
+ *   npm run import-aib -- --rescore                  # re-judge models previously below --min
  *
  * Env: AIB_SUPABASE_URL + AIB_SUPABASE_PUBLISHABLE_KEY (default mode),
  *      OPENROUTER_API_KEY (Jev), SUPABASE_SERVICE_ROLE_KEY + VITE_SUPABASE_URL (siliconage writes).
@@ -52,6 +53,10 @@ const DRY = flag('dry-run');
 const FILE = opt('file');
 const SINCE = opt('since') ?? '2023-01-01';
 const MIN = Number(opt('min') ?? 0.5);
+// Models scored below --min are remembered (rejected_node_ids, reason
+// 'jev_below:<p>') so the next run does not pay Jev for them again.
+// --rescore re-evaluates them (e.g. after recalibrating --min).
+const RESCORE = flag('rescore');
 const BATCH = 8;
 
 // ---------------------------------------------------------------------------
@@ -146,10 +151,22 @@ async function main() {
     let rejected = new Set<string>();
     let queued = new Set<string>();
     if (sb) {
-        const { data: rej } = await sb.from('rejected_node_ids').select('id');
-        rejected = new Set(((rej as Array<{ id: string }>) ?? []).map(r => r.id));
-        const { data: q } = await sb.from('nodes').select('id').like('id', 'aib_%');
-        queued = new Set(((q as Array<{ id: string }>) ?? []).map(r => r.id));
+        // Paged: PostgREST caps a response at 1000 rows. Errors abort — a
+        // silently empty list would re-import rejected candidates.
+        const all = async <T,>(make: () => any): Promise<T[]> => { // eslint-disable-line @typescript-eslint/no-explicit-any
+            const out: T[] = [];
+            for (let from = 0; ; from += 1000) {
+                const { data, error } = await make().range(from, from + 999);
+                if (error) throw new Error(`siliconage read failed: ${error.message} (are migrations 0007/0008 applied?)`);
+                out.push(...((data as T[]) ?? []));
+                if (!data || data.length < 1000) break;
+            }
+            return out;
+        };
+        const rej = await all<{ id: string; reason: string | null }>(() => sb.from('rejected_node_ids').select('id, reason').order('id'));
+        rejected = new Set(rej.filter(r => !(RESCORE && (r.reason ?? '').startsWith('jev_below'))).map(r => r.id));
+        const q = await all<{ id: string }>(() => sb.from('nodes').select('id').like('id', 'aib_%').order('id'));
+        queued = new Set(q.map(r => r.id));
     }
     const candidates = rows.filter(r => {
         const id = toId(r.slug!);
@@ -203,7 +220,14 @@ async function main() {
             const { company } = labContext(r.lab_slug);
             const product = line && line.choice !== 'none' && line.confidence >= 0.5 ? line.choice : null;
             console.log(`  ${ms >= MIN ? '✓' : '·'} ${r.release_date} ${r.name.padEnd(28).slice(0, 28)} milestone=${ms.toFixed(2)} ${role ? `role=${role.choice}` : ''}${product ? ` → ${product}` : ''}${company ? ` ← ${company}` : ''}`);
-            if (ms < MIN) { below++; continue; }
+            if (ms < MIN) {
+                below++;
+                if (sb) {
+                    await sb.from('rejected_node_ids').upsert(
+                        { id, source: 'aib.vote', reason: `jev_below:${ms.toFixed(3)}` } as never, { onConflict: 'id' });
+                }
+                continue;
+            }
             if (!sb) continue;
 
             const aibUrl = `${AIB_BASE_URL}/en/models/${r.slug}`;
