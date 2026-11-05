@@ -78,10 +78,13 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
             ? generateDescription(node)
             : DEFAULT_META.description;
 
-        // SEO-friendly path-based URL
+        // SEO-friendly path-based URL. Keep the /ko or /ja prefix of a
+        // localized landing page (prerendered by scripts/prerender.ts) so the
+        // runtime canonical never contradicts the static one.
+        const localePrefix = (/^\/(ko|ja)(?=\/|$)/.exec(window.location.pathname)?.[0]) ?? '';
         const url = node
-            ? `${baseUrl}/${categoryToPath[node.category]}/${node.id}`
-            : baseUrl;
+            ? `${baseUrl}${localePrefix}/${categoryToPath[node.category]}/${node.id}`
+            : `${baseUrl}${localePrefix}/`;
 
         const image = `${baseUrl}${DEFAULT_META.image}`;
 

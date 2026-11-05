@@ -245,9 +245,23 @@ export const detectBrowserLocale = (): Locale => {
 /**
  * Initialize i18n with saved or detected locale
  */
+export const getUrlLocale = (): Locale | null => {
+    try {
+        const prefix = /^\/(ko|ja|en)(?=\/|$)/.exec(window.location.pathname)?.[1];
+        if (prefix) return prefix as Locale;
+        const q = new URLSearchParams(window.location.search).get('lang');
+        if (q === 'ko' || q === 'ja' || q === 'en') return q;
+    } catch {
+        // non-browser context
+    }
+    return null;
+};
+
 export const initLocale = async (): Promise<Locale> => {
+    // An explicit locale in the URL (/ko/company/apple, ?lang=ja) wins over
+    // the saved preference: it is what the search result / shared link promised.
     const saved = getSavedLocale();
-    const locale = saved || detectBrowserLocale();
+    const locale = getUrlLocale() || saved || detectBrowserLocale();
     await loadLocale(locale);
     return locale;
 };

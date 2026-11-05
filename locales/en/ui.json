@@ -108,6 +108,11 @@
         "notPubliclyTraded": "Not Publicly Traded",
         "learnMore": "Learn More",
         "externalLinksLabel": "(External Links)",
+        "aibTitle": "Now on aib vote",
+        "aibSubtitle": "Today's models, rankings and news for this part of history",
+        "aibLab": "Current models & rankings",
+        "aibRanking": "AI model rankings",
+        "aibNews": "Latest news",
         "disclaimer": "The content and links provided on this site are aggregated through AI algorithms based on objective technical keywords, rather than personal curation or subjective selection."
     },
     "mapView": {

@@ -275,6 +275,9 @@ const App: React.FC = () => {
     const handleUrlChange = () => {
       const path = window.location.pathname;
       const pathParts = path.split('/').filter(Boolean);
+      // Localized landing URLs (/ko/company/apple) — the locale itself is
+      // picked up by initLocale(); routing ignores the prefix.
+      if (pathParts[0] === 'ko' || pathParts[0] === 'ja' || pathParts[0] === 'en') pathParts.shift();
 
       // Legacy query param support (for backwards compatibility)
       const params = new URLSearchParams(window.location.search);

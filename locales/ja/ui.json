@@ -121,6 +121,11 @@
         "notPubliclyTraded": "非上場",
         "learnMore": "もっと詳しく",
         "externalLinksLabel": "(外部リンク)",
+        "aibTitle": "いま aib vote で",
+        "aibSubtitle": "この歴史の“現在”— 最新モデル・ランキング・ニュース",
+        "aibLab": "現在のモデルとランキング",
+        "aibRanking": "AIモデルランキング",
+        "aibNews": "最新ニュース",
         "disclaimer": "当サイトのコンテンツは個人の主観によらず、AIが技術キーワードに基づき客観的に収集・構成しています。"
     },
     "mapView": {

@@ -85,6 +85,13 @@ export interface PendingNode {
     discovered_from: string | null;
     discovery_depth: number | null;
     wikipedia_urls: Record<string, string> | null;
+    /** P(belongs in the graph) from TypeSafe Jev — scripts/triageCandidates.ts */
+    jev_relevance?: number | null;
+    jev_suggestion?: {
+        role?: { value: string; confidence: number } | null;
+        company_category?: { value: string; confidence: number } | null;
+        tech?: { l1: string; l2: string; confidence: number } | null;
+    } | null;
 }
 
 export interface AdminStats {

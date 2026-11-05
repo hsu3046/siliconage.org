@@ -4,6 +4,7 @@ import { CATEGORY_COLORS, CATEGORY_LABELS } from '../constants';
 import { fetchNodeDetails } from '../services/geminiService';
 import { useLocale } from '../hooks/useLocale';
 import { EXTERNAL_LINKS, getExternalLinkUrl, getApplicableLinks, SupportedLocale } from '../config/externalLinks';
+import { getAibLinks } from '../config/aibLinks';
 
 interface DetailPanelProps {
   node: NodeData | null;
@@ -159,6 +160,11 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
   // Get smart external links (locale-aware)
   const externalLinks = useMemo(() => {
     return node ? getExternalLinks(node, locale as SupportedLocale) : [];
+  }, [node, locale]);
+
+  // "Now on aib vote" — history → present bridge for AI-era nodes
+  const aibLinks = useMemo(() => {
+    return node ? getAibLinks(node, locale as SupportedLocale) : [];
   }, [node, locale]);
 
   // Calculate connections with smart sorting
@@ -649,6 +655,34 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
                   </button>
                 );
               })}
+            </div>
+          </div>
+        )}
+
+        {/* 3a. Now on aib vote (sister site: live model rankings + news) */}
+        {aibLinks.length > 0 && (
+          <div className="mb-6">
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+              {t('detailPanel.aibTitle')}
+            </h3>
+            <p className="text-[11px] text-slate-500 mb-3">{t('detailPanel.aibSubtitle')}</p>
+            <div className="flex flex-wrap gap-3">
+              {aibLinks.map(link => (
+                <a
+                  key={link.kind}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener"
+                  className="flex items-center gap-2 px-3 py-2 bg-indigo-950/60 border border-indigo-700/60 rounded-lg hover:bg-indigo-900/60 hover:border-indigo-500 transition-colors text-xs font-medium text-indigo-100"
+                >
+                  {link.kind === 'news' ? (
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" /></svg>
+                  ) : (
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                  )}
+                  {t(link.kind === 'lab' ? 'detailPanel.aibLab' : link.kind === 'ranking' ? 'detailPanel.aibRanking' : 'detailPanel.aibNews')}
+                </a>
+              ))}
             </div>
           </div>
         )}

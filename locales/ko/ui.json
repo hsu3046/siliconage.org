@@ -121,6 +121,11 @@
         "notPubliclyTraded": "비상장",
         "learnMore": "더 알아보기",
         "externalLinksLabel": "(외부 링크)",
+        "aibTitle": "지금 aib vote에서",
+        "aibSubtitle": "이 역사의 현재 — 최신 모델·순위·뉴스",
+        "aibLab": "현재 모델과 순위",
+        "aibRanking": "AI 모델 순위",
+        "aibNews": "최신 뉴스",
         "disclaimer": "본 사이트의 콘텐츠와 링크는 운영자의 주관적 개입 없이, AI 알고리즘이 기술 키워드를 기반으로 객관적으로 수집 및 구성했습니다."
     },
     "mapView": {

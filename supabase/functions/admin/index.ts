@@ -102,9 +102,12 @@ Deno.serve(async (req: Request) => {
             case 'list_pending': {
                 const { data, error } = await supa
                     .from('nodes')
-                    .select('id, label, category, year, description, impact_role, tech_l1, tech_l2, company_categories, relevance_score, sitelinks_count, wikidata_qid, discovered_from, discovery_depth, wikipedia_urls')
+                    .select('id, label, category, year, description, impact_role, tech_l1, tech_l2, company_categories, relevance_score, sitelinks_count, wikidata_qid, discovered_from, discovery_depth, wikipedia_urls, jev_relevance, jev_suggestion')
                     .eq('provenance', 'ai_discovered')
                     .is('approved_at', null)
+                    // Jev-scored rows first (scripts/triageCandidates.ts), then the
+                    // Wikidata BFS heuristic for anything not yet triaged.
+                    .order('jev_relevance', { ascending: false, nullsFirst: false })
                     .order('relevance_score', { ascending: false, nullsFirst: false })
                     .limit(2000);
                 if (error) throw error;

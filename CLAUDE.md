@@ -10,7 +10,7 @@ The Silicon Age — interactive knowledge graph of 100 years of digital history.
 
 ```bash
 npm run dev               # Vite dev server on http://localhost:3000
-npm run build             # Production build (vite build)
+npm run build             # vite build + scripts/prerender.ts (static node pages, sitemap, /data JSON, llms.txt)
 npm run preview           # Preview the production build
 
 # AI cache generation (requires VITE_GOOGLE_API_KEY in .env)
@@ -21,9 +21,13 @@ npm run i18n:sync-all     # extract + translate nodes, links, events (all three 
 npm run i18n:sync         # nodes only
 npm run i18n:sync-links   # links only
 npm run i18n:sync-events  # events only
+
+# Review-queue triage with TypeSafe Jev (needs OPENROUTER_API_KEY + migration 0007)
+npm run triage -- --dry-run --limit 20   # preview verdicts
+npm run triage                           # score unscored pending candidates
 ```
 
-No test suite, no lint script. TypeScript is strict — rely on `tsc` errors surfaced through `vite build`.
+No test suite, no lint script. `vite build` does NOT type-check — run `npx tsc --noEmit` before committing.
 
 Debug dashboard: `http://localhost:3000/debug` (dev-only, lazy-loaded so it's excluded from the production bundle).
 
@@ -76,3 +80,12 @@ Runtime: `utils/i18n.ts` + `hooks/useLocale.ts`. Locale changes are async (`load
 - **No backend.** Everything ships as static assets. Don't introduce server routes or API handlers — this repo is not Next.js.
 - **Strict TS, no `any`.** When extending `NodeData` / `LinkData`, update `types.ts` first.
 - **License: GPL v3.** Copyright KnowAI. Don't remove license headers.
+
+### Static prerender (SEO / GEO)
+`scripts/prerender.ts` runs after `vite build`. It writes `dist/<cat>/<id>.html` plus `/ko/…` and `/ja/…` variants (served extensionless via `cleanUrls` in `vercel.json`; static files win over the SPA rewrite). Each page has localized title/description, canonical + hreflang, JSON-LD and a readable fallback article inside `#root` that React replaces on boot. `/ko` and `/ja` path prefixes are **entry-only**: `initLocale()` reads them and `App.tsx` strips them before routing; in-app navigation still writes unprefixed URLs. It also emits `dist/sitemap.xml` (hreflang), `dist/llms.txt`, `dist/data/graph.json` and `dist/data/lineage/<id>.json` (CORS-open, consumed by aib vote). Do not hand-edit `public/sitemap.xml` — the build output replaces it.
+
+### aib vote bridge
+`config/aibLinks.ts` maps AI-era node ids to aib vote lab slugs / news keywords for the DetailPanel "Now on aib vote" block. Lab slugs must exist as `pricing_services.slug` on aib vote — a wrong slug is a 404 on the partner site. Strategy and roadmap: `docs/ROADMAP_2026-11.md` (internal — `docs/` is gitignored).
+
+### Jev triage
+`services/jevClient.ts` (Node-only) + `scripts/triageCandidates.ts` score the `ai_discovered` queue: `jev_relevance` (P(belongs)) and role/category suggestions with confidence (`nodes.jev_*`, migration 0007). `/admin` sorts by Jev and can bulk-select by threshold — approval stays human. Shuffle choice options every call (position bias), pin the model version, calibrate thresholds on hand labels.

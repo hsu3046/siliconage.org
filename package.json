@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && npx tsx scripts/prerender.ts",
     "preview": "vite preview",
     "generate-cache": "npx tsx scripts/generateCache.ts",
     "i18n:extract": "npx tsx scripts/extract-nodes.ts",
@@ -23,7 +23,9 @@
     "wikidata:enrich": "npx tsx scripts/enrichFromWikidata.ts",
     "wikidata:bfs": "npx tsx scripts/wikidataBfs.ts",
     "classify": "npx tsx scripts/classifyNodes.ts",
-    "embed": "npx tsx scripts/generateEmbeddings.ts"
+    "embed": "npx tsx scripts/generateEmbeddings.ts",
+    "triage": "npx tsx scripts/triageCandidates.ts",
+    "prerender": "npx tsx scripts/prerender.ts"
   },
   "dependencies": {
     "@formspree/react": "^2.5.1",

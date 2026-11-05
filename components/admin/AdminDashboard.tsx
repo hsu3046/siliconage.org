@@ -27,6 +27,10 @@ const AdminDashboard: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [selected, setSelected] = useState<Set<string>>(new Set());
     const [filter, setFilter] = useState<'all' | 'COMPANY' | 'PERSON' | 'TECHNOLOGY'>('all');
+    // Jev triage threshold for bulk selection. Defaults are deliberately
+    // conservative until calibrated against hand labels.
+    const [jevMin, setJevMin] = useState(0.9);
+    const [jevMax, setJevMax] = useState(0.1);
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(() => {
         try { return localStorage.getItem(SIDEBAR_KEY) !== '0'; } catch { return true; }
     });
@@ -70,6 +74,11 @@ const AdminDashboard: React.FC = () => {
         const next = new Set(selected);
         if (next.has(id)) next.delete(id); else next.add(id);
         setSelected(next);
+    };
+
+    const jevScored = useMemo(() => rows.filter(r => typeof r.jev_relevance === 'number').length, [rows]);
+    const selectByJev = (pred: (p: number) => boolean) => {
+        setSelected(new Set(filtered.filter(r => typeof r.jev_relevance === 'number' && pred(r.jev_relevance)).map(r => r.id)));
     };
 
     const approve = useCallback(async () => {
@@ -240,6 +249,19 @@ const AdminDashboard: React.FC = () => {
                                     <option value="TECHNOLOGY">TECHNOLOGY ({rows.filter(r => r.category === 'TECHNOLOGY').length})</option>
                                 </select>
                                 <div className="text-xs text-slate-500">{selected.size} selected</div>
+                                {jevScored > 0 && (
+                                    <div className="flex items-center gap-1.5 text-xs text-slate-400" title="TypeSafe Jev relevance — run `npm run triage` to score new candidates">
+                                        <span>Jev {jevScored}/{rows.length}</span>
+                                        <button type="button" onClick={() => selectByJev(p => p >= jevMin)} className="px-2 py-1 bg-emerald-900/40 hover:bg-emerald-800/60 border border-emerald-800/60 rounded-sm">
+                                            select ≥
+                                        </button>
+                                        <input type="number" step={0.05} min={0} max={1} value={jevMin} onChange={e => setJevMin(Number(e.target.value))} className="w-16 bg-slate-900 border border-slate-800 rounded-sm px-1.5 py-1" />
+                                        <button type="button" onClick={() => selectByJev(p => p <= jevMax)} className="px-2 py-1 bg-rose-900/40 hover:bg-rose-800/60 border border-rose-800/60 rounded-sm">
+                                            select ≤
+                                        </button>
+                                        <input type="number" step={0.05} min={0} max={1} value={jevMax} onChange={e => setJevMax(Number(e.target.value))} className="w-16 bg-slate-900 border border-slate-800 rounded-sm px-1.5 py-1" />
+                                    </div>
+                                )}
                                 <div className="flex-1" />
                                 <button
                                     type="button"
@@ -270,7 +292,7 @@ const AdminDashboard: React.FC = () => {
                                         <div>Label / role</div>
                                         <div>Category</div>
                                         <div>Year</div>
-                                        <div>Score · SL</div>
+                                        <div>Jev · Score · SL</div>
                                         <div>Description</div>
                                         <div>Wiki</div>
                                     </div>
@@ -293,6 +315,18 @@ const AdminDashboard: React.FC = () => {
                                                 </div>
                                                 <div className="text-slate-300">{r.year || '—'}</div>
                                                 <div className="text-slate-300 text-xs">
+                                                    {typeof r.jev_relevance === 'number' && (
+                                                        <div
+                                                            className={r.jev_relevance >= 0.8 ? 'text-emerald-300' : r.jev_relevance <= 0.2 ? 'text-rose-300' : 'text-amber-200'}
+                                                            title={[
+                                                                r.jev_suggestion?.role ? `role ${r.jev_suggestion.role.value} (${r.jev_suggestion.role.confidence.toFixed(2)})` : '',
+                                                                r.jev_suggestion?.company_category ? `category ${r.jev_suggestion.company_category.value} (${r.jev_suggestion.company_category.confidence.toFixed(2)})` : '',
+                                                                r.jev_suggestion?.tech ? `${r.jev_suggestion.tech.l2} (${r.jev_suggestion.tech.confidence.toFixed(2)})` : '',
+                                                            ].filter(Boolean).join('\n')}
+                                                        >
+                                                            {Math.round(r.jev_relevance * 100)}%
+                                                        </div>
+                                                    )}
                                                     <div>{(r.relevance_score ?? 0).toFixed(1)}</div>
                                                     <div className="text-slate-500">{r.sitelinks_count ?? 0}</div>
                                                 </div>
