@@ -72,7 +72,7 @@ interface NodeRow {
     impact_role: string | null; tech_l1: string | null; tech_l2: string | null; company_categories: string[] | null;
     primary_role: string | null; secondary_role: string | null; birth_year: number | null; death_year: number | null;
     end_year: number | null; market_cap: { current?: string; peak?: string } | null; keywords: string[] | null;
-    wikipedia_urls: Record<string, string> | null; provenance: string;
+    wikipedia_urls: Record<string, string> | null; provenance: string; external_links: unknown;
 }
 interface LinkRow {
     id: number; source_id: string; target_id: string; type: string; arrow: string; icon: string | null;
@@ -135,7 +135,17 @@ function toNode(r: NodeRow): NodeData | null {
         if (r.death_year) n.deathYear = r.death_year;
     }
     if (r.keywords?.length) n.keywords = r.keywords;
-    if (r.wikipedia_urls?.en) n.externalLinks = [{ type: 'WIKIPEDIA', url: r.wikipedia_urls.en, label: 'Wikipedia' }];
+    const ext: NonNullable<NodeData['externalLinks']> = [];
+    if (r.wikipedia_urls?.en) ext.push({ type: 'WIKIPEDIA', url: r.wikipedia_urls.en, label: 'Wikipedia' });
+    if (Array.isArray(r.external_links)) {
+        for (const e of r.external_links as Array<Record<string, unknown>>) {
+            const type = String(e?.type ?? 'OTHER');
+            const href = String(e?.url ?? '');
+            if (!/^https:\/\//.test(href) || !['YOUTUBE', 'WIKIPEDIA', 'BLOG', 'BOOK', 'OTHER'].includes(type)) continue;
+            if (!ext.some(x => x.url === href)) ext.push({ type: type as 'OTHER', url: href, label: String(e?.label ?? '') });
+        }
+    }
+    if (ext.length) n.externalLinks = ext;
     return n;
 }
 
@@ -145,7 +155,7 @@ async function main() {
     // RLS already limits anon to approved rows; the filters make intent explicit.
     const nodeRows = await selectAll<NodeRow>(
         'nodes',
-        'id, label, category, year, description, impact_role, tech_l1, tech_l2, company_categories, primary_role, secondary_role, birth_year, death_year, end_year, market_cap, keywords, wikipedia_urls, provenance',
+        'id, label, category, year, description, impact_role, tech_l1, tech_l2, company_categories, primary_role, secondary_role, birth_year, death_year, end_year, market_cap, keywords, wikipedia_urls, provenance, external_links',
         q => q.neq('provenance', 'curated').not('approved_at', 'is', null).order('id'),
     );
     const nodes = nodeRows.filter(r => !curatedIds.has(r.id)).map(toNode).filter((n): n is NodeData => !!n);

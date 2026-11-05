@@ -26,7 +26,8 @@
     "triage": "npx tsx scripts/triageCandidates.ts",
     "prerender": "npx tsx scripts/prerender.ts",
     "deepdive": "npx tsx scripts/generateDeepDive.ts",
-    "export-approved": "npx tsx scripts/exportApproved.ts"
+    "export-approved": "npx tsx scripts/exportApproved.ts",
+    "import-aib": "npx tsx scripts/importFromAib.ts"
   },
   "dependencies": {
     "@formspree/react": "^2.5.1",

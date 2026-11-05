@@ -26,6 +26,12 @@ npm run i18n:sync-events  # events only
 # Review-queue triage with TypeSafe Jev (needs OPENROUTER_API_KEY + migration 0007)
 npm run triage -- --dry-run --limit 20   # preview verdicts
 npm run triage                           # score unscored pending candidates
+
+# AI-era candidates from aib vote's public model catalog (read-only on aib; migration 0008)
+npm run import-aib -- --dry-run          # or --file ./aib-models.json for zero aib access
+
+# Approved review-queue rows → data/approved.json (commit it), then build
+npm run export-approved
 ```
 
 No test suite, no lint script. `vite build` does NOT type-check — run `npx tsc --noEmit` before committing.
@@ -86,6 +92,9 @@ Runtime: `utils/i18n.ts` + `hooks/useLocale.ts`. Locale changes are async (`load
 
 ### Static prerender (SEO / GEO)
 `scripts/prerender.ts` runs after `vite build`. It writes `dist/<cat>/<id>.html` plus `/ko/…` and `/ja/…` variants (served extensionless via `cleanUrls` in `vercel.json`; static files win over the SPA rewrite). Each page has localized title/description, canonical + hreflang, JSON-LD and a readable fallback article inside `#root` that React replaces on boot. `/ko` and `/ja` path prefixes are **entry-only**: `initLocale()` reads them and `App.tsx` strips them before routing; in-app navigation still writes unprefixed URLs. It also emits `dist/sitemap.xml` (hreflang), `dist/llms.txt`, `dist/data/graph.json` and `dist/data/lineage/<id>.json` (CORS-open, consumed by aib vote). Do not hand-edit `public/sitemap.xml` — the build output replaces it.
+
+### aib vote is read-only from here
+aib vote is the main service. siliconage scripts may only READ what aib already exposes publicly (anon/publishable key, public pages) and never write to aib or require aib code changes. `importFromAib.ts` also supports `--file` for zero aib access. Any change on the aib side is reviewed separately.
 
 ### aib vote bridge
 `config/aibLinks.ts` maps AI-era node ids to aib vote lab slugs / news keywords for the DetailPanel "Now on aib vote" block. Lab slugs must exist as `pricing_services.slug` on aib vote — a wrong slug is a 404 on the partner site. Strategy and roadmap: `docs/ROADMAP_2026-11.md` (internal — `docs/` is gitignored).

@@ -58,6 +58,7 @@ const T: Record<Locale, {
     siteDescription: string;
     allEntities: string;
     aibTitle: string;
+    aibModel: string;
     aibLab: string;
     aibRanking: string;
     aibNews: string;
@@ -76,6 +77,7 @@ const T: Record<Locale, {
         siteDescription: 'Explore 100 years of digital history as a web of cause and effect — the companies, people and technologies that led to the AI era.',
         allEntities: 'All entities',
         aibTitle: 'Now on aib vote',
+        aibModel: 'Scores, prices & comparisons',
         aibLab: 'Current models & rankings',
         aibRanking: 'AI model rankings',
         aibNews: 'Latest news',
@@ -94,6 +96,7 @@ const T: Record<Locale, {
         siteDescription: '100년 디지털 역사를 인과관계의 네트워크로 — AI 시대를 만든 기업·인물·기술을 한눈에 탐구하세요.',
         allEntities: '전체 항목',
         aibTitle: '지금 aib vote에서',
+        aibModel: '성능·가격·비교 보기',
         aibLab: '현재 모델과 순위',
         aibRanking: 'AI 모델 순위',
         aibNews: '최신 뉴스',
@@ -112,6 +115,7 @@ const T: Record<Locale, {
         siteDescription: '100年のデジタル史を因果関係のネットワークで — AI時代を生んだ企業・人物・技術を探求しよう。',
         allEntities: 'すべての項目',
         aibTitle: 'いま aib vote で',
+        aibModel: '性能・価格・比較を見る',
         aibLab: '現在のモデルとランキング',
         aibRanking: 'AIモデルランキング',
         aibNews: '最新ニュース',
@@ -291,7 +295,7 @@ function nodeBody(n: NodeData, loc: Locale): string {
         : `${n.year}${n.endYear ? `–${n.endYear}` : ''}`]
         .join(' · ');
     const aib = getAibLinks(n, loc);
-    const aibLabel = { lab: t.aibLab, ranking: t.aibRanking, news: t.aibNews } as const;
+    const aibLabel = { model: t.aibModel, lab: t.aibLab, ranking: t.aibRanking, news: t.aibNews } as const;
     return `<main class="sa-ssr">
 <nav><a href="${homeUrl(loc)}">The Silicon Age</a> › ${esc(t.cat[n.category])}</nav>
 <article>

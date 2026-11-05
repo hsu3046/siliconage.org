@@ -55,7 +55,7 @@ export const AIB_NODE_MAP: Record<string, AibTarget> = {
 };
 
 function isAiEra(node: NodeData): boolean {
-    if (AIB_NODE_MAP[node.id]) return true;
+    if (AIB_NODE_MAP[node.id] || aibModelSlug(node)) return true;
     if (node.category === Category.COMPANY) {
         return (node.companyCategories ?? []).includes(CompanyCategory.AI_INNOVATION);
     }
@@ -75,7 +75,16 @@ function withUtm(path: string, locale: SupportedLocale, content: string): string
     return url.toString();
 }
 
-export type AibLinkKind = 'lab' | 'news' | 'ranking';
+export type AibLinkKind = 'model' | 'lab' | 'news' | 'ranking';
+
+/** Model slug for nodes imported from aib vote (scripts/importFromAib.ts stores the model URL). */
+function aibModelSlug(node: NodeData): string | null {
+    for (const l of node.externalLinks ?? []) {
+        const m = /^https:\/\/www\.aib\.vote\/(?:(?:en|ja|ko)\/)?models\/([a-z0-9._-]+)\/?$/i.exec(l.url);
+        if (m) return m[1];
+    }
+    return null;
+}
 
 export interface AibLink {
     kind: AibLinkKind;
@@ -87,7 +96,10 @@ export function getAibLinks(node: NodeData, locale: SupportedLocale): AibLink[] 
     if (!isAiEra(node)) return [];
     const target = AIB_NODE_MAP[node.id] ?? {};
     const links: AibLink[] = [];
-    if (target.lab) {
+    const modelSlug = aibModelSlug(node);
+    if (modelSlug) {
+        links.push({ kind: 'model', url: withUtm(`/models/${modelSlug}`, locale, node.id) });
+    } else if (target.lab) {
         links.push({ kind: 'lab', url: withUtm(`/labs/${target.lab}`, locale, node.id) });
     } else {
         links.push({ kind: 'ranking', url: withUtm('/models', locale, node.id) });

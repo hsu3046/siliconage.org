@@ -191,6 +191,16 @@ Deno.serve(async (req: Request) => {
                         if (e1) throw e1;
                     }
                     totalQids += qids.length;
+                    // Source-agnostic negative cache (0008) — aib vote imports
+                    // have no Q-id. Best-effort: a missing table must not block
+                    // rejection on databases that predate the migration.
+                    const { data: srcRows } = await supa.from('nodes').select('id, discovered_from').in('id', chunk);
+                    const rejRows = ((srcRows as Array<{ id: string; discovered_from: string | null }>) ?? [])
+                        .map(r => ({ id: r.id, source: r.discovered_from, reason: 'admin reject' }));
+                    if (rejRows.length > 0) {
+                        const { error: eRej } = await supa.from('rejected_node_ids').upsert(rejRows as never, { onConflict: 'id' });
+                        if (eRej) console.warn('[admin] rejected_node_ids upsert skipped:', eRej.message);
+                    }
                     // Hard delete; ON DELETE CASCADE removes translations + links.
                     const { error: e2, count: dCount } = await supa
                         .from('nodes')
