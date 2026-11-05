@@ -138,6 +138,12 @@ export interface NodeData {
 
   // Focus Mode Distance (0=focused, 1=1st-degree, 2=2nd-degree)
   _focusDistance?: number;
+
+  // === Reviewed additions (data/approved.json, see scripts/exportApproved.ts) ===
+  /** 'curated' = hand-written in constants.ts; others came through the /admin review queue */
+  provenance?: 'curated' | 'ai_discovered' | 'ai_enriched';
+  /** Per-locale label/description for nodes outside the locales/*.json pipeline */
+  i18n?: Partial<Record<'ko' | 'ja', { label?: string; description?: string }>>;
 }
 
 export interface LinkData {
@@ -153,6 +159,9 @@ export interface LinkData {
   story?: string;       // e.g., "Jobs returned to Apple and started the turnaround"
   startYear?: number;   // When the relationship started
   endYear?: number;     // When it ended (undefined = ongoing)
+
+  /** Per-locale story for links outside the locales/*.json pipeline */
+  i18n?: Partial<Record<'ko' | 'ja', { story?: string }>>;
 }
 
 export interface EventData {
@@ -161,6 +170,8 @@ export interface EventData {
   year: number;                  // when the event happened
   endYear?: number;              // optional end year
   relatedNodes?: string[];       // optional node IDs to link (for click navigation)
+  /** Per-locale story for events outside the locales/*.json pipeline */
+  i18n?: Partial<Record<'ko' | 'ja', { story?: string }>>;
 }
 
 export interface GraphData {

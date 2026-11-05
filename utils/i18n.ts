@@ -20,6 +20,27 @@ let isLoaded = false;
 
 export const LOCALE_CHANGE_EVENT = 'silicon-age:locale-change';
 
+// Translations carried by reviewed additions (data/approved.json). They are
+// not part of the locales/*.json pipeline, so translateNode/translateLink fall
+// back to this registry after the locale files.
+type ExtraNodeTr = Record<string, { label?: string; description?: string; primaryRole?: string; secondaryRole?: string }>;
+type ExtraLinkTr = Record<string, { story?: string }>;
+const extraNodeTr: Partial<Record<Locale, ExtraNodeTr>> = {};
+const extraLinkTr: Partial<Record<Locale, ExtraLinkTr>> = {};
+
+const extraEventTr: Partial<Record<Locale, ExtraLinkTr>> = {};
+
+export const registerExtraTranslations = (
+    locale: Locale,
+    nodes: ExtraNodeTr,
+    links: ExtraLinkTr,
+    events: ExtraLinkTr = {},
+): void => {
+    extraNodeTr[locale] = { ...(extraNodeTr[locale] ?? {}), ...nodes };
+    extraLinkTr[locale] = { ...(extraLinkTr[locale] ?? {}), ...links };
+    extraEventTr[locale] = { ...(extraEventTr[locale] ?? {}), ...events };
+};
+
 const LOCALE_PREFIX_RE = /^\/(ko|ja|en)(?=\/|$)/;
 
 /** '/ko/company/apple' → '/company/apple'; '/ko' → '/' */
@@ -167,7 +188,7 @@ export const translateNode = (
         };
     }
 
-    const translation = nodeTranslations[nodeId];
+    const translation = nodeTranslations[nodeId] ?? extraNodeTr[currentLocale]?.[nodeId];
 
     if (translation) {
         return {
@@ -204,7 +225,7 @@ export const translateLink = (
     }
 
     const key = `${source}__${target}`;
-    const translation = linkTranslations[key];
+    const translation = linkTranslations[key] ?? extraLinkTr[currentLocale]?.[key];
 
     if (translation?.story) {
         return translation.story;
@@ -228,7 +249,7 @@ export const translateEvent = (
         return fallbackStory || '';
     }
 
-    const translation = eventTranslations[eventId];
+    const translation = eventTranslations[eventId] ?? extraEventTr[currentLocale]?.[eventId];
 
     if (translation?.story) {
         return translation.story;

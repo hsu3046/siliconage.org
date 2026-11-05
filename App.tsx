@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo, useCallback, Suspense, lazy } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Logo } from './components/Logo';
-import { INITIAL_DATA, CATEGORY_COLORS } from './constants';
+import { CATEGORY_COLORS } from './constants';
+import { GRAPH_DATA as INITIAL_DATA } from './data/graphData';
 import { NodeData, Category, GraphData, LinkType, CompanyMode } from './types';
 import { calculateSiliconRank } from './utils/ranking';
 import { useLocale } from './hooks/useLocale';

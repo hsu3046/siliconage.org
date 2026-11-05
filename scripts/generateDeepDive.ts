@@ -36,7 +36,7 @@ import path from 'path';
 import crypto from 'crypto';
 import { fileURLToPath } from 'url';
 import { GoogleGenAI, Type } from '@google/genai';
-import { INITIAL_DATA } from '../constants';
+import { GRAPH_DATA as INITIAL_DATA } from '../data/graphData';
 import type { NodeData, LinkData } from '../types';
 import { jevDecide, noulOf, type JevQuestion } from '../services/jevClient';
 

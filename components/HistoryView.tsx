@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { GraphData, NodeData, Category, LinkType, LinkData, EventData } from '../types';
-import { CATEGORY_COLORS, ERAS, INITIAL_DATA } from '../constants';
+import { CATEGORY_COLORS, ERAS } from '../constants';
+import { GRAPH_DATA as INITIAL_DATA } from '../data/graphData';
 import { useLocale } from '../hooks/useLocale';
 
 interface HistoryViewProps {

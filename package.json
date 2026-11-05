@@ -25,7 +25,8 @@
     "embed": "npx tsx scripts/generateEmbeddings.ts",
     "triage": "npx tsx scripts/triageCandidates.ts",
     "prerender": "npx tsx scripts/prerender.ts",
-    "deepdive": "npx tsx scripts/generateDeepDive.ts"
+    "deepdive": "npx tsx scripts/generateDeepDive.ts",
+    "export-approved": "npx tsx scripts/exportApproved.ts"
   },
   "dependencies": {
     "@formspree/react": "^2.5.1",

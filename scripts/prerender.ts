@@ -29,7 +29,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { INITIAL_DATA } from '../constants';
+import { GRAPH_DATA as INITIAL_DATA } from '../data/graphData';
 import { Category, LinkType, type NodeData, type LinkData } from '../types';
 import { getAibLinks } from '../config/aibLinks';
 
@@ -143,11 +143,13 @@ const nodes: NodeData[] = INITIAL_DATA.nodes;
 const byId = new Map(nodes.map(n => [n.id, n]));
 const endId = (e: LinkData['source']) => (typeof e === 'string' ? e : e.id);
 
-const label = (n: NodeData, loc: Locale) => nodeTr[loc][n.id]?.label || n.label;
-const description = (n: NodeData, loc: Locale) => nodeTr[loc][n.id]?.description || n.description || '';
+const nodeI18n = (n: NodeData, loc: Locale) => (loc === 'en' ? undefined : n.i18n?.[loc]);
+const label = (n: NodeData, loc: Locale) => nodeTr[loc][n.id]?.label || nodeI18n(n, loc)?.label || n.label;
+const description = (n: NodeData, loc: Locale) =>
+    nodeTr[loc][n.id]?.description || nodeI18n(n, loc)?.description || n.description || '';
 const story = (l: LinkData, loc: Locale) => {
     const key = `${endId(l.source)}__${endId(l.target)}`;
-    return linkTr[loc][key]?.story || l.story || '';
+    return linkTr[loc][key]?.story || (loc === 'en' ? undefined : l.i18n?.[loc]?.story) || l.story || '';
 };
 
 const pathFor = (n: NodeData, loc: Locale) =>

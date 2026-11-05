@@ -34,8 +34,10 @@ Debug dashboard: `http://localhost:3000/debug` (dev-only, lazy-loaded so it's ex
 
 ## Architecture
 
-### Data lives in one file
-`constants.ts` (~155 KB) is the source of truth for the entire graph: every node, link, era, and event is a hand-curated entry. There is no database and no API. Adding or editing an entity = editing `constants.ts` and re-running the i18n sync.
+### Data: curated file + reviewed additions
+`constants.ts` (~155 KB) is the hand-curated source of truth: every curated node, link, era, and event. Adding or editing a curated entity = editing `constants.ts` and re-running the i18n sync.
+
+Reviewed additions (Wikidata BFS, aib vote imports) live in Supabase until an editor approves them in `/admin`; `npm run export-approved` writes them to `data/approved.json` (committed). `data/graphData.ts` exports `GRAPH_DATA` = curated ∪ approved — **the app, prerender and generators use `GRAPH_DATA`; `seedSupabase.ts` and the debug tools keep `INITIAL_DATA`** (otherwise approved rows would be re-seeded as `curated`). Approved items carry their own ko/ja text in `i18n` fields, registered into `utils/i18n.ts` as a fallback after the locale files.
 
 `types.ts` defines the schema. Key shapes:
 - `NodeData`: `{ id, label, category (COMPANY/PERSON/TECHNOLOGY), year, impactRole, techCategoryL1/L2, ... }`

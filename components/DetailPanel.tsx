@@ -724,6 +724,9 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, data, onClose, onFocus,
 
         {/* Disclaimer */}
         <p className="text-[10px] text-slate-500 leading-relaxed mt-6 pt-4 border-t border-slate-700/50">
+          {node.provenance && node.provenance !== 'curated' && (
+            <span className="block mb-1">{t('detailPanel.reviewedAddition')}</span>
+          )}
           {t('detailPanel.disclaimer')}
         </p>
 

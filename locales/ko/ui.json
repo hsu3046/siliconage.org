@@ -130,6 +130,7 @@
         "deepDiveNoKeyHint": "왼쪽 위 로고를 눌러 API 키 설정에 Gemini 키를 넣으면 지금 바로 생성할 수 있습니다.",
         "deepDiveError": "지금은 AI 분석을 불러올 수 없습니다(사용량 한도 또는 연결 문제). 잠시 후 다시 시도해 주세요.",
         "deepDivePregenerated": "AI가 작성하고 큐레이션된 그래프와 대조해 검사했습니다. 오류가 있을 수 있습니다.",
+        "reviewedAddition": "Wikidata·aib vote 데이터에서 가져와 편집자가 승인한 항목입니다. 큐레이션 항목보다 설명이 짧을 수 있습니다.",
         "disclaimer": "본 사이트의 콘텐츠와 링크는 운영자의 주관적 개입 없이, AI 알고리즘이 기술 키워드를 기반으로 객관적으로 수집 및 구성했습니다."
     },
     "mapView": {
