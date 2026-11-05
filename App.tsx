@@ -5,6 +5,7 @@ import { INITIAL_DATA, CATEGORY_COLORS } from './constants';
 import { NodeData, Category, GraphData, LinkType, CompanyMode } from './types';
 import { calculateSiliconRank } from './utils/ranking';
 import { useLocale } from './hooks/useLocale';
+import { localizePath } from './utils/i18n';
 
 // Static Imports (non-lazy for performance)
 import MapView from './components/MapView';
@@ -98,11 +99,28 @@ const App: React.FC = () => {
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
 
   // i18n hook - handles locale initialization and provides t() function
-  const { t, locale, setLocale, translateNode, translateLink, translateEvent } = useLocale();
+  const { t, locale, setLocale, translateNode, translateLink, translateEvent, isLoaded: isLocaleReady } = useLocale();
 
-  // Router hooks for SEO-friendly URLs
-  const navigate = useNavigate();
+  // Router hooks for SEO-friendly URLs. Every in-app URL carries the locale
+  // prefix (/ko/…, /ja/…; English unprefixed) so a shared link or a reload
+  // reopens the same language — and matches the prerendered static pages.
+  const rawNavigate = useNavigate();
   const location = useLocation();
+  const navigate = useCallback((to: string) => {
+    rawNavigate(localizePath(to, locale));
+  }, [rawNavigate, locale]);
+
+  // Language switched anywhere (About, Welcome, Tutorial) → rewrite the URL
+  // prefix in place. Waits for i18n init so a /ko landing URL is not stripped
+  // while the default 'en' state is still in place.
+  useEffect(() => {
+    if (!isLocaleReady) return;
+    const want = localizePath(location.pathname, locale);
+    if (want !== location.pathname) {
+      rawNavigate(`${want}${location.search}${location.hash}`, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locale, isLocaleReady]);
 
   // Translate node and link data when locale changes
   const translatedData = useMemo(() => {

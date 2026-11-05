@@ -15,7 +15,8 @@ import {
     translateLink,
     translateEvent,
     AVAILABLE_LOCALES,
-    isLocaleLoaded
+    isLocaleLoaded,
+    LOCALE_CHANGE_EVENT,
 } from '../utils/i18n';
 
 interface UseLocaleReturn {
@@ -73,6 +74,18 @@ export const useLocale = (): UseLocaleReturn => {
             }
         };
         init();
+    }, []);
+
+    // Stay in sync with locale changes made through any other instance.
+    useEffect(() => {
+        const onChange = (e: Event) => {
+            const next = (e as CustomEvent<Locale>).detail;
+            setLocaleState(next);
+            setIsLoaded(true);
+            document.documentElement.lang = next;
+        };
+        window.addEventListener(LOCALE_CHANGE_EVENT, onChange);
+        return () => window.removeEventListener(LOCALE_CHANGE_EVENT, onChange);
     }, []);
 
     // Change locale function

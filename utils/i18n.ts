@@ -18,6 +18,23 @@ let linkTranslations: Record<string, { story: string }> = {};
 let eventTranslations: Record<string, { story: string }> = {};
 let isLoaded = false;
 
+export const LOCALE_CHANGE_EVENT = 'silicon-age:locale-change';
+
+const LOCALE_PREFIX_RE = /^\/(ko|ja|en)(?=\/|$)/;
+
+/** '/ko/company/apple' → '/company/apple'; '/ko' → '/' */
+export const stripLocalePrefix = (pathname: string): string => {
+    const stripped = pathname.replace(LOCALE_PREFIX_RE, '');
+    return stripped === '' ? '/' : stripped;
+};
+
+/** '/company/apple' + 'ko' → '/ko/company/apple'. English is unprefixed (canonical). */
+export const localizePath = (pathname: string, locale: Locale): string => {
+    const base = stripLocalePrefix(pathname);
+    if (locale === 'en') return base;
+    return base === '/' ? `/${locale}` : `/${locale}${base}`;
+};
+
 /**
  * Load translations for a specific locale
  */
@@ -58,7 +75,11 @@ export const loadLocale = async (locale: Locale): Promise<void> => {
 
         // Store preference in localStorage
         if (typeof window !== 'undefined') {
-            localStorage.setItem('locale', locale);
+            try { localStorage.setItem('locale', locale); } catch { /* private mode */ }
+            // Every useLocale() instance has its own state; broadcast so a
+            // change made in one component (WelcomeModal, Tutorial, About)
+            // re-renders the whole app, not just that component.
+            window.dispatchEvent(new CustomEvent<Locale>(LOCALE_CHANGE_EVENT, { detail: locale }));
         }
     } catch (error) {
         console.error(`Failed to load locale: ${locale}`, error);
@@ -247,7 +268,7 @@ export const detectBrowserLocale = (): Locale => {
  */
 export const getUrlLocale = (): Locale | null => {
     try {
-        const prefix = /^\/(ko|ja|en)(?=\/|$)/.exec(window.location.pathname)?.[1];
+        const prefix = LOCALE_PREFIX_RE.exec(window.location.pathname)?.[1];
         if (prefix) return prefix as Locale;
         const q = new URLSearchParams(window.location.search).get('lang');
         if (q === 'ko' || q === 'ja' || q === 'en') return q;
