@@ -24,6 +24,8 @@
 //     → { approved_nodes, approved_links }
 //   { action: 'reject', ids: string[] }
 //     → { deleted_nodes, excluded_qids }
+//   { action: 'list_events' } / 'approve_events' / 'reject_events' (ids: ev_*)
+//     → timeline event candidates from scripts/scoutEvents.ts (0009)
 
 // @ts-ignore — Deno-only import
 import { createClient } from 'jsr:@supabase/supabase-js@2';
@@ -69,6 +71,12 @@ function validIds(input: unknown): string[] | null {
         out.push(id);
     }
     return out;
+}
+
+const EVENT_ID_RE = /^ev_[a-f0-9]{12}$/;
+function validEventIds(input: unknown): string[] | null {
+    if (!Array.isArray(input) || input.length === 0 || input.length > 500) return null;
+    return input.every(id => typeof id === 'string' && EVENT_ID_RE.test(id)) ? input as string[] : null;
 }
 
 // @ts-ignore — Deno runtime entrypoint
@@ -211,6 +219,60 @@ Deno.serve(async (req: Request) => {
                     totalDeleted += dCount ?? 0;
                 }
                 return json({ deleted_nodes: totalDeleted, excluded_qids: totalQids });
+            }
+
+            // ── Timeline event candidates (0009, scripts/scoutEvents.ts) ──
+            case 'list_events': {
+                const { data, error } = await supa
+                    .from('event_candidates')
+                    .select('id, year, story_en, story_ko, story_ja, related_nodes, source_url, published_at, jev_milestone')
+                    .eq('status', 'pending')
+                    .order('jev_milestone', { ascending: false, nullsFirst: false })
+                    .limit(500);
+                if (error) throw error;
+                return json({ rows: data ?? [] });
+            }
+
+            case 'approve_events': {
+                const ids = validEventIds(body.ids);
+                if (!ids) return json({ error: 'invalid ids' }, { status: 400 });
+                const { data, error } = await supa
+                    .from('event_candidates')
+                    .select('id, year, story_en, story_ko, story_ja, related_nodes, source_url')
+                    .in('id', ids)
+                    .eq('status', 'pending');
+                if (error) throw error;
+                const rows = (data as Array<{ id: string; year: number; story_en: string; story_ko: string | null; story_ja: string | null; related_nodes: string[]; source_url: string }>) ?? [];
+                if (rows.length === 0) return json({ approved_events: 0 });
+                const { error: e1 } = await supa.from('events').upsert(
+                    rows.map(r => ({ id: r.id, year: r.year, related_nodes: r.related_nodes, source_url: r.source_url })) as never,
+                    { onConflict: 'id' },
+                );
+                if (e1) throw e1;
+                const tr = rows.flatMap(r => ([
+                    { event_id: r.id, locale: 'en', story: r.story_en },
+                    ...(r.story_ko ? [{ event_id: r.id, locale: 'ko', story: r.story_ko }] : []),
+                    ...(r.story_ja ? [{ event_id: r.id, locale: 'ja', story: r.story_ja }] : []),
+                ]));
+                const { error: e2 } = await supa.from('event_translations').upsert(tr as never, { onConflict: 'event_id,locale' });
+                if (e2) throw e2;
+                const { error: e3 } = await supa.from('event_candidates')
+                    .update({ status: 'approved', decided_at: new Date().toISOString() } as never)
+                    .in('id', rows.map(r => r.id));
+                if (e3) throw e3;
+                return json({ approved_events: rows.length });
+            }
+
+            case 'reject_events': {
+                const ids = validEventIds(body.ids);
+                if (!ids) return json({ error: 'invalid ids' }, { status: 400 });
+                // Keep the row (status=rejected) so the scout never re-queues it.
+                const { error, count } = await supa.from('event_candidates')
+                    .update({ status: 'rejected', decided_at: new Date().toISOString() } as never, { count: 'exact' })
+                    .in('id', ids)
+                    .eq('status', 'pending');
+                if (error) throw error;
+                return json({ rejected_events: count ?? 0 });
             }
 
             default:

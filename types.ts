@@ -170,6 +170,8 @@ export interface EventData {
   year: number;                  // when the event happened
   endYear?: number;              // optional end year
   relatedNodes?: string[];       // optional node IDs to link (for click navigation)
+  /** Source article (aib vote news) for events added through the review queue */
+  sourceUrl?: string;
   /** Per-locale story for events outside the locales/*.json pipeline */
   i18n?: Partial<Record<'ko' | 'ja', { story?: string }>>;
 }

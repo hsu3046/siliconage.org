@@ -30,6 +30,9 @@ npm run triage                           # score unscored pending candidates
 # AI-era candidates from aib vote's public model catalog (read-only on aib; migration 0008)
 npm run import-aib -- --dry-run          # or --file ./aib-models.json for zero aib access
 
+# Timeline event candidates from aib vote's public RSS (3 cached GETs; migration 0009)
+npm run scout-events -- --dry-run
+
 # Approved review-queue rows → data/approved.json (commit it), then build
 npm run export-approved
 ```

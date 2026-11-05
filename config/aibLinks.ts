@@ -112,3 +112,17 @@ export function getAibLinks(node: NodeData, locale: SupportedLocale): AibLink[] 
     }
     return links;
 }
+
+/**
+ * Rewrite an absolute aib vote URL to the viewer's locale and add UTM tags
+ * (ko = unprefixed, ja/en = path prefix). Non-aib URLs are returned untouched.
+ */
+export function localizeAibUrl(url: string, locale: SupportedLocale, campaign: string): string {
+    const m = /^https:\/\/www\.aib\.vote(?:\/(?:en|ja|ko))?(\/[^?#]*)?(\?[^#]*)?$/.exec(url);
+    if (!m) return url;
+    const out = new URL(`${AIB_BASE_URL}${locale === 'ko' ? '' : `/${locale}`}${m[1] ?? '/'}${m[2] ?? ''}`);
+    out.searchParams.set('utm_source', 'siliconage');
+    out.searchParams.set('utm_medium', 'referral');
+    out.searchParams.set('utm_campaign', campaign);
+    return out.toString();
+}

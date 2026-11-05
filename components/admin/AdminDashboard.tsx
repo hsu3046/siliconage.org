@@ -5,8 +5,9 @@ import {
     getAdminPassword, setAdminPassword, clearAdminPassword,
     type PendingNode, type AdminStats,
 } from '../../services/adminService';
+import EventCandidatesPanel from './EventCandidatesPanel';
 
-type Tab = 'pending-nodes' | 'stats';
+type Tab = 'pending-nodes' | 'events' | 'stats';
 
 const CATEGORY_TINT: Record<PendingNode['category'], string> = {
     COMPANY: 'bg-cyan-500/15 text-cyan-200 border-cyan-700/50',
@@ -196,6 +197,7 @@ const AdminDashboard: React.FC = () => {
                     <div className="space-y-1 min-w-[160px]">
                         {([
                             ['pending-nodes', `Pending Nodes${stats ? ` (${stats.pending})` : ''}`],
+                            ['events', 'Event Candidates'],
                             ['stats', 'Stats'],
                         ] as Array<[Tab, string]>).map(([key, label]) => (
                             <button
@@ -215,6 +217,10 @@ const AdminDashboard: React.FC = () => {
                         <div className="mb-3 p-3 bg-rose-900/40 border border-rose-700/60 text-rose-100 rounded-sm text-sm">
                             {error}
                         </div>
+                    )}
+
+                    {tab === 'events' && (
+                        <EventCandidatesPanel onUnauthorized={() => { clearAdminPassword(); setAuthed(false); setError('Session expired — re-enter password.'); }} />
                     )}
 
                     {tab === 'stats' && stats && (

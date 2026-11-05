@@ -78,7 +78,7 @@ interface LinkRow {
     id: number; source_id: string; target_id: string; type: string; arrow: string; icon: string | null;
     strength: number; start_year: number | null; end_year: number | null;
 }
-interface EventRow { id: string; year: number; end_year: number | null; related_nodes: string[] | null }
+interface EventRow { id: string; year: number; end_year: number | null; related_nodes: string[] | null; source_url: string | null }
 
 async function selectAll<T>(table: string, columns: string, apply: (q: any) => any): Promise<T[]> { // eslint-disable-line @typescript-eslint/no-explicit-any
     const out: T[] = [];
@@ -215,7 +215,7 @@ async function main() {
 
     // Approved timeline events (event_candidates, migration 0009) — optional table.
     let events: EventData[] = [];
-    const evRes = await sb.from('events').select('id, year, end_year, related_nodes').like('id', 'ev_%').order('year');
+    const evRes = await sb.from('events').select('id, year, end_year, related_nodes, source_url').like('id', 'ev_%').order('year');
     if (!evRes.error && evRes.data) {
         const rows = evRes.data as EventRow[];
         const evTr = await inChunks(rows.map(r => r.id), chunk => selectAll<{ event_id: string; locale: string; story: string }>(
@@ -229,6 +229,7 @@ async function main() {
             ...(r.end_year ? { endYear: r.end_year } : {}),
             story: st.get(r.id)!.en,
             relatedNodes: (r.related_nodes ?? []).filter(id => allIds.has(id)),
+            ...(r.source_url && /^https:\/\//.test(r.source_url) ? { sourceUrl: r.source_url } : {}),
             ...((st.get(r.id)!.ko || st.get(r.id)!.ja) ? {
                 i18n: {
                     ...(st.get(r.id)!.ko ? { ko: { story: st.get(r.id)!.ko } } : {}),
