@@ -193,11 +193,25 @@ const AskAI: React.FC<Props> = ({ locale, onSourcesChange, onNodeRefClick, initi
                             </div>
                         </div>
                     )}
-                    {!loading && result?.status === 'ok' && result.answer && (
+                    {!loading && result?.status === 'ok' && result.no_context && (
+                        <div className="text-slate-300 text-sm leading-relaxed">
+                            {locale === 'ko' ? '그래프에서 이 질문과 관련된 항목을 찾지 못했습니다. 기업·인물·기술 이름을 넣어 다시 물어보세요.'
+                                : locale === 'ja' ? 'グラフ内にこの質問に関連する項目が見つかりませんでした。企業・人物・技術の名前を入れて質問し直してください。'
+                                : 'Nothing in the graph matches this question. Try naming a company, person or technology.'}
+                        </div>
+                    )}
+                    {!loading && result?.status === 'ok' && !result.no_context && result.answer && (
                         <div className="space-y-3">
                             <div className="text-slate-100 text-base leading-relaxed">
                                 {renderAnswerBody(result.answer)}
                             </div>
+                            {typeof result.grounded === 'number' && result.grounded < 0.5 && (
+                                <div className="text-[11px] text-amber-200/90 bg-amber-900/20 border border-amber-700/40 rounded-sm px-2 py-1">
+                                    {locale === 'ko' ? '이 답변의 일부는 그래프 자료로 뒷받침되지 않을 수 있습니다. 출처 노드를 확인해 주세요.'
+                                        : locale === 'ja' ? 'この回答の一部はグラフの資料で裏付けられていない可能性があります。出典ノードを確認してください。'
+                                        : 'Parts of this answer may not be backed by the graph. Check the source nodes.'}
+                                </div>
+                            )}
                             {result.source_node_ids && result.source_node_ids.length > 0 && (
                                 <div>
                                     <div className="text-xs uppercase tracking-wider text-slate-500 mb-1">Sources</div>
